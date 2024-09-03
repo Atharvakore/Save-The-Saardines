@@ -7,7 +7,6 @@ TODO: Corporation knowledge sharing. Via a Visitor?
 enum Direction { D0, D60, D120, D180, D240, D300 }
 enum GarbageType { OIL, PLASTIC, CHEMICALS }
 class Vec2D { int posX, posY; }
-class Map { Tile[][] tiles; }
 class Corporation {
   int id; String name;
   List<GarbageType> acceptedGarbageTypes;
@@ -20,7 +19,6 @@ class Scenario {
 }
 
 class Simulation {
-  Map map;
   List<Corporation> corporations;
   List<Ship> ships;
   List<Event> events;
@@ -41,7 +39,7 @@ class Garbage {
 }
 
 // Tiles
-abstract class Tile { int id; Vec2D pos; }
+abstract class Tile { int id; Vec2D pos; Tile[6] adj; } // adjacency indexed by Direction.ordinal(), missing tile is null.
 class Land extends Tile {}
 abstract class WaterTile extends Tile {} // Ship-traversable, Garbage-traversable
 class Harbor { Corporation owner; }
