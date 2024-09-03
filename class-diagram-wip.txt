@@ -1,87 +1,156 @@
-== SOPRA NOTES ==
+import java.util.*
 
-TODO: Corporation knowledge sharing. Via a Visitor?
-      Caching feels not worth it (simulation & status changes every tick).
-
-// General
-enum Direction { D0, D60, D120, D180, D240, D300 }
-enum GarbageType { OIL, PLASTIC, CHEMICALS }
-class Vec2D { int posX, posY; }
+enum class Direction { D0, D60, D120, D180, D240, D300 }
+enum class GarbageType { OIL, PLASTIC, CHEMICALS }
+class Vec2D {
+    var x: Int = 0
+    var y: Int = 0
+    constructor(x: Int, y: Int) {
+        this.x = x
+        this.y = y
+    }
+    constructor() { }
+}
 class Corporation {
-  int id; String name;
-  List<GarbageType> acceptedGarbageTypes;
-
-  List<Harbor> ownedHarbors;
-  List<Ship> ownedShips;
+    var id: Int = 0
+    var name: String = ""
+    var acceptedGarbageTypes: Array<GarbageType> = arrayOf()
+    var ownedShips: Array<Ship> = arrayOf()
+    var ownedHarbors: Array<Harbor> = arrayOf()
 }
 class Scenario {
-  // TODO.
+    var events: Array<Event> = arrayOf()
+    var garbage: Array<Garbage> = arrayOf()
+    var ships: Array<Ship> = arrayOf()
+}
+
+interface JSONParser<T> {
+    fun parse(json: String): T
+}
+class MapJSONParser : JSONParser<Tile> {
+    override fun parse(json: String): Tile {
+        throw UnsupportedOperationException()
+    }
+}
+class ScenarioJSONParser : JSONParser<Scenario> {
+    override fun parse(json: String): Scenario {
+        throw UnsupportedOperationException()
+    }
+}
+class CorporationJSONParser : JSONParser<Corporation> {
+    override fun parse(json: String): Corporation {
+        throw UnsupportedOperationException()
+    }
+}
+
+class Garbage {
+    var id: Int = 0
+    var amount: Int = 0
+    var type: GarbageType? = null
+    var pos: Vec2D? = null
+}
+
+abstract class Tile {
+    var pos: Vec2D? = null
+    var id: Int = 0
+};
+
+class Harbor {
+    var owner: Corporation? = null
+}
+
+class Current {
+    var dir: Direction? = null
+    var speed: Int = 0
+    var intensity: Int = 0
+}
+
+class Land : Tile() { }
+
+abstract class WaterTile : Tile() {
+}
+
+class Shore : WaterTile() {
+    var harbor: Optional<Harbor> = Optional.empty()
+}
+
+class ShallowWater : WaterTile() { }
+
+class DeepWater : WaterTile() {
+    var current: Current? = null
+}
+
+abstract class Ship {
+    var id: Int = 0
+    var name: String? = null
+    var owner: Corporation? = null
+    var pos: Vec2D? = null
+    var dir: Direction? = null
+    var maxVelocity: Int = 0
+    var acceleration: Int = 0
+    var fuelCapacity: Int = 0
+    var fuelConsumption: Int = 0
+    var visibilityRange: Int = 0
+}
+
+class ScoutingShip : Ship()
+class CoordinatingShip : Ship()
+class CollectingShip : Ship() {
+    var garbageType: GarbageType? = null
+    var garbageCapacity: Int = 0
+}
+
+enum class EventType {
+    STORM, RESTRICTION, OIL_SPILL
+}
+
+abstract class Event {
+    var id: Int = 0
+    var fireTick: Int = 0
+}
+
+abstract class LocalEvent : Event() {
+    var pos: Vec2D? = null
+    var radius: Int = 0
+}
+
+class Storm : LocalEvent() {
+    var speed: Int = 0
+    var dir: Direction? = null
+}
+
+class Restriction : LocalEvent() {
+    var duration: Int = 0
+}
+
+class OilSpill : LocalEvent() {
+    var amount: Int = 0
+}
+
+class PirateAttack : Event() {
+    var shipId: Int = 0
 }
 
 class Simulation {
-  List<Corporation> corporations;
-  List<Ship> ships;
-  List<Event> events;
-  int tick;
+    var scenario: Scenario? = null
+    var corporations: Array<Corporation> = arrayOf()
+    var tick: Int = 0
+    var maxTicks: Int = 0
+    var map: Tile? = null // Graph is strongly connected.
 
-  void start();
-  void tick();
-}
+    fun start() {
+        throw UnsupportedOperationException()
+    }
 
-interface JSONParser<T> { T parse(String json); }
-class MapJSONParser implements JSONParser<Map> {}
-class CorporationJSONParser implements JSONParser<Corporation> {}
-class ScenarioJSONParser implements JSONParser<Scenario> {}
-
-// Trash
-class Garbage {
-  int id, amount; GarbageType type; Vec2D pos;
+    fun tick() {
+        throw UnsupportedOperationException()
+    }
 }
 
-// Tiles
-abstract class Tile { int id; Vec2D pos; Tile[6] adj; } // adjacency indexed by Direction.ordinal(), missing tile is null.
-class Land extends Tile {}
-abstract class WaterTile extends Tile {} // Ship-traversable, Garbage-traversable
-class Harbor { Corporation owner; }
-class Shore extends WaterTile { Optional<Harbor> harbor; }
-class ShallowOcean extends WaterTile {}
-class Current { Direction dir; int speed; int intensity; }
-class DeepOcean extends WaterTile { Optional<Current> current; }
-
-// Ships
-abstract class Ship {
-  int id; String name; Corporation owner; Vec2D pos; Direction dir;
-  int maxVelocity; int acceleration; int fuelCapacity, fuelConsumption;
-  int visibilityRange;
-}
-class ScoutingShip extends Ship {}
-class CoordinatingShip extends Ship {}
-class CollectingShip extends Ship { GarbageType garbageType; int garbageCapacity; }
-
-// Events
-enum EventType { STORM, RESTRICTION, OIL_SPILL }
-abstract class Event {
-  int id; int fireTick;
-}
-abstract class LocalEvent extends Event {
-  Vec2D pos; int radius;
-}
-class Storm extends LocalEvent {
-  int speed; Direction dir;
-}
-class Restriction extends LocalEvent {
-  int duration;
-}
-class OilSpill extends LocalEvent {
-  int amount;
-}
-class PirateAttack extends Event {
-  int shipId;
-}
-
-// Utility
+// Utils
 class Dijkstra {}
 
 class Logger {}
 
 class CLIParser {}
+
