@@ -1,0 +1,60 @@
+@startuml
+'General
+  enum Direction{
+    D0,
+    D60,
+    D120,
+    D180,
+    D240,
+    D300
+  }
+  enum GarbageType{
+    OIL,
+    PLASTIC,
+    CHEMICALS
+  }
+   class Vec2D{
+    posX: Int,
+    posY: Int
+  }
+
+
+  class Corporation{
+    id:Int,
+    name:String,
+    acceptedGarbageTypes: List<GarbageType>
+    ownedHarbors : List<Harbor>
+    ownedShips: List<Ship>
+
+  }
+
+
+    class Simulation{
+        corporations: List<Corporation>
+        ships: List<Ship>
+        events:List<Event>
+        tick: Int
+
+        start()
+        tick()
+    }
+
+
+    interface JSONParser<T>{
+    parse(String json):T
+    }
+
+    MapJSONParser --|> JSONParser
+    class MapJSONParser<Map>{
+
+    }
+    CorporationJSONParser --|> JSONParser
+    class CorporationJSONParser<Corporation>{
+
+    }
+        ScenarioJSONParser --|> JSONParser
+        class ScenarioJSONParser<Scenario>{
+
+        }
+
+@enduml
