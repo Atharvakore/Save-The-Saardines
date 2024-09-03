@@ -1,0 +1,89 @@
+== SOPRA NOTES ==
+
+TODO: Corporation knowledge sharing. Via a Visitor?
+      Caching feels not worth it (simulation & status changes every tick).
+
+// General
+enum Direction { D0, D60, D120, D180, D240, D300 }
+enum GarbageType { OIL, PLASTIC, CHEMICALS }
+class Vec2D { int posX, posY; }
+class Map { Tile[][] tiles; }
+class Corporation {
+  int id; String name;
+  List<GarbageType> acceptedGarbageTypes;
+
+  List<Harbor> ownedHarbors;
+  List<Ship> ownedShips;
+}
+class Scenario {
+  // TODO.
+}
+
+class Simulation {
+  Map map;
+  List<Corporation> corporations;
+  List<Ship> ships;
+  List<Event> events;
+  int tick;
+
+  void start();
+  void tick();
+}
+
+interface JSONParser<T> { T parse(String json); }
+class MapJSONParser implements JSONParser<Map> {}
+class CorporationJSONParser implements JSONParser<Corporation> {}
+class ScenarioJSONParser implements JSONParser<Scenario> {}
+
+// Trash
+class Garbage {
+  int id, amount; GarbageType type; Vec2D pos;
+}
+
+// Tiles
+abstract class Tile { int id; Vec2D pos; }
+class Land extends Tile {}
+abstract class WaterTile extends Tile {} // Ship-traversable, Garbage-traversable
+class Harbor { Corporation owner; }
+class Shore extends WaterTile { Optional<Harbor> harbor; }
+class ShallowOcean extends WaterTile {}
+class Current { Direction dir; int speed; int intensity; }
+class DeepOcean extends WaterTile { Optional<Current> current; }
+
+// Ships
+abstract class Ship {
+  int id; String name; Corporation owner; Vec2D pos; Direction dir;
+  int maxVelocity; int acceleration; int fuelCapacity, fuelConsumption;
+  int visibilityRange;
+}
+class ScoutingShip extends Ship {}
+class CoordinatingShip extends Ship {}
+class CollectingShip extends Ship { GarbageType garbageType; int garbageCapacity; }
+
+// Events
+enum EventType { STORM, RESTRICTION, OIL_SPILL }
+abstract class Event {
+  int id; int fireTick;
+}
+abstract class LocalEvent extends Event {
+  Vec2D pos; int radius;
+}
+class Storm extends LocalEvent {
+  int speed; Direction dir;
+}
+class Restriction extends LocalEvent {
+  int duration;
+}
+class OilSpill extends LocalEvent {
+  int amount;
+}
+class PirateAttack extends Event {
+  int shipId;
+}
+
+// Utility
+class Dijkstra {}
+
+class Logger {}
+
+class CLIParser {}
