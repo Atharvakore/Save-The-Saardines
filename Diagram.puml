@@ -38,7 +38,35 @@
         start()
         tick()
     }
-
+    enum EventType {
+    STORM,RESTRICTION,OIL_SPILL,PIRATE_ATTACK,
+    }
+    abstract class Event {
+    id:Int,
+    type:EventType
+    tick : Int ,
+    location : Int (Id of Tile) ,
+    radius:Int,
+    speed:Int,
+    amount:Int,
+    direction:Direction,
+    ShipID:Int,
+    }
+     Event --|> Pirate_Attack
+    class Pirate_Attack {
+    }
+    Event --|> Local_Event
+    abstract class Local_Event {
+    }
+    Local_Event --|> Strom
+    class Strom {
+    }
+    Local_Event --|> OilSpill
+    class OilSpill {
+    }
+    Local_Event --|> Restriction
+    class Restriction {
+    }
 
     interface JSONParser<T>{
     parse(String json):T
