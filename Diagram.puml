@@ -1,0 +1,133 @@
+@startuml
+'General
+  enum Direction{
+    D0,
+    D60,
+    D120,
+    D180,
+    D240,
+    D300
+  }
+  enum GarbageType{
+    OIL,
+    PLASTIC,
+    CHEMICALS
+  }
+   class Vec2D{
+    posX: Int,
+    posY: Int
+  }
+
+class Scenario{
+
+}
+
+  class Corporation{
+    id:Int,
+    name:String,
+    acceptedGarbageTypes: List<GarbageType>
+    ownedHarbors : List<Harbor>
+    ownedShips: List<Ship>
+
+  }
+
+
+    class Simulation{
+        corporations: List<Corporation>
+        ships: List<Ship>
+        events:List<Event>
+        tick: Int
+
+        start()
+        tick()
+    }
+    enum EventType {
+    STORM,RESTRICTION,OIL_SPILL,PIRATE_ATTACK,
+    }
+    abstract class Event {
+    id:Int,
+    type:EventType
+    tick : Int ,
+    location : Int (Id of Tile) ,
+    radius:Int,
+    speed:Int,
+    amount:Int,
+    direction:Direction,
+    ShipID:Int,
+    }
+     Event --|> Pirate_Attack
+    class Pirate_Attack {
+    }
+    Event --|> Local_Event
+    abstract class Local_Event {
+    }
+    Local_Event --|> Strom
+    class Strom {
+    }
+    Local_Event --|> OilSpill
+    class OilSpill {
+    }
+    Local_Event --|> Restriction
+    class Restriction {
+    }
+
+    interface JSONParser<T>{
+    parse(String json):T
+    }
+
+    MapJSONParser --|> JSONParser
+    class MapJSONParser<Map>{
+
+    }
+    CorporationJSONParser --|> JSONParser
+    class CorporationJSONParser<Corporation>{
+
+    }
+        ScenarioJSONParser --|> JSONParser
+        class ScenarioJSONParser<Scenario>{
+
+        }
+'Tiles
+abstract class Tile{
+    id:Int,
+    pos:Vec2D,
+    adjacentTiles:Tile[6]
+}
+
+Land --|> Tile
+Water --|> Tile
+
+Shore --|> Water
+DeepOcean --|> Water
+ShallowOcean --|> Water
+
+class Current{
+}
+class Land{
+}
+class Water{}
+class Shore{}
+class ShallowOcean{}
+class DeepOcean{}
+
+
+'Ships
+abstract class Ship{
+    id:Int,
+    name: String,
+    owner: Corporation,
+    pos: Vec2D,
+    dir: Direction
+}
+
+ScoutingShip --|> Ship
+CoordinatingShip --|> Ship
+CollectingShip --|> Ship
+
+class ScoutingShip{
+}
+class CoordinatingShip{
+}
+class CollectingShip{
+}
+@enduml
