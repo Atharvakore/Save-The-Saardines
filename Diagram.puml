@@ -18,6 +18,9 @@
     posY: Int
   }
 
+class Scenario{
+
+}
 
   class Corporation{
     id:Int,
@@ -84,5 +87,47 @@
         class ScenarioJSONParser<Scenario>{
 
         }
+'Tiles
+abstract class Tile{
+    id:Int,
+    pos:Vec2D,
+    adjacentTiles:Tile[6]
+}
 
+Land --|> Tile
+Water --|> Tile
+
+Shore --|> Water
+DeepOcean --|> Water
+ShallowOcean --|> Water
+
+class Current{
+}
+class Land{
+}
+class Water{}
+class Shore{}
+class ShallowOcean{}
+class DeepOcean{}
+
+
+'Ships
+abstract class Ship{
+    id:Int,
+    name: String,
+    owner: Corporation,
+    pos: Vec2D,
+    dir: Direction
+}
+
+ScoutingShip --|> Ship
+CoordinatingShip --|> Ship
+CollectingShip --|> Ship
+
+class ScoutingShip{
+}
+class CoordinatingShip{
+}
+class CollectingShip{
+}
 @enduml
