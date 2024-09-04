@@ -37,8 +37,7 @@ class Garbage {
 id:Int,
 amount:Int,
 type:GarbageType,
-tile:Tile
-+drift()
++drift(Tile)
 }
 
   class Corporation {
@@ -68,6 +67,7 @@ tile:Tile
 
     class Simulation {
         corporations: List<Corporation>
+        -tileToGarbage: Map<Tile, List<Garbage>>
         scenario: Scenario
         tick: Int
         maxTick: Int
@@ -76,6 +76,7 @@ tile:Tile
         +start()
         +tick()
         +corporationsSharing(Corporation, Corporation):Boolean
+        +getGarbageOnTile(Tile):List<Garbage>
     }
     package Event{
     abstract class Event {
