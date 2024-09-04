@@ -24,6 +24,11 @@
     posY: Int
   }
 
+  interface Validator {
+    ' Throws an exception if the object is not valid
+    validateState(Object) : void
+  }
+
 class Scenario{
         ships: List<Ship>
         events:List<Event>
@@ -37,7 +42,7 @@ type:GarbageType,
 pos:Vec2D
 }
 
-  class Corporation{
+  class Corporation implements Validator{
     id:Int,
     name:String,
     acceptedGarbageTypes: List<GarbageType>
@@ -53,7 +58,7 @@ pos:Vec2D
   }
 
 
-    class Simulation{
+    class Simulation implements Validator{
         corporations: List<Corporation>
         scenario: Scenario
         tick: Int
@@ -64,7 +69,7 @@ pos:Vec2D
         tick()
     }
     package Event{
-    abstract class Event {
+    abstract class Event implements Validator {
     id:Int,
     act(Simulation)
     }
@@ -101,7 +106,6 @@ package Parser{
     class MapJSONParser<Map>{
 
     parseTile(String json)
-    validateTile()
     }
 
     CorporationJSONParser --|> JSONParser
@@ -118,7 +122,7 @@ package Parser{
 'Tiles
 
 package Tile{
-abstract class Tile{
+abstract class Tile implements Validator{
     id:Int,
     pos:Vec2D,
     adjacentTiles:Tile[6],
@@ -150,7 +154,7 @@ current: Current?
 }
 'Ships
 package Ship{
-abstract class Ship{
+abstract class Ship implements Validator{
     id:Int,
     name: String,
     owner: Corporation,
@@ -161,6 +165,10 @@ abstract class Ship{
     fuelCapacity: Int,
     fuelConsumption: Int,
     visibleRange: Int,
+
+    getGarbageInFieldOfView((Id of Tile) tile): List<Garbage>
+    navigateTo((Id of Tile) tile)
+    refuel()
 }
 
 ScoutingShip --|> Ship
