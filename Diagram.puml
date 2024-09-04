@@ -25,7 +25,16 @@
   }
 
 class Scenario{
+        ships: List<Ship>
+        events:List<Event>
+        garbage:List<Garbage>
+}
 
+class Garbage {
+id:Int,
+amount:Int,
+type:GarbageType,
+pos:Vec2D
 }
 
   class Corporation{
@@ -37,45 +46,49 @@ class Scenario{
 
   }
 
+  class Harbor {
+           owner:Corporation
+  }
+
+
+
 
     class Simulation{
         corporations: List<Corporation>
-        ships: List<Ship>
-        events:List<Event>
+        scenario: Scenario
         tick: Int
+        maxTick: Int
+        map: (Id of Tile)
 
         start()
         tick()
     }
     package Event{
-    enum EventType {
-    STORM,RESTRICTION,OIL_SPILL,PIRATE_ATTACK,
-    }
     abstract class Event {
     id:Int,
-    type:EventType
-    tick : Int ,
-    location : Int (Id of Tile) ,
-    radius:Int,
-    speed:Int,
-    amount:Int,
-    direction:Direction,
-    ShipID:Int,
+    fireTick:Int,
     }
      Event --|> Pirate_Attack
     class Pirate_Attack {
+    ShipID:Int,
     }
     Event --|> Local_Event
     abstract class Local_Event {
+    location : Int (Id of Tile) ,
+     radius:Int,
     }
     Local_Event --|> Strom
     class Strom {
+    speed: Int,
+    direction: Direction
     }
     Local_Event --|> OilSpill
     class OilSpill {
+    amount: Int,
     }
     Local_Event --|> Restriction
     class Restriction {
+    duration: Int,
     }
     }
 
@@ -109,24 +122,31 @@ package Tile{
 abstract class Tile{
     id:Int,
     pos:Vec2D,
-    adjacentTiles:Tile[6]
+    adjacentTiles:Tile[6],
+    shipTraversable:Boolean,
 }
 
 Land --|> Tile
 Water --|> Tile
 
-Shore --|> Water
-DeepOcean --|> Water
-ShallowOcean --|> Water
+Shore --|> Tile
+DeepOcean --|> Tile
+ShallowOcean --|> Tile
 
 class Current{
+    speed: Int,
+    direction: Direction,
+    intensity: Int
 }
 class Land{
 }
-class Water{}
-class Shore{}
+class Shore{
+harbor: Harbor?
+}
 class ShallowOcean{}
-class DeepOcean{}
+class DeepOcean{
+current: Current?
+}
 
 }
 'Ships
@@ -136,7 +156,12 @@ abstract class Ship{
     name: String,
     owner: Corporation,
     pos: Vec2D,
-    dir: Direction
+    dir: Direction,
+    maxVelocity: Int,
+    acceleration: Int,
+    fuelCapacity: Int,
+    fuelConsumption: Int,
+    visibleRange: Int,
 }
 
 ScoutingShip --|> Ship
@@ -148,6 +173,10 @@ class ScoutingShip{
 class CoordinatingShip{
 }
 class CollectingShip{
+garbageType: GarbageType
+garbageCapacity: Int
+}
+class Dijkstra{
 }
 }
 package Logger{
