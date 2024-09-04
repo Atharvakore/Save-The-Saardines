@@ -26,7 +26,7 @@
 
   interface Validator {
     ' Throws an exception if the object is not valid
-    validateState(Object) : void
+    +validateState(Object) : void
   }
 
 class Scenario{
@@ -40,7 +40,7 @@ id:Int,
 amount:Int,
 type:GarbageType,
 tile:Tile
-drift()
++drift()
 }
 
 Corporation --|> Validator
@@ -55,17 +55,17 @@ Corporation --|> Validator
 
   class Harbor {
            owner:Corporation
-           refuelShip(Ship)
-           takeGarbage(Ship)
+           +refuelShip(Ship)
+           +takeGarbage(Ship)
   }
 
   class Map {
     tiles: List<Tile>
     tileIndex: Map<Vec2D, Tile>
 
-    getTileById(Int):Tile
-    addTile(Tile):void
-    getTileByPosition(Vec2D):Tile
+    +getTileById(Int):Tile
+    +addTile(Tile):void
+    +getTileByPosition(Vec2D):Tile
   }
 
 
@@ -77,14 +77,14 @@ Corporation --|> Validator
         maxTick: Int
         map: Map
 
-        start()
-        tick()
+        +start()
+        +tick()
     }
     package Event{
     Event --|> Validator
     abstract class Event {
     id:Int,
-    act(Simulation)
+    +act(Simulation)
     }
      Pirate_Attack --|> Event
     class Pirate_Attack {
@@ -95,8 +95,8 @@ Corporation --|> Validator
     location : Tile ,
      radius:Int,
     }
-    Strom --|> Local_Event
-    class Strom {
+    Storm --|> Local_Event
+    class Storm {
     speed: Int,
     direction: Direction
     }
