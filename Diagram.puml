@@ -42,7 +42,8 @@ type:GarbageType,
 pos:Vec2D
 }
 
-  class Corporation implements Validator{
+Corporation --|> Validator
+  class Corporation {
     id:Int,
     name:String,
     acceptedGarbageTypes: List<GarbageType>
@@ -57,19 +58,27 @@ pos:Vec2D
            takeGarbage(Ship)
   }
 
+  class Map {
+    tiles: List<Tile>
+    getTileById(Int):Tile
+    addTile(Tile):void
+  }
 
-    class Simulation implements Validator{
+
+    Simulation --|> Validator
+    class Simulation {
         corporations: List<Corporation>
         scenario: Scenario
         tick: Int
         maxTick: Int
-        map: (Id of Tile)
+        map: Map
 
         start()
         tick()
     }
     package Event{
-    abstract class Event implements Validator {
+    Event --|> Validator
+    abstract class Event {
     id:Int,
     act(Simulation)
     }
@@ -98,31 +107,32 @@ pos:Vec2D
     }
 
 package Parser{
-    interface JSONParser<T>{
-    parse(String json):T
+    class GenericJSONParser{
+    parse(String json):Object
     }
 
-    MapJSONParser --|> JSONParser
-    class MapJSONParser<Map>{
-
-    parseTile(String json)
+    class MapJSONParser{
+    parseMap(String json):(Id of Tile)
     }
 
-    CorporationJSONParser --|> JSONParser
-    class CorporationJSONParser<Corporation>{
-     parseCorporation(corporation:String)
-     parseShip(ship:String)
-     parseHarbors(harbors:String)
+    class CorporationJSONParser{
+     parseCorporation(corporation:String):Corporation
+     parseShip(ship:String):Ship
+     parseHarbors(harbors:String):Harbor
     }
-        ScenarioJSONParser --|> JSONParser
-        class ScenarioJSONParser<Scenario>{
 
+        class ScenarioJSONParser{
+          parseGarbage(garbage:String):Garbage
         }
+        GenericJSONParser --> MapJSONParser
+        GenericJSONParser --> CorporationJSONParser
+        GenericJSONParser --> ScenarioJSONParser
         }
 'Tiles
 
 package Tile{
-abstract class Tile implements Validator{
+Simulation --|> Tile
+abstract class Tile{
     id:Int,
     pos:Vec2D,
     adjacentTiles:Tile[6],
@@ -154,7 +164,8 @@ current: Current?
 }
 'Ships
 package Ship{
-abstract class Ship implements Validator{
+Simulation --|> Ship
+abstract class Ship {
     id:Int,
     name: String,
     owner: Corporation,
