@@ -75,6 +75,7 @@ tile:Tile
 
         +start()
         +tick()
+        +corporationsSharing(Corporation, Corporation):Boolean
     }
     package Event{
     abstract class Event {
