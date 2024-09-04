@@ -79,9 +79,9 @@ corparser -> corparser: validateShipUniqueName(name)
 activate corparser
 corparser --> corparser: True
 deactivate corparser
-corparser -> corparser: validateShiplocation(location)
+corparser -> corparser: validateShiplocation(locationId)
 activate corparser
-corparser -> map: getTilebyId(location)
+corparser -> map: getTilebyId(locationId)
 activate map
 map --> corparser: tile
 deactivate map
@@ -91,8 +91,15 @@ corparser -> corparser: validateShipAttributes(type, maxVelocity, acceleration, 
 activate corparser
 corparser --> corparser: True
 deactivate corparser
+create "s:Ship" as ship
+corparser -> ship: Ship(id, name, tile, maxVelocity, acceleration, fuelCapacity, fuelConsumption, visibilityRange, garbageType, capacity)
+activate ship
+ship -> corparser: s
+deactivate ship
+corparser -> corparser: this.corporateToShip.add(locationId, 
 
 
 
 
-@enduml
+
+enduml

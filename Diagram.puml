@@ -149,11 +149,11 @@ package Parser{
      - ships:Map<Int,Ship>
      - mapCorporationToHarbor:Map<Int,List<Tile>>
      - currentObject:JSONObject
+     - corporateToShip: Map<Int, List<Ship>>
      +CorporationJSONParser(map: Map)
      + parseCorporation(corporation:String):Corporation
      + parseShip(ship:String):Ship
      + parseHarbors(harbors:String):Harbor
-
      + validateCorporation(corporation: Corporation): Boolean
      - validateCorporationUniqueId(): Boolean
      - validateCorporationUniqueName(): Boolean
@@ -212,20 +212,20 @@ current: Current?
 'Ships
 package Ship{
 abstract class Ship {
-    id:Int,
-    name: String,
-    owner: Corporation,
-    pos: Tile,
-    dir: Direction,
-    maxVelocity: Int,
-    acceleration: Int,
-    fuelCapacity: Int,
-    fuelConsumption: Int,
-    visibleRange: Int,
-
-    getGarbageInFieldOfView(Tile): List<Garbage>
-    navigateTo(Tile)
-    refuel()
+    -id:Int,
+    -name: String,
+    -owner: Corporation,
+    -pos: Tile,
+    -dir: Direction,
+    -maxVelocity: Int,
+    -acceleration: Int,
+    -fuelCapacity: Int,
+    -fuelConsumption: Int,
+    -visibleRange: Int,
+    +Ship(id:Int, name:String, pos:Tile, maxVelocity: Int, acceleration:Int, fuelCapacity: Int, fuelConsumption:Int, visibilityRange: Int)
+    +getGarbageInFieldOfView(Tile): List<Garbage>
+    +navigateTo(Tile)
+    +refuel()
 }
 
 ScoutingShip --|> Ship
