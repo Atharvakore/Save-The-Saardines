@@ -197,6 +197,7 @@ abstract class Ship {
     navigateTo(Tile)
     refuel()
     getGarbageInFieldOfView(): List<Garbage>
+    drift()
 }
 
 ScoutingShip --|> Ship
