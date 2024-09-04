@@ -1,0 +1,26 @@
+@startuml
+actor User
+participant CLIParser as parser
+User -> parser: map.json, corporations.json, scenario.json, 0
+activate parser
+parser -> parser: parseTiles(map.json)
+activate parser
+create Tiles
+parser -> Tiles: Tiles(id, coord, category, harbor, current, direction, speed, intensity)
+activate Tiles
+Tiles -> Tiles: validate(id, coord, category, harbor, current, direction, speed)
+activate Tiles
+Tiles --> Tiles
+deactivate Tiles
+Tiles --> parser
+deactivate Tiles
+parser --> parser : List<Tiles>
+deactivate parser
+create "m:Map" as map
+parser -> map : Map(List<Tiles>)
+activate map
+map --> parser: m
+deactivate map
+
+
+@enduml
