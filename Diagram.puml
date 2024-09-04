@@ -132,6 +132,7 @@ package Parser{
     class MapJSONParser<Map>{
     -tiles: List<Tile>
     -tilesbyId: Map<Int,Tile>
+    -tilesbyCoord: Map<Vec2D, Tile>
     -currentTile: Tile
     +parseMap(jsonFile:String): Boolean
     -parseNextTile(String json): Tile
@@ -143,10 +144,12 @@ package Parser{
     }
 
     class CorporationJSONParser{
+    -map: Map
      - corporations:List<Corporation>
      - ships:Map<Int,Ship>
      - mapCorporationToHarbor:Map<Int,List<Tile>>
      - currentObject:JSONObject
+     +CorporationJSONParser(map: Map)
      + parseCorporation(corporation:String):Corporation
      + parseShip(ship:String):Ship
      + parseHarbors(harbors:String):Harbor
@@ -158,16 +161,10 @@ package Parser{
      - validateCorporationGarbageTypes(): Boolean
      + createCorporation(currentObject): Corporation
      + validateShip()
-     - validateShipUniqueId():Boolean
-     - validateShipUniqueName():Boolean
-     - validateShipType():Boolean
-     - validateShipCorporation():Boolean
-     - validateShipVelocity():Boolean
-     - validateShipAcceleration():Boolean
-     - validateShipCapacity():Boolean
-     - validateShipConsumption():Boolean
-     - validateShipRangeIfExists():Boolean
-     - validateShipGarbageCapacityIfExists():Boolean
+     - validateShipUniqueId(id: Int):Boolean
+     - validateShipUniqueName(name: String):Boolean
+     - validateShipLocation(location: Int): Boolean
+     - validateShipAttributes(type: String, maxVelocity: Int, acceleration: Int, fuelCapacity: Int, fuelConsumption: Int, visibilityRange: Int, garbageType: String, capacity: Int):Boolean
      + createShip(currentObject):Ship
     }
 
@@ -185,6 +182,7 @@ abstract class Tile{
     pos:Vec2D,
     adjacentTiles:Tile[6],
     shipTraversable:Boolean,
+    +Tile(id: Int, pos: Vec2D, shipTraversable: Boolean)
 }
 
 Land --|> Tile
