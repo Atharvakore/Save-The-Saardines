@@ -32,13 +32,6 @@ class Scenario{
         events:List<Event>
 }
 
-class Garbage {
-id:Int,
-amount:Int,
-type:GarbageType,
-+drift(Tile)
-}
-
   class Corporation {
     id:Int,
     name:String,
@@ -46,6 +39,10 @@ type:GarbageType,
     ownedHarbors : List<Harbor>
     ownedShips: List<Ship>
     moveShips()
+  }
+
+  class Dijkstra{
+    computeDistance(Tile, Tile): Int
   }
 
   class Harbor {
@@ -222,6 +219,13 @@ abstract class Tile{
     garbage:List<Garbage>
 }
 
+class Garbage {
+id:Int,
+amount:Int,
+type:GarbageType,
++drift(Tile)
+}
+
 Land --|> Tile
 Water --|> Tile
 
@@ -276,9 +280,6 @@ class CollectingShip{
 garbageType: GarbageType
 garbageCapacity: Int,
 garbageLoad: Int,
-}
-class Dijkstra{
-  computeDistance(Tile, Tile): Int
 }
 }
 package Logger{
