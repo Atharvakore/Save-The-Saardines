@@ -23,6 +23,9 @@
     posX: Int,
     posY: Int
   }
+  class Logger{
+
+  }
 
   interface Validator {
     ' Throws an exception if the object is not valid
@@ -202,11 +205,6 @@ garbageLoad: Int,
 }
 class Dijkstra{
   computeDistance(Tile, Tile): Int
-}
-}
-package Logger{
-class Logger{
-
 }
 }
 @enduml
