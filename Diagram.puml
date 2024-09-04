@@ -39,7 +39,7 @@
   }
 
   class Harbor {
-           owner:Corporation
+           owner:List<Corporation>
            +refuelShip(Ship)
            +takeGarbage(Ship)
   }
