@@ -23,14 +23,7 @@
     posX: Int,
     posY: Int
   }
-  class Logger{
 
-  }
-
-  interface Validator {
-    ' Throws an exception if the object is not valid
-    +validateState(Object) : void
-  }
 
 class Scenario{
         ships: List<Ship>
@@ -46,7 +39,6 @@ tile:Tile
 +drift()
 }
 
-Corporation --|> Validator
   class Corporation {
     id:Int,
     name:String,
@@ -72,7 +64,6 @@ Corporation --|> Validator
   }
 
 
-    Simulation --|> Validator
     class Simulation {
         corporations: List<Corporation>
         scenario: Scenario
@@ -84,7 +75,6 @@ Corporation --|> Validator
         +tick()
     }
     package Event{
-    Event --|> Validator
     abstract class Event {
     id:Int,
     +act(Simulation)
@@ -114,13 +104,29 @@ Corporation --|> Validator
     }
 
 package Parser{
-    class GenericJSONParser{
-    ' Return a Kotlin object
-    parse(String json):Object
-    }
 
-    class MapJSONParser{
-    parseMap(String json):Tile
+  interface Validator {
+    ' Throws an exception if the object is not valid
+    validateState(Object) : void
+  }
+    interface JSONParser<T>{
+    -jsonObjects: Map<String,Array<JSONObject>>
+    +parse(String jsonFile):Boolean
+    -getNextObject(jsonObject: String)
+    }
+    MapJSONParser --|> JSONParser
+    class MapJSONParser<Map>{
+    -tiles: Map<Int,Tile>
+    -currentTile: Tile
+    +parseMap(jsonFile:String): Boolean
+    -parseNextTile(String json)
+    -validateTile()
+    -validateUniqueId()
+    -validateCoordinates()
+    -validateTileCategory()
+    -validateHarborifExists()
+    -validateCurrentIfExists()
+
     }
 
     class CorporationJSONParser{
@@ -132,14 +138,12 @@ package Parser{
         class ScenarioJSONParser{
           parseGarbage(garbage:String):Garbage
         }
-        GenericJSONParser --> MapJSONParser
-        GenericJSONParser --> CorporationJSONParser
-        GenericJSONParser --> ScenarioJSONParser
+        JSONParser <|-- CorporationJSONParser
+        JSONParser <|-- ScenarioJSONParser
         }
 'Tiles
 
 package Tile{
-Tile --|> Validator
 abstract class Tile{
     id:Int,
     pos:Vec2D,
@@ -172,7 +176,6 @@ current: Current?
 }
 'Ships
 package Ship{
-Ship --|> Validator
 abstract class Ship {
     id:Int,
     name: String,
@@ -205,6 +208,12 @@ garbageLoad: Int,
 }
 class Dijkstra{
   computeDistance(Tile, Tile): Int
+}
+}
+package Logger{
+class Logger{
+
+
 }
 }
 @enduml
