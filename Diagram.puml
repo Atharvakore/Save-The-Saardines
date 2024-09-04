@@ -109,6 +109,16 @@ tile:Tile
 
 package Parser{
 
+   enum TileCategory{
+    LAND,
+    SHORE,
+    SHALLOW_OCEAN,
+    DEEP_OCEAN
+   }
+   class ParsedObject{
+   properties:Map<String,String>
+
+   }
   interface Validator {
     ' Throws an exception if the object is not valid
     validateState(Object) : void
@@ -133,9 +143,32 @@ package Parser{
     }
 
     class CorporationJSONParser{
-     parseCorporation(corporation:String):Corporation
-     parseShip(ship:String):Ship
-     parseHarbors(harbors:String):Harbor
+     - corporations:List<Corporation>
+     - ships:Map<Int,Ship>
+     - mapCorporationToHarbor:Map<Int,List<Tile>>
+     - currentObject:JSONObject
+     + parseCorporation(corporation:String):Corporation
+     + parseShip(ship:String):Ship
+     + parseHarbors(harbors:String):Harbor
+
+     + validateCorporation(corporation: Corporation): Boolean
+     - validateCorporationUniqueId(): Boolean
+     - validateCorporationUniqueName(): Boolean
+     - validateExistsTilesForHarbors(): Boolean
+     - validateCorporationGarbageTypes(): Boolean
+     + createCorporation(currentObject): Corporation
+     + validateShip()
+     - validateShipUniqueId():Boolean
+     - validateShipUniqueName():Boolean
+     - validateShipType():Boolean
+     - validateShipCorporation():Boolean
+     - validateShipVelocity():Boolean
+     - validateShipAcceleration():Boolean
+     - validateShipCapacity():Boolean
+     - validateShipConsumption():Boolean
+     - validateShipRangeIfExists():Boolean
+     - validateShipGarbageCapacityIfExists():Boolean
+     + createShip(currentObject):Ship
     }
 
         class ScenarioJSONParser{
