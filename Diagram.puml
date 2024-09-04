@@ -48,9 +48,9 @@ pos:Vec2D
 
   class Harbor {
            owner:Corporation
+           refuelShip(Ship)
+           takeGarbage(Ship)
   }
-
-
 
 
     class Simulation{
@@ -66,7 +66,7 @@ pos:Vec2D
     package Event{
     abstract class Event {
     id:Int,
-    fireTick:Int,
+    act(Simulation)
     }
      Event --|> Pirate_Attack
     class Pirate_Attack {
@@ -109,7 +109,6 @@ package Parser{
      parseCorporation(corporation:String)
      parseShip(ship:String)
      parseHarbors(harbors:String)
-
     }
         ScenarioJSONParser --|> JSONParser
         class ScenarioJSONParser<Scenario>{
@@ -174,7 +173,8 @@ class CoordinatingShip{
 }
 class CollectingShip{
 garbageType: GarbageType
-garbageCapacity: Int
+garbageCapacity: Int,
+garbageLoad: Int,
 }
 class Dijkstra{
 }
