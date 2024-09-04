@@ -37,7 +37,7 @@ package GeneralEnums{
   }
 
   class Dijkstra{
-    computeDistance(Tile, Tile): Int
+    execute(Tile): Map<Tile,Int>
   }
 
   class Harbor {
