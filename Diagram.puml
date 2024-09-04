@@ -82,25 +82,25 @@ Corporation --|> Validator
     id:Int,
     act(Simulation)
     }
-     Event --|> Pirate_Attack
+     Pirate_Attack --|> Event
     class Pirate_Attack {
     ShipID:Int,
     }
-    Event --|> Local_Event
+    Local_Event --|> Event
     abstract class Local_Event {
     location : Tile ,
      radius:Int,
     }
-    Local_Event --|> Strom
+    Strom --|> Local_Event
     class Strom {
     speed: Int,
     direction: Direction
     }
-    Local_Event --|> OilSpill
+    OilSpill --|> Local_Event
     class OilSpill {
     amount: Int,
     }
-    Local_Event --|> Restriction
+    Restriction --|> Local_Event
     class Restriction {
     duration: Int,
     }
