@@ -155,6 +155,8 @@ type:GarbageType,
 +drift(Tile)
 }
 
+Garbage --> Tile
+
 Land --|> Tile
 Water --|> Tile
 
