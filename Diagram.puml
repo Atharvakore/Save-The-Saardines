@@ -189,8 +189,8 @@ abstract class Ship {
     fuelConsumption: Int,
     visibleRange: Int,
 
-    getGarbageInFieldOfView(Tile): List<Garbage>
     navigateTo(Tile)
+    operate()
     refuel()
 }
 
