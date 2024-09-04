@@ -33,11 +33,11 @@ package GeneralEnums{
     acceptedGarbageTypes: List<GarbageType>
     ownedHarbors : List<Harbor>
     ownedShips: List<Ship>
-    moveShips()
+    +moveShips()
   }
 
   class Dijkstra{
-    execute(Tile): Map<Tile,Int>
+    +execute(Tile): Map<Tile,Int>
   }
 
   class Harbor {
@@ -113,7 +113,7 @@ package Parser{
   interface Validator {
     -jsonParser:JsonParser
     ' Throws an exception if the object is not valid
-    validateState(Object) : void
+    +validateState(Object) : void
   }
     interface JSONParser<T>{
     -jsonObjects: Map<String,Array<JSONObject>>
@@ -209,9 +209,11 @@ package Tile{
 abstract class Tile{
     id:Int,
     pos:Vec2D,
-    adjacentTiles:Tile[6],
+    -adjacentTiles:Tile[6],
     shipTraversable:Boolean,
     garbage:List<Garbage>
+
+    +getTileInDirection(Direction):Tile
 }
 
 class Garbage {
@@ -260,10 +262,10 @@ abstract class Ship {
     fuelConsumption: Int,
     visibleRange: Int,
 
-    navigateTo(Tile)
-    refuel()
-    getGarbageInFieldOfView(): List<Garbage>
-    drift()
+    +navigateTo(Tile)
+    +refuel()
+    +getGarbageInFieldOfView(): List<Garbage>
+    +drift()
 }
 
 ScoutingShip --|> Ship
