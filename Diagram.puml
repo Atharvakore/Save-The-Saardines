@@ -1,5 +1,6 @@
 @startuml
 'General
+package GeneralEnums{
   enum Direction{
     D0,
     D60,
@@ -18,6 +19,7 @@
   AVAILABLE,
   ON_THE_WAY,
   REFILLING
+  }
   }
    class Vec2D{
     posX: Int,
@@ -102,6 +104,8 @@ tile:Tile
     duration: Int,
     }
     }
+
+
 
 package Parser{
 
