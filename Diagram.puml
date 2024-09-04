@@ -47,7 +47,7 @@ tile:Tile
     acceptedGarbageTypes: List<GarbageType>
     ownedHarbors : List<Harbor>
     ownedShips: List<Ship>
-
+    moveShips()
   }
 
   class Harbor {
