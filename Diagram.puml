@@ -30,7 +30,6 @@ package GeneralEnums{
 class Scenario{
         ships: List<Ship>
         events:List<Event>
-        garbage:List<Garbage>
 }
 
 class Garbage {
@@ -67,7 +66,6 @@ type:GarbageType,
 
     class Simulation {
         corporations: List<Corporation>
-        -tileToGarbage: Map<Tile, List<Garbage>>
         scenario: Scenario
         tick: Int
         maxTick: Int
@@ -76,7 +74,6 @@ type:GarbageType,
         +start()
         +tick()
         +corporationsSharing(Corporation, Corporation):Boolean
-        +getGarbageOnTile(Tile):List<Garbage>
     }
     package Event{
     abstract class Event {
@@ -222,7 +219,7 @@ abstract class Tile{
     pos:Vec2D,
     adjacentTiles:Tile[6],
     shipTraversable:Boolean,
-    +Tile(id: Int, pos: Vec2D, shipTraversable: Boolean)
+    garbage:List<Garbage>
 }
 
 Land --|> Tile
