@@ -196,6 +196,7 @@ garbageCapacity: Int,
 garbageLoad: Int,
 }
 class Dijkstra{
+  computeDistance(Tile, Tile): Int
 }
 }
 package Logger{
