@@ -149,6 +149,8 @@ package Parser{
      - ships:Map<Int,Ship>
      - mapCorporationToHarbor:Map<Int,List<Tile>>
      - currentObject:JSONObject
+     - mapCorporationToShips: Map<Int,List<String>>
+
      +CorporationJSONParser(map: Map)
      + parseCorporation(corporation:String):Corporation
      + parseShip(ship:String):Ship
@@ -169,8 +171,20 @@ package Parser{
     }
 
         class ScenarioJSONParser{
-          parseGarbage(garbage:String):Garbage
+          -events:List<ParsedObject>
+          -garbage:List<ParsedObject>
+
+          +parseEvents(json:String)
+          +parseGarbage(garbage:String):Garbage
+          +validateGarbage()
+          -validateGarbageUniqueId():Boolean
+          -validateGarbageType():Boolean
+          -validateGarbageLocationExists():Boolean
+          -validateGarbageAmount():Boolean
+          +createGarbage()
+
         }
+
         JSONParser <|-- CorporationJSONParser
         JSONParser <|-- ScenarioJSONParser
         }
@@ -247,6 +261,30 @@ class Dijkstra{
 }
 package Logger{
 class Logger{
+    - outputPath: File = STDOUT
+
+    +logInitializationInfoSuccess(filename:String)
+    +logInitializationInfoFail(filename:String)
+    +logSimulationStarted()
+    +logSimulationEnded()
+    +logSimulationTick(tick:Int)
+    +logCorporationStartMoveShips(corporationId:Int)
+    +logShipMovement(shipId:Int,speed:Int,tileId:Int)
+    +logCorporationStartCollectGarbage(corporateId)
+    +logGarbageCollectionByShip(shipId:Int,garbageType:GarbageType,garbageId:Int)
+    +logCorporationCooperationStart(corporationId:Int)
+    +logCooperationBetweenCorporations(corporationId:Int, otherCorporationId: Int, shipId:Int, cooperatedShipId: Int)
+    +logCorporationRefueling(corporationId:Int)
+    +logRefuelingShip(shipId:Int, tileId: Int)
+    +logUnloadShip(shipId:Int, amount:Int, garbageType:GarbageType, tileId:Int)
+    +logCorporationFinishedActions(corporationId:Int)
+    +logCurrentDriftGarbage(garbageType:GarbageType, garbageId:Int, amount:Int, startTileId:Int, endTileId:Int)
+    +logCurrentDriftShip(shipId:Int,startTileId:Int, endTileId:Int)
+    +logEventStart(eventId:Int,eventType:EventType)
+    +logSimulationStatisticsCalculated()
+    +logSimulationStatistics()
+
+
 
 
 }
