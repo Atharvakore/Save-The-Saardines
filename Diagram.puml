@@ -13,6 +13,12 @@
     PLASTIC,
     CHEMICALS
   }
+
+  enum ShipStatus{
+  AVAILABLE,
+  ON_THE_WAY,
+  REFILLING
+  }
    class Vec2D{
     posX: Int,
     posY: Int
@@ -41,6 +47,7 @@ class Scenario{
         start()
         tick()
     }
+    package Event{
     enum EventType {
     STORM,RESTRICTION,OIL_SPILL,PIRATE_ATTACK,
     }
@@ -70,7 +77,9 @@ class Scenario{
     Local_Event --|> Restriction
     class Restriction {
     }
+    }
 
+package Parser{
     interface JSONParser<T>{
     parse(String json):T
     }
@@ -78,16 +87,25 @@ class Scenario{
     MapJSONParser --|> JSONParser
     class MapJSONParser<Map>{
 
+    parseTile(String json)
+    validateTile()
     }
+
     CorporationJSONParser --|> JSONParser
     class CorporationJSONParser<Corporation>{
+     parseCorporation(corporation:String)
+     parseShip(ship:String)
+     parseHarbors(harbors:String)
 
     }
         ScenarioJSONParser --|> JSONParser
         class ScenarioJSONParser<Scenario>{
 
         }
+        }
 'Tiles
+
+package Tile{
 abstract class Tile{
     id:Int,
     pos:Vec2D,
@@ -110,8 +128,9 @@ class Shore{}
 class ShallowOcean{}
 class DeepOcean{}
 
-
+}
 'Ships
+package Ship{
 abstract class Ship{
     id:Int,
     name: String,
@@ -129,5 +148,12 @@ class ScoutingShip{
 class CoordinatingShip{
 }
 class CollectingShip{
+}
+}
+package Logger{
+class Logger{
+
+
+}
 }
 @enduml
