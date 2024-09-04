@@ -227,11 +227,10 @@ abstract class Tile{
 Land --|> Tile
 Water --|> Tile
 
-Shore --|> Water
-DeepOcean --|> Water
-ShallowOcean --|> Water
+Shore --|> Tile
+DeepOcean --|> Tile
+ShallowOcean --|> Tile
 
-abstract class Water{}
 class Current{
     speed: Int,
     direction: Direction,
@@ -251,20 +250,20 @@ current: Current?
 'Ships
 package Ship{
 abstract class Ship {
-    -id:Int,
-    -name: String,
-    -owner: Corporation,
-    -pos: Tile,
-    -dir: Direction,
-    -maxVelocity: Int,
-    -acceleration: Int,
-    -fuelCapacity: Int,
-    -fuelConsumption: Int,
-    -visibleRange: Int,
-    +Ship(id:Int, name:String, pos:Tile, maxVelocity: Int, acceleration:Int, fuelCapacity: Int, fuelConsumption:Int, visibilityRange: Int)
-    +getGarbageInFieldOfView(Tile): List<Garbage>
-    +navigateTo(Tile)
-    +refuel()
+    id:Int,
+    name: String,
+    owner: Corporation,
+    pos: Tile,
+    dir: Direction,
+    maxVelocity: Int,
+    acceleration: Int,
+    fuelCapacity: Int,
+    fuelConsumption: Int,
+    visibleRange: Int,
+
+    navigateTo(Tile)
+    operate()
+    refuel()
 }
 
 ScoutingShip --|> Ship
