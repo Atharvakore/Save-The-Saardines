@@ -262,8 +262,8 @@ abstract class Ship {
     visibleRange: Int,
 
     navigateTo(Tile)
-    operate()
     refuel()
+    getGarbageInFieldOfView(): List<Garbage>
 }
 
 ScoutingShip --|> Ship
