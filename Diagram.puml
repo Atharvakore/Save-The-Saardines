@@ -120,16 +120,15 @@ package Parser{
     }
     MapJSONParser --|> JSONParser
     class MapJSONParser<Map>{
-    -tiles: Map<Int,Tile>
+    -tiles: List<Tile>
+    -tilesbyId: Map<Int,Tile>
     -currentTile: Tile
     +parseMap(jsonFile:String): Boolean
-    -parseNextTile(String json)
-    -validateTile()
-    -validateUniqueId()
-    -validateCoordinates()
-    -validateTileCategory()
-    -validateHarborifExists()
-    -validateCurrentIfExists()
+    -parseNextTile(String json): Tile
+    -validateTile(Int id, Vec2D coord, TileCategory category, boolean Harbor, boolean Current, Direction direction, Double speed, Double intensity ): Boolean
+    -validateUniqueId(Int id): Boolean
+    -validateCoordinates(Vec2D coord): Boolean
+    -validateRequirements(TileCategory category, boolean Harbor, boolean Current, Direction direction, Double speed, Double intensity): Boolean
 
     }
 
@@ -158,10 +157,11 @@ abstract class Tile{
 Land --|> Tile
 Water --|> Tile
 
-Shore --|> Tile
-DeepOcean --|> Tile
-ShallowOcean --|> Tile
+Shore --|> Water
+DeepOcean --|> Water
+ShallowOcean --|> Water
 
+abstract class Water{}
 class Current{
     speed: Int,
     direction: Direction,

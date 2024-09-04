@@ -1,18 +1,37 @@
 @startuml
 actor User
-participant CLIParser as parser
-User -> parser: map.json, corporations.json, scenario.json, 0
+participant JSONParser as JSONparser
+
+User -> JSONparser: map.json, corporations.json, scenario.json, 0
+activate JSONparser
+create parser as "m: MapJSONParser"
+JSONparser -> parser: parseMap(map.json)
+
 activate parser
-parser -> parser: parseTiles(map.json)
+parser -> parser: parseNextTile(map.json)
 activate parser
-create Tiles
+parser->parser:validateTile(id, coord, category, harbor, current, direction, speed, intensity)
+activate parser
+parser -> parser: validateUniqueId(id)
+activate parser
+parser --> parser: True
+deactivate parser
+parser -> parser: validateCoordinates(coord)
+
+activate parser
+parser --> parser: True
+deactivate parser
+parser -> parser: validateRequirements(category, harbor, current, direction, speed, intensity)
+activate parser
+parser --> parser: True
+deactivate parser
+
+
+create "t:Tiles" as Tiles
 parser -> Tiles: Tiles(id, coord, category, harbor, current, direction, speed, intensity)
 activate Tiles
-Tiles -> Tiles: validate(id, coord, category, harbor, current, direction, speed)
-activate Tiles
-Tiles --> Tiles
-deactivate Tiles
-Tiles --> parser
+
+Tiles --> parser: t
 deactivate Tiles
 parser --> parser : List<Tiles>
 deactivate parser
@@ -21,6 +40,20 @@ parser -> map : Map(List<Tiles>)
 activate map
 map --> parser: m
 deactivate map
+participant Logger as log
+parser -> log: parsedAndValidated(maps.json)
+activate log
+log --> parser:
+deactivate log
+parser -> parser: parseShips(corporations.json)
+activate parser
+parser -> parser: UniqueTileIdAndName(id, coord)
+activate parser
+parser --> parser: True
+deactivate parser
+create ship as "s: Ships"
+parser -> ship: Ship(
+
 
 
 @enduml
