@@ -131,7 +131,7 @@ package Parser{
 'Tiles
 
 package Tile{
-Simulation --|> Tile
+Tile --|> Validator
 abstract class Tile{
     id:Int,
     pos:Vec2D,
@@ -164,7 +164,7 @@ current: Current?
 }
 'Ships
 package Ship{
-Simulation --|> Ship
+Ship --|> Validator
 abstract class Ship {
     id:Int,
     name: String,
