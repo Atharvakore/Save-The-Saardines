@@ -41,7 +41,7 @@ package GeneralEnums{
   }
 
   class Harbor {
-           owner:List <Corporation >
+           owner:List<Corporation>
            +refuelShip(Ship)
            +takeGarbage(Ship)
   }
