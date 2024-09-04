@@ -124,8 +124,8 @@ package Parser{
     MapJSONParser --|> JSONParser
     class MapJSONParser<Map>{
     -tiles: List<Tile>
-    -tilesById: Map<Int,Tile>
-    -tilesByCoord: Map<Vec2D, Tile>
+    -tilesbyId: Map<Int,Tile>
+    -tilesbyCoord: Map<Vec2D, Tile>
     -currentTile: Tile
     +parseMap(jsonFile:String): Boolean
     -parseNextTile(String json): Tile

@@ -1,0 +1,96 @@
+@startuml
+actor User
+participant JSONParser as JSONparser
+
+User -> JSONparser: map.json, corporations.json, scenario.json, 0
+activate JSONparser
+create parser as "m: MapJSONParser"
+JSONparser -> parser: parseMap(map.json)
+
+activate parser
+parser -> parser: parseNextTile(map.json)
+activate parser
+parser->parser:validateTile(id, coord, category, harbor, current, direction, speed, intensity)
+activate parser
+parser -> parser: validateUniqueId(id)
+activate parser
+parser --> parser: True
+deactivate parser
+parser -> parser: validateCoordinates(coord)
+
+activate parser
+parser --> parser: True
+deactivate parser
+parser -> parser: validateRequirements(category, harbor, current, direction, speed, intensity)
+activate parser
+parser --> parser: True
+deactivate parser
+parser-->parser: True
+deactivate parser
+create "t:Tiles" as Tiles
+parser -> Tiles: Tiles(id, coord, shipTraversable)
+activate Tiles
+
+Tiles --> parser: t
+deactivate Tiles
+parser -> parser: this.tiles.add(t)
+activate parser
+parser --> parser
+deactivate parser
+parser -> parser: this.tilesbyId.add(id, t)
+activate parser
+parser --> parser
+deactivate parser
+parser -> parser: this.tilesbyCoord.add(coord, t)
+activate parser
+parser --> parser
+deactivate parser
+parser --> parser : True
+deactivate parser
+create "m:Map" as map
+parser -> map : Map(tiles, tilesbyCoord)
+activate map
+map --> parser: m
+deactivate map
+participant Logger as log
+parser -> log: parsedAndValidated(maps.json)
+activate log
+log --> parser:
+deactivate log
+parser-->JSONparser: m
+deactivate parser
+create corparser as "c: CorporartionJSONParser"
+JSONparser -> corparser: CorporationJSONParser(m)
+activate corparser
+corparser --> JSONparser : c
+deactivate corparser
+JSONparser -> corparser: parseShips(corprations.json)
+
+activate corparser
+corparser -> corparser:ValidateShip(id, name, type, corporationId, locationId, maxVelocity, acceleration,  fuelCapacity, fuelConsumption, visibilityRange, garbageType, capacity)
+activate corparser
+corparser -> corparser: validateShipUniqueId(id)
+activate corparser
+corparser --> corparser: True
+deactivate corparser
+corparser -> corparser: validateShipUniqueName(name)
+activate corparser
+corparser --> corparser: True
+deactivate corparser
+corparser -> corparser: validateShiplocation(location)
+activate corparser
+corparser -> map: getTilebyId(location)
+activate map
+map --> corparser: tile
+deactivate map
+corparser -->corparser: True
+deactivate corparser
+corparser -> corparser: validateShipAttributes(type, maxVelocity, acceleration, fuelCapacity, fuelConsumption, visibilityRange, garbageType, capacity)
+activate corparser
+corparser --> corparser: True
+deactivate corparser
+
+
+
+
+@enduml
