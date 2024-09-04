@@ -88,7 +88,7 @@ Corporation --|> Validator
     }
     Event --|> Local_Event
     abstract class Local_Event {
-    location : Int (Id of Tile) ,
+    location : Tile ,
      radius:Int,
     }
     Local_Event --|> Strom
@@ -112,7 +112,7 @@ package Parser{
     }
 
     class MapJSONParser{
-    parseMap(String json):(Id of Tile)
+    parseMap(String json):Tile
     }
 
     class CorporationJSONParser{
@@ -177,8 +177,8 @@ abstract class Ship {
     fuelConsumption: Int,
     visibleRange: Int,
 
-    getGarbageInFieldOfView((Id of Tile) tile): List<Garbage>
-    navigateTo((Id of Tile) tile)
+    getGarbageInFieldOfView(Tile): List<Garbage>
+    navigateTo(Tile)
     refuel()
 }
 
@@ -200,7 +200,6 @@ class Dijkstra{
 }
 package Logger{
 class Logger{
-
 
 }
 }
