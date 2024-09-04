@@ -56,8 +56,8 @@
 
     class Simulation {
         corporations: List<Corporation>
-        events:List<Event>
-        ships: List<Ship>
+        allEvents:List<Event>
+        allShips: List<Ship>
         tick: Int
         maxTick: Int
         map: Map
