@@ -25,11 +25,6 @@
   }
 
 
-class Scenario{
-        ships: List<Ship>
-        events:List<Event>
-}
-
   class Corporation {
     id:Int,
     name:String,
@@ -61,7 +56,8 @@ class Scenario{
 
     class Simulation {
         corporations: List<Corporation>
-        scenario: Scenario
+        events:List<Event>
+        ships: List<Ship>
         tick: Int
         maxTick: Int
         map: Map
