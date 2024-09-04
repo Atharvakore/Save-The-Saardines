@@ -8,6 +8,7 @@ create parser as "m: MapJSONParser"
 JSONparser -> parser: parseMap(map.json)
 
 activate parser
+loop all tiles in file
 parser -> parser: parseNextTile(map.json)
 activate parser
 parser->parser:validateTile(id, coord, category, harbor, current, direction, speed, intensity)
@@ -47,6 +48,7 @@ parser --> parser
 deactivate parser
 parser --> parser : True
 deactivate parser
+end
 create "m:Map" as map
 parser -> map : Map(tiles, tilesbyCoord)
 activate map
@@ -64,7 +66,7 @@ JSONparser -> corparser: CorporationJSONParser(m)
 activate corparser
 corparser --> JSONparser : c
 deactivate corparser
-JSONparser -> corparser: parseShips(corprations.json)
+JSONparser -> corparser: parseShips(corporations.json)
 
 activate corparser
 corparser -> corparser:ValidateShip(id, name, type, corporationId, locationId, maxVelocity, acceleration,  fuelCapacity, fuelConsumption, visibilityRange, garbageType, capacity)
