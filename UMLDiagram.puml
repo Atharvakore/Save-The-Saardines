@@ -14,11 +14,6 @@ package GeneralEnums{
     PLASTIC,
     CHEMICALS
   }
-  enum ShipStatus{
-    AVAILABLE,
-    ON_THE_WAY,
-    REFILLING
-  }
 }
 class Vec2D{
   posX: Int,
@@ -42,8 +37,6 @@ class Dijkstra{
 class Harbor {
   owner: List<Corporation>,
   pos: Tile,
-  +refuelShip(Ship)
-  +takeGarbage(Ship)
 }
 
 class Map {
@@ -103,11 +96,6 @@ package Parser {
   }
   class ParsedObject {
     properties:Map<String,String>
-  }
-  interface Validator {
-    -jsonParser: JsonParser
-    ' Throws an exception if the object is not valid
-    +validateState(Object): void
   }
   interface JSONParser<T>{
     -jsonObjects: Map<String, Array<JSONObject>>
@@ -262,6 +250,7 @@ package Ship{
     -destinationTile: Tile,
     +navigateTo(Tile)
     +refuel()
+    + giveGarbage()
     +getTilesWithGarbageInFoV(): List<Tile>
     +drift()
   }
