@@ -14,11 +14,6 @@ package GeneralEnums{
     PLASTIC,
     CHEMICALS
   }
-  enum ShipStatus{
-    AVAILABLE,
-    ON_THE_WAY,
-    REFILLING
-  }
 }
 class Vec2D{
   posX: Int,
@@ -26,6 +21,7 @@ class Vec2D{
 }
 class Corporation {
   id:Int,
+  partner:Corporation
   name:String,
   acceptedGarbageTypes: List<GarbageType>
   ownedHarbors: List<Harbor>
@@ -33,6 +29,7 @@ class Corporation {
   +moveShips(),
   +collectGarbage(),
   +refuelShips()
+  +cooperatewith(c1:coperation)
 }
 class Dijkstra{
   execute(Tile): Map<Tile,Int>
@@ -40,8 +37,6 @@ class Dijkstra{
 class Harbor {
   owner: List<Corporation>,
   pos: Tile,
-  +refuelShip(Ship)
-  +takeGarbage(Ship)
 }
 
 class Map {
@@ -62,6 +57,7 @@ class Simulation {
   map: Map
   +start()
   +tick()
+
 }
 package Event{
   abstract class Event {
@@ -101,13 +97,8 @@ package Parser {
   class ParsedObject {
     properties:Map<String,String>
   }
-'  interface Validator {
-'    -jsonParser: JsonParser
-'    ' Throws an exception if the object is not valid
-'    +validateState(Object): void
-'  }
-  interface JSONParser{
-    + accumulator:Accumulator
+  interface JSONParser<T>{
+    -jsonObjects: Map<String, Array<JSONObject>>
     +parse(jsonFile: String): Boolean
     -getNextObject(jsonObject: String)
   }
@@ -269,6 +260,7 @@ package Ship{
     -destinationTile: Tile,
     +navigateTo(Tile)
     +refuel()
+    + giveGarbage()
     +getTilesWithGarbageInFoV(): List<Tile>
     +drift()
   }
