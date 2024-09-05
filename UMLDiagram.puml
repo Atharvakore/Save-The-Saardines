@@ -1,0 +1,305 @@
+@startuml
+'General
+package GeneralEnums{
+  enum Direction{
+    D0,
+    D60,
+    D120,
+    D180,
+    D240,
+    D300
+  }
+  enum GarbageType{
+    OIL,
+    PLASTIC,
+    CHEMICALS
+  }
+  enum ShipStatus{
+    AVAILABLE,
+    ON_THE_WAY,
+    REFILLING
+  }
+}
+class Vec2D{
+  posX: Int,
+  posY: Int
+}
+class Corporation {
+  id:Int,
+  name:String,
+  acceptedGarbageTypes: List<GarbageType>
+  ownedHarbors: List<Harbor>
+  ownedShips: List<Ship>
+  +moveShips(),
+  +collectGarbage(),
+  +refuelShips()
+}
+class Dijkstra{
+  execute(Tile): Map<Tile,Int>
+}
+class Harbor {
+  owner: List<Corporation>,
+  pos: Tile,
+  +refuelShip(Ship)
+  +takeGarbage(Ship)
+}
+
+class Map {
+  tiles: List<Tile>
+  tileIndex: Map<Vec2D, Tile>
+  +getTileById(Int): Tile
+  +getTiles(): List<Tile>
+  +addTile(Tile): void
+  +getTileByPosition(Vec2D): Tile
+}
+
+
+class Simulation {
+  corporations: List<Corporation>
+  allEvents: List<Event>
+  tick: Int
+  maxTick: Int
+  map: Map
+  +start()
+  +tick()
+}
+package Event{
+  abstract class Event {
+    id: Int,
+    +act(Simulation)
+  }
+  Pirate_Attack --|> Event
+  class Pirate_Attack {
+    ShipID: Int,
+  }
+  Local_Event --|> Event
+  abstract class Local_Event {
+    location: Tile,
+    radius: Int,
+  }
+  Storm --|> Local_Event
+  class Storm {
+    speed: Int,
+    direction: Direction
+  }
+  OilSpill --|> Local_Event
+  class OilSpill {
+    amount: Int,
+  }
+  Restriction --|> Local_Event
+  class Restriction {
+    duration: Int,
+  }
+}
+package Parser {
+  enum TileCategory {
+    LAND,
+    SHORE,
+    SHALLOW_OCEAN,
+    DEEP_OCEAN
+  }
+  class ParsedObject {
+    properties:Map<String,String>
+  }
+  interface Validator {
+    -jsonParser: JsonParser
+    ' Throws an exception if the object is not valid
+    +validateState(Object): void
+  }
+  interface JSONParser<T>{
+    -jsonObjects: Map<String, Array<JSONObject>>
+    +parse(jsonFile: String): Boolean
+    -getNextObject(jsonObject: String)
+  }
+  MapJSONParser --|> JSONParser
+  class MapJSONParser<Map> {
+    -tiles: List<Tile>
+    -tilesbyId: Map<Int, Tile>
+    -tilesbyCoord: Map<Vec2D, Tile>
+    -currentTile: Tile
+    +parseMap(jsonFile:String): Boolean
+    -parseNextTile(String json): Tile
+    -validateTile(Int id, Vec2D coord, TileCategory category, boolean Harbor, boolean Current, Direction direction, Double speed, Double intensity): Boolean
+    -validateUniqueId(Int id): Boolean
+    -validateCoordinates(Vec2D coord): Boolean
+    -validateRequirements(TileCategory category, boolean Harbor, boolean Current, Direction direction, Double speed, Double intensity): Boolean
+
+  }
+
+  class CorporationJSONParser{
+    -map: Map
+    -corporations: List<Corporation>
+    -ships: Map<Int, Ship>
+    -mapCorporationToHarbor: Map<Int, List<Tile>>
+    -currentObject: ParsedObject
+    -mapCorporationToShips: Map<Int, List<Int>>
+
+    +CorporationJSONParser(map: Map)
+    +parseCorporation(corporation:String): Corporation
+    +parseShip(ship:String): Ship
+    +parseHarbors(harbors:String): Harbor
+    +validateCorporation(): Boolean
+    -validateCorporationUniqueId(): Boolean
+    -validateCorporationUniqueName(): Boolean
+    -validateHarborTiles(): Boolean
+    -validateCorporationGarbageTypes(): Boolean
+    -validateCorporationShip(): Boolean
+    +createCorporation(currentObject): Corporation
+    +validateShip()
+    -validateShipUniqueId(id: Int): Boolean
+    -validateShipUniqueName(name: String): Boolean
+    -validateShipLocation(location: Int): Boolean
+    -validateShipAttributes(type: String, maxVelocity: Int, acceleration: Int, fuelCapacity: Int, fuelConsumption: Int, visibilityRange: Int, garbageType: String, capacity: Int): Boolean
+    +createShip(currentObject:ParsedObject): Ship
+  }
+
+  class ScenarioJSONParser{
+    -events: List<ParsedObject>
+    -garbage: List<ParsedObject>
+    +parseEvents(json: String)
+    +parseGarbage(garbage: String): Garbage
+    +validateGarbage()
+    -validateGarbageUniqueId(): Boolean
+    -validateGarbageType(): Boolean
+    -validateGarbageLocationExists(): Boolean
+    -validateGarbageAmount(): Boolean
+    +createGarbage(garbage: ParsedObject)
+    +validateEvents()
+    -validateEventUniqueId(): Boolean
+    -validateEventType(): Boolean
+    -validateEventTick(): Boolean
+    -validateEventLocation(): Boolean
+    -validateEventRadius(): Boolean
+    -validateEventSpeed(): Boolean
+    -validateEventAmountIfExists(): Boolean
+    -validateEventDirectionIfExists(): Boolean
+    -validateEventShipIdIfExists(): Boolean
+    +createEvent(event: ParsedObject)
+  }
+
+  JSONParser <|-- CorporationJSONParser
+  JSONParser <|-- ScenarioJSONParser
+  class Accumulator {
+    +parsedObjects: Map<String, ParsedObject>
+    +map: Map
+    +tiles: Map<Int, Tile>
+    +corporations: Map<Int, Corporation>
+    +ships: Map<Int, Ship>
+    #events: Map<Int, Event>
+    #garbage: Map<Int, Garbage>
+    #mapCorporationToHarbor: Map<Int, List<Tile>>
+    #mapCorporationToShips: Map<Int, List<Int>>
+    +Getters()
+  }
+}
+'Tiles
+
+package Tile{
+  abstract class Tile{
+    id: Int,
+    pos: Vec2D,
+    -adjacentTiles: Tile[6],
+    shipTraversable: Boolean,
+    garbage: List<Garbage>
+    +isDriftable(Int): Boolean
+    +driftGarbage(GarbageType, Int): void
+    +getTileInDirection(Direction): Tile
+  }
+
+  class Garbage {
+    id: Int,
+    amount: Int,
+    type: GarbageType,
+    +drift(Tile)
+  }
+
+  Garbage --> Tile
+
+  Land --|> Tile
+  Water --|> Tile
+
+  Shore --|> Tile
+  DeepOcean --|> Tile
+  ShallowOcean --|> Tile
+
+  class Current {
+    -speed: Int,
+    -direction: Direction,
+    -intensity: Int,
+    +getSpeed(): Int
+    +getIntensity(): Int
+    +getDirection(): Direction
+  }
+  class Land{
+  }
+  class Shore{
+    -harbor: Harbor?
+    +getHarbor(): Harbor?
+  }
+  class ShallowOcean{}
+  class DeepOcean{
+    -current: Current?
+    +getCurrent(): Current?
+  }
+
+}
+'Ships
+package Ship{
+  abstract class Ship {
+    id: Int,
+    name: String,
+    owner: Corporation,
+    pos: Tile,
+    dir: Direction,
+    maxVelocity: Int,
+    acceleration: Int,
+    fuelCapacity: Int,
+    fuelConsumption: Int,
+    visibleRange: Int,
+    -destinationTile: Tile,
+    +navigateTo(Tile)
+    +refuel()
+    +getTilesWithGarbageInFoV(): List<Tile>
+    +drift()
+  }
+
+  ScoutingShip --|> Ship
+  CoordinatingShip --|> Ship
+  CollectingShip --|> Ship
+
+  class ScoutingShip{
+  }
+  class CoordinatingShip{
+  }
+  class CollectingShip{
+    garbageType: GarbageType
+    garbageCapacity: Int,
+    garbageLoad: Int,
+  }
+}
+package Logger{
+  class Logger{
+    -writer: PrintWriter = new PrintWriter(System.out)
+    +logInitializationInfoSuccess(filename:String)
+    +logInitializationInfoFail(filename:String)
+    +logSimulationStarted()
+    +logSimulationEnded()
+    +logSimulationTick(tick:Int)
+    +logCorporationStartMoveShips(corporationId:Int)
+    +logShipMovement(shipId:Int,speed:Int,tileId:Int)
+    +logCorporationStartCollectGarbage(corporateId)
+    +logGarbageCollectionByShip(shipId:Int,garbageType:GarbageType,garbageId:Int)
+    +logCorporationCooperationStart(corporationId:Int)
+    +logCooperationBetweenCorporations(corporationId:Int, otherCorporationId: Int, shipId:Int, cooperatedShipId: Int)
+    +logCorporationRefueling(corporationId:Int)
+    +logRefuelingShip(shipId:Int, tileId: Int)
+    +logUnloadShip(shipId:Int, amount:Int, garbageType:GarbageType, tileId:Int)
+    +logCorporationFinishedActions(corporationId:Int)
+    +logCurrentDriftGarbage(garbageType:GarbageType, garbageId:Int, amount:Int, startTileId:Int, endTileId:Int)
+    +logCurrentDriftShip(shipId:Int,startTileId:Int, endTileId:Int)
+    +logEventStart(eventId:Int,eventType:EventType)
+    +logSimulationStatisticsCalculated()
+    +logSimulationStatistics()
+  }
+}
+@enduml
