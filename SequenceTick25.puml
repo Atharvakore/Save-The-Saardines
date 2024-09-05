@@ -1,5 +1,4 @@
 @startuml
-actor "u:User" as u
 participant "sim:Simulator" as s
 participant "c1:Corporation" as c1
 participant "s1:ScoutingShip" as scouting
@@ -14,7 +13,9 @@ participant "t67:DeepOcean" as t67
 
 
 activate s
-u -> s: tick()
+
+s -> s: tick()
+activate s
 
 s -> s: runCorporations()
 activate s
@@ -87,7 +88,7 @@ current-> oil: 10
 oil -> current: getDirection()
 current --> oil: 0
 deactivate current
-oil -> t66: getTileByDirection(0,1)
+oil -> t66: getTileInDirection(0,1)
 activate t66
 
 t66 --> oil: t67
@@ -150,7 +151,7 @@ scouting -> current: getDirection()
 current --> scouting: 0
 deactivate current
 
-scouting -> t66: getTileByDirection(0)
+scouting -> t66: getTileInDirection(0,1)
 activate t66
 
 t66 -> scouting: t67
@@ -162,12 +163,12 @@ deactivate scouting
 
 s --> s
 deactivate s
-s -> s: eventsExist()
+s -> s: processEvents()
 activate s
-s --> s: false
+s --> s
 deactivate s
 
-s --> u
+s --> s
 deactivate s
 
 @enduml
