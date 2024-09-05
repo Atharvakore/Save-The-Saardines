@@ -1,6 +1,27 @@
 @startuml
 
 [*] --> MapParsed : parseMapJSON()[parseSuccessful]
+[*] --> [*] : parseMapJSON()[parseFailed]
+
+MapParsed --> CorporationParsed : parseCorporationsJSON()[parseSuccessful]
+MapParsed --> [*] : parseCorporationsJSON()[parseFailed]
+
+CorporationParsed --> ScenarioParsed : parseScenarioJSON()[parseSuccessful]
+CorporationParsed --> [*] : parseScenarioJSON()[parseFailed]
+
+ScenarioParsed --> SimulationStarted : startSimulation()
+
+SimulationStarted --> TickStarted : tick()
+
+TickStarted --> CorporationPresent : checkCorporations()
+CorporationPresent --> ShipsMoved : moveShips()
+ShipsMoved --> GarbageCollected : collectGarbage()
+GarbageCollected --> CorporationsCorporated : corporate()
+CorporationsCorporated --> ShipsUnloaded : unloadShips()
+ShipsUnloaded --> ShipsRefueled : refuelShips()
+ShipsRefueled --> CorporationPresent : checkCorporations()
+
+
 
 @enduml
 
