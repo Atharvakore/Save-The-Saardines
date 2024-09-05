@@ -14,14 +14,19 @@ ScenarioParsed --> SimulationStarted : startSimulation()
 SimulationStarted --> TickStarted : tick()
 
 TickStarted --> CorporationPresent : checkCorporations()
-CorporationPresent --> ShipsMoved : moveShips()
+CorporationPresent --> ShipsMoved : moveShips() [corporationsPresent]
 ShipsMoved --> GarbageCollected : collectGarbage()
 GarbageCollected --> CorporationsCorporated : corporate()
 CorporationsCorporated --> ShipsUnloaded : unloadShips()
 ShipsUnloaded --> ShipsRefueled : refuelShips()
-ShipsRefueled --> CorporationPresent : checkCorporations()
-
-
+ShipsRefueled --> CorporationPresent : checkCorporations()[True]
+CorporationPresent --> GarbageDrifted : driftGarbage() [corporationsAbsent]
+GarbageDrifted --> ShipsDrifted : driftShips()
+ShipsDrifted --> EventsProcessed : processEVents()
+EventsProcessed --> TickStarted : [currentTick!=eventTick]
+EventsProcessed --> EventsStarted : [currentTick=eventTick]
+EventsStarted --> TickStarted : []
+TickStarted --> [*] : [CurrentTick=25]
 
 @enduml
 
