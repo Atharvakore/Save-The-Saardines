@@ -26,7 +26,7 @@ class Vec2D{
 }
 class Corporation {
   id:Int,
-  partner:Coperator
+  partner:Corporation
   name:String,
   acceptedGarbageTypes: List<GarbageType>
   ownedHarbors: List<Harbor>
