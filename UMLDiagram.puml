@@ -26,6 +26,7 @@ class Vec2D{
 }
 class Corporation {
   id:Int,
+  partner:Coperator
   name:String,
   acceptedGarbageTypes: List<GarbageType>
   ownedHarbors: List<Harbor>
@@ -33,6 +34,7 @@ class Corporation {
   +moveShips(),
   +collectGarbage(),
   +refuelShips()
+  +cooperatewith(c1:coperation)
 }
 class Dijkstra{
   execute(Tile): Map<Tile,Int>
@@ -62,7 +64,7 @@ class Simulation {
   map: Map
   +start()
   +tick()
-  +cooperatewith(c1:coperation,c2:coperation)
+
 }
 package Event{
   abstract class Event {
