@@ -101,61 +101,62 @@ package Parser {
   class ParsedObject {
     properties:Map<String,String>
   }
-  interface Validator {
-    -jsonParser: JsonParser
-    ' Throws an exception if the object is not valid
-    +validateState(Object): void
-  }
-  interface JSONParser<T>{
-    -jsonObjects: Map<String, Array<JSONObject>>
+'  interface Validator {
+'    -jsonParser: JsonParser
+'    ' Throws an exception if the object is not valid
+'    +validateState(Object): void
+'  }
+  interface JSONParser{
+    + accumulator:Accumulator
     +parse(jsonFile: String): Boolean
     -getNextObject(jsonObject: String)
   }
+
   MapJSONParser --|> JSONParser
-  class MapJSONParser<Map> {
-    -tiles: List<Tile>
-    -tilesbyId: Map<Int, Tile>
-    -tilesbyCoord: Map<Vec2D, Tile>
-    -currentTile: Tile
+
+
+  class MapJSONParser {
     +parseMap(jsonFile:String): Boolean
-    -parseNextTile(String json): Tile
-    -validateTile(Int id, Vec2D coord, TileCategory category, boolean Harbor, boolean Current, Direction direction, Double speed, Double intensity): Boolean
-    -validateUniqueId(Int id): Boolean
-    -validateCoordinates(Vec2D coord): Boolean
-    -validateRequirements(TileCategory category, boolean Harbor, boolean Current, Direction direction, Double speed, Double intensity): Boolean
+    -validateTile(): Boolean
+    -validateUniqueId(): Boolean
+    -validateCoordinates(): Boolean
+    -validateRequirements(): Boolean
 
   }
 
   class CorporationJSONParser{
-    -map: Map
-    -corporations: List<Corporation>
-    -ships: Map<Int, Ship>
-    -mapCorporationToHarbor: Map<Int, List<Tile>>
-    -currentObject: ParsedObject
-    -mapCorporationToShips: Map<Int, List<Int>>
+'    -map: Map
+'    -corporations: List<Corporation>
+'    -ships: Map<Int, Ship>
+'    -mapCorporationToHarbor: Map<Int, List<Tile>>
+'    -currentObject: ParsedObject
+'    -mapCorporationToShips: Map<Int, List<Int>>
 
-    +CorporationJSONParser(map: Map)
-    +parseCorporation(corporation:String): Corporation
-    +parseShip(ship:String): Ship
-    +parseHarbors(harbors:String): Harbor
+    +CorporationJSONParser(accumulator:Accumulator)
+    +parseCorporationFile(filePath: String): Boolean
+    +parseShips(): Boolean
+    +parseHarbors(): Boolean
+
     +validateCorporation(): Boolean
     -validateCorporationUniqueId(): Boolean
     -validateCorporationUniqueName(): Boolean
     -validateHarborTiles(): Boolean
     -validateCorporationGarbageTypes(): Boolean
     -validateCorporationShip(): Boolean
+
     +createCorporation(currentObject): Corporation
-    +validateShip()
-    -validateShipUniqueId(id: Int): Boolean
-    -validateShipUniqueName(name: String): Boolean
+
+    + validateShips():Boolean
+    +validateShip(ship:ParsedObject): Boolean
+    -validateShipUniqueId(id:Int): Boolean
+    -validateShipUniqueName(name:String): Boolean
     -validateShipLocation(location: Int): Boolean
-    -validateShipAttributes(type: String, maxVelocity: Int, acceleration: Int, fuelCapacity: Int, fuelConsumption: Int, visibilityRange: Int, garbageType: String, capacity: Int): Boolean
+    -validateShipAttributes(ship:ParsedObject): Boolean
+
     +createShip(currentObject:ParsedObject): Ship
   }
 
   class ScenarioJSONParser{
-    -events: List<ParsedObject>
-    -garbage: List<ParsedObject>
     +parseEvents(json: String)
     +parseGarbage(garbage: String): Garbage
     +validateGarbage()
@@ -179,16 +180,25 @@ package Parser {
 
   JSONParser <|-- CorporationJSONParser
   JSONParser <|-- ScenarioJSONParser
+  Accumulator --o JSONParser
+  ParsedObject --o Accumulator
   class Accumulator {
-    +parsedObjects: Map<String, ParsedObject>
+    +parsedTiles: List<ParsedObject>
+    +parsedCorporations: List<ParsedObject>
+    +parsedShips: List<ParsedObject>
+    +parsedGarbages: List<ParsedObject>
+    +parsedEvents: List<ParsedObject>
+
+    +currentValidatingObject: ParsedObject
+
     +map: Map
     +tiles: Map<Int, Tile>
     +corporations: Map<Int, Corporation>
     +ships: Map<Int, Ship>
-    #events: Map<Int, Event>
-    #garbage: Map<Int, Garbage>
-    #mapCorporationToHarbor: Map<Int, List<Tile>>
-    #mapCorporationToShips: Map<Int, List<Int>>
+    +events: Map<Int, Event>
+    +garbage: Map<Int, Garbage>
+    +mapCorporationToHarbor: Map<Int, List<Tile>>
+    +mapCorporationToShips: Map<Int, List<Int>>
     +Getters()
   }
 }
