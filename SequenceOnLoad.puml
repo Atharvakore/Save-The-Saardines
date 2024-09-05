@@ -127,14 +127,24 @@ activate corparser
 corparser --> corparser
 
 deactivate corparser
-corparser --> corparser
+corparser --> corparser: True
 deactivate corparser
 end
 corparser --> JSONparser: ships
 deactivate corparser
 JSONparser -> corparser: parseCorporations(corporations.json)
 activate corparser
-corparser -> corparser: ValidateCorporation(id, name, ships, homeHarbors, garbageTypes)
+activate corparser
+corparser -> corparser: createObjects(corporations.json)
+activate corparser
+corparser --> corparser : objects: List<ParsedObject>
+deactivate corparser
+corparser -> corparser: this.accu.setParsedCorporations(objects)
+activate corparser
+corparser --> corparser :
+deactivate corparser
+loop for corporationObject in this.accu.parsedCorporations
+corparser -> corparser: ValidateCorporation(corporationObject)
 activate corparser
 corparser -> corparser : validateCorporationUniqueId(id)
 activate corparser
@@ -144,19 +154,27 @@ corparser-> corparser: validateCorporationUniqueName(name)
 activate corparser
 corparser --> corparser: True
 deactivate corparser
-corparser -> corparser: validateHarborTiles()
+corparser -> corparser: validateHarborTiles(homeHarbors)
 activate corparser
-corparser -> map: getTilebyId(id)
-activate map
-map --> corparser : t
-deactivate map
+loop for id in homeHarbors
+corparser -> accu: getTilebyId(id)
+activate accu
+accu --> corparser : t
+deactivate accu
+end
 corparser --> corparser: True
 deactivate corparser
-corparser -> corparser: validateCorporationShip()
+corparser -> corparser: validateCorporationShip(ships)
 activate corparser
-corparser -> corparser : this.mapCorporationToShips.get(id)
+loop for id in ships
+corparser -> accu: getShipById(id)
+activate accu
+accu --> corparser : s
+deactivate accu
+end
+corparser -> corparser : this.accu.mapCorporationToShips.get(id)
 activate corparser
-corparser --> corparser : List<Int>
+corparser --> corparser : shouldBeShips: List<Int>
 deactivate corparser
 corparser --> corparser: True
 deactivate corparser
@@ -166,6 +184,7 @@ corparser --> corparser: True
 deactivate corparser
 corparser --> corparser : True
 deactivate corparser
+end
 corparser -> log : logInitializationInfoSuccess(corporations.json)
 activate log
 log --> corparser
