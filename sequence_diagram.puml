@@ -129,6 +129,77 @@ corparser --> corparser: True
 deactivate corparser
 corparser -> corparser: validateCorporationShip()
 activate corparser
+corparser -> corparser : this.mapCorporationToShips.get(id)
+activate corparser
+corparser --> corparser : List<Int>
+deactivate corparser
+corparser --> corparser: True
+deactivate corparser
+corparser -> corparser : validateCorporationGarbageTypes()
+activate corparser
+corparser --> corparser: True
+deactivate corparser
+corparser --> corparser : True
+deactivate corparser
+corparser -> log : logInitializationInfoSuccess(corpartions.json)
+activate log
+log --> corparser
+deactivate log
+corparser --> JSONparser
+deactivate corparser
+create "Sc: ScenarioJSONParser" as scparser
+JSONparser -> scparser
+activate scparser
+scparser -> JSONparser: Sc
+deactivate scparser
+JSONparser -> scparser : parseGarbage(Scenario.json)
+loop all garbages
+activate scparser
+scparser -> scparser : validateGarbage(id, type, locationID, amount)
+activate scparser
+scparser -> scparser: validateGarbageUniqueId(id)
+activate scparser
+scparser --> scparser: True
+deactivate scparser
+scparser -> scparser: validateGarbageTypeAndAmount(type, amount)
+activate scparser
+scparser --> scparser: True
+deactivate scparser
+scparser -> scparser: validateGarbageLocation(locationId)
+activate scparser
+scparser -> map : getTilebyId(locationId)
+activate map
+map --> scparser: t
+deactivate map
+scparser --> scparser: True
+deactivate scparser
+create "g: Garbage " as garbage
+scparser -> garbage: Garbage(id, amount, type, t)
+activate garbage
+garbage --> scparser: g
+deactivate garbage
+deactivate scparser
+end
+scparser --> JSONparser: List<Garbage>
+deactivate scparser
+JSONparser -> scparser: parseEvents(Scenario.json)
+activate scparser
+scparser -> scparser: validateEvent(id, type, tick, duration, location, radius, speed, amount, direction, shipID)
+activate scparser
+scparser -> scparser: validateUniqueId(id)
+activate scparser
+scparser --> scparser: True
+deactivate scparser
+scparser -> scparser: validateAttributes(type, duration, location, radius, speed, amount, direction, shipId)
+activate scparser
+scparser --> scparser: True
+deactivate scparser
+create "event: Event" as event
+scparser -> event: event(id, type, tick, duration, location, radius, speed, amount, direction, shipID)
+activate event
+event --> scparser: event
+deactivate event
+scparser --> JSONparser: True
 
 
 
