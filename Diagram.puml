@@ -120,6 +120,7 @@ package Parser{
 
    }
   interface Validator {
+    -jsonParser:JsonParser
     ' Throws an exception if the object is not valid
     validateState(Object) : void
   }
@@ -131,8 +132,8 @@ package Parser{
     MapJSONParser --|> JSONParser
     class MapJSONParser<Map>{
     -tiles: List<Tile>
-    -tilesbyId: Map<Int,Tile>
-    -tilesbyCoord: Map<Vec2D, Tile>
+    -tilesById: Map<Int,Tile>
+    -tilesByCoord: Map<Vec2D, Tile>
     -currentTile: Tile
     +parseMap(jsonFile:String): Boolean
     -parseNextTile(String json): Tile
@@ -148,8 +149,9 @@ package Parser{
      - corporations:List<Corporation>
      - ships:Map<Int,Ship>
      - mapCorporationToHarbor:Map<Int,List<Tile>>
-     - currentObject:JSONObject
+     - currentObject:ParsedObject
      - mapCorporationToShips: Map<Int,List<Int>>
+
      +CorporationJSONParser(map: Map)
      + parseCorporation(corporation:String):Corporation
      + parseShip(ship:String):Ship
@@ -166,7 +168,7 @@ package Parser{
      - validateShipUniqueName(name: String):Boolean
      - validateShipLocation(location: Int): Boolean
      - validateShipAttributes(type: String, maxVelocity: Int, acceleration: Int, fuelCapacity: Int, fuelConsumption: Int, visibilityRange: Int, garbageType: String, capacity: Int):Boolean
-     + createShip(currentObject):Ship
+     + createShip(currentObject:ParsedObject):Ship
     }
 
         class ScenarioJSONParser{
@@ -180,13 +182,36 @@ package Parser{
           -validateGarbageType():Boolean
           -validateGarbageLocationExists():Boolean
           -validateGarbageAmount():Boolean
-          +createGarbage()
-
+          +createGarbage(garbage: ParsedObject)
+          + validateEvents()
+          - validateEventUniqueId():Boolean
+          - validateEventType():Boolean
+          - validateEventTick():Boolean
+          - validateEventLocation():Boolean
+          - validateEventRadius():Boolean
+          - validateEventSpeed():Boolean
+          - validateEventAmountIfExists():Boolean
+          - validateEventDirectionIfExists():Boolean
+          - validateEventShipIdIfExists():Boolean
+          + createEvent(event: ParsedObject)
         }
 
         JSONParser <|-- CorporationJSONParser
         JSONParser <|-- ScenarioJSONParser
+        class Accumulator{
+            + parsedObjects: Map<String, ParsedObject>
+            + map: Map
+            + tiles:Map<Int,Tile>
+            + corporations:Map<Int, Corporation>
+            + ships: Map<Int,Ship>
+            # events:Map<Int,Event>
+            # garbage:Map<Int,Garbage>
+            # mapCorporationToHarbor:Map<Int,List<Tile>>
+            # mapCorporationToShips: Map<Int, List<Int>>
+
+            +Getters()
         }
+}
 'Tiles
 
 package Tile{
