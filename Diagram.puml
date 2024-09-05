@@ -31,7 +31,9 @@
     acceptedGarbageTypes: List<GarbageType>
     ownedHarbors : List<Harbor>
     ownedShips: List<Ship>
-    moveShips()
+    +moveShips(),
+    +collectGarbage(),
+    +refuelShips()
   }
 
   class Dijkstra{
@@ -50,6 +52,7 @@
     tileIndex: Map<Vec2D, Tile>
 
     +getTileById(Int):Tile
+    +getTiles():List<Tile>
     +addTile(Tile):void
     +getTileByPosition(Vec2D):Tile
   }
@@ -142,6 +145,8 @@ abstract class Tile{
     adjacentTiles:Tile[6],
     shipTraversable:Boolean,
     garbage:List<Garbage>
+    +isDriftable(Int):Boolean
+    +driftGarbage(GarbageType,Int)
 }
 
 class Garbage {
@@ -161,18 +166,23 @@ DeepOcean --|> Tile
 ShallowOcean --|> Tile
 
 class Current{
-    speed: Int,
-    direction: Direction,
-    intensity: Int
+    -speed: Int,
+    -direction: Direction,
+    -intensity: Int,
+    +getSpeed():Int
+    +getIntensity():Int
+    +getDirection():Direction
 }
 class Land{
 }
 class Shore{
-harbor: Harbor?
+-harbor: Harbor?
++getHarbor():Harbor?
 }
 class ShallowOcean{}
 class DeepOcean{
-current: Current?
+-current: Current?
++getCurrent():Current?
 }
 
 }
@@ -189,11 +199,12 @@ abstract class Ship {
     fuelCapacity: Int,
     fuelConsumption: Int,
     visibleRange: Int,
+    -destinationTile: Tile,
 
-    navigateTo(Tile)
-    refuel()
-    getGarbageInFieldOfView(): List<Garbage>
-    drift()
+    +navigateTo(Tile)
+    +refuel()
+    +getTilesWithGarbageInFoV(): List<Tile>
+    +drift()
 }
 
 ScoutingShip --|> Ship
