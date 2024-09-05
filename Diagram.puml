@@ -198,7 +198,20 @@ package Parser{
 
         JSONParser <|-- CorporationJSONParser
         JSONParser <|-- ScenarioJSONParser
+        class Accumulator{
+            + parsedObjects: Map<String, ParsedObject>
+            + map: Map
+            + tiles:Map<Int,Tile>
+            + corporations:Map<Int, Corporation>
+            + ships: Map<Int,Ship>
+            # events:Map<Int,Event>
+            # garbage:Map<Int,Garbage>
+            # mapCorporationToHarbor:Map<Int,List<Tile>>
+            # mapCorporationToShips: Map<Int, List<Int>>
+
+            +Getters()
         }
+}
 'Tiles
 
 package Tile{
