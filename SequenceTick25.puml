@@ -2,10 +2,10 @@
 actor "u:User" as u
 participant "s:Simulator" as s
 participant "c1:Corporation" as c1
-participant "scouting:Ship" as scouting
-participant "collecting:Ship" as collecting
+participant "s1:ScoutingShip" as scouting
+participant "s2:CollectingShip" as collecting
 participant "m:Map" as m
-participant "t66:Tile" as t66
+participant "t66:DeepOcean" as t66
 participant "oil:Garbage" as oil
 participant "current:Current" as current
 participant "t67:Tile" as t67
@@ -19,10 +19,10 @@ activate c1
 s -> c1: moveShips()
 
 activate scouting
-c1 -> scouting: getTilesWithGarbage()
+c1 -> scouting: getTilesWithGarbageInFoV()
 scouting --> c1: List<Tile>
 
-c1 -> collecting: getTilesWithGarbage()
+c1 -> collecting: getTilesWithGarbageInFoV()
 activate collecting
 
 collecting --> c1: List<Tile>
@@ -51,6 +51,10 @@ activate t66
 s -> t66: getCurrent()
 t66 --> s: curr
 deactivate t66
+
+' Here the problem is: Current can drift more than 1 tile, but we call drift(t67,curr)
+' without actually computing the destination tile, we just assume it goes there and then
+' query getIntensity() and getSpeed() which makes no sense at this point.
 
 activate oil
 activate current
