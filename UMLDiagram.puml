@@ -38,7 +38,11 @@ class Harbor {
   owner: List<Corporation>,
   pos: Tile,
 }
-
+class Coordinator {
++main(mapfile : String, corporationsfile: String, scenarioFile: String, max_ticks: Int)
+-parse(): Accumulator
+}
+Coordinator -- Simulation
 class Map {
   tiles: List<Tile>
   tileIndex: Map<Vec2D, Tile>
@@ -98,9 +102,9 @@ package Parser {
     properties:Map<String,String>
   }
   interface JSONParser<T>{
-    -jsonObjects: Map<String, Array<JSONObject>>
+    -accumulator: Accumulator
     +parse(jsonFile: String): Boolean
-    -getNextObject(jsonObject: String)
+    -createObjects(file: String): List<ParsedObject>
   }
 
   MapJSONParser --|> JSONParser
@@ -108,11 +112,10 @@ package Parser {
 
   class MapJSONParser {
     +parseMap(jsonFile:String): Boolean
-    -validateTile(): Boolean
-    -validateUniqueId(): Boolean
-    -validateCoordinates(): Boolean
-    -validateRequirements(): Boolean
-
+    -validateTile(object: ParsedObject): Boolean
+    -validateUniqueId(id: Int): Boolean
+    -validateCoordinates(coord: Vec2D): Boolean
+    -validateRequirements(category: Category, harbor: boolean, current: Boolean, direction: Direction, speed: Int, Intensity: Int): Boolean
   }
 
   class CorporationJSONParser{
@@ -184,6 +187,7 @@ package Parser {
 
     +map: Map
     +tiles: Map<Int, Tile>
+    +tilesByCoordinat: Map<Vec2D, Tile>
     +corporations: Map<Int, Corporation>
     +ships: Map<Int, Ship>
     +events: Map<Int, Event>
@@ -201,10 +205,11 @@ package Tile{
     pos: Vec2D,
     -adjacentTiles: Tile[6],
     shipTraversable: Boolean,
-    garbage: List<Garbage>
+    -garbage: List<Garbage>
     +isDriftable(Int): Boolean
     +driftGarbage(GarbageType, Int): void
     +getTileInDirection(Direction): Tile
+    +addGarbage(g: Garbage): void
   }
 
   class Garbage {

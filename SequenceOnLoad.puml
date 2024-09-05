@@ -1,17 +1,35 @@
 @startuml
 actor User
-participant JSONParser as JSONparser
+participant Coordinator as JSONparser
 
-User -> JSONparser: map.json, corporations.json, scenario.json, 0
+User -> JSONparser: main(map.json, corporations.json, scenario.json, 0)
 activate JSONparser
-create parser as "m: MapJSONParser"
-JSONparser -> parser: parseMap(map.json)
+create "accu: Accumulator" as accu
+JSONparser -> accu :  Accumulator
+activate accu
+accu --> JSONparser : accu
+deactivate accu
 
+create parser as "m: MapJSONParser"
+JSONparser -> parser : MapJSONParser(accu)
 activate parser
-loop all tiles in file
-parser -> parser: parseNextTile(map.json)
+parser --> JSONparser: m
+deactivate parser
+JSONparser -> parser: parseMap(map.json)
 activate parser
-parser->parser:validateTile(id, coord, category, harbor, current, direction, speed, intensity)
+parser -> parser: createObjects(map.json)
+activate parser
+parser --> parser : objects: List<ParsedObject>
+deactivate parser
+parser -> parser: this.accu.setParsedTiles(objects)
+activate parser
+parser --> parser :
+deactivate parser
+
+
+loop for object in accu.parsedTiles
+
+parser->parser:validateTile(object)
 activate parser
 parser -> parser: validateUniqueId(id)
 activate parser
@@ -34,14 +52,11 @@ activate Tiles
 
 Tiles --> parser: t
 deactivate Tiles
-parser -> parser: this.tiles.add(t)
+parser -> parser: this.accu.tiles.add(id, t)
 activate parser
 parser --> parser
 deactivate parser
-parser -> parser: this.tilesbyId.add(id, t)
-activate parser
-parser --> parser
-deactivate parser
+
 parser -> parser: this.tilesbyCoord.add(coord, t)
 activate parser
 parser --> parser
@@ -50,7 +65,7 @@ parser --> parser : True
 deactivate parser
 end
 create "m:Map" as map
-parser -> map : Map(tiles, tilesbyCoord)
+parser -> map : Map(tiles.getValues(), tilesbyCoord)
 activate map
 map --> parser: m
 deactivate map
@@ -69,8 +84,18 @@ deactivate corparser
 JSONparser -> corparser: parseShips(corporations.json)
 
 activate corparser
-loop all ships
-corparser -> corparser:ValidateShip(id, name, type, corporationId, locationId, maxVelocity, acceleration,  fuelCapacity, fuelConsumption, visibilityRange, garbageType, capacity)
+corparser -> corparser: createObjects(corporations.json)
+activate corparser
+corparser --> corparser : objects: List<ParsedObject>
+deactivate corparser
+corparser -> corparser: this.accu.setParsedShips(objects)
+activate corparser
+corparser --> corparser :
+deactivate corparser
+
+loop for shipObject in this.accu.parsedShips
+
+corparser -> corparser:ValidateShip(shipObject)
 activate corparser
 corparser -> corparser: validateShipUniqueId(id)
 activate corparser
@@ -97,7 +122,7 @@ corparser -> ship: Ship(id, name, tile, maxVelocity, acceleration, fuelCapacity,
 activate ship
 ship -> corparser: s
 deactivate ship
-corparser -> corparser: this.corporateToShip.get(locationId).add(id)
+corparser -> corparser: this.accu.mapCorporationToShips.get(locationId).add(id)
 activate corparser
 corparser --> corparser
 
@@ -105,7 +130,7 @@ deactivate corparser
 corparser --> corparser
 deactivate corparser
 end
-corparser --> JSONparser
+corparser --> JSONparser: ships
 deactivate corparser
 JSONparser -> corparser: parseCorporations(corporations.json)
 activate corparser
@@ -141,11 +166,11 @@ corparser --> corparser: True
 deactivate corparser
 corparser --> corparser : True
 deactivate corparser
-corparser -> log : logInitializationInfoSuccess(corpartions.json)
+corparser -> log : logInitializationInfoSuccess(corporations.json)
 activate log
 log --> corparser
 deactivate log
-corparser --> JSONparser
+corparser --> JSONparser : corporations
 deactivate corparser
 create "Sc: ScenarioJSONParser" as scparser
 JSONparser -> scparser
@@ -180,10 +205,11 @@ garbage --> scparser: g
 deactivate garbage
 deactivate scparser
 end
-scparser --> JSONparser: List<Garbage>
+scparser --> JSONparser: garbage
 deactivate scparser
 JSONparser -> scparser: parseEvents(Scenario.json)
 activate scparser
+loop all events in file
 scparser -> scparser: validateEvent(id, type, tick, duration, location, radius, speed, amount, direction, shipID)
 activate scparser
 scparser -> scparser: validateUniqueId(id)
@@ -199,8 +225,31 @@ scparser -> event: event(id, type, tick, duration, location, radius, speed, amou
 activate event
 event --> scparser: event
 deactivate event
-scparser --> JSONparser: True
 
+end
+deactivate scparser
+scparser -> log: logInitializationInfoSuccess(scenario.json)
+activate log
+log --> scparser
+deactivate log
+scparser --> JSONparser: events
+deactivate scparser
+
+loop for g in garbage
+JSONparser -> JSONparser: m.getTilebyId(g.getLocationId()).addGarbage(g)
+activate JSONparser
+JSONparser --> JSONparser
+deactivate JSONparser
+end
+create "s: Simulation" as sim
+
+JSONparser -> sim: sim(corporations, events, 0, 0, m)
+activate sim
+sim --> JSONparser : s
+deactivate sim
+JSONparser ->sim : start()
+activate sim
+sim -> log :
 
 
 
