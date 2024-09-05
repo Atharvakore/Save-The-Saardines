@@ -1,0 +1,7 @@
+@startuml
+
+[*] --> MapParsed : parseMapJSON()[parseSuccessful]
+
+@enduml
+
+
