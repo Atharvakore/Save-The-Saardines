@@ -2,24 +2,29 @@
 actor "u:User" as u
 participant "s:Simulator" as s
 participant "c1:Corporation" as c1
-participant "s1:ScoutingShip" as scouting
-participant "s2:CollectingShip" as collecting
+participant "scouting:ScoutingShip" as scouting
+participant "collecting:CollectingShip" as collecting
 participant "m:Map" as m
 participant "t66:DeepOcean" as t66
 participant "oil:Garbage" as oil
 participant "current:Current" as current
-participant "t67:Tile" as t67
+participant "t67:DeepOcean" as t67
 
 
 
 
 activate s
 u -> s: tick()
-activate c1
-s -> c1: moveShips()
 
-activate scouting
+s -> s: runCorporations()
+activate s
+
+s -> c1: moveShips()
+activate c1
+
 c1 -> scouting: getTilesWithGarbageInFoV()
+activate scouting
+
 scouting --> c1: List<Tile>
 
 c1 -> collecting: getTilesWithGarbageInFoV()
@@ -34,42 +39,67 @@ deactivate scouting
 
 
 c1 --> s
+deactivate c1
+
 
 s -> c1: collectGarbage()
+activate c1
 c1--> s
+deactivate c1
+
 
 s -> c1: refuelShips()
+activate c1
 c1--> s
+deactivate c1
 
+s --> s
+deactivate s
 
-activate m
+s -> s: driftGarbage()
+activate s
+
 s -> m: getTiles()
+activate m
+
 m --> s : List<Tile>
 deactivate m
 
-activate t66
 s -> t66: getCurrent()
-t66 --> s: curr
+activate t66
+
+t66 --> s: current
 deactivate t66
 
-' Here the problem is: Current can drift more than 1 tile, but we call drift(t67,curr)
-' without actually computing the destination tile, we just assume it goes there and then
-' query getIntensity() and getSpeed() which makes no sense at this point.
-
+s -> oil: drift(t66, current)
 activate oil
-activate current
-s -> oil: drift(t67, curr)
+
 oil -> current: getIntensity()
+activate current
+
 current --> oil: 1
 
 
 
 oil -> current: getSpeed()
 current-> oil: 10
-deactivate current
 
-activate t67
+oil -> current: getDirection()
+current --> oil: 0
+deactivate current
+oil -> t66: getTileByDirection(0)
+activate t66
+
+t66 --> oil: t67
+deactivate t66
+
+' Here the problem is: Current can drift more than 1 tile, but we call drift(t67,curr)
+' without actually computing the destination tile, we just assume it goes there and then
+' query getIntensity() and getSpeed() which makes no sense at this point.
+
 oil -> t67: isDriftable(50)
+activate t67
+
 t67 --> oil: true
 oil -> t67: driftGarbage(OIL,50)
 t67 --> oil
@@ -78,14 +108,53 @@ deactivate t67
 oil --> s
 deactivate oil
 
+s --> s
+deactivate s
+
+
+s -> s: driftShips()
+activate s
 
 s -> c1: getShips()
+activate c1
+
 c1 --> s: List<Ship>
 deactivate c1
+s -> scouting: drift()
 activate scouting
-s -> scouting: drift(t67)
+
+scouting -> t66: getCurrent()
+activate t66
+
+t66 --> scouting: current
+
+
+scouting -> current: getIntensity()
+activate current
+
+current --> scouting: 1
+
+scouting -> current: getSpeed()
+current --> scouting: 10
+
+scouting -> current: getDirection()
+current --> scouting: 0
+deactivate current
+
+scouting -> t66: getTileByDirection(0)
+t66 -> scouting: t67
+deactivate t66
+
+
 scouting --> s
 deactivate scouting
+
+s --> s
+deactivate s
+s -> s: eventsExist()
+activate s
+s --> s: false
+deactivate s
 
 s --> u
 deactivate s
