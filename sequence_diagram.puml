@@ -55,7 +55,7 @@ activate map
 map --> parser: m
 deactivate map
 participant Logger as log
-parser -> log: parsedAndValidated(maps.json)
+parser -> log: logInitializationInfoSuccess(maps.json)
 activate log
 log --> parser:
 deactivate log
@@ -69,6 +69,7 @@ deactivate corparser
 JSONparser -> corparser: parseShips(corporations.json)
 
 activate corparser
+loop all ships
 corparser -> corparser:ValidateShip(id, name, type, corporationId, locationId, maxVelocity, acceleration,  fuelCapacity, fuelConsumption, visibilityRange, garbageType, capacity)
 activate corparser
 corparser -> corparser: validateShipUniqueId(id)
@@ -96,10 +97,44 @@ corparser -> ship: Ship(id, name, tile, maxVelocity, acceleration, fuelCapacity,
 activate ship
 ship -> corparser: s
 deactivate ship
-corparser -> corparser: this.corporateToShip.add(locationId, 
+corparser -> corparser: this.corporateToShip.get(locationId).add(id)
+activate corparser
+corparser --> corparser
+
+deactivate corparser
+corparser --> corparser
+deactivate corparser
+end
+corparser --> JSONparser
+deactivate corparser
+JSONparser -> corparser: parseCorporations(corporations.json)
+activate corparser
+corparser -> corparser: ValidateCorporation(id, name, ships, homeHarbors, garbageTypes)
+activate corparser
+corparser -> corparser : validateCorporationUniqueId(id)
+activate corparser
+corparser --> corparser: True
+deactivate corparser
+corparser-> corparser: validateCorporationUniqueName(name)
+activate corparser
+corparser --> corparser: True
+deactivate corparser
+corparser -> corparser: validateHarborTiles()
+activate corparser
+corparser -> map: getTilebyId(id)
+activate map
+map --> corparser : t
+deactivate map
+corparser --> corparser: True
+deactivate corparser
+corparser -> corparser: validateCorporationShip()
+activate corparser
 
 
 
 
 
-enduml
+
+
+
+@enduml
