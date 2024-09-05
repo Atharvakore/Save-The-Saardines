@@ -8,6 +8,7 @@ create parser as "m: MapJSONParser"
 JSONparser -> parser: parseMap(map.json)
 
 activate parser
+loop all tiles in file
 parser -> parser: parseNextTile(map.json)
 activate parser
 parser->parser:validateTile(id, coord, category, harbor, current, direction, speed, intensity)
@@ -47,13 +48,14 @@ parser --> parser
 deactivate parser
 parser --> parser : True
 deactivate parser
+end
 create "m:Map" as map
 parser -> map : Map(tiles, tilesbyCoord)
 activate map
 map --> parser: m
 deactivate map
 participant Logger as log
-parser -> log: parsedAndValidated(maps.json)
+parser -> log: logInitializationInfoSuccess(maps.json)
 activate log
 log --> parser:
 deactivate log
@@ -64,9 +66,10 @@ JSONparser -> corparser: CorporationJSONParser(m)
 activate corparser
 corparser --> JSONparser : c
 deactivate corparser
-JSONparser -> corparser: parseShips(corprations.json)
+JSONparser -> corparser: parseShips(corporations.json)
 
 activate corparser
+loop all ships
 corparser -> corparser:ValidateShip(id, name, type, corporationId, locationId, maxVelocity, acceleration,  fuelCapacity, fuelConsumption, visibilityRange, garbageType, capacity)
 activate corparser
 corparser -> corparser: validateShipUniqueId(id)
@@ -77,9 +80,9 @@ corparser -> corparser: validateShipUniqueName(name)
 activate corparser
 corparser --> corparser: True
 deactivate corparser
-corparser -> corparser: validateShiplocation(location)
+corparser -> corparser: validateShiplocation(locationId)
 activate corparser
-corparser -> map: getTilebyId(location)
+corparser -> map: getTilebyId(locationId)
 activate map
 map --> corparser: tile
 deactivate map
@@ -89,6 +92,47 @@ corparser -> corparser: validateShipAttributes(type, maxVelocity, acceleration, 
 activate corparser
 corparser --> corparser: True
 deactivate corparser
+create "s:Ship" as ship
+corparser -> ship: Ship(id, name, tile, maxVelocity, acceleration, fuelCapacity, fuelConsumption, visibilityRange, garbageType, capacity)
+activate ship
+ship -> corparser: s
+deactivate ship
+corparser -> corparser: this.corporateToShip.get(locationId).add(id)
+activate corparser
+corparser --> corparser
+
+deactivate corparser
+corparser --> corparser
+deactivate corparser
+end
+corparser --> JSONparser
+deactivate corparser
+JSONparser -> corparser: parseCorporations(corporations.json)
+activate corparser
+corparser -> corparser: ValidateCorporation(id, name, ships, homeHarbors, garbageTypes)
+activate corparser
+corparser -> corparser : validateCorporationUniqueId(id)
+activate corparser
+corparser --> corparser: True
+deactivate corparser
+corparser-> corparser: validateCorporationUniqueName(name)
+activate corparser
+corparser --> corparser: True
+deactivate corparser
+corparser -> corparser: validateHarborTiles()
+activate corparser
+corparser -> map: getTilebyId(id)
+activate map
+map --> corparser : t
+deactivate map
+corparser --> corparser: True
+deactivate corparser
+corparser -> corparser: validateCorporationShip()
+activate corparser
+
+
+
+
 
 
 
