@@ -16,71 +16,83 @@ package GeneralEnums{
   }
 }
 class Vec2D{
-  posX: Int,
-  posY: Int
+  + posX: Int,
+  + posY: Int
 }
 class Corporation {
-  id:Int,
-  partner:Corporation
-  name:String,
-  acceptedGarbageTypes: List<GarbageType>
-  ownedHarbors: List<Harbor>
-  ownedShips: List<Ship>
-  +moveShips(),
-  +collectGarbage(),
-  +refuelShips()
-  +cooperatewith(c1:coperation)
+  - id:Int,
+  - partner:Corporation
+  - name:String,
+  - acceptedGarbageTypes: List<GarbageType>
+  - ownedHarbors: List<Harbor>
+  - ownedShips: List<Ship>
+  + moveShips(),
+  + collectGarbage(),
+  + refuelShips()
+  +cooperateWith(c1:Corporation)
 }
 class Dijkstra{
-  execute(Tile): Map<Tile,Int>
+  + execute(Tile): Map<Tile,Int>
 }
+
+Dijkstra --o Simulation
+
+
+Coordinator o-- Parser
+Event --o Simulation
+Ship --o Corporation
+Tile --o Map
+Logger --o Coordinator
+
 class Harbor {
   owner: List<Corporation>,
   pos: Tile,
 }
 class Coordinator {
-+main(mapfile : String, corporationsfile: String, scenarioFile: String, max_ticks: Int)
--parse(): Accumulator
+ + main(mapFile : String, corporationsFile: String, scenarioFile: String, max_ticks: Int)
+ - parse(): Accumulator
 }
 Coordinator -- Simulation
 class Map {
-  tiles: List<Tile>
-  tileIndex: Map<Vec2D, Tile>
-  +getTileById(Int): Tile
-  +getTiles(): List<Tile>
-  +addTile(Tile): void
-  +getTileByPosition(Vec2D): Tile
+  - tiles: List<Tile>
+  - tileIndex: Map<Vec2D, Tile>
+  + getTileById(Int): Tile
+  + getTiles(): List<Tile>
+  + addTile(Tile): void
+  + getTileByPosition(Vec2D): Tile
 }
 
 
 class Simulation {
-  corporations: List<Corporation>
-  allEvents: List<Event>
-  tick: Int
-  maxTick: Int
-  map: Map
-  +start()
-  +tick()
+  - corporations: List<Corporation>
+  - allEvents: List<Event>
+  - tick: Int
+  - maxTick: Int
+  - map: Map
+  + start()
+  + tick()
 
 }
+Corporation --o Simulation
+Map --o Simulation
 package Event{
   abstract class Event {
-    id: Int,
-    +act(Simulation)
+    - id: Int,
+    + act(Simulation)
   }
   Pirate_Attack --|> Event
   class Pirate_Attack {
-    ShipID: Int,
+    - ship: Ship,
   }
   Local_Event --|> Event
   abstract class Local_Event {
-    location: Tile,
-    radius: Int,
+    - location: Tile,
+    - radius: Int,
   }
   Storm --|> Local_Event
   class Storm {
-    speed: Int,
-    direction: Direction
+    - speed: Int,
+    - direction: Direction
   }
   OilSpill --|> Local_Event
   class OilSpill {
@@ -99,23 +111,23 @@ package Parser {
     DEEP_OCEAN
   }
   class ParsedObject {
-    properties:Map<String,String>
+    + properties:Map<String,String>
   }
   interface JSONParser<T>{
-    -accumulator: Accumulator
-    +parse(jsonFile: String): Boolean
-    -createObjects(file: String): List<ParsedObject>
+    - logger: Logger
+    - accumulator: Accumulator
+    # validateObjects(object:List<ParsedObject>)
   }
 
   MapJSONParser --|> JSONParser
 
 
   class MapJSONParser {
-    +parseMap(jsonFile:String): Boolean
-    -validateTile(object: ParsedObject): Boolean
-    -validateUniqueId(id: Int): Boolean
-    -validateCoordinates(coord: Vec2D): Boolean
-    -validateRequirements(category: Category, harbor: boolean, current: Boolean, direction: Direction, speed: Int, Intensity: Int): Boolean
+    + parseMap(jsonFile:String): Boolean
+    - validateTile(tile: ParsedObject): Boolean
+    - validateUniqueId(id: Int): Boolean
+    - validateCoordinates(coord: Vec2D): Boolean
+    - validateRequirements(category: Category, harbor: boolean, current: Boolean, direction: Direction, speed: Int, Intensity: Int): Boolean
   }
 
   class CorporationJSONParser{
@@ -126,50 +138,61 @@ package Parser {
 '    -currentObject: ParsedObject
 '    -mapCorporationToShips: Map<Int, List<Int>>
 
-    +CorporationJSONParser(accumulator:Accumulator)
-    +parseCorporationFile(filePath: String): Boolean
-    +parseShips(): Boolean
-    +parseHarbors(): Boolean
+    + CorporationJSONParser(accumulator:Accumulator)
+    + parseCorporationFile(filePath: String): Boolean
+    - parseShips(): Boolean
+    - parseHarbors(): Boolean
 
-    +validateCorporation(corporationObject: ParsedObject): Boolean
-    -validateCorporationUniqueId(id: Int): Boolean
-    -validateCorporationUniqueName(name: String): Boolean
-    -validateHarborTiles(harbors: List<Int>): Boolean
-    -validateCorporationGarbageTypes(g: GarbageType): Boolean
-    -validateCorporationShip(ships: List<Int>): Boolean
+    + validateCorporations(corporations :List<ParsedObject>): Boolean
 
-    +createCorporation(currentObject): Corporation
+    - validateCorporation(corporationObject: ParsedObject): Boolean
 
-    + validateShips():Boolean
-    +validateShip(ship:ParsedObject): Boolean
-    -validateShipUniqueId(id:Int): Boolean
-    -validateShipUniqueName(name:String): Boolean
-    -validateShipLocation(location: Int): Boolean
-    -validateShipAttributes(ship:ParsedObject): Boolean
+    - validateCorporationUniqueId(id: Int): Boolean
+    - validateCorporationUniqueName(name: String): Boolean
+    - validateHarborTiles(harbors: List<Int>): Boolean
+    - validateCorporationGarbageTypes(g: GarbageType): Boolean
+    - validateCorporationShip(ships: List<Int>): Boolean
 
-    +createShip(currentObject:ParsedObject): Ship
+    + createCorporation(currentObject): Corporation
+
+    + validateShips(ships: List<ParsedObject>):Boolean
+
+    + validateShip(ship:ParsedObject): Boolean
+    - validateShipUniqueId(id:Int): Boolean
+    - validateShipUniqueName(name:String): Boolean
+    - validateShipLocation(location: Int): Boolean
+    - validateShipAttributes(ship:ParsedObject): Boolean
+
+    + createShip(currentObject:ParsedObject): Ship
   }
 
   class ScenarioJSONParser{
-    +parseEvents(json: String)
-    +parseGarbage(garbage: String): Garbage
-    +validateGarbage()
-    -validateGarbageUniqueId(): Boolean
-    -validateGarbageType(): Boolean
-    -validateGarbageLocationExists(): Boolean
-    -validateGarbageAmount(): Boolean
-    +createGarbage(garbage: ParsedObject)
-    +validateEvents()
-    -validateEventUniqueId(): Boolean
-    -validateEventType(): Boolean
-    -validateEventTick(): Boolean
-    -validateEventLocation(): Boolean
-    -validateEventRadius(): Boolean
-    -validateEventSpeed(): Boolean
-    -validateEventAmountIfExists(): Boolean
-    -validateEventDirectionIfExists(): Boolean
-    -validateEventShipIdIfExists(): Boolean
-    +createEvent(event: ParsedObject)
+    + ScenarioJSONParser(accumulator:Accumulator)
+    + parseEvents(json: String)
+    + parseGarbage(garbage: String): Garbage
+
+    + validateGarbages(garbages:List<ParsedObject>)
+
+    - validateGarbageUniqueId(): Boolean
+    - validateGarbageType(): Boolean
+    - validateGarbageLocationExists(): Boolean
+    - validateGarbageAmount(): Boolean
+    + createGarbage(garbage: ParsedObject)
+
+    + validateEvents(events:List<ParsedObject>)
+
+    + validateEvent(event: ParsedObject)
+
+    - validateEventUniqueId(): Boolean
+    - validateEventType(): Boolean
+    - validateEventTick(): Boolean
+    - validateEventLocation(): Boolean
+    - validateEventRadius(): Boolean
+    - validateEventSpeed(): Boolean
+    - validateEventAmountIfExists(): Boolean
+    - validateEventDirectionIfExists(): Boolean
+    - validateEventShipIdIfExists(): Boolean
+    + createEvent(event: ParsedObject)
   }
 
   JSONParser <|-- CorporationJSONParser
@@ -177,46 +200,38 @@ package Parser {
   Accumulator --o JSONParser
   ParsedObject --o Accumulator
   class Accumulator {
-    +parsedTiles: List<ParsedObject>
-    +parsedCorporations: List<ParsedObject>
-    +parsedShips: List<ParsedObject>
-    +parsedGarbages: List<ParsedObject>
-    +parsedEvents: List<ParsedObject>
-
-    +currentValidatingObject: ParsedObject
-
-    +map: Map
-    +tiles: Map<Int, Tile>
-    +tilesByCoordinat: Map<Vec2D, Tile>
-    +corporations: Map<Int, Corporation>
-    +ships: Map<Int, Ship>
-    +events: Map<Int, Event>
-    +garbage: Map<Int, Garbage>
-    +mapCorporationToHarbor: Map<Int, List<Tile>>
-    +mapCorporationToShips: Map<Int, List<Int>>
-    +Getters()
+    + map: Map
+    + tiles: Map<Int, Tile>
+    + tilesByCoordinate: Map<Vec2D, Tile>
+    + corporations: Map<Int, Corporation>
+    + ships: Map<Int, Ship>
+    + events: Map<Int, Event>
+    + garbage: Map<Int, Garbage>
+    + mapCorporationToHarbor: Map<Int, List<Tile>>
+    + mapCorporationToShips: Map<Int, List<Int>>
+    + Getters()
   }
 }
 'Tiles
 
 package Tile{
   abstract class Tile{
-    id: Int,
-    pos: Vec2D,
-    -adjacentTiles: Tile[6],
-    shipTraversable: Boolean,
-    -garbage: List<Garbage>
-    +isDriftable(Int): Boolean
-    +driftGarbage(GarbageType, Int): void
-    +getTileInDirection(Direction): Tile
-    +addGarbage(g: Garbage): void
+    - id: Int,
+    - pos: Vec2D,
+    - adjacentTiles: Tile[6],
+    - shipTraversable: Boolean,
+    - garbage: List<Garbage>
+    + isDriftable(Int): Boolean
+    + driftGarbage(GarbageType, Int): void
+    + getTileInDirection(Direction): Tile
+    + addGarbage(g: Garbage): void
   }
 
   class Garbage {
-    id: Int,
-    amount: Int,
-    type: GarbageType,
-    +drift(Tile)
+    - id: Int,
+    - amount: Int,
+    - type: GarbageType,
+    + drift(Tile)
   }
 
   Garbage --> Tile
@@ -229,45 +244,45 @@ package Tile{
   ShallowOcean --|> Tile
 
   class Current {
-    -speed: Int,
-    -direction: Direction,
-    -intensity: Int,
-    +getSpeed(): Int
-    +getIntensity(): Int
-    +getDirection(): Direction
+    - speed: Int,
+    - direction: Direction,
+    - intensity: Int,
+    + getSpeed(): Int
+    + getIntensity(): Int
+    + getDirection(): Direction
   }
   class Land{
   }
   class Shore{
-    -harbor: Harbor?
-    +getHarbor(): Harbor?
+    - harbor: Harbor?
+    + getHarbor(): Harbor?
   }
   class ShallowOcean{}
   class DeepOcean{
-    -current: Current?
-    +getCurrent(): Current?
+    - current: Current?
+    + getCurrent(): Current?
   }
 
 }
 'Ships
 package Ship{
   abstract class Ship {
-    id: Int,
-    name: String,
-    owner: Corporation,
-    pos: Tile,
-    dir: Direction,
-    maxVelocity: Int,
-    acceleration: Int,
-    fuelCapacity: Int,
-    fuelConsumption: Int,
-    visibleRange: Int,
-    -destinationTile: Tile,
-    +navigateTo(Tile)
-    +refuel()
+    - id: Int,
+    - name: String,
+    - owner: Corporation,
+    - pos: Tile,
+    - dir: Direction,
+    - maxVelocity: Int,
+    - acceleration: Int,
+    - fuelCapacity: Int,
+    - fuelConsumption: Int,
+    - visibleRange: Int,
+    - destinationTile: Tile,
+    + navigateTo(Tile)
+    + refuel()
     + giveGarbage()
-    +getTilesWithGarbageInFoV(): List<Tile>
-    +drift()
+    + getTilesWithGarbageInFoV(): List<Tile>
+    + drift()
   }
 
   ScoutingShip --|> Ship
@@ -279,34 +294,35 @@ package Ship{
   class CoordinatingShip{
   }
   class CollectingShip{
-    garbageType: GarbageType
-    garbageCapacity: Int,
-    garbageLoad: Int,
+    - garbageType: GarbageType
+    - garbageCapacity: Int,
+    - garbageLoad: Int,
   }
 }
 package Logger{
   class Logger{
-    -writer: PrintWriter = new PrintWriter(System.out)
-    +logInitializationInfoSuccess(filename:String)
-    +logInitializationInfoFail(filename:String)
-    +logSimulationStarted()
-    +logSimulationEnded()
-    +logSimulationTick(tick:Int)
-    +logCorporationStartMoveShips(corporationId:Int)
-    +logShipMovement(shipId:Int,speed:Int,tileId:Int)
-    +logCorporationStartCollectGarbage(corporateId)
-    +logGarbageCollectionByShip(shipId:Int,garbageType:GarbageType,garbageId:Int)
-    +logCorporationCooperationStart(corporationId:Int)
-    +logCooperationBetweenCorporations(corporationId:Int, otherCorporationId: Int, shipId:Int, cooperatedShipId: Int)
-    +logCorporationRefueling(corporationId:Int)
-    +logRefuelingShip(shipId:Int, tileId: Int)
-    +logUnloadShip(shipId:Int, amount:Int, garbageType:GarbageType, tileId:Int)
-    +logCorporationFinishedActions(corporationId:Int)
-    +logCurrentDriftGarbage(garbageType:GarbageType, garbageId:Int, amount:Int, startTileId:Int, endTileId:Int)
-    +logCurrentDriftShip(shipId:Int,startTileId:Int, endTileId:Int)
-    +logEventStart(eventId:Int,eventType:EventType)
-    +logSimulationStatisticsCalculated()
-    +logSimulationStatistics()
+'  - writer: PrintWriter = new PrintWriter(System.out)
+    - writer: PrintWriter
+    + logInitializationInfoSuccess(filename:String)
+    + logInitializationInfoFail(filename:String)
+    + logSimulationStarted()
+    + logSimulationEnded()
+    + logSimulationTick(tick:Int)
+    + logCorporationStartMoveShips(corporationId:Int)
+    + logShipMovement(shipId:Int,speed:Int,tileId:Int)
+    + logCorporationStartCollectGarbage(corporateId)
+    + logGarbageCollectionByShip(shipId:Int,garbageType:GarbageType,garbageId:Int)
+    + logCorporationCooperationStart(corporationId:Int)
+    + logCooperationBetweenCorporations(corporationId:Int, otherCorporationId: Int, shipId:Int, cooperatedShipId: Int)
+    + logCorporationRefueling(corporationId:Int)
+    + logRefuelingShip(shipId:Int, tileId: Int)
+    + logUnloadShip(shipId:Int, amount:Int, garbageType:GarbageType, tileId:Int)
+    + logCorporationFinishedActions(corporationId:Int)
+    + logCurrentDriftGarbage(garbageType:GarbageType, garbageId:Int, amount:Int, startTileId:Int, endTileId:Int)
+    + logCurrentDriftShip(shipId:Int,startTileId:Int, endTileId:Int)
+    + logEventStart(eventId:Int,eventType:EventType)
+    + logSimulationStatisticsCalculated()
+    + logSimulationStatistics()
   }
 }
 @enduml
