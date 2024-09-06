@@ -64,10 +64,6 @@ deactivate c1
 
 s --> s
 deactivate s
-
-s -> s: driftGarbage()
-activate s
-
 s -> m: getTiles()
 activate m
 
@@ -79,6 +75,11 @@ activate s
 
 s --> s: listOfDeepOceanTiles
 deactivate
+
+s -> s: driftGarbage()
+activate s
+
+
 
 loop for tile in listOfDeepOceanTiles
 
@@ -92,11 +93,10 @@ s -> t66: isGarbagePresent()
 t66--> s: true
 
 s -> t66: getListOfGarbage()
-t66 --> s:
-
-
+t66 --> s: {oil}
 deactivate t66
 
+loop for garbage in {oil}
 s -> oil: drift(t66)
 activate oil
 
@@ -131,7 +131,7 @@ oil --> oil: false
 deactivate oil
 
 
-oil -> oil: removeGarbage(OIL,50)
+oil -> oil: removeGarbage(50)
 activate oil
 
 oil --> oil
@@ -170,7 +170,7 @@ deactivate t67
 
 oil --> s
 deactivate oil
-
+end
 s --> s
 deactivate s
 end
@@ -182,13 +182,30 @@ s -> c1: getShips()
 activate c1
 
 c1 --> s: {s1,s2}
-
 deactivate c1
-s -> scouting: drift()
+
+loop for ship in {s1,s2}
+
+s -> scouting: getTile()
 activate scouting
+scouting --> s: t66
+
+s -> s: listOfDeepOceanTiles.contains(t66)
+activate s
+s --> s: true
+deactivate s
+
+
+s -> scouting: drift()
+
+scouting -> t66: isCurrentPresent()
+activate t66
+
+
+t66 --> scouting: true
 
 scouting -> t66: getCurrent()
-activate t66
+
 
 t66 --> scouting: current
 deactivate t66
@@ -221,7 +238,7 @@ deactivate
 
 scouting --> s
 deactivate scouting
-
+end
 s --> s
 deactivate s
 s -> s: processEvents()
