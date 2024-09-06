@@ -130,7 +130,7 @@ package Parser {
     +parseCorporationFile(filePath: String): Boolean
     +parseShips(): Boolean
     +parseHarbors(): Boolean
-
+    + createShipObjects(file: String)
     +validateCorporation(corporationObject: ParsedObject): Boolean
     -validateCorporationUniqueId(id: Int): Boolean
     -validateCorporationUniqueName(name: String): Boolean
@@ -195,6 +195,10 @@ package Parser {
     +mapCorporationToHarbor: Map<Int, List<Tile>>
     +mapCorporationToShips: Map<Int, List<Int>>
     +Getters()
+    +addTile(id: Int, t: Tile): Unit
+    +addTileByCoordinat(coord: Vec2D, t: Tile): Unit
+    +addShip(shipId: Int, ship: Ship)
+    +addShipToCorp(corporationId: Int, shipId: Int)
   }
 }
 'Tiles
