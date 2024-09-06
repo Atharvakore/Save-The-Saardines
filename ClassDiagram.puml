@@ -26,11 +26,12 @@ class Corporation {
   - acceptedGarbageTypes: List<GarbageType>
   - ownedHarbors: List<Harbor>
   - ownedShips: List<Ship>
-  + moveShips(),
-  + collectGarbage(),
-  + refuelShips()
-  + unloadShips()
+  -moveShips(),
+  -collectGarbage(),
+  -refuelShips()
+  -unloadShips()
   +cooperateWith(c1:Corporation)
+  +run()
 }
 class Dijkstra{
   + execute(Tile): Map<Tile,Int>
