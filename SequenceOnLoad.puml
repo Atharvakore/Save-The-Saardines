@@ -197,9 +197,17 @@ activate scparser
 scparser -> JSONparser: Sc
 deactivate scparser
 JSONparser -> scparser : parseGarbage(Scenario.json)
-loop all garbages
 activate scparser
-scparser -> scparser : validateGarbage(id, type, locationID, amount)
+scparser -> scparser: createObjects(Scenario.json)
+activate scparser
+scparser --> scparser : objects: List<ParsedObject>
+deactivate scparser
+scparser -> scparser: this.accu.setParsedGarbage(objects)
+activate scparser
+scparser --> scparser
+deactivate scparser
+loop for garbageObject in parsedGarbage
+scparser -> scparser : validateGarbage(garbageObject)
 activate scparser
 scparser -> scparser: validateGarbageUniqueId(id)
 activate scparser
@@ -228,8 +236,16 @@ scparser --> JSONparser: garbage
 deactivate scparser
 JSONparser -> scparser: parseEvents(Scenario.json)
 activate scparser
-loop all events in file
-scparser -> scparser: validateEvent(id, type, tick, duration, location, radius, speed, amount, direction, shipID)
+scparser -> scparser: createObjects(Scenario.json)
+activate scparser
+scparser --> scparser : objects: List<ParsedObject>
+deactivate scparser
+scparser -> scparser: this.accu.setParsedGarbage(objects)
+activate scparser
+scparser --> scparser
+deactivate scparser
+loop eventObject in parsedEvents
+scparser -> scparser: validateEvent(eventObject)
 activate scparser
 scparser -> scparser: validateUniqueId(id)
 activate scparser
