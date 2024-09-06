@@ -309,9 +309,8 @@ JSONparser -> sim: sim(corporations, events, 0, 0, m)
 activate sim
 sim --> JSONparser : s
 deactivate sim
-JSONparser ->sim : start()
-activate sim
-sim -> log :
+
+
 
 
 
