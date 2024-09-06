@@ -201,7 +201,9 @@ package Tile{
     id: Int,
     amount: Int,
     type: GarbageType,
+    static maxId: Int,
     +drift(Tile)
+    +static getNextId(): Int
   }
 
   Garbage --> Tile
