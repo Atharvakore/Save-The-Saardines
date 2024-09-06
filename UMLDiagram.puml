@@ -124,10 +124,12 @@ package Parser {
 
   class MapJSONParser {
     + parseMap(jsonFile:String): Boolean
+    - createTileObjects(filePath: String): List<ParsedObject>
+    - validateTiles(objects: List<ParsedObject>): Boolean
     - validateTile(tile: ParsedObject): Boolean
     - validateUniqueId(id: Int): Boolean
     - validateCoordinates(coord: Vec2D): Boolean
-    - validateRequirements(category: Category, harbor: boolean, current: Boolean, direction: Direction, speed: Int, Intensity: Int): Boolean
+    - validateRequirements(tileObject: ParsedObject): Boolean
   }
 
   class CorporationJSONParser{
@@ -149,7 +151,7 @@ package Parser {
     -validateCorporationUniqueId(id: Int): Boolean
     -validateCorporationUniqueName(name: String): Boolean
     -validateHarborTiles(harbors: List<Int>): Boolean
-    -validateCorporationGarbageTypes(g: GarbageType): Boolean
+    -validateCorporationGarbageTypes(g: List<GarbageType>): Boolean
     -validateCorporationShip(ships: List<Int>): Boolean
 
     - createShipObjects(file: String): List<ParsedObject>
@@ -218,17 +220,10 @@ package Parser {
     +addTileByCoordinat(coord: Vec2D, t: Tile): Unit
     +addShip(shipId: Int, ship: Ship)
     +addShipToCorp(corporationId: Int, shipId: Int)
-
-    + map: Map
-    + tiles: Map<Int, Tile>
-    + tilesByCoordinate: Map<Vec2D, Tile>
-    + corporations: Map<Int, Corporation>
-    + ships: Map<Int, Ship>
-    + events: Map<Int, Event>
-    + garbage: Map<Int, Garbage>
-    + mapCorporationToHarbor: Map<Int, List<Tile>>
-    + mapCorporationToShips: Map<Int, List<Int>>
-    + Getters()
+    +getShipsOfCorp(corpId: Int): List<Int>
+    +addEvent(eventId: Int, event: Event)
+    +addCorporation(corpId: Int, corporation: Corporation)
+    +addGarbage(garbageId: Int, garbage: Garbage)
 
   }
 }
@@ -241,6 +236,7 @@ package Tile{
     - adjacentTiles: Tile[6],
     - shipTraversable: Boolean,
     - garbage: List<Garbage>
+    +Tile(id: Int, pos: Vec2D, shipTraversable): Tile
     + isSpaceAvailable(Int): Boolean
     + driftGarbage(GarbageType, Int): void
     + getTileInDirection(distance: Int, dir: Direction): Tile
@@ -265,7 +261,6 @@ package Tile{
   Garbage --> Tile
 
   Land --|> Tile
-  Water --|> Tile
 
   Shore --|> Tile
   DeepOcean --|> Tile
