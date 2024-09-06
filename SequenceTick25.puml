@@ -64,17 +64,11 @@ deactivate c1
 
 s --> s
 deactivate s
-s -> m: getTiles()
+s -> m: getTilesByInstance(instanceOf(DeepOcean))
 activate m
 
-m --> s : {t1..t100}
+m --> s : listOfDeepOceanTiles
 deactivate m
-
-s -> s: getDeepOceanTiles({t1,..,t100})
-activate s
-
-s --> s: listOfDeepOceanTiles
-deactivate
 
 s -> s: driftGarbage()
 activate s
