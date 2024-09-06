@@ -44,10 +44,7 @@ Ship --o Corporation
 Tile --o Map
 Logger --o Coordinator
 
-class Harbor {
-  owner: List<Corporation>,
-  pos: Tile,
-}
+
 class Coordinator {
  + main(mapFile : String, corporationsFile: String, scenarioFile: String, max_ticks: Int)
  - parse(): Accumulator
@@ -227,6 +224,7 @@ package Tile{
     + addGarbage(g: Garbage): void
   }
 
+
   class Garbage {
     - id: Int,
     - amount: Int,
@@ -263,6 +261,11 @@ package Tile{
     + getCurrent(): Current?
   }
 
+class Harbor {
+  owner: List<Corporation>,
+  pos: Tile,
+}
+Harbor --o Shore
 }
 'Ships
 package Ship{
