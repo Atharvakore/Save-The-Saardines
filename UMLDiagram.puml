@@ -29,6 +29,7 @@ class Corporation {
   + moveShips(),
   + collectGarbage(),
   + refuelShips()
+  + unloadShips()
   +cooperateWith(c1:Corporation)
 }
 class Dijkstra{
@@ -68,7 +69,8 @@ class Simulation {
   - map: Map
   + start()
   + tick()
-
+  - runCorporations()
+  - processEvents()
 }
 Corporation --o Simulation
 Map --o Simulation
@@ -238,10 +240,13 @@ package Tile{
     - adjacentTiles: Tile[6],
     - shipTraversable: Boolean,
     - garbage: List<Garbage>
-    + isDriftable(Int): Boolean
+    + isSpaceAvailable(Int): Boolean
     + driftGarbage(GarbageType, Int): void
-    + getTileInDirection(Direction): Tile
+    + getTileInDirection(distance: Int, dir: Direction): Tile
     + addGarbage(g: Garbage): void
+    + isOilPresent(): Boolean
+    + isPlasticPresent(): Boolean
+    + areChemicalsPresent(): Boolean
   }
 
 
@@ -252,6 +257,8 @@ package Tile{
     -static maxId: Int,
     +drift(Tile)
     +static getNextId(): Int
+    +canDriftAtOnce(Int): Boolean
+    +removeAmount(Int): void
   }
 
   Garbage --> Tile
