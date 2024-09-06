@@ -250,7 +250,6 @@ package Ship{
     -destinationTile: Tile,
     +navigateTo(Tile)
     +refuel()
-    + giveGarbage()
     +getTilesWithGarbageInFoV(): List<Tile>
     +drift()
   }
@@ -267,6 +266,7 @@ package Ship{
     garbageType: GarbageType
     garbageCapacity: Int,
     garbageLoad: Int,
+    + giveGarbage()
   }
 }
 package Logger{
