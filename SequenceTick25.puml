@@ -7,7 +7,7 @@ participant "m:Map" as m
 participant "t66:DeepOcean" as t66
 participant "oil:Garbage" as oil
 participant "current:Current" as current
-participant "t67:DeepOcean" as t67
+participant "t67:Tile" as t67
 
 
 
@@ -22,8 +22,8 @@ activate s
 
 s -> c1: moveShips()
 activate c1
+s -> c1: moveShips()
 
-c1 -> scouting: getTilesWithGarbageInFoV()
 activate scouting
 
 scouting --> c1: {t66}
@@ -41,19 +41,12 @@ deactivate scouting
 
 
 c1 --> s
-deactivate c1
-
 
 s -> c1: collectGarbage()
-activate c1
 c1--> s
-deactivate c1
-
 
 s -> c1: refuelShips()
-activate c1
 c1--> s
-deactivate c1
 
 s -> c1: unloadShips()
 activate c1
@@ -65,27 +58,24 @@ deactivate c1
 s --> s
 deactivate s
 
-s -> s: driftGarbage()
-activate s
-
-s -> m: getTiles()
 activate m
-
+s -> m: getTiles()
 m --> s : List<Tile>
 deactivate m
 
-s -> oil: drift(t66)
-activate oil
-
-oil -> t66: getCurrent()
 activate t66
-
-t66 --> oil: current
+s -> t66: getCurrent()
+t66 --> s: curr
 deactivate t66
 
-oil -> current: getIntensity()
-activate current
+' Here the problem is: Current can drift more than 1 tile, but we call drift(t67,curr)
+' without actually computing the destination tile, we just assume it goes there and then
+' query getIntensity() and getSpeed() which makes no sense at this point.
 
+activate oil
+activate current
+s -> oil: drift(t67, curr)
+oil -> current: getIntensity()
 current --> oil: 1
 
 
@@ -148,19 +138,10 @@ deactivate t67
 oil --> s
 deactivate oil
 
-s --> s
-deactivate s
-
-
-s -> s: driftShips()
-activate s
 
 s -> c1: getShips()
-activate c1
-
 c1 --> s: List<Ship>
 deactivate c1
-s -> scouting: drift()
 activate scouting
 
 scouting -> t66: getCurrent()
