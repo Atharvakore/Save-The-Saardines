@@ -58,6 +58,7 @@ class Map {
   + getTiles(): List<Tile>
   + addTile(Tile): void
   + getTileByPosition(Vec2D): Tile
+  + getTilesByInstance(instanceOf(Tile))
 }
 
 
