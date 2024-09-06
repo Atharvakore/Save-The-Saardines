@@ -198,7 +198,11 @@ deactivate corparser
 create "corporation: Corporation" as corp
 corparser -> corp : Corporation(id, name, ships, homeHarbors, garbage)
 activate corp
-corp --> corparser
+corp --> corparser: corp
+corparser -> accu: addCorporation(id, corp)
+activate accu
+accu --> corparser
+deactivate accu
 deactivate corp
 
 corparser --> corparser : True
@@ -251,6 +255,10 @@ scparser -> garbage: Garbage(id, amount, type, t)
 activate garbage
 garbage --> scparser: g
 deactivate garbage
+scparser -> accu: addGarbage(id, g)
+activate accu
+accu --> scparser
+deactivate accu
 scparser --> scparser: True
 
 deactivate scparser
@@ -261,7 +269,7 @@ scparser --> JSONparser: True
 deactivate scparser
 JSONparser -> scparser: parseEvents(Scenario.json)
 activate scparser
-scparser -> scparser: createObjects(Scenario.json)
+scparser -> scparser: createEventObjects(Scenario.json)
 activate scparser
 scparser --> scparser : objects: List<ParsedObject>
 deactivate scparser
@@ -284,6 +292,10 @@ scparser -> event: Event(id, type, tick, duration, location, radius, speed, amou
 activate event
 event --> scparser: event
 deactivate event
+scparser -> accu: addEvent(id, event)
+activate accu
+accu --> scparser
+deactivate accu
 scparser --> scparser: True
 deactivate scparser
 end

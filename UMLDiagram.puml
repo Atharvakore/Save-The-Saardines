@@ -217,7 +217,10 @@ package Parser {
     +addTileByCoordinat(coord: Vec2D, t: Tile): Unit
     +addShip(shipId: Int, ship: Ship)
     +addShipToCorp(corporationId: Int, shipId: Int)
-    +getShipsOfCorp(corpId: Int)
+    +getShipsOfCorp(corpId: Int): List<Int>
+    +addEvent(eventId: Int, event: Event)
+    +addCorporation(corpId: Int, corporation: Corporation)
+    +addGarbage(garbageId: Int, garbage: Garbage)
 
   }
 }
