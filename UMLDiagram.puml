@@ -264,7 +264,6 @@ package Tile{
   Garbage --> Tile
 
   Land --|> Tile
-  Water --|> Tile
 
   Shore --|> Tile
   DeepOcean --|> Tile
