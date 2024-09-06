@@ -20,8 +20,23 @@ activate s
 s -> s: runCorporations()
 activate s
 
-s -> c1: moveShips()
+loop for corporation in Corporation
+s -> c1: run()
 activate c1
+
+c1 -> c1: filterCollectingShips()
+activate c1
+
+c1 --> c1: listOfCollectingShips
+deactivate c1
+
+loop for ship in {s1,s2}
+
+c1 -> c1: listOfCollectingShips.contains(s1)
+activate c1
+
+c1 --> c1: false
+deactivate c1
 
 c1 -> scouting: getTilesWithGarbageInFoV()
 activate scouting
@@ -29,6 +44,8 @@ activate scouting
 scouting --> c1: {t66}
 deactivate scouting
 
+
+end
 
 c1 -> scouting: move()
 activate scouting
@@ -40,35 +57,61 @@ scouting --> c1
 deactivate scouting
 
 
+c1 -> c1: collectGarbage()
+activate c1
+
+loop for ship in listOfCollectingShips
+
+c1 -> collecting: getTile()
+activate collecting
+
+collecting --> c1:
+deactivate collecting
+
+c1 -> c1: checkTileWithGarbage()
+activate c1
+
+c1--> c1: false
+deactivate c1
+
+c1--> c1
+deactivate c1
+end
+
+
+c1 -> c1: refuelShips()
+activate c1
+
+
+c1--> c1
+deactivate c1
+
+c1 -> c1: unloadShips()
+activate c1
+
+c1 --> c1
+deactivate c1
+
 c1 --> s
 deactivate c1
+end
 
-
-s -> c1: collectGarbage()
-activate c1
-c1--> s
-deactivate c1
-
-
-s -> c1: refuelShips()
-activate c1
-c1--> s
-deactivate c1
-
-s -> c1: unloadShips()
-activate c1
-
-c1 --> s
-deactivate c1
 
 
 s --> s
 deactivate s
-s -> m: getTilesByInstance(instanceOf(DeepOcean))
+s -> m: getTiles()
 activate m
 
-m --> s : listOfDeepOceanTiles
+m --> s : listOfTiles
 deactivate m
+
+s -> s: getDeepOceanTiles({t1,..,t100})
+activate s
+
+s --> s: listOfDeepOceanTiles
+deactivate
+
 
 s -> s: driftGarbage()
 activate s
@@ -87,10 +130,10 @@ s -> t66: isGarbagePresent()
 t66--> s: true
 
 s -> t66: getListOfGarbage()
-t66 --> s: {oil}
+t66 --> s: L= {oil}
 deactivate t66
 
-loop for garbage in {oil}
+loop for garbage in L
 s -> oil: drift(t66)
 activate oil
 
@@ -125,7 +168,7 @@ oil --> oil: false
 deactivate oil
 
 
-oil -> oil: removeGarbage(50)
+oil -> oil: removeAmount(50)
 activate oil
 
 oil --> oil
