@@ -246,10 +246,10 @@ package Tile{
 
 
   class Garbage {
-    id: Int,
-    amount: Int,
-    type: GarbageType,
-    static maxId: Int,
+    -id: Int,
+    -amount: Int,
+    -type: GarbageType,
+    -static maxId: Int,
     +drift(Tile)
     +static getNextId(): Int
   }
