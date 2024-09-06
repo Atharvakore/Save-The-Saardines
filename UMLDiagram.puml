@@ -315,6 +315,7 @@ package Ship{
     + giveGarbage()
     + getTilesWithGarbageInFoV(): List<Tile>
     + drift()
+    + updateTile(Tile)
   }
 
   ScoutingShip --|> Ship
