@@ -26,12 +26,15 @@ activate c1
 c1 -> scouting: getTilesWithGarbageInFoV()
 activate scouting
 
-scouting --> c1: List<Tile>
+scouting --> c1: {t66}
 deactivate scouting
 
 
-c1 -> scouting: navigateTo(t66)
+c1 -> scouting: move()
 activate scouting
+
+scouting -> scouting:
+
 
 scouting --> c1
 deactivate scouting
@@ -51,6 +54,13 @@ s -> c1: refuelShips()
 activate c1
 c1--> s
 deactivate c1
+
+s -> c1: unloadShips()
+activate c1
+
+c1 --> s
+deactivate c1
+
 
 s --> s
 deactivate s
@@ -104,7 +114,19 @@ activate oil
 oil --> oil
 deactivate oil
 
-oil -> oil: createGarbage(id,OIL,50)
+'need loop to check other tiles if space is not availabel
+oil -> t67: isSpaceAvailable(50)
+activate t67
+
+t67 --> oil: true
+
+oil -> t67 : isOilPresent()
+
+t67 --> oil: false
+
+
+
+oil -> oil: createGarbage(OIL,50)
 activate oil
 
 oil --> oil: newOil
@@ -114,15 +136,12 @@ deactivate oil
 ' without actually computing the destination tile, we just assume it goes there and then
 ' query getIntensity() and getSpeed() which makes no sense at this point.
 
-oil -> t67: isSpaceAvailable(50)
-activate t67
-
-t67 --> oil: true
 
 
 
 
-oil -> t67: driftGarbage(newOil)
+
+oil -> t67: addGarabge(newOil)
 t67 --> oil
 deactivate t67
 
