@@ -192,7 +192,7 @@ package Tile{
     -adjacentTiles: Tile[6],
     shipTraversable: Boolean,
     garbage: List<Garbage>
-    +isDriftable(Int): Boolean
+    +isSpaceAvailable(Int): Boolean
     +driftGarbage(GarbageType, Int): void
     +getTileInDirection(Direction): Tile
   }

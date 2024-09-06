@@ -27,14 +27,12 @@ c1 -> scouting: getTilesWithGarbageInFoV()
 activate scouting
 
 scouting --> c1: List<Tile>
+deactivate scouting
 
-c1 -> collecting: getTilesWithGarbageInFoV()
-activate collecting
-
-collecting --> c1: List<Tile>
-deactivate collecting
 
 c1 -> scouting: navigateTo(t66)
+activate scouting
+
 scouting --> c1
 deactivate scouting
 
@@ -86,23 +84,37 @@ oil -> current: getSpeed()
 current-> oil: 10
 
 oil -> current: getDirection()
-current --> oil: 0
+current --> oil: D0
 deactivate current
-oil -> t66: getTileInDirection(0,1)
+oil -> t66: getTileInDirection(D0,1)
 activate t66
 
 t66 --> oil: t67
 deactivate t66
 
-oil -> oil: splitGarbage(50)
+oil -> oil: canDriftAtOnce(50)
 activate oil
+oil --> oil: false
+deactivate oil
+
+
+oil -> oil: removeGarbage(OIL,50)
+activate oil
+
+oil --> oil
+deactivate oil
+
+oil -> oil: createGarbage(id,OIL,50)
+activate oil
+
 oil --> oil: newOil
 deactivate oil
+
 ' Here the problem is: Current can drift more than 1 tile, but we call drift(t67,curr)
 ' without actually computing the destination tile, we just assume it goes there and then
 ' query getIntensity() and getSpeed() which makes no sense at this point.
 
-oil -> t67: isDriftable(50)
+oil -> t67: isSpaceAvailable(50)
 activate t67
 
 t67 --> oil: true
@@ -148,10 +160,10 @@ scouting -> current: getSpeed()
 current --> scouting: 10
 
 scouting -> current: getDirection()
-current --> scouting: 0
+current --> scouting: D0
 deactivate current
 
-scouting -> t66: getTileInDirection(0,1)
+scouting -> t66: getTileInDirection(D0,1)
 activate t66
 
 t66 -> scouting: t67
