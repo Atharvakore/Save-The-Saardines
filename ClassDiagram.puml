@@ -321,7 +321,7 @@ package Ships{
     - destinationTile: Tile,
     + setDestinationTile(Tile): Unit
     + refuel(): Unit
-    + getTilesWithGarbageInFoV(): List<Tile>
+
     + drift(): Unit
     + setTile(Tile): Unit
   }
@@ -332,9 +332,11 @@ package Ships{
 
   class ScoutingShip{
    - visibleRange: Int
+   + getTilesWithGarbageInFoV(): List<Tile>
   }
   class CoordinatingShip{
   - visibleRange: Int,
+  + getImmediateTilesWithGarbage(): List<Tile>
   }
   class CollectingShip{
    - visibleRange: Int,
