@@ -42,8 +42,8 @@ Dijkstra --o Simulation
 Tiles.Tile --o Tiles.Sea
 
 class Main {
- - parse(): Accumulator
  + main(mapFile : String, corporationsFile: String, scenarioFile: String, max_ticks: Int)
+ - parse(): Accumulator
 }
 
 Main -- Simulation
