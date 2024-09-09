@@ -40,18 +40,18 @@ class Dijkstra{
 Dijkstra --o Simulation
 
 
-Coordinator o-- Parser
+Main o-- Parser
 Event --o Simulation
 Ship --o Corporation
 Tile --o GameMap
-Logger --o Coordinator
+Logger --o Main
 
 
-class Coordinator {
+class Main {
  + main(mapFile : String, corporationsFile: String, scenarioFile: String, max_ticks: Int)
  - parse(): Accumulator
 }
-Coordinator -- Simulation
+Main -- Simulation
 class GameMap {
   + tiles: List<Tile>
   + tileIndex: Map<Vec2D, Tile>
