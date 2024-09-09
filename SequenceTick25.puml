@@ -47,7 +47,7 @@ scouting --> c1: {t66}
 deactivate scouting
 end
 
-c1 -> scouting: isFuelSufficient(t66, listOfHarbors)
+c1 -> scouting: isFuelSufficient(t66, ownedHarbors)
 activate scouting
 
 scouting --> c1: true
@@ -72,7 +72,7 @@ c1 --> c1: true
 deactivate
 end
 
-c1 -> collecting: isFuelSufficient(t66, listOfHarbors)
+c1 -> collecting: isFuelSufficient(t66, ownedHarbors)
 activate collecting
 
 collecting --> c1: true
