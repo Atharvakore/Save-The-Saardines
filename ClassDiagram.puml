@@ -17,7 +17,8 @@ package GeneralEnums{
 }
 class Vec2D{
   + posX: Int,
-  + posY: Int
+  + posY: Int,
+  + tilesInRadius(Int): Iterator<Vec2D>
 }
 class Corporation {
   - id:Int,
@@ -78,11 +79,12 @@ GameMap --o Simulation
 package Event{
   abstract class Event {
     - id: Int,
-    + tick()
+    + abstract tick(): void
   }
   Pirate_Attack --|> Event
   class Pirate_Attack {
     - ship: Ship,
+    + override tick(): void
   }
   Local_Event --|> Event
   abstract class Local_Event {
@@ -93,15 +95,18 @@ package Event{
   Storm --|> Local_Event
   class Storm {
     - speed: Int,
-    - direction: Direction
+    - direction: Direction,
+    + override tick(): void
   }
   OilSpill --|> Local_Event
   class OilSpill {
-    amount: Int,
+    - amount: Int,
+    + override tick(): void
   }
   Restriction --|> Local_Event
   class Restriction {
-    duration: Int,
+    - duration: Int,
+    + override tick(): void
   }
 }
 package Parser {
@@ -216,7 +221,7 @@ package Parser {
     +mapCorporationToShips: Map<Int, List<Int>>
     +Getters()
     +addTile(id: Int, t: Tile): Unit
-    +addTileByCoordinat(coord: Vec2D, t: Tile): Unit
+    +addTileByCoordinates(coord: Vec2D, t: Tile): Unit
     +addShip(shipId: Int, ship: Ship)
     +addShipToCorp(corporationId: Int, shipId: Int)
     +getShipsOfCorp(corpId: Int): List<Int>
@@ -290,6 +295,7 @@ class Harbor {
   pos: Tile,
 }
 Harbor --o Shore
+Current --o DeepOcean
 }
 'Ships
 package Ship{
@@ -305,12 +311,11 @@ package Ship{
     - fuelConsumption: Int,
     - visibleRange: Int,
     - destinationTile: Tile,
-    + navigateTo(Tile)
+    + setDestinationTile(Tile)
     + refuel()
-    + giveGarbage()
     + getTilesWithGarbageInFoV(): List<Tile>
     + drift()
-    + updateTile(Tile)
+    + setTile(Tile)
   }
 
   ScoutingShip --|> Ship
