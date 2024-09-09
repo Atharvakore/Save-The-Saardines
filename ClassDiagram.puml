@@ -242,7 +242,7 @@ class GameMap {
     - adjacentTiles: Tile[6],
     - shipTraversable: Boolean,
     - garbage: List<Garbage>
-    +Tile(id: Int, pos: Vec2D, shipTraversable): Tile
+    +Tile(id: Int, pos: Vec2D, shipTraversable: Boolean): Tile
     + isSpaceAvailable(Int): Boolean
     + driftGarbage(GarbageType, Int): void
     + getTileInDirection(distance: Int, dir: Direction): Tile
