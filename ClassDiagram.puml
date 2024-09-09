@@ -22,12 +22,12 @@ class Corporation {
   - acceptedGarbageTypes: List<GarbageType>
   - ownedHarbors: List<Harbor>
   - ownedShips: List<Ship>
-  - moveShips(): Unit
-  - collectGarbage(): Unit
-  - refuelShips(): Unit
-  - unloadShips(): Unit
+  - moveShips(Map): Unit
+  - collectGarbage(Map): Unit
+  - refuelShips(Map): Unit
+  - unloadShips(Map): Unit
   +cooperateWith(c1:Corporation): Unit
-  +run(): Unit
+  +run(Map): Unit
 
 
 }
@@ -276,20 +276,13 @@ class GameMap {
     + getDirection(): Direction
   }
   class Shore{
-    - harbor: Harbor?
-    + getHarbor(): Harbor?
+    + hasHarbor: boolean
   }
   class ShallowOcean{}
   class DeepOcean{
     - current: Current?
     + getCurrent(): Current?
   }
-
-class Harbor {
-  owner: List<Corporation>,
-  pos: Tile,
-}
-Harbor --o Shore
 Current --o DeepOcean
 }
 'Ships
