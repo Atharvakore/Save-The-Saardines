@@ -50,7 +50,7 @@ Main -- Simulation
 
 Events.Event --o Simulation
 Ships.Ship --o Corporation
-Tiles.Tile --o Tiles.Sea
+
 Loggers.Logger --o Main
 Parser.JSONParser --o Main
 Tiles.Vec2D --o Tiles.Sea
