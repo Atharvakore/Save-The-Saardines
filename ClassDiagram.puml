@@ -39,7 +39,7 @@ Dijkstra --o Simulation
 
 
 Main o-- Parser
-Event --o Simulation
+
 
 Tile --o GameMap
 Logger --o Main
