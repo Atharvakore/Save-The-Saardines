@@ -219,7 +219,7 @@ package Parser {
     +garbage: Map<Int, Garbage>
     +mapCorporationToHarbor: Map<Int, List<Tile>>
     +mapCorporationToShips: Map<Int, List<Int>>
-    +Getters()
+    
     +addTile(id: Int, t: Tile): Unit
     +addTileByCoordinates(coord: Vec2D, t: Tile): Unit
     +addShip(shipId: Int, ship: Ship)
