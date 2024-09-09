@@ -81,14 +81,15 @@ package Events{
   abstract class Event {
     - id: Int,
     - fireTick: Int,
-    + abstract actUponTick(): Unit
-
+    ' Returns bool whether it the event is finished and can be removed
+    ' from consideration in future ticks.
+    + abstract actUponTick(Int): Boolean
   }
   Pirate_Attack --|> Event
   class Pirate_Attack {
     - ship: Ship,
     - owningCorporation: Corporation,
-    + override actUponTick(): Unit
+    + override actUponTick(Int): Boolean
   }
   Local_Event --|> Event
   abstract class Local_Event {
@@ -100,17 +101,23 @@ package Events{
   class Storm {
     - speed: Int,
     - direction: Direction,
-    + override actUponTick(): Unit
+    + override actUponTick(Int): Boolean
   }
   OilSpill --|> Local_Event
   class OilSpill {
     - amount: Int,
-    + override actUponTick(): Unit
+    + override actUponTick(Int): Boolean
   }
+  ' Parser creates a restriction class, which does not rollback anything.
+  ' Then it creates endrestriction class that fires 'duration' later
+  ' and rollbacks the changes.
   Restriction --|> Local_Event
   class Restriction {
-    - duration: Int,
-    + override actUponTick(): Unit
+    + override actUponTick(Int): Boolean
+  }
+  EndRestriction --|> Local_Event
+  class EndRestriction {
+    + override actUponTick(Int): Boolean
   }
 }
 package Parser {
