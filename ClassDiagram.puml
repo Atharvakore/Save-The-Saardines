@@ -42,7 +42,7 @@ Dijkstra --o Simulation
 Main o-- Parser
 
 
-Tiles.Tile --o Tiles.GameMap
+Tiles.Tile --o Tiles.Sea
 
 
 class Main {
@@ -55,10 +55,10 @@ Main -- Simulation
 
 Events.Event --o Simulation
 Ships.Ship --o Corporation
-Tiles.Tile --o Tiles.GameMap
+Tiles.Tile --o Tiles.Sea
 Loggers.Logger --o Main
 Parser.JSONParser --o Main
-Tiles.Vec2D --o Tiles.GameMap
+Tiles.Vec2D --o Tiles.Sea
 Tiles.Vec2D --o Tiles.Tile
 
 
@@ -69,14 +69,14 @@ class Simulation {
   - allEvents: List<Event>
   - tick: Int
   - maxTick: Int
-  - map: GameMap
+  - map: Sea
   - runCorporations(): Unit
   - processEvents(): Unit
   + start(): Unit
   + tick(): Unit
 }
 Corporation --o Simulation
-Tiles.GameMap --o Simulation
+Tiles.Sea --o Simulation
 package Events{
   abstract class Event {
     - id: Int,
@@ -93,7 +93,7 @@ package Events{
   }
   Local_Event --|> Event
   abstract class Local_Event {
-    - map: GameMap,
+    - map: Sea,
     - location: Tile,
     - radius: Int,
   }
@@ -201,7 +201,7 @@ package Parser {
   JSONParser <|-- ScenarioJSONParser
   Accumulator --o JSONParser
   class Accumulator {
-    +map: GameMap
+    +map: Sea
     +corporations: Map<Int, Corporation>
     +ships: Map<Int, Ship>
     +events: Map<Int, Event>
@@ -233,11 +233,11 @@ class Vec2D{
   + tilesInRadius(Int): Iterator<Vec2D>
 }
 
-class GameMap {
+class Sea {
   + tiles: List<Tile>
   + tileIndex: Map<Vec2D, Tile>
   + getTileById(Int): Tile
-  
+  + getTileByPos(Vec2D): Tile
 }
 
   abstract class Tile{
