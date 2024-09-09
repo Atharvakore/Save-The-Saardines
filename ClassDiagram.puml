@@ -22,7 +22,7 @@ class Corporation {
   - partner:Corporation
   - name:String,
   - acceptedGarbageTypes: List<GarbageType>
-  - ownedHarbors: List<Harbor>
+  - ownedHarbors: List<Tile>
   - ownedShips: List<Ship>
   - moveShips(Map): Unit
   - collectGarbage(Map): Unit
