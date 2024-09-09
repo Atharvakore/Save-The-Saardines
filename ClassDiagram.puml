@@ -81,14 +81,14 @@ package Events{
   abstract class Event {
     - id: Int,
     - fireTick: Int,
-    + abstract actUponTick(): Unit
+    + abstract actUponTick(Int): Unit
 
   }
   Pirate_Attack --|> Event
   class Pirate_Attack {
     - ship: Ship,
     - owningCorporation: Corporation,
-    + override actUponTick(): Unit
+    + override actUponTick(Int): Unit
   }
   Local_Event --|> Event
   abstract class Local_Event {
@@ -100,17 +100,17 @@ package Events{
   class Storm {
     - speed: Int,
     - direction: Direction,
-    + override actUponTick(): Unit
+    + override actUponTick(Int): Unit
   }
   OilSpill --|> Local_Event
   class OilSpill {
     - amount: Int,
-    + override actUponTick(): Unit
+    + override actUponTick(Int): Unit
   }
   Restriction --|> Local_Event
   class Restriction {
     - duration: Int,
-    + override actUponTick(): Unit
+    + override actUponTick(Int): Unit
   }
 }
 package Parser {
