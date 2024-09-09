@@ -4,10 +4,12 @@ participant "c1:Corporation" as c1
 participant "s1:ScoutingShip" as scouting
 participant "s2:CollectingShip" as collecting
 participant "m:Map" as m
+participant  "t65:DeepOcean" as t65
 participant "t66:DeepOcean" as t66
-participant "oil:Garbage" as oil
-participant "current:Current" as current
 participant "t67:DeepOcean" as t67
+participant "current:Current" as current
+participant "oil:Garbage" as oil
+participant "newOil:Garbage" as oil
 
 
 
@@ -43,19 +45,46 @@ activate scouting
 
 scouting --> c1: {t66}
 deactivate scouting
-
-
 end
 
-c1 -> scouting: move()
+c1 -> scouting: isFuelSufficient(t66, listOfHarbors)
 activate scouting
 
-scouting -> scouting:
+scouting --> c1: true
 
+c1 -> scouting: setDestinationTile(t66)
 
 scouting --> c1
 deactivate scouting
 
+loop for tile in {t66}
+
+c1 -> t66: getGarbage()
+activate t66
+
+t66 --> c1: listOfGarbage
+deactivate t66
+
+c1 -> c1: isAcceptedGarbagePresent(listOfGarbage)
+activate c1
+
+c1 --> c1: true
+deactivate
+end
+
+c1 -> collecting: isFuelSufficient(t66, listOfHarbors)
+activate collecting
+
+collecting --> c1: true
+
+c1 -> collecting: hasGarbageCapacity(listOfGarbage)
+collecting --> c1: true
+
+
+c1 -> collecting: setDestinationTile(t66)
+
+collecting --> c1
+deactivate collecting
 
 c1 -> c1: collectGarbage()
 activate c1
@@ -65,14 +94,18 @@ loop for ship in listOfCollectingShips
 c1 -> collecting: getTile()
 activate collecting
 
-collecting --> c1:
+collecting --> c1: t65
+
+c1 -> collecting: getGarbageType()
+
+collecting --> c1: OIL
 deactivate collecting
 
-c1 -> c1: checkTileWithGarbage()
-activate c1
+c1 -> t65: isOilPresent()
+activate t65
 
-c1--> c1: false
-deactivate c1
+t65 --> c1: false
+deactivate t65
 
 c1--> c1
 deactivate c1
@@ -82,12 +115,23 @@ end
 c1 -> c1: refuelShips()
 activate c1
 
+c1 -> c1: areShipsOnHarbor()
+activate c1
+
+c1 --> c1: false
+deactivate c1
 
 c1--> c1
 deactivate c1
 
 c1 -> c1: unloadShips()
 activate c1
+
+c1 -> c1: areShipsOnHarbor()
+activate c1
+
+c1 --> c1: false
+deactivate c1
 
 c1 --> c1
 deactivate c1
@@ -106,7 +150,7 @@ activate m
 m --> s : listOfTiles
 deactivate m
 
-s -> s: getDeepOceanTiles({t1,..,t100})
+s -> s: filterDeepOceanTiles({t1,..,t100})
 activate s
 
 s --> s: listOfDeepOceanTiles
