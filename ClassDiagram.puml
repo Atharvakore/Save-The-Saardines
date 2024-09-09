@@ -78,7 +78,7 @@ GameMap --o Simulation
 package Event{
   abstract class Event {
     - id: Int,
-    + act(Simulation)
+    + tick()
   }
   Pirate_Attack --|> Event
   class Pirate_Attack {
@@ -86,6 +86,7 @@ package Event{
   }
   Local_Event --|> Event
   abstract class Local_Event {
+    - map: GameMap,
     - location: Tile,
     - radius: Int,
   }
