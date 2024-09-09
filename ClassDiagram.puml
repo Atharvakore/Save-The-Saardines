@@ -130,13 +130,14 @@ package Parser {
 
   class MapJSONParser {
 
+    + parseMap(jsonFile:String): Boolean
     - createTileObjects(filePath: String): List<ParsedObject>
     - validateTiles(objects: List<ParsedObject>): Boolean
     - validateTile(tile: ParsedObject): Boolean
     - validateUniqueId(id: Int): Boolean
     - validateCoordinates(coord: Vec2D): Boolean
     - validateRequirements(tileObject: ParsedObject): Boolean
-    + parseMap(jsonFile:String): Boolean
+
   }
 
   class CorporationJSONParser{
