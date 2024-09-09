@@ -32,7 +32,9 @@ class Corporation {
 
 }
 class Dijkstra{
-  + execute(Tile): Map<Tile,Int>
+  ' Returns a mapping that, for each path from the source to destination
+  ' tiles, maps the destination tile to the path.
+  + execute(Tile): Map<Tile,List<Tile>>
 }
 
 Dijkstra --o Simulation
