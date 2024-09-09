@@ -246,6 +246,14 @@ class Sea {
     - adjacentTiles: Tile[6],
     - shipTraversable: Boolean,
     - garbage: List<Garbage>
+    ' Stores the amount of garbage drifted to this tile this tick.
+    ' This is important because the garbage drifts to the next tile
+    ' and we want to drift only as much as the current allows,
+    ' but on the other hand we don't want to drift garbage twice.
+    ' So we drift each piece of garbage instead of drifting from
+    ' within the tick, and this field actually stores the amount
+    ' to make sure that we don't drift more than the capacity
+    + amountOfGarbageDriftedThisTick: Int
     +Tile(id: Int, pos: Vec2D, shipTraversable: Boolean): Tile
     + isSpaceAvailable(Int): Boolean
     + driftGarbage(GarbageType, Int): Unit
