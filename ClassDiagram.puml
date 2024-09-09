@@ -169,13 +169,19 @@ package Parser {
 
   class ScenarioJSONParser{
 
+    + ScenarioJSONParser(accumulator:Accumulator)
+    + parseEvents(json: String)
+    + parseGarbage(garbage: String): Garbage
+    + validateGarbages(garbages:List<ParsedObject>)
+    + createGarbage(garbage: ParsedObject)
+    + validateEvents(events:List<ParsedObject>)
+    + validateEvent(event: ParsedObject)
+    + createEvent(event: ParsedObject)
 
     - validateGarbageUniqueId(): Boolean
     - validateGarbageType(): Boolean
     - validateGarbageLocationExists(): Boolean
     - validateGarbageAmount(): Boolean
-
-
     - validateEventUniqueId(): Boolean
     - validateEventType(): Boolean
     - validateEventTick(): Boolean
@@ -185,14 +191,7 @@ package Parser {
     - validateEventAmountIfExists(): Boolean
     - validateEventDirectionIfExists(): Boolean
     - validateEventShipIdIfExists(): Boolean
-    + ScenarioJSONParser(accumulator:Accumulator):Boolean
-    + parseEvents(json: String): Boolean
-    + parseGarbage(garbage: String): Boolean
-    + validateGarbages(garbages:List<JSONObject>):Boolean
-    + createGarbage(garbage: JSONObject):Garbage
-    + validateEvents(events:List<JSONObject>):Boolean
-    + validateEvent(event: JSONObject):Boolean
-    + createEvent(event: JSONObject):Event
+
   }
 
   JSONParser <|-- CorporationJSONParser
