@@ -37,9 +37,11 @@ Dijkstra --o Simulation
 
 Events.Event --o Simulation
 Ships.Ship --o Corporation
-Tiles.Tile --o GameMap
+Tiles.Tile --o Tiles.GameMap
 Loggers.Logger --o Coordinator
 Parser.JSONParser --o Coordinator
+Tiles.Vec2D --o Tiles.GameMap
+Tiles.Vec2D --o Tiles.Tile
 
 
 class Coordinator {
@@ -47,14 +49,6 @@ class Coordinator {
  - parse(): Accumulator
 }
 Coordinator -- Simulation
-class GameMap {
-  + tiles: List<Tile>
-  + tileIndex: Map<Vec2D, Tile>
-  + getTileById(Int): Tile
-  + getTiles(): List<Tile>
-  + getTileByPosition(Vec2D): Tile
-  + getTilesByInstance(instanceOf(Tile))
-}
 
 
 class Simulation {
@@ -69,7 +63,7 @@ class Simulation {
   - processEvents()
 }
 Corporation --o Simulation
-GameMap --o Simulation
+Tiles.GameMap --o Simulation
 package Events{
   abstract class Event {
     - id: Int,
@@ -231,6 +225,15 @@ class Vec2D{
   + posX: Int,
   + posY: Int,
   + tilesInRadius(Int): Iterator<Vec2D>
+}
+
+class GameMap {
+  + tiles: List<Tile>
+  + tileIndex: Map<Vec2D, Tile>
+  + getTileById(Int): Tile
+  + getTiles(): List<Tile>
+  + getTileByPosition(Vec2D): Tile
+  + getTilesByInstance(instanceOf(Tile))
 }
 
   abstract class Tile{
