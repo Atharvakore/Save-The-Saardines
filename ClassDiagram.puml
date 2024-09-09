@@ -1,7 +1,7 @@
 @startuml
 'General
-package GeneralEnums{
-  enum Direction{
+package GeneralEnums {
+  enum Direction {
     D0,
     D60,
     D120,
@@ -10,7 +10,7 @@ package GeneralEnums{
     D300
   }
 
-  enum GarbageType{
+  enum GarbageType {
     OIL,
     PLASTIC,
     CHEMICALS
@@ -28,11 +28,11 @@ class Corporation {
   - collectGarbage(Map): Unit
   - refuelShips(Map): Unit
   - unloadShips(Map): Unit
-  + cooperateWith(c1:Corporation): Unit
+  + cooperateWith(c1: Corporation): Unit
   + run(Map): Unit
 }
 
-class Dijkstra{
+class Dijkstra {
   ' Returns a mapping that, for each path from the source to destination
   ' tiles, maps the destination tile to the path.
   + execute(Tile): Map<Tile,List<Tile>>
@@ -71,7 +71,7 @@ class Simulation {
 Corporation --o Simulation
 Tiles.Sea --o Simulation
 
-package Events{
+package Events {
   abstract class Event {
     - id: Int,
     - fireTick: Int,
@@ -129,7 +129,7 @@ package Parser {
     DEEP_OCEAN
   }
 
-  interface JSONParser{
+  interface JSONParser {
     - logger: Logger
     - accumulator: Accumulator
     # validateObjects(object: List<JSONObject>)
@@ -146,7 +146,7 @@ package Parser {
     - validateRequirements(tileObject: JSONObject): Boolean
   }
 
-  class CorporationJSONParser{
+  class CorporationJSONParser {
     + CorporationJSONParser(accumulator: Accumulator)
     + parseCorporations(filePath: String): Boolean
     + parseShips(filePath: String): Boolean
@@ -160,14 +160,14 @@ package Parser {
     - validateCorporationShip(ships: List<Int>): Boolean
     - createShipObjects(file: String): List<JSONObject>
     - validateShips(ships: List<JSONObject>):Boolean
-    - validateShip(ship:JSONObject): Boolean
-    - validateShipUniqueId(id:Int): Boolean
-    - validateShipUniqueName(name:String): Boolean
+    - validateShip(ship: JSONObject): Boolean
+    - validateShipUniqueId(id: Int): Boolean
+    - validateShipUniqueName(name: String): Boolean
     - validateShipLocation(location: Int): Boolean
-    - validateShipAttributes(ship:JSONObject): Boolean
+    - validateShipAttributes(ship: JSONObject): Boolean
   }
 
-  class ScenarioJSONParser{
+  class ScenarioJSONParser {
     + ScenarioJSONParser(accumulator: Accumulator)
     + parseEvents(json: String)
     + parseGarbage(garbage: String): Garbage
@@ -217,8 +217,8 @@ package Parser {
   }
 }
 
-package Tiles{
-  class Vec2D{
+package Tiles {
+  class Vec2D {
     + posX: Int,
     + posY: Int,
     + tilesInRadius(Int): Iterator<Vec2D>
@@ -231,7 +231,7 @@ package Tiles{
     + getTileByPos(Vec2D): Tile
   }
 
-  abstract class Tile{
+  abstract class Tile {
     - id: Int
     - pos: Vec2D
     - adjacentTiles: Tile[6]
@@ -280,20 +280,21 @@ package Tiles{
     + getDirection(): Direction
   }
 
-  class Shore{
+  class Shore {
     + hasHarbor: boolean
   }
 
-  class ShallowOcean {}
+  class ShallowOcean {
+  }
 
-  class DeepOcean{
+  class DeepOcean {
     - current: Current?
     + getCurrent(): Current?
   }
   Current --o DeepOcean
 }
 'Ships
-package Ships{
+package Ships {
   abstract class Ship {
     - id: Int,
     - name: String,
@@ -315,15 +316,15 @@ package Ships{
   CoordinatingShip --|> Ship
   CollectingShip --|> Ship
 
-  class ScoutingShip{
+  class ScoutingShip {
     - visibleRange: Int
     + getTilesWithGarbageInFoV(): List<Tile>
   }
-  class CoordinatingShip{
+  class CoordinatingShip {
     - visibleRange: Int,
     + getImmediateTilesWithGarbage(): List<Tile>
   }
-  class CollectingShip{
+  class CollectingShip {
     - visibleRange: Int,
     - garbageType: GarbageType
     - garbageCapacity: Int,
@@ -331,8 +332,8 @@ package Ships{
     + giveGarbage(): Unit
   }
 }
-package Loggers{
-  class Logger{
+package Loggers {
+  class Logger {
     ' - writer: PrintWriter = new PrintWriter(System.out)
     - writer: PrintWriter
     + logInitializationInfoSuccess(filename:String): Unit
