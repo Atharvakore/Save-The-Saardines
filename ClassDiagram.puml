@@ -119,7 +119,6 @@ package Parser {
   interface JSONParser{
     - logger: Logger
     - accumulator: Accumulator
-    # validateObjects(object:List<JSONObject>)
   }
 
   MapJSONParser --|> JSONParser
@@ -127,6 +126,7 @@ package Parser {
 
   class MapJSONParser {
 
+    +MapJSONParser(accumulator:Accumulator):MapJSONParser
     + parseMap(jsonFile:String): Boolean
     - createTileObjects(filePath: String): List<JSONObject>
     - validateTiles(objects: List<JSONObject>): Boolean
@@ -134,15 +134,16 @@ package Parser {
     - validateUniqueId(id: Int): Boolean
     - validateCoordinates(coord: Vec2D): Boolean
     - validateRequirements(tileObject: JSONObject): Boolean
-
+    - createTile(tile:JSONObject):Tile
+    - createMap(tiles:List<Tile>):GameMap
   }
 
   class CorporationJSONParser{
-    +CorporationJSONParser(accumulator:Accumulator)
+    +CorporationJSONParser(accumulator:Accumulator): ScenarioJSONParser
     +parseCorporations(filePath: String): Boolean
     +parseShips(filePath: String): Boolean
 
-    - createCorporationObjects(file: String): List<JSONObject>
+    - createCorporationObjects(filePath: String): List<JSONObject>
     -validateCorporations(corpObjects: List<JSONObject>): Boolean
     -validateCorporation(corporationObject: JSONObject): Boolean
     -validateCorporationUniqueId(id: Int): Boolean
@@ -151,7 +152,7 @@ package Parser {
     -validateCorporationGarbageTypes(g: List<GarbageType>): Boolean
     -validateCorporationShip(ships: List<Int>): Boolean
 
-    - createShipObjects(file: String): List<JSONObject>
+    - createShipObjects(filePath: String): List<JSONObject>
     - validateShips(ships: List<JSONObject>):Boolean
     - validateShip(ship:JSONObject): Boolean
     - validateShipUniqueId(id:Int): Boolean
@@ -162,19 +163,21 @@ package Parser {
 
   class ScenarioJSONParser{
 
-    + ScenarioJSONParser(accumulator:Accumulator)
-    + parseEvents(json: String)
-    + parseGarbage(garbage: String): Garbage
-    + validateGarbages(garbages:List<JSONObject>)
-    + createGarbage(garbage: JSONObject)
-    + validateEvents(events:List<JSONObject>)
-    + validateEvent(event: JSONObject)
-    + createEvent(event: JSONObject)
+    + ScenarioJSONParser(accumulator:Accumulator):ScenarioJSONParser
+    + parseEvents(json: String): Boolean
+    + parseGarbage(garbage: String): Boolean
+
+    + validateGarbages(garbages:List<JSONObject>): Boolean
+    + createGarbage(garbage: JSONObject): Garbage
+    + validateEvents(events:List<JSONObject>): Boolean
+    + validateEvent(event: JSONObject): Boolean
+    + createEvent(event: JSONObject): Event
 
     - validateGarbageUniqueId(): Boolean
     - validateGarbageType(): Boolean
     - validateGarbageLocationExists(): Boolean
     - validateGarbageAmount(): Boolean
+
     - validateEventUniqueId(): Boolean
     - validateEventType(): Boolean
     - validateEventTick(): Boolean
