@@ -41,7 +41,7 @@ Dijkstra --o Simulation
 
 
 
-Main o-- Parser
+
 
 
 Tiles.Tile --o Tiles.Sea
