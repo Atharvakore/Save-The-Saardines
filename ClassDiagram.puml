@@ -22,14 +22,16 @@ class Corporation {
   - partner:Corporation
   - name:String,
   - acceptedGarbageTypes: List<GarbageType>
-  - ownedHarbors: List<Harbor>
+  - ownedHarbors: List<Shore>
   - ownedShips: List<Ship>
+  + cooperateWith(c1: Corporation): Unit
+  + run(Map): Unit
   - moveShips(Map): Unit
   - collectGarbage(Map): Unit
   - refuelShips(Map): Unit
   - unloadShips(Map): Unit
-  + cooperateWith(c1: Corporation): Unit
-  + run(Map): Unit
+  - isAcceptedGarbagePresent(listOfGarbage): Boolean
+  - areShipsOnHarbor(): Boolean
 }
 
 class Dijkstra {
@@ -62,10 +64,13 @@ class Simulation {
   - tick: Int
   - maxTick: Int
   - map: Sea
-  - runCorporations(): Unit
-  - processEvents(): Unit
   + start(): Unit
   + tick(): Unit
+  - runCorporations(): Unit
+  - driftGarbage(): Unit
+  - driftShips(): Unit
+  - processEvents(): Unit
+
 }
 
 Corporation --o Simulation
@@ -266,7 +271,7 @@ package Tiles {
     + removeAmount(Int): Unit
   }
 
-  Garbage --> Tile
+  Garbage --o Tile
   Shore --|> Tile
   DeepOcean --|> Tile
   ShallowOcean --|> Tile
@@ -307,6 +312,7 @@ package Ships {
     + refuel(): Unit
     + drift(): Unit
     + setTile(Tile): Unit
+    + isFuelSufficient(Tile, List<Shore>): Boolean
   }
 
   ScoutingShip --|> Ship
@@ -327,6 +333,7 @@ package Ships {
     - garbageCapacity: Int,
     - garbageLoad: Int,
     + giveGarbage(): Unit
+    + hasGarbageCap(List<Garbage>): Boolean
   }
 }
 package Loggers {

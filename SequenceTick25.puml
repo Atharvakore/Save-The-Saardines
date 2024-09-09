@@ -4,7 +4,7 @@ participant "c1:Corporation" as c1
 participant "s1:ScoutingShip" as scouting
 participant "s2:CollectingShip" as collecting
 participant "m:Map" as m
-participant  "t65:DeepOcean" as t65
+participant "t65:DeepOcean" as t65
 participant "t66:DeepOcean" as t66
 participant "t67:DeepOcean" as t67
 participant "current:Current" as current
@@ -106,10 +106,10 @@ activate t65
 
 t65 --> c1: false
 deactivate t65
+end
 
 c1--> c1
 deactivate c1
-end
 
 
 c1 -> c1: refuelShips()
@@ -164,12 +164,8 @@ activate s
 
 loop for tile in listOfDeepOceanTiles
 
-s -> t66: isCurrentPresent()
-activate t66
-
-t66 --> s:true
-
 s -> t66: isGarbagePresent()
+activate t66
 
 t66--> s: true
 
@@ -269,6 +265,7 @@ loop for ship in {s1,s2}
 
 s -> scouting: getTile()
 activate scouting
+
 scouting --> s: t66
 
 s -> s: listOfDeepOceanTiles.contains(t66)
@@ -279,13 +276,11 @@ deactivate s
 
 s -> scouting: drift()
 
-scouting -> t66: isCurrentPresent()
-activate t66
 
 
-t66 --> scouting: true
 
 scouting -> t66: getCurrent()
+activate t66
 
 
 t66 --> scouting: current
@@ -310,7 +305,7 @@ activate t66
 t66 -> scouting: t67
 deactivate t66
 
-scouting -> scouting: updateTile(t67)
+scouting -> scouting: setTile(t67)
 activate scouting
 
 scouting --> scouting
