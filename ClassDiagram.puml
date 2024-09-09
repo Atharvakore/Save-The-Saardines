@@ -111,7 +111,6 @@ package Event{
 }
 package Parser {
   enum TileCategory {
-    LAND,
     SHORE,
     SHALLOW_OCEAN,
     DEEP_OCEAN
@@ -264,8 +263,6 @@ package Tile{
 
   Garbage --> Tile
 
-  Land --|> Tile
-
   Shore --|> Tile
   DeepOcean --|> Tile
   ShallowOcean --|> Tile
@@ -277,8 +274,6 @@ package Tile{
     + getSpeed(): Int
     + getIntensity(): Int
     + getDirection(): Direction
-  }
-  class Land{
   }
   class Shore{
     - harbor: Harbor?
