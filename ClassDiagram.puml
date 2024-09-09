@@ -39,7 +39,7 @@ Dijkstra --o Simulation
 
 Main o-- Parser
 Event --o Simulation
-Ship --o Corporation
+
 Tile --o GameMap
 Logger --o Main
 
