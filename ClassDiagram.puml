@@ -49,13 +49,7 @@ class Main {
  - parse(): Accumulator
 }
 Main -- Simulation
-class GameMap {
-  + tiles: List<Tile>
-  + tileIndex: Map<Vec2D, Tile>
-  + getTileById(Int): Tile
-  + getTiles(): List<Tile>
-  + getTileByPosition(Vec2D): Tile
-}
+
 
 Events.Event --o Simulation
 Ships.Ship --o Corporation
