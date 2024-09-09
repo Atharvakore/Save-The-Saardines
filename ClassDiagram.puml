@@ -22,12 +22,13 @@ class Corporation {
   - acceptedGarbageTypes: List<GarbageType>
   - ownedHarbors: List<Harbor>
   - ownedShips: List<Ship>
+  - moveShips(): Unit
+  - collectGarbage(): Unit
+  - refuelShips(): Unit
+  - unloadShips(): Unit
   +cooperateWith(c1:Corporation): Unit
   +run(): Unit
-  -moveShips(): Unit
-  -collectGarbage(): Unit
-  -refuelShips(): Unit
-  -unloadShips(): Unit
+
 
 }
 class Dijkstra{
@@ -45,8 +46,9 @@ Tiles.Tile --o Tiles.GameMap
 
 
 class Main {
- + main(mapFile : String, corporationsFile: String, scenarioFile: String, max_ticks: Int)
  - parse(): Accumulator
+ + main(mapFile : String, corporationsFile: String, scenarioFile: String, max_ticks: Int)
+
 }
 Main -- Simulation
 
@@ -68,10 +70,10 @@ class Simulation {
   - tick: Int
   - maxTick: Int
   - map: GameMap
-  + start(): Unit
-  + tick(): Unit
   - runCorporations(): Unit
   - processEvents(): Unit
+  + start(): Unit
+  + tick(): Unit
 }
 Corporation --o Simulation
 Tiles.GameMap --o Simulation
@@ -127,13 +129,14 @@ package Parser {
 
 
   class MapJSONParser {
-    + parseMap(jsonFile:String): Boolean
+
     - createTileObjects(filePath: String): List<ParsedObject>
     - validateTiles(objects: List<ParsedObject>): Boolean
     - validateTile(tile: ParsedObject): Boolean
     - validateUniqueId(id: Int): Boolean
     - validateCoordinates(coord: Vec2D): Boolean
     - validateRequirements(tileObject: ParsedObject): Boolean
+    + parseMap(jsonFile:String): Boolean
   }
 
   class CorporationJSONParser{
@@ -168,18 +171,7 @@ package Parser {
   }
 
   class ScenarioJSONParser{
-    + ScenarioJSONParser(accumulator:Accumulator)
-    + parseEvents(json: String)
-    + parseGarbage(garbage: String): Garbage
 
-    + validateGarbages(garbages:List<ParsedObject>)
-
-    + createGarbage(garbage: ParsedObject)
-
-    + validateEvents(events:List<ParsedObject>)
-
-    + validateEvent(event: ParsedObject)
-    + createEvent(event: ParsedObject)
 
     - validateGarbageUniqueId(): Boolean
     - validateGarbageType(): Boolean
@@ -196,6 +188,14 @@ package Parser {
     - validateEventAmountIfExists(): Boolean
     - validateEventDirectionIfExists(): Boolean
     - validateEventShipIdIfExists(): Boolean
+    + ScenarioJSONParser(accumulator:Accumulator)
+    + parseEvents(json: String)
+    + parseGarbage(garbage: String): Garbage
+    + validateGarbages(garbages:List<ParsedObject>)
+    + createGarbage(garbage: ParsedObject)
+    + validateEvents(events:List<ParsedObject>)
+    + validateEvent(event: ParsedObject)
+    + createEvent(event: ParsedObject)
   }
 
   JSONParser <|-- CorporationJSONParser
@@ -341,7 +341,7 @@ package Ships{
    - garbageType: GarbageType
    - garbageCapacity: Int,
    - garbageLoad: Int,
-    + giveGarbage(): Unit
+   + giveGarbage(): Unit
   }
 }
 package Loggers{
