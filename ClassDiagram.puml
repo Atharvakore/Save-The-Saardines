@@ -210,7 +210,7 @@ package Parser {
     +parsedGarbages: List<ParsedObject>
     +parsedEvents: List<ParsedObject>
 
-    +currentValidatingObject: ParsedObject
+    
 
     +map: GameMap
     +corporations: Map<Int, Corporation>
