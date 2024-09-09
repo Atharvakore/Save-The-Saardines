@@ -116,10 +116,7 @@ package Parser {
     SHALLOW_OCEAN,
     DEEP_OCEAN
   }
-  class ParsedObject {
-    + properties:Map<String,String>
-  }
-  interface JSONParser<T>{
+  interface JSONParser{
     - logger: Logger
     - accumulator: Accumulator
     # validateObjects(object:List<ParsedObject>)
@@ -130,7 +127,7 @@ package Parser {
 
   class MapJSONParser {
 
-    - createTileObjects(filePath: String): List<ParsedObject>
+    - createTileObjects(filePath: String): List<JSONObject>
     - validateTiles(objects: List<ParsedObject>): Boolean
     - validateTile(tile: ParsedObject): Boolean
     - validateUniqueId(id: Int): Boolean
@@ -152,7 +149,7 @@ package Parser {
     +parseCorporations(filePath: String): Boolean
     +parseShips(filePath: String): Boolean
 
-    - createCorporationObjects(file: String): List<ParsedObject>
+    - createCorporationObjects(file: String): List<JSONObject>
     -validateCorporations(corpObjects: List<ParsedObject>): Boolean
     -validateCorporation(corporationObject: ParsedObject): Boolean
     -validateCorporationUniqueId(id: Int): Boolean
@@ -161,7 +158,7 @@ package Parser {
     -validateCorporationGarbageTypes(g: List<GarbageType>): Boolean
     -validateCorporationShip(ships: List<Int>): Boolean
 
-    - createShipObjects(file: String): List<ParsedObject>
+    - createShipObjects(file: String): List<JSONObject>
     - validateShips(ships: List<ParsedObject>):Boolean
     - validateShip(ship:ParsedObject): Boolean
     - validateShipUniqueId(id:Int): Boolean
@@ -188,30 +185,20 @@ package Parser {
     - validateEventAmountIfExists(): Boolean
     - validateEventDirectionIfExists(): Boolean
     - validateEventShipIdIfExists(): Boolean
-    + ScenarioJSONParser(accumulator:Accumulator)
-    + parseEvents(json: String)
-    + parseGarbage(garbage: String): Garbage
-    + validateGarbages(garbages:List<ParsedObject>)
-    + createGarbage(garbage: ParsedObject)
-    + validateEvents(events:List<ParsedObject>)
-    + validateEvent(event: ParsedObject)
-    + createEvent(event: ParsedObject)
+    + ScenarioJSONParser(accumulator:Accumulator):Boolean
+    + parseEvents(json: String): Boolean
+    + parseGarbage(garbage: String): Boolean
+    + validateGarbages(garbages:List<JSONObject>):Boolean
+    + createGarbage(garbage: JSONObject):Garbage
+    + validateEvents(events:List<JSONObject>):Boolean
+    + validateEvent(event: JSONObject):Boolean
+    + createEvent(event: JSONObject):Event
   }
 
   JSONParser <|-- CorporationJSONParser
   JSONParser <|-- ScenarioJSONParser
   Accumulator --o JSONParser
-  ParsedObject --o Accumulator
   class Accumulator {
-
-    +parsedTiles: List<ParsedObject>
-    +parsedCorporations: List<ParsedObject>
-    +parsedShips: List<ParsedObject>
-    +parsedGarbages: List<ParsedObject>
-    +parsedEvents: List<ParsedObject>
-
-    
-
     +map: GameMap
     +corporations: Map<Int, Corporation>
     +ships: Map<Int, Ship>
@@ -219,7 +206,11 @@ package Parser {
     +garbage: Map<Int, Garbage>
     +mapCorporationToHarbor: Map<Int, List<Tile>>
     +mapCorporationToShips: Map<Int, List<Int>>
-    
+
+    +getHarborsOfCorporation(corporationId:Int):List<Tile>
+    +getShipsIDofCorporation(corporationId:Int):List<Int>
+    +getTileFromMap(tileId:Int):Tile
+    +getTileFromMap(tileCoordinates:Vec2D):Tile
     +addTile(id: Int, t: Tile): Unit
     +addTileByCoordinates(coord: Vec2D, t: Tile): Unit
     +addShip(shipId: Int, ship: Ship)
