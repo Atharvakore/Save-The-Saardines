@@ -317,7 +317,7 @@ deactivate Main
 end
 create "s: Simulation" as sim
 
-Main -> sim: sim(corporations, events, 0, 0, m)
+Main -> sim: Simulation(corporations, events, 0, 0, m)
 activate sim
 sim --> Main : s
 deactivate sim
