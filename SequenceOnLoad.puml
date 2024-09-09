@@ -30,17 +30,7 @@ loop for tileObject in objects
 
 parser->parser:validateTile(tileObject)
 activate parser
-parser -> parser: validateUniqueId(id)
-activate parser
-parser --> parser: True
-deactivate parser
-parser -> parser: validateCoordinates(coord)
 
-activate parser
-parser --> parser: True
-deactivate parser
-parser     -> parser: validateRequirements(tileobject)
-activate parser
 parser --> parser: True
 deactivate parser
 
@@ -59,17 +49,20 @@ parser -> accu: addTileByCoordinat(coord, t)
 activate accu
 accu --> parser
 deactivate accu
-parser --> parser : True
-deactivate parser
 end
 parser --> parser: True
 deactivate parser
+parser -> parser: createMap()
+activate parser
+
 
 create "m:Map" as map
 parser -> map : Map(accu.tiles.getValues(), accu.tilesbyCoord)
 activate map
 map --> parser: m
 deactivate map
+parser --> parser: m
+deactivate parser
 parser -> accu: setMap(m)
 activate accu
 accu --> parser:
@@ -104,32 +97,19 @@ loop for shipObject in objects
 
 corparser -> corparser:ValidateShip(shipObject)
 activate corparser
-corparser -> corparser: validateShipUniqueId(id)
-activate corparser
-corparser --> corparser: True
+corparser --> corparser : True
 deactivate corparser
-corparser -> corparser: validateShipUniqueName(name)
+corparser -> corparser : createShip(shipObject)
 activate corparser
-corparser --> corparser: True
-deactivate corparser
-corparser -> corparser: validateShiplocation(locationId)
-activate corparser
-corparser -> accu:TilebyId(locationId)
-activate accu
-accu  ->corparser: tile
-deactivate accu
-corparser -->corparser: True
-deactivate corparser
-corparser -> corparser: validateShipAttributes(shipObject)
-activate corparser
-corparser --> corparser: True
-deactivate corparser
+
 create "s:Ship" as ship
 corparser -> ship: Ship(id, name, tile, maxVelocity, acceleration, fuelCapacity, fuelConsumption, visibilityRange, garbageType, capacity)
 activate ship
 ship -->corparser: s
 deactivate ship
+corparser --> corparser: s
 corparser -> accu: addShip(id, s)
+
 activate accu
 accu --> corparser
 deactivate accu
@@ -159,14 +139,6 @@ activate corparser
 loop for corporationObject in objects
 corparser -> corparser: ValidateCorporation(corporationObject)
 activate corparser
-corparser -> corparser : validateCorporationUniqueId(id)
-activate corparser
-corparser --> corparser: True
-deactivate corparser
-corparser-> corparser: validateCorporationUniqueName(name)
-activate corparser
-corparser --> corparser: True
-deactivate corparser
 corparser -> corparser: validateHarborTiles(homeHarbors)
 activate corparser
 loop for id in homeHarbors
@@ -191,10 +163,6 @@ accu --> corparser : shouldBeShips: List<Int>
 deactivate accu
 corparser --> corparser: True
 deactivate corparser
-corparser -> corparser : validateCorporationGarbageTypes(g)
-activate corparser
-corparser --> corparser: True
-deactivate corparser
 create "corporation: Corporation" as corp
 corparser -> corp : Corporation(id, name, ships, homeHarbors, garbage)
 activate corp
@@ -204,7 +172,7 @@ activate accu
 accu --> corparser
 deactivate accu
 deactivate corp
-
+deactivate corparser
 corparser --> corparser : True
 deactivate corparser
 end
@@ -228,20 +196,12 @@ scparser -> scparser: createGarbageObjects(Scenario.json)
 activate scparser
 scparser --> scparser : objects: List<ParsedObject>
 deactivate scparser
-scparser -> scparser:  validateGarbage(objects)
+scparser -> scparser:  validateGarbages(objects)
 activate scparser
 
 loop for garbageObject in objects
 scparser -> scparser : validateGarbage(garbageObject)
 activate scparser
-scparser -> scparser: validateGarbageUniqueId(id)
-activate scparser
-scparser --> scparser: True
-deactivate scparser
-scparser -> scparser: validateGarbageTypeAndAmount(type, amount)
-activate scparser
-scparser --> scparser: True
-deactivate scparser
 scparser -> scparser: validateGarbageLocation(locationId)
 activate scparser
 scparser -> map : getTilebyId(locationId)
@@ -250,11 +210,16 @@ map --> scparser: t
 deactivate map
 scparser --> scparser: True
 deactivate scparser
+scparser ->scparser : createGarbage(garbageObject)
+activate scparser
 create "g: Garbage " as garbage
 scparser -> garbage: Garbage(id, amount, type, t)
 activate garbage
 garbage --> scparser: g
 deactivate garbage
+
+scparser -->scparser : g
+deactivate scparser
 scparser -> accu: addGarbage(id, g)
 activate accu
 accu --> scparser
@@ -279,19 +244,15 @@ activate scparser
 loop eventObject in objects
 scparser -> scparser: validateEvent(eventObject)
 activate scparser
-scparser -> scparser: validateUniqueId(id)
+scparser -> scparser : createEvent(eventObject)
 activate scparser
-scparser --> scparser: True
-deactivate scparser
-scparser -> scparser: validateAttributes(type, duration, location, radius, speed, amount, direction, shipId)
-activate scparser
-scparser --> scparser: True
-deactivate scparser
 create "event: Event" as event
 scparser -> event: Event(id, type, tick, duration, location, radius, speed, amount, direction, shipID)
 activate event
 event --> scparser: event
 deactivate event
+scparser --> scparser: event
+deactivate scparser
 scparser -> accu: addEvent(id, event)
 activate accu
 accu --> scparser
