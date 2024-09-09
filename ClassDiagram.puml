@@ -22,12 +22,12 @@ class Corporation {
   - acceptedGarbageTypes: List<GarbageType>
   - ownedHarbors: List<Harbor>
   - ownedShips: List<Ship>
-  -moveShips(),
-  -collectGarbage(),
-  -refuelShips()
-  -unloadShips()
-  +cooperateWith(c1:Corporation)
-  +run()
+  -moveShips(): Unit
+  -collectGarbage(): Unit
+  -refuelShips(): Unit
+  -unloadShips(): Unit
+  +cooperateWith(c1:Corporation): Unit
+  +run(): Unit
 }
 class Dijkstra{
   + execute(Tile): Map<Tile,Int>
@@ -45,7 +45,7 @@ Tiles.Vec2D --o Tiles.Tile
 
 
 class Coordinator {
- + main(mapFile : String, corporationsFile: String, scenarioFile: String, max_ticks: Int)
+ + main(mapFile : String, corporationsFile: String, scenarioFile: String, max_ticks: Int): Unit
  - parse(): Accumulator
 }
 Coordinator -- Simulation
@@ -57,22 +57,22 @@ class Simulation {
   - tick: Int
   - maxTick: Int
   - map: GameMap
-  + start()
-  + tick()
-  - runCorporations()
-  - processEvents()
+  + start(): Unit
+  + tick(): Unit
+  - runCorporations(): Unit
+  - processEvents(): Unit
 }
 Corporation --o Simulation
 Tiles.GameMap --o Simulation
 package Events{
   abstract class Event {
     - id: Int,
-    + abstract tick(): void
+    + abstract tick(): Unit
   }
   Pirate_Attack --|> Event
   class Pirate_Attack {
     - ship: Ship,
-    + override tick(): void
+    + override tick(): Unit
   }
   Local_Event --|> Event
   abstract class Local_Event {
@@ -84,17 +84,17 @@ package Events{
   class Storm {
     - speed: Int,
     - direction: Direction,
-    + override tick(): void
+    + override tick(): Unit
   }
   OilSpill --|> Local_Event
   class OilSpill {
     - amount: Int,
-    + override tick(): void
+    + override tick(): Unit
   }
   Restriction --|> Local_Event
   class Restriction {
     - duration: Int,
-    + override tick(): void
+    + override tick(): Unit
   }
 }
 package Parser {
@@ -243,9 +243,9 @@ class GameMap {
     - garbage: List<Garbage>
     +Tile(id: Int, pos: Vec2D, shipTraversable: Boolean): Tile
     + isSpaceAvailable(Int): Boolean
-    + driftGarbage(GarbageType, Int): void
+    + driftGarbage(GarbageType, Int): Unit
     + getTileInDirection(distance: Int, dir: Direction): Tile
-    + addGarbage(g: Garbage): void
+    + addGarbage(g: Garbage): Unit
     + isOilPresent(): Boolean
     + isPlasticPresent(): Boolean
     + areChemicalsPresent(): Boolean
@@ -257,10 +257,10 @@ class GameMap {
     -amount: Int,
     -type: GarbageType,
     -static maxId: Int,
-    +drift(Tile)
+    +drift(Tile): Unit
     +static getNextId(): Int
     +canDriftAtOnce(Int): Boolean
-    +removeAmount(Int): void
+    +removeAmount(Int): Unit
   }
 
   Garbage --> Tile
@@ -308,11 +308,11 @@ package Ships{
     - fuelConsumption: Int,
     - visibleRange: Int,
     - destinationTile: Tile,
-    + setDestinationTile(Tile)
-    + refuel()
+    + setDestinationTile(Tile): Unit
+    + refuel(): Unit
     + getTilesWithGarbageInFoV(): List<Tile>
-    + drift()
-    + setTile(Tile)
+    + drift(): Unit
+    + setTile(Tile): Unit
   }
 
   ScoutingShip --|> Ship
@@ -327,33 +327,33 @@ package Ships{
     garbageType: GarbageType
     garbageCapacity: Int,
     garbageLoad: Int,
-    + giveGarbage()
+    + giveGarbage(): Unit
   }
 }
 package Loggers{
   class Logger{
 '  - writer: PrintWriter = new PrintWriter(System.out)
     - writer: PrintWriter
-    + logInitializationInfoSuccess(filename:String)
-    + logInitializationInfoFail(filename:String)
-    + logSimulationStarted()
-    + logSimulationEnded()
-    + logSimulationTick(tick:Int)
-    + logCorporationStartMoveShips(corporationId:Int)
-    + logShipMovement(shipId:Int,speed:Int,tileId:Int)
-    + logCorporationStartCollectGarbage(corporateId)
-    + logGarbageCollectionByShip(shipId:Int,garbageType:GarbageType,garbageId:Int)
-    + logCorporationCooperationStart(corporationId:Int)
-    + logCooperationBetweenCorporations(corporationId:Int, otherCorporationId: Int, shipId:Int, cooperatedShipId: Int)
-    + logCorporationRefueling(corporationId:Int)
-    + logRefuelingShip(shipId:Int, tileId: Int)
-    + logUnloadShip(shipId:Int, amount:Int, garbageType:GarbageType, tileId:Int)
-    + logCorporationFinishedActions(corporationId:Int)
-    + logCurrentDriftGarbage(garbageType:GarbageType, garbageId:Int, amount:Int, startTileId:Int, endTileId:Int)
-    + logCurrentDriftShip(shipId:Int,startTileId:Int, endTileId:Int)
-    + logEventStart(eventId:Int,eventType:EventType)
-    + logSimulationStatisticsCalculated()
-    + logSimulationStatistics()
+    + logInitializationInfoSuccess(filename:String): Unit
+    + logInitializationInfoFail(filename:String): Unit
+    + logSimulationStarted(): Unit
+    + logSimulationEnded(): Unit
+    + logSimulationTick(tick:Int): Unit
+    + logCorporationStartMoveShips(corporationId:Int): Unit
+    + logShipMovement(shipId:Int,speed:Int,tileId:Int): Unit
+    + logCorporationStartCollectGarbage(corporateId): Unit
+    + logGarbageCollectionByShip(shipId:Int,garbageType:GarbageType,garbageId:Int): Unit
+    + logCorporationCooperationStart(corporationId:Int): Unit
+    + logCooperationBetweenCorporations(corporationId:Int, otherCorporationId: Int, shipId:Int, cooperatedShipId: Int): Unit
+    + logCorporationRefueling(corporationId:Int): Unit
+    + logRefuelingShip(shipId:Int, tileId: Int): Unit
+    + logUnloadShip(shipId:Int, amount:Int, garbageType:GarbageType, tileId:Int): Unit
+    + logCorporationFinishedActions(corporationId:Int): Unit
+    + logCurrentDriftGarbage(garbageType:GarbageType, garbageId:Int, amount:Int, startTileId:Int, endTileId:Int): Unit
+    + logCurrentDriftShip(shipId:Int,startTileId:Int, endTileId:Int): Unit
+    + logEventStart(eventId:Int,eventType:EventType): Unit
+    + logSimulationStatisticsCalculated(): Unit
+    + logSimulationStatistics(): Unit
   }
 }
 @enduml
