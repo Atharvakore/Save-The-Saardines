@@ -346,7 +346,9 @@ class Task {
     -rewardShip: Ship
 }
 class Reward{
-    
+    -id: Int
+    -visibilityRange: Int
+    -capz
 
 }
 Task o-- Reward
