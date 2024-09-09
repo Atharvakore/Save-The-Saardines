@@ -26,7 +26,7 @@ ShipsDrifted --> EventsProcessed : processEVents()
 EventsProcessed --> TickStarted : [currentTick!=eventTick]
 EventsProcessed --> EventsStarted : [currentTick=eventTick]
 EventsStarted --> TickStarted : []
-TickStarted --> [*] : [CurrentTick=max_ticks]
-
+TickStarted --> SimulationStatistics : [CurrentTick=max_ticks]
+SimulationStatistics -> [*]
 @enduml
 
