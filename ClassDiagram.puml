@@ -233,7 +233,6 @@ class GameMap {
   + getTileById(Int): Tile
   + getTiles(): List<Tile>
   + getTileByPosition(Vec2D): Tile
-  + getTilesByInstance(instanceOf(Tile))
 }
 
   abstract class Tile{
