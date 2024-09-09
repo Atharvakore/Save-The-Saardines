@@ -42,7 +42,7 @@ Dijkstra --o Simulation
 Main o-- Parser
 
 
-Tiles.Tile --o Tiles.GameMap
+Tiles.Tile --o Tiles.Sea
 
 
 class Main {
@@ -55,10 +55,10 @@ Main -- Simulation
 
 Events.Event --o Simulation
 Ships.Ship --o Corporation
-Tiles.Tile --o Tiles.GameMap
+Tiles.Tile --o Tiles.Sea
 Loggers.Logger --o Main
 Parser.JSONParser --o Main
-Tiles.Vec2D --o Tiles.GameMap
+Tiles.Vec2D --o Tiles.Sea
 Tiles.Vec2D --o Tiles.Tile
 
 
@@ -69,18 +69,21 @@ class Simulation {
   - allEvents: List<Event>
   - tick: Int
   - maxTick: Int
-  - map: GameMap
+  - map: Sea
   - runCorporations(): Unit
   - processEvents(): Unit
   + start(): Unit
   + tick(): Unit
 }
 Corporation --o Simulation
-Tiles.GameMap --o Simulation
+Tiles.Sea --o Simulation
 package Events{
   abstract class Event {
     - id: Int,
     - fireTick: Int,
+    ' Returns bool whether it the event is finished and can be removed
+    ' from consideration in future ticks.
+    + abstract actUponTick(Int): Boolean
     + abstract actUponTick(Int): Unit
 
   }
@@ -88,11 +91,12 @@ package Events{
   class Pirate_Attack {
     - ship: Ship,
     - owningCorporation: Corporation,
+    + override actUponTick(Int): Boolean
     + override actUponTick(Int): Unit
   }
   Local_Event --|> Event
   abstract class Local_Event {
-    - map: GameMap,
+    - map: Sea,
     - location: Tile,
     - radius: Int,
   }
@@ -100,17 +104,27 @@ package Events{
   class Storm {
     - speed: Int,
     - direction: Direction,
+    + override actUponTick(Int): Boolean
     + override actUponTick(Int): Unit
   }
   OilSpill --|> Local_Event
   class OilSpill {
     - amount: Int,
+    + override actUponTick(Int): Boolean
     + override actUponTick(Int): Unit
   }
+  ' Parser creates a restriction class, which does not rollback anything.
+  ' Then it creates endrestriction class that fires 'duration' later
+  ' and rollbacks the changes.
   Restriction --|> Local_Event
   class Restriction {
     - duration: Int,
     + override actUponTick(Int): Unit
+    + override actUponTick(Int): Boolean
+  }
+  EndRestriction --|> Local_Event
+  class EndRestriction {
+    + override actUponTick(Int): Boolean
   }
 }
 package Parser {
@@ -194,7 +208,7 @@ package Parser {
   JSONParser <|-- ScenarioJSONParser
   Accumulator --o JSONParser
   class Accumulator {
-    +map: GameMap
+    +map: Sea
     +corporations: Map<Int, Corporation>
     +ships: Map<Int, Ship>
     +events: Map<Int, Event>
@@ -226,11 +240,11 @@ class Vec2D{
   + tilesInRadius(Int): Iterator<Vec2D>
 }
 
-class GameMap {
+class Sea {
   + tiles: List<Tile>
   + tileIndex: Map<Vec2D, Tile>
   + getTileById(Int): Tile
-  
+  + getTileByPos(Vec2D): Tile
 }
 
   abstract class Tile{
