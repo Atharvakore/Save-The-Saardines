@@ -321,7 +321,6 @@ package Ships{
     - destinationTile: Tile,
     + setDestinationTile(Tile): Unit
     + refuel(): Unit
-
     + drift(): Unit
     + setTile(Tile): Unit
   }
