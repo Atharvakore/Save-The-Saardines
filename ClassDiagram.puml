@@ -276,20 +276,13 @@ class GameMap {
     + getDirection(): Direction
   }
   class Shore{
-    - harbor: Harbor?
-    + getHarbor(): Harbor?
+    + hasHarbor: boolean
   }
   class ShallowOcean{}
   class DeepOcean{
     - current: Current?
     + getCurrent(): Current?
   }
-
-class Harbor {
-  owner: List<Corporation>,
-  pos: Tile,
-}
-Harbor --o Shore
 Current --o DeepOcean
 }
 'Ships
