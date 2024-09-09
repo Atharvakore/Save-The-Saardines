@@ -1,17 +1,19 @@
 @startuml
 [*] --> MapParsed
 MapParsed --> MapValidated: validateMapJSON()[parseSuccessful]
-MapParsed --> [*] : parseMapJSON()[parseUnsuccessful]
-[*] --> [*] : parseMapJSON()[parseFailed]
+MapParsed --> SimulationFailed : parseMapJSON()[parseFailed]
+[*] --> SimulationFailed : parseMapJSON()[parseFailed]
 
 MapValidated --> CorporationParsed : parseCorporationsJSON()[parseSuccessful]
-MapValidated --> [*] : parseCorporationsJSON()[ValidationFailed]
+MapValidated --> SimulationFailed : parseCorporationsJSON()[ValidationFailed]
 CorporationParsed -->CorporationValidated : validateCorporation()[validationSuccessful]
-CorporationParsed -->[*] : validateCorporation()[validationFailed]
+CorporationParsed -->SimulationFailed : validateCorporation()[validationFailed]
 CorporationValidated --> ScenarioParsed : parseScenarioJSON [parseSuccessful]
 ScenarioParsed --> ScenarioValidated : validateScenario()[validationSuccessful]
-ScenarioParsed --> [*] : validateScenario()[validationFailed]
-CorporationValidated --> [*] : parseScenarioJSON()[parseFailed]
+ScenarioParsed --> SimulationFailed : validateScenario()[validationFailed]
+CorporationValidated --> SimulationFailed : parseScenarioJSON()[parseFailed]
+
+SimulationFailed --> [*]
 
 ScenarioValidated--> SimulationStarted : startSimulation()
 
@@ -31,6 +33,7 @@ EventsProcessed --> TickStarted : [currentTick!=eventTick]
 EventsProcessed --> EventsStarted : [currentTick=eventTick]
 EventsStarted --> TickStarted : []
 TickStarted --> SimulationStatistics : [CurrentTick=max_ticks]
-SimulationStatistics -> [*]
+SimulationStatistics --> SimulationSuccessful 
+SimulationSuccessful --> [*]
 @enduml
 
