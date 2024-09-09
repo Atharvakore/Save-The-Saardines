@@ -86,7 +86,8 @@ package Events{
   Pirate_Attack --|> Event
   class Pirate_Attack {
     - ship: Ship,
-    + override tick(): Unit
+    - owningCorporation: Corporation,
+    + override tick(Int): Unit
   }
   Local_Event --|> Event
   abstract class Local_Event {
@@ -98,17 +99,17 @@ package Events{
   class Storm {
     - speed: Int,
     - direction: Direction,
-    + override tick(): Unit
+    + override tick(Int): Unit
   }
   OilSpill --|> Local_Event
   class OilSpill {
     - amount: Int,
-    + override tick(): Unit
+    + override tick(Int): Unit
   }
   Restriction --|> Local_Event
   class Restriction {
     - duration: Int,
-    + override tick(): Unit
+    + override tick(Int): Unit
   }
 }
 package Parser {
