@@ -235,7 +235,7 @@ class GameMap {
   + tiles: List<Tile>
   + tileIndex: Map<Vec2D, Tile>
   + getTileById(Int): Tile
-  + getTiles(): List<Tile>
+  
 }
 
   abstract class Tile{
