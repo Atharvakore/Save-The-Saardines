@@ -119,7 +119,7 @@ package Parser {
   interface JSONParser{
     - logger: Logger
     - accumulator: Accumulator
-    # validateObjects(object:List<ParsedObject>)
+    # validateObjects(object:List<JSONObject>)
   }
 
   MapJSONParser --|> JSONParser
@@ -128,31 +128,23 @@ package Parser {
   class MapJSONParser {
 
     + parseMap(jsonFile:String): Boolean
-    - createTileObjects(filePath: String): List<ParsedObject>
-    - validateTiles(objects: List<ParsedObject>): Boolean
-    - validateTile(tile: ParsedObject): Boolean
+    - createTileObjects(filePath: String): List<JSONObject>
+    - validateTiles(objects: List<JSONObject>): Boolean
+    - validateTile(tile: JSONObject): Boolean
     - validateUniqueId(id: Int): Boolean
     - validateCoordinates(coord: Vec2D): Boolean
-    - validateRequirements(tileObject: ParsedObject): Boolean
+    - validateRequirements(tileObject: JSONObject): Boolean
 
   }
 
   class CorporationJSONParser{
-'    -map: GameMap
-'    -corporations: List<Corporation>
-'    -ships: Map<Int, Ship>
-'    -mapCorporationToHarbor: Map<Int, List<Tile>>
-'    -currentObject: ParsedObject
-'    -mapCorporationToShips: Map<Int, List<Int>>
-
-
     +CorporationJSONParser(accumulator:Accumulator)
     +parseCorporations(filePath: String): Boolean
     +parseShips(filePath: String): Boolean
 
     - createCorporationObjects(file: String): List<JSONObject>
-    -validateCorporations(corpObjects: List<ParsedObject>): Boolean
-    -validateCorporation(corporationObject: ParsedObject): Boolean
+    -validateCorporations(corpObjects: List<JSONObject>): Boolean
+    -validateCorporation(corporationObject: JSONObject): Boolean
     -validateCorporationUniqueId(id: Int): Boolean
     -validateCorporationUniqueName(name: String): Boolean
     -validateHarborTiles(harbors: List<Int>): Boolean
@@ -160,12 +152,12 @@ package Parser {
     -validateCorporationShip(ships: List<Int>): Boolean
 
     - createShipObjects(file: String): List<JSONObject>
-    - validateShips(ships: List<ParsedObject>):Boolean
-    - validateShip(ship:ParsedObject): Boolean
+    - validateShips(ships: List<JSONObject>):Boolean
+    - validateShip(ship:JSONObject): Boolean
     - validateShipUniqueId(id:Int): Boolean
     - validateShipUniqueName(name:String): Boolean
     - validateShipLocation(location: Int): Boolean
-    - validateShipAttributes(ship:ParsedObject): Boolean
+    - validateShipAttributes(ship:JSONObject): Boolean
   }
 
   class ScenarioJSONParser{
@@ -173,11 +165,11 @@ package Parser {
     + ScenarioJSONParser(accumulator:Accumulator)
     + parseEvents(json: String)
     + parseGarbage(garbage: String): Garbage
-    + validateGarbages(garbages:List<ParsedObject>)
-    + createGarbage(garbage: ParsedObject)
-    + validateEvents(events:List<ParsedObject>)
-    + validateEvent(event: ParsedObject)
-    + createEvent(event: ParsedObject)
+    + validateGarbages(garbages:List<JSONObject>)
+    + createGarbage(garbage: JSONObject)
+    + validateEvents(events:List<JSONObject>)
+    + validateEvent(event: JSONObject)
+    + createEvent(event: JSONObject)
 
     - validateGarbageUniqueId(): Boolean
     - validateGarbageType(): Boolean
