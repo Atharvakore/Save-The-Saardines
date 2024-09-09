@@ -80,6 +80,7 @@ Tiles.GameMap --o Simulation
 package Events{
   abstract class Event {
     - id: Int,
+    - fireTick: Int,
     + abstract tick(Int): Unit
   }
   Pirate_Attack --|> Event
