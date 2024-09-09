@@ -1,21 +1,21 @@
 @startuml
 actor User
-participant Coordinator as JSONparser
+participant Main as Main
 
-User -> JSONparser: main(map.json, corporations.json, scenario.json, 0)
-activate JSONparser
+User -> Main: main(map.json, corporations.json, scenario.json, 0)
+activate Main
 create "accu: Accumulator" as accu
-JSONparser -> accu :  Accumulator()
+Main -> accu :  Accumulator()
 activate accu
-accu --> JSONparser : accu
+accu --> Main : accu
 deactivate accu
 
 create parser as "m: MapJSONParser"
-JSONparser -> parser : MapJSONParser(accu)
+Main -> parser : MapJSONParser(accu)
 activate parser
-parser --> JSONparser: m
+parser --> Main: m
 deactivate parser
-JSONparser -> parser: parseMap(map.json)
+Main -> parser: parseMap(map.json)
 activate parser
 parser -> parser: createTileObjects(map.json)
 activate parser
@@ -79,17 +79,17 @@ parser -> log: logInitializationInfoSuccess(maps.json)
 activate log
 log --> parser:
 deactivate log
-parser-->JSONparser: True
+parser-->Main: True
 deactivate parser
 
 
 
 create corparser as "c: CorporartionJSONParser"
-JSONparser -> corparser: CorporationJSONParser(accu)
+Main -> corparser: CorporationJSONParser(accu)
 activate corparser
-corparser --> JSONparser : c
+corparser --> Main : c
 deactivate corparser
-JSONparser -> corparser: parseShips(corporations.json)
+Main -> corparser: parseShips(corporations.json)
 
 activate corparser
 corparser -> corparser: createShipObjects(corporations.json)
@@ -144,9 +144,9 @@ end
 corparser --> corparser: True
 deactivate corparser
 
-corparser --> JSONparser: True
+corparser --> Main: True
 deactivate corparser
-JSONparser -> corparser: parseCorporations(corporations.json)
+Main -> corparser: parseCorporations(corporations.json)
 activate corparser
 activate corparser
 corparser -> corparser: createCorporationObjectst(corporations.json)
@@ -215,14 +215,14 @@ corparser -> log : logInitializationInfoSuccess(corporations.json)
 activate log
 log --> corparser
 deactivate log
-corparser --> JSONparser : True
+corparser --> Main : True
 deactivate corparser
 create "Sc: ScenarioJSONParser" as scparser
-JSONparser -> scparser: ScenarioJSONParser(accu)
+Main -> scparser: ScenarioJSONParser(accu)
 activate scparser
-scparser -> JSONparser: Sc
+scparser -> Main: Sc
 deactivate scparser
-JSONparser -> scparser : parseGarbage(Scenario.json)
+Main -> scparser : parseGarbage(Scenario.json)
 activate scparser
 scparser -> scparser: createGarbageObjects(Scenario.json)
 activate scparser
@@ -265,9 +265,9 @@ deactivate scparser
 end
 scparser --> scparser: True
 deactivate scparser
-scparser --> JSONparser: True
+scparser --> Main: True
 deactivate scparser
-JSONparser -> scparser: parseEvents(Scenario.json)
+Main -> scparser: parseEvents(Scenario.json)
 activate scparser
 scparser -> scparser: createEventObjects(Scenario.json)
 activate scparser
@@ -306,28 +306,21 @@ scparser -> log: logInitializationInfoSuccess(scenario.json)
 activate log
 log --> scparser
 deactivate log
-scparser --> JSONparser: events
+scparser --> Main: events
 deactivate scparser
 
 loop for g in garbage
-JSONparser -> JSONparser: m.getTilebyId(g.getLocationId()).addGarbage(g)
-activate JSONparser
-JSONparser --> JSONparser
-deactivate JSONparser
+Main -> Main: m.getTilebyId(g.getLocationId()).addGarbage(g)
+activate Main
+Main --> Main
+deactivate Main
 end
 create "s: Simulation" as sim
 
-JSONparser -> sim: sim(corporations, events, 0, 0, m)
+Main -> sim: sim(corporations, events, 0, 0, m)
 activate sim
-sim --> JSONparser : s
+sim --> Main : s
 deactivate sim
-
-
-
-
-
-
-
 
 
 @enduml
