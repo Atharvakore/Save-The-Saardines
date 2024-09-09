@@ -15,11 +15,6 @@ package GeneralEnums{
     CHEMICALS
   }
 }
-class Vec2D{
-  + posX: Int,
-  + posY: Int,
-  + tilesInRadius(Int): Iterator<Vec2D>
-}
 class Corporation {
   - id:Int,
   - partner:Corporation
@@ -40,12 +35,11 @@ class Dijkstra{
 
 Dijkstra --o Simulation
 
-
-Coordinator o-- Parser
-Event --o Simulation
-Ship --o Corporation
-Tile --o GameMap
-Logger --o Coordinator
+Events.Event --o Simulation
+Ships.Ship --o Corporation
+Tiles.Tile --o GameMap
+Loggers.Logger --o Coordinator
+Parser.JSONParser --o Coordinator
 
 
 class Coordinator {
@@ -76,7 +70,7 @@ class Simulation {
 }
 Corporation --o Simulation
 GameMap --o Simulation
-package Event{
+package Events{
   abstract class Event {
     - id: Int,
     + abstract tick(): void
@@ -232,7 +226,13 @@ package Parser {
 }
 
 
-package Tile{
+package Tiles{
+class Vec2D{
+  + posX: Int,
+  + posY: Int,
+  + tilesInRadius(Int): Iterator<Vec2D>
+}
+
   abstract class Tile{
     - id: Int,
     - pos: Vec2D,
@@ -293,7 +293,7 @@ Harbor --o Shore
 Current --o DeepOcean
 }
 'Ships
-package Ship{
+package Ships{
   abstract class Ship {
     - id: Int,
     - name: String,
@@ -328,7 +328,7 @@ package Ship{
     + giveGarbage()
   }
 }
-package Logger{
+package Loggers{
   class Logger{
 '  - writer: PrintWriter = new PrintWriter(System.out)
     - writer: PrintWriter
