@@ -43,7 +43,7 @@ Dijkstra --o Simulation
 Coordinator o-- Parser
 Event --o Simulation
 Ship --o Corporation
-Tile --o Map
+Tile --o GameMap
 Logger --o Coordinator
 
 
@@ -52,12 +52,11 @@ class Coordinator {
  - parse(): Accumulator
 }
 Coordinator -- Simulation
-class Map {
-  - tiles: List<Tile>
-  - tileIndex: Map<Vec2D, Tile>
+class GameMap {
+  + tiles: List<Tile>
+  + tileIndex: Map<Vec2D, Tile>
   + getTileById(Int): Tile
   + getTiles(): List<Tile>
-  + addTile(Tile): void
   + getTileByPosition(Vec2D): Tile
   + getTilesByInstance(instanceOf(Tile))
 }
@@ -68,14 +67,14 @@ class Simulation {
   - allEvents: List<Event>
   - tick: Int
   - maxTick: Int
-  - map: Map
+  - map: GameMap
   + start()
   + tick()
   - runCorporations()
   - processEvents()
 }
 Corporation --o Simulation
-Map --o Simulation
+GameMap --o Simulation
 package Event{
   abstract class Event {
     - id: Int,
@@ -134,7 +133,7 @@ package Parser {
   }
 
   class CorporationJSONParser{
-'    -map: Map
+'    -map: GameMap
 '    -corporations: List<Corporation>
 '    -ships: Map<Int, Ship>
 '    -mapCorporationToHarbor: Map<Int, List<Tile>>
@@ -207,9 +206,7 @@ package Parser {
 
     +currentValidatingObject: ParsedObject
 
-    +map: Map
-    +tiles: Map<Int, Tile>
-    +tilesByCoordinat: Map<Vec2D, Tile>
+    +map: GameMap
     +corporations: Map<Int, Corporation>
     +ships: Map<Int, Ship>
     +events: Map<Int, Event>
