@@ -266,7 +266,7 @@ package Tiles {
     + removeAmount(Int): Unit
   }
 
-  Garbage --> Tile
+  Garbage --o Tile
   Shore --|> Tile
   DeepOcean --|> Tile
   ShallowOcean --|> Tile
