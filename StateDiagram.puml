@@ -1,11 +1,11 @@
 @startuml
 [*] --> MapParsed: parseMapJSON() [parseSuccessful]
 MapParsed --> MapValidated: validateMapJSON()[validationSuccessful]
-MapParsed --> [*] : parseMapJSON()[parseFailed]
-[*] --> [*] : validateMapJSON()[validationFailed]
+MapParsed --> [*] : validateMapJSON()[validationFailed]
+[*] --> [*] : parseMapJSON()[parseFailed]
 
 MapValidated --> CorporationParsed : parseCorporationsJSON()[parseSuccessful]
-MapValidated --> [*] : parseCorporationsJSON()[ValidationFailed]
+MapValidated --> [*] : parseCorporationsJSON()[parseFailed]
 CorporationParsed -->CorporationValidated : validateCorporation()[validationSuccessful]
 CorporationParsed -->[*] : validateCorporation()[validationFailed]
 CorporationValidated --> ScenarioParsed : parseScenarioJSON [parseSuccessful]
