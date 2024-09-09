@@ -22,12 +22,12 @@ class Corporation {
   - acceptedGarbageTypes: List<GarbageType>
   - ownedHarbors: List<Harbor>
   - ownedShips: List<Ship>
-  - moveShips(): Unit
-  - collectGarbage(): Unit
-  - refuelShips(): Unit
-  - unloadShips(): Unit
+  - moveShips(Map): Unit
+  - collectGarbage(Map): Unit
+  - refuelShips(Map): Unit
+  - unloadShips(Map): Unit
   +cooperateWith(c1:Corporation): Unit
-  +run(): Unit
+  +run(Map): Unit
 
 
 }
