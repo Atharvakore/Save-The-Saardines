@@ -318,7 +318,6 @@ package Ships{
     - acceleration: Int,
     - fuelCapacity: Int,
     - fuelConsumption: Int,
-    - visibleRange: Int,
     - destinationTile: Tile,
     + setDestinationTile(Tile): Unit
     + refuel(): Unit
@@ -332,13 +331,16 @@ package Ships{
   CollectingShip --|> Ship
 
   class ScoutingShip{
+   - visibleRange: Int
   }
   class CoordinatingShip{
+  - visibleRange: Int,
   }
   class CollectingShip{
-    garbageType: GarbageType
-    garbageCapacity: Int,
-    garbageLoad: Int,
+   - visibleRange: Int,
+   - garbageType: GarbageType
+   - garbageCapacity: Int,
+   - garbageLoad: Int,
     + giveGarbage(): Unit
   }
 }
