@@ -80,12 +80,12 @@ Tiles.GameMap --o Simulation
 package Events{
   abstract class Event {
     - id: Int,
-    + abstract tick(): Unit
+    + abstract actUponTick(): Unit
   }
   Pirate_Attack --|> Event
   class Pirate_Attack {
     - ship: Ship,
-    + override tick(): Unit
+    + override actUponTick(): Unit
   }
   Local_Event --|> Event
   abstract class Local_Event {
@@ -97,17 +97,17 @@ package Events{
   class Storm {
     - speed: Int,
     - direction: Direction,
-    + override tick(): Unit
+    + override actUponTick(): Unit
   }
   OilSpill --|> Local_Event
   class OilSpill {
     - amount: Int,
-    + override tick(): Unit
+    + override actUponTick(): Unit
   }
   Restriction --|> Local_Event
   class Restriction {
     - duration: Int,
-    + override tick(): Unit
+    + override actUponTick (): Unit
   }
 }
 package Parser {
