@@ -1,8 +1,8 @@
 @startuml
-[*] --> MapParsed
-MapParsed --> MapValidated: validateMapJSON()[parseSuccessful]
+[*] --> MapParsed: parseMapJSON() [parseSuccessful]
+MapParsed --> MapValidated: validateMapJSON()[validationSuccessful]
 MapParsed --> [*] : parseMapJSON()[parseFailed]
-[*] --> [*] : parseMapJSON()[parseFailed]
+[*] --> [*] : validateMapJSON()[validationFailed]
 
 MapValidated --> CorporationParsed : parseCorporationsJSON()[parseSuccessful]
 MapValidated --> [*] : parseCorporationsJSON()[ValidationFailed]
