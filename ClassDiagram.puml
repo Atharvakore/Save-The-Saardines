@@ -22,12 +22,13 @@ class Corporation {
   - acceptedGarbageTypes: List<GarbageType>
   - ownedHarbors: List<Harbor>
   - ownedShips: List<Ship>
+  +cooperateWith(c1:Corporation): Unit
+  +run(): Unit
   -moveShips(): Unit
   -collectGarbage(): Unit
   -refuelShips(): Unit
   -unloadShips(): Unit
-  +cooperateWith(c1:Corporation): Unit
-  +run(): Unit
+
 }
 class Dijkstra{
   + execute(Tile): Map<Tile,Int>
@@ -55,7 +56,6 @@ class GameMap {
   + getTileById(Int): Tile
   + getTiles(): List<Tile>
   + getTileByPosition(Vec2D): Tile
-  + getTilesByInstance(instanceOf(Tile))
 }
 
 Events.Event --o Simulation
@@ -181,15 +181,18 @@ package Parser {
 
     + validateGarbages(garbages:List<ParsedObject>)
 
-    - validateGarbageUniqueId(): Boolean
-    - validateGarbageType(): Boolean
-    - validateGarbageLocationExists(): Boolean
-    - validateGarbageAmount(): Boolean
     + createGarbage(garbage: ParsedObject)
 
     + validateEvents(events:List<ParsedObject>)
 
     + validateEvent(event: ParsedObject)
+    + createEvent(event: ParsedObject)
+
+    - validateGarbageUniqueId(): Boolean
+    - validateGarbageType(): Boolean
+    - validateGarbageLocationExists(): Boolean
+    - validateGarbageAmount(): Boolean
+
 
     - validateEventUniqueId(): Boolean
     - validateEventType(): Boolean
@@ -200,7 +203,6 @@ package Parser {
     - validateEventAmountIfExists(): Boolean
     - validateEventDirectionIfExists(): Boolean
     - validateEventShipIdIfExists(): Boolean
-    + createEvent(event: ParsedObject)
   }
 
   JSONParser <|-- CorporationJSONParser
@@ -250,7 +252,6 @@ class GameMap {
   + tileIndex: Map<Vec2D, Tile>
   + getTileById(Int): Tile
   + getTiles(): List<Tile>
-  + getTileByPosition(Vec2D): Tile
 }
 
   abstract class Tile{
