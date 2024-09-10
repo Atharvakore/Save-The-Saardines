@@ -19,7 +19,9 @@ package GeneralEnums {
 
 class Corporation {
   - id:Int,
-  - partner:Corporation
+  ' Garbage of the corporation that we have cooperated with.
+  ' I.e. past locations of garbage as a mapping int (id) -> vec2d.
+  - partnerGarbage: Map<Int, Vec2D>
   - name:String,
   - acceptedGarbageTypes: List<GarbageType>
   - ownedHarbors: List<Shore>
