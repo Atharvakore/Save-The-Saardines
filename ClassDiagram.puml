@@ -205,11 +205,13 @@ package Parser {
     - validateGarbage(garbage: JSONObject): Boolean
     - validateEvents(events:List<JSONObject>): Boolean
     - validateEvent(event: JSONObject): Boolean
+    - validateTasks(tasks: List<JSONObject>): Boolean
+    - validateTask(task: JSONObject): Boolean
+    - validateRewards(rewards: List<JSONObject>): Boolean
+    - validateReward(reward: JSONObject): Boolean
     - createGarbage(garbage: JSONObject): Garbage
     - createEvent(event: JSONObject): Event
-    - validateTask(task: JSONObject): Boolean
     - createTask(task: JSONObject): Task
-    - validateReward(reward: JSONObject): Boolean
     - createReward(reward: JSONObject): Reward
 '    - validateGarbageUniqueId(): Boolean
 '    - validateGarbageType(): Boolean
@@ -403,19 +405,11 @@ package TasksRewards {
 
   class Reward {
       -id: Int
-      }
+}
 Task o-- Reward
 
 Task --o Simulation
-
-
-
 'this is just an initial thought, still to be finalized
-
-
-
-
-
   CollectGarbageTask --|> Task
   ExploreMapTask --|> Task
   FindGarbageTask --|> Task
