@@ -35,11 +35,11 @@ class Corporation {
   ' Garbage that has trackers owned by this corporation.
   - trackedGarbage: List<Garbage>
   + cooperateWith(c1: Corporation): Unit
-  + run(Sea): Unit
-  - moveShips(Sea): Unit
-  - collectGarbage(Sea): Unit
-  - refuelShips(Sea): Unit
-  - unloadShips(Sea): Unit
+  + run(sea: Sea): Unit
+  - moveShips(sea: Sea): Unit
+  - collectGarbage(sea: Sea): Unit
+  - refuelShips(sea: Sea): Unit
+  - unloadShips(sea: Sea): Unit
   - isAcceptedGarbagePresent(listOfGarbage: List<Garbage>): Boolean
   - areShipsOnHarbor(): Boolean
 }
@@ -47,7 +47,7 @@ Tiles.Shore --o Corporation
 class Dijkstra {
   ' Returns a mapping that, for each path from the source to destination
   ' tiles, maps the destination tile to the path.
-  + execute(Tile): Map<Tile,List<Tile>>
+  + execute(source: Tile): Map<Tile,List<Tile>>
 }
 
 Dijkstra --o Simulation
@@ -96,14 +96,14 @@ package Events {
     - fireTick: Int,
     ' Returns bool whether it the event is finished and can be removed
     ' from consideration in future ticks.
-    + abstract actUponTick(Int): Boolean
+    + abstract actUponTick(currentTick: Int): Boolean
   }
 
   Pirate_Attack --|> Event
   class Pirate_Attack {
     - ship: Ship,
     - owningCorporation: Corporation,
-    + override actUponTick(Int): Boolean
+    + override actUponTick(currentTick: Int): Boolean
   }
 
   Local_Event --|> Event
@@ -117,13 +117,13 @@ package Events {
   class Storm {
     - speed: Int,
     - direction: Direction,
-    + override actUponTick(Int): Boolean
+    + override actUponTick(currentTick: Int): Boolean
   }
 
   OilSpill --|> Local_Event
   class OilSpill {
     - amount: Int,
-    + override actUponTick(Int): Boolean
+    + override actUponTick(currentTick: Int): Boolean
   }
 
   ' Parser creates a restriction class, which does not rollback anything.
@@ -132,12 +132,12 @@ package Events {
   Restriction --|> Local_Event
   class Restriction {
     - duration: Int,
-    + override actUponTick(Int): Boolean
+    + override actUponTick(currentTick: Int): Boolean
   }
 
   EndRestriction --|> Local_Event
   class EndRestriction {
-    + override actUponTick(Int): Boolean
+    + override actUponTick(currentTick: Int): Boolean
   }
 }
 
@@ -265,14 +265,14 @@ package Tiles {
   class Vec2D {
     + posX: Int,
     + posY: Int,
-    + tilesInRadius(Int): Iterator<Vec2D>
+    + tilesInRadius(visibleRadius: Int): Iterator<Vec2D>
   }
 
   class Sea {
     + tiles: List<Tile>
     + tileIndex: Map<Vec2D, Tile>
-    + getTileById(Int): Tile
-    + getTileByPos(Vec2D): Tile
+    + getTileById(tile_id: Int): Tile
+    + getTileByPos(position: Vec2D): Tile
   }
 
   abstract class Tile {
@@ -290,10 +290,10 @@ package Tiles {
     ' to make sure that we don't drift more than the capacity
     + amountOfGarbageDriftedThisTick: Int
     + Tile(id: Int, pos: Vec2D, shipTraversable: Boolean): Tile
-    + isSpaceAvailable(Int): Boolean
-    + driftGarbage(GarbageType, Int): Unit
+    + isSpaceAvailable(amount: Int): Boolean
+    + driftGarbage(garbage: GarbageType, Int): Unit
     + getTileInDirection(distance: Int, dir: Direction): Tile
-    + addGarbage(g: Garbage): Unit
+    + addGarbage(garbage: Garbage): Unit
     + isOilPresent(): Boolean
     + isPlasticPresent(): Boolean
     + areChemicalsPresent(): Boolean
@@ -306,17 +306,16 @@ package Tiles {
     - type: GarbageType,
     - static maxId: Int,
     - trackedBy: Set<Corporation>
-    + drift(Tile): Unit
+    + drift(currentTile: Tile): Unit
     + static getNextId(): Int
-    + canDriftAtOnce(Int): Boolean
-    + removeAmount(Int): Unit
+    + canDriftAtOnce(amount: Int): Boolean
+    + removeAmount(amount: Int): Unit
   }
 
   Garbage --o Tile
   Shore --|> Tile
   DeepOcean --|> Tile
   ShallowOcean --|> Tile
-
   class Current {
     - speed: Int,
     - direction: Direction,
@@ -325,7 +324,6 @@ package Tiles {
     + getIntensity(): Int
     + getDirection(): Direction
   }
-
   class Shore {
     + hasHarbor: boolean
   }
@@ -339,6 +337,10 @@ package Tiles {
   }
   Current --o DeepOcean
 }
+GeneralEnums.GarbageType --o Tiles.Garbage
+GeneralEnums.Direction --o Tiles.Current
+
+
 'Ships
 package Ships {
   ShipCapability --o Ships.Ship
@@ -354,8 +356,8 @@ package Ships {
     - capabilities: Set<ShipCapability>
     + refuel(): Unit
     + drift(): Unit
-    + setTile(Tile): Unit
-    + isFuelSufficient(Tile, List<Shore>): Boolean
+    + setTile(destination: Tile): Unit
+    + isFuelSufficient(tile: Tile,harbors: List<Shore>): Boolean
   }
 
   interface ShipCapability {
@@ -390,7 +392,7 @@ package Ships {
     - garbageLoad: Int,
     - auxiliaryContainers: List<Container>
     + giveGarbage(): Unit
-    + hasGarbageCapacity(List<Garbage>): Boolean
+    + hasGarbageCapacity(garbageOnTile: List<Garbage>): Boolean
   }
 
   class ShipWithTracker {
@@ -421,20 +423,20 @@ Task --o Simulation
   CooperateTask --|> Task
   class CollectGarbageTask {
     - tile: Tile
-    + override actUponTick(Int): Boolean
+    + override actUponTick(currentTick: Int): Boolean
   }
   class ExploreMapTask {
     - tile: Tile
-    + override actUponTick(Int): Boolean
+    + override actUponTick(currentTick: Int): Boolean
   }
   class FindGarbageTask {
     - tile: Tile
-    + override actUponTick(Int): Boolean
+    + override actUponTick(currentTick: Int): Boolean
   }
   class CooperateTask {
     - tile: Tile
     - otherCorporation: Corporation
-    + override actUponTick(Int): Boolean
+    + override actUponTick(currentTick: Int): Boolean
   }
   TelescopeReward --|> Reward
   ContainerReward --|> Reward
@@ -442,22 +444,22 @@ Task --o Simulation
   TrackerReward --|> Reward
   abstract class Reward {
     - id: Int
-    + abstract applyReward(Ship): Unit
+    + abstract applyReward(ship: Ship): Unit
   }
   class TelescopeReward {
     - additiveFieldOfView: Int
-    + override applyReward(Ship): Unit
+    + override applyReward(ship: Ship): Unit
   }
   class ContainerReward {
     - capacity: Int
     - typeOfGarbage: GarbageType
-    + override applyReward(Ship): Unit
+    + override applyReward(ship: Ship): Unit
   }
   class RadioReward {
-    + override applyReward(Ship): Unit
+    + override applyReward(ship: Ship): Unit
   }
   class TrackerReward {
-    + override applyReward(Ship): Unit
+    + override applyReward(ship: Ship): Unit
   }
 }
 
