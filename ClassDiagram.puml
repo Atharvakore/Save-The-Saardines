@@ -450,6 +450,7 @@ Task --o Simulation
   }
   class ContainerReward {
     - capacity: Int
+    - typeOfGarbage: GarbageType
     + override applyReward(Ship): Unit
   }
   class RadioReward {
