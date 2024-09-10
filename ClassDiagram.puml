@@ -18,6 +18,10 @@ package GeneralEnums {
 }
 
 
+
+
+TasksRewards.Task --o Corporation
+
 class Corporation {
   - id:Int,
   ' Garbage of the corporation that we have cooperated with.
@@ -31,11 +35,11 @@ class Corporation {
   ' Garbage that has trackers owned by this corporation.
   - trackedGarbage: List<Garbage>
   + cooperateWith(c1: Corporation): Unit
-  + run(Map): Unit
-  - moveShips(Map): Unit
-  - collectGarbage(Map): Unit
-  - refuelShips(Map): Unit
-  - unloadShips(Map): Unit
+  + run(Sea): Unit
+  - moveShips(Sea): Unit
+  - collectGarbage(Sea): Unit
+  - refuelShips(Sea): Unit
+  - unloadShips(Sea): Unit
   - isAcceptedGarbagePresent(listOfGarbage: List<Garbage>): Boolean
   - areShipsOnHarbor(): Boolean
 }
@@ -160,7 +164,7 @@ package Parser {
 '    - validateCoordinates(coord: Vec2D): Boolean
 '    - validateRequirements(tileObject: JSONObject): Boolean
     - createTile(tile:JSONObject):Tile
-    - createMap():GameMap
+    - createMap():Sea
   }
 
   class CorporationJSONParser{
@@ -350,6 +354,7 @@ package Ships {
   interface ShipCapability {
   }
 
+  Container --o CollectingShip
   class Container {
     - garbageType: GarbageType
     - capacity: Int
@@ -386,25 +391,75 @@ package Ships {
 }
 
 package TasksRewards {
-  class Task {
+  Event --|> Task
+  abstract class Task {
     - tick: Int
     - id: Int
     - taskShip: Ship
     - reward: Reward
     - rewardShip: Ship
+    - corporation: Corporation
   }
+
   class Reward {
       -id: Int
       }
 Task o-- Reward
-Task --o Corporation
+
 Task --o Simulation
-}
+
 
 
 'this is just an initial thought, still to be finalized
 
 
+
+
+
+  CollectGarbageTask --|> Task
+  ExploreMapTask --|> Task
+  FindGarbageTask --|> Task
+  CooperateTask --|> Task
+  class CollectGarbageTask {
+    - tile: Tile
+    + override actUponTick(Int): Boolean
+  }
+  class ExploreMapTask {
+    - tile: Tile
+    + override actUponTick(Int): Boolean
+  }
+  class FindGarbageTask {
+    - tile: Tile
+    + override actUponTick(Int): Boolean
+  }
+  class CooperateTask {
+    - tile: Tile
+    - otherCorporation: Corporation
+    + override actUponTick(Int): Boolean
+  }
+  TelescopeReward --|> Reward
+  ContainerReward --|> Reward
+  RadioReward --|> Reward
+  TrackerReward --|> Reward
+  abstract class Reward {
+    - id: Int
+    + abstract applyReward(Ship): Unit
+  }
+  class TelescopeReward {
+    - additiveFieldOfView: Int
+    + override applyReward(Ship): Unit
+  }
+  class ContainerReward {
+    - capacity: Int
+    + override applyReward(Ship): Unit
+  }
+  class RadioReward {
+    + override applyReward(Ship): Unit
+  }
+  class TrackerReward {
+    + override applyReward(Ship): Unit
+  }
+}
 
 
 package Loggers {
