@@ -309,6 +309,22 @@ activate scparser
 loop taskObject in tasks
 scparser -> scparser: validateTask(taskObject)
 activate scparser
+scparser -> accu: getRewardById(rewardId)
+activate accu
+accu --> scparser: reward
+deactivate accu
+scparser -> accu: getShipById(taskShipId)
+activate accu
+accu --> scparser: ship1
+deactivate accu
+scparser -> accu: getShipById(rewardShipId)
+activate accu
+accu --> scparser: ship2
+deactivate accu
+scparser -> scparser: ship1.getOwner().equals(ship2.getOwner)
+activate scparser
+scparser --> scparser
+deactivate scparser
 scparser --> scparser
 deactivate scparser
 scparser -> scparser : createTask(taskObject)
@@ -325,7 +341,7 @@ activate accu
 accu --> scparser
 deactivate accu
 scparser --> scparser: True
-deactivate scparser
+deactivate scparserx
 end
 scparser --> scparser: True
 scparser --> Main: True
