@@ -263,15 +263,12 @@ end
 scparser --> scparser: True
 
 deactivate scparser
-scparser -> log: logInitializationInfoSuccess(scenario.json)
-activate log
-log --> scparser
-deactivate log
-scparser --> Main: events
+
+scparser --> Main: True
 deactivate scparser
 
 
-Main -> scparser: parseTasks(Scenario.json)
+Main -> scparser: parseRewards(Scenario.json)
 activate scparser
 
 scparser -> scparser:  validateRewards(rewards)
@@ -284,14 +281,14 @@ scparser --> scparser
 deactivate scparser
 scparser -> scparser : createReward(rewardObject)
 activate scparser
-create "event: Event" as event
-scparser -> event: Event(id, type, tick, duration, location, radius, speed, amount, direction, shipID)
-activate event
-event --> scparser: event
-deactivate event
-scparser --> scparser: event
+create "reward: Reward" as reward
+scparser -> reward: Reward(id)
+activate reward
+reward --> scparser: reward
+deactivate reward
+scparser --> scparser: True
 deactivate scparser
-scparser -> accu: addEvent(id, event)
+scparser -> accu: addReward(id, reward)
 activate accu
 accu --> scparser
 deactivate accu
@@ -299,13 +296,39 @@ scparser --> scparser: True
 deactivate scparser
 end
 scparser --> scparser: True
-
+scparser --> Main: True
 deactivate scparser
-scparser -> log: logInitializationInfoSuccess(scenario.json)
-activate log
-log --> scparser
-deactivate log
-scparser --> Main: events
+
+
+Main -> scparser: parseTasks(Scenario.json)
+activate scparser
+
+scparser -> scparser:  validateTasks(tasks)
+activate scparser
+
+loop taskObject in tasks
+scparser -> scparser: validateTask(taskObject)
+activate scparser
+scparser --> scparser
+deactivate scparser
+scparser -> scparser : createTask(taskObject)
+activate scparser
+create "task: Task" as task
+scparser -> task: Task(id, tick, taskShip, reward, rewardShip, corporation)
+activate task
+task --> scparser: task
+deactivate task
+scparser --> scparser: True
+deactivate scparser
+scparser -> accu: addTask(id, task)
+activate accu
+accu --> scparser
+deactivate accu
+scparser --> scparser: True
+deactivate scparser
+end
+scparser --> scparser: True
+scparser --> Main: True
 deactivate scparser
 
 
