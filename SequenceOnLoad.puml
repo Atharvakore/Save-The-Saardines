@@ -274,13 +274,15 @@ deactivate scparser
 Main -> scparser: parseTasks(Scenario.json)
 activate scparser
 
-scparser -> scparser:  validateTasks(tasks)
+scparser -> scparser:  validateRewards(rewards)
 activate scparser
 
-loop taskObject in tasks
-scparser -> scparser: validateTask(taskObject)
+loop rewardObject in rewards
+scparser -> scparser: validateReward(rewardObject)
 activate scparser
-scparser -> scparser : createEvent(eventObject)
+scparser --> scparser
+deactivate scparser
+scparser -> scparser : createReward(rewardObject)
 activate scparser
 create "event: Event" as event
 scparser -> event: Event(id, type, tick, duration, location, radius, speed, amount, direction, shipID)
