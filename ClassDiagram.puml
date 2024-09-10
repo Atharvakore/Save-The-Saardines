@@ -151,7 +151,6 @@ package Parser {
   interface JSONParser {
     - logger: Logger
     - accumulator: Accumulator
-    # validateObjects(object: List<JSONObject>)
   }
 
   MapJSONParser --|> JSONParser
@@ -199,7 +198,7 @@ package Parser {
     + parseEvents(EventJSON: String): Boolean
     + parseGarbage(garbageJSON: String): Boolean
     +parseTasks(taskJSON: String): Boolean
-    +parseReward(rewardJSON: String): Boolean
+    +parseRewards(rewardJSON: String): Boolean
 
     - validateGarbages(garbages:List<JSONObject>): Boolean
     - validateGarbage(garbage: JSONObject): Boolean
@@ -211,8 +210,9 @@ package Parser {
     - validateReward(reward: JSONObject): Boolean
     - createGarbage(garbage: JSONObject): Garbage
     - createEvent(event: JSONObject): Event
-    - createTask(task: JSONObject): Task
     - createReward(reward: JSONObject): Reward
+    - createTask(task: JSONObject): Task
+
 '    - validateGarbageUniqueId(): Boolean
 '    - validateGarbageType(): Boolean
 '    - validateGarbageLocationExists(): Boolean
@@ -239,11 +239,16 @@ package Parser {
     + ships: Map<Int, Ship>
     + events: Map<Int, Event>
     + garbage: Map<Int, Garbage>
+    + tasks: Map<Int, Task>
+    + rewards: Map<Int, Reward>
     + mapCorporationToHarbor: Map<Int, List<Tile>>
     + mapCorporationToShips: Map<Int, List<Int>>
+
     + getHarborsOfCorporation(corporationId: Int): List<Tile>
     + getShipsIDofCorporation(corporationId: Int): List<Int>
     + getTileFromMap(tileId: Int): Tile
+    + getRewardById(rewardId: Int): Reward
+    + getTaskById(taskId: Int): Task
     + getTileFromMap(tileCoordinates:Vec2D): Tile
     + addTile(id: Int, t: Tile): Unit
     + addTileByCoordinates(coord: Vec2D, t: Tile): Unit

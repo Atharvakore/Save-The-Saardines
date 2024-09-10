@@ -19,7 +19,7 @@ Main -> parser: parseMap(map.json)
 activate parser
 parser -> parser: createTileObjects(map.json)
 activate parser
-parser --> parser : objects: List<ParsedObject>
+parser --> parser : objects: List<JSONObject>
 deactivate parser
 parser -> parser : validateTiles(objects)
 activate parser
@@ -87,7 +87,7 @@ Main -> corparser: parseShips(corporations.json)
 activate corparser
 corparser -> corparser: createShipObjects(corporations.json)
 activate corparser
-corparser --> corparser : objects: List<ParsedObject>
+corparser --> corparser : objects: List<JSONObject>
 deactivate corparser
 corparser -> corparser : validateShips(objects)
 activate corparser
@@ -131,7 +131,7 @@ activate corparser
 activate corparser
 corparser -> corparser: createCorporationObjectst(corporations.json)
 activate corparser
-corparser --> corparser : objects: List<ParsedObject>
+corparser --> corparser : objects: List<JSONObject>
 deactivate corparser
 corparser -> corparser: validateCorporations(objects)
 activate corparser
@@ -194,7 +194,7 @@ Main -> scparser : parseGarbage(Scenario.json)
 activate scparser
 scparser -> scparser: createGarbageObjects(Scenario.json)
 activate scparser
-scparser --> scparser : objects: List<ParsedObject>
+scparser --> scparser : objects: List<JSONObject>
 deactivate scparser
 scparser -> scparser:  validateGarbages(objects)
 activate scparser
@@ -236,7 +236,7 @@ Main -> scparser: parseEvents(Scenario.json)
 activate scparser
 scparser -> scparser: createEventObjects(Scenario.json)
 activate scparser
-scparser --> scparser : objects: List<ParsedObject>
+scparser --> scparser : objects: List<JSONObject>
 deactivate scparser
 scparser -> scparser:  validateEvents(objects)
 activate scparser
@@ -269,6 +269,46 @@ log --> scparser
 deactivate log
 scparser --> Main: events
 deactivate scparser
+
+
+Main -> scparser: parseTasks(Scenario.json)
+activate scparser
+
+scparser -> scparser:  validateTasks(tasks)
+activate scparser
+
+loop taskObject in tasks
+scparser -> scparser: validateTask(taskObject)
+activate scparser
+scparser -> scparser : createEvent(eventObject)
+activate scparser
+create "event: Event" as event
+scparser -> event: Event(id, type, tick, duration, location, radius, speed, amount, direction, shipID)
+activate event
+event --> scparser: event
+deactivate event
+scparser --> scparser: event
+deactivate scparser
+scparser -> accu: addEvent(id, event)
+activate accu
+accu --> scparser
+deactivate accu
+scparser --> scparser: True
+deactivate scparser
+end
+scparser --> scparser: True
+
+deactivate scparser
+scparser -> log: logInitializationInfoSuccess(scenario.json)
+activate log
+log --> scparser
+deactivate log
+scparser --> Main: events
+deactivate scparser
+
+
+
+
 
 loop for g in garbage
 Main -> Main: m.getTilebyId(g.getLocationId()).addGarbage(g)
