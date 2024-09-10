@@ -58,12 +58,15 @@ Parser.JSONParser --o Main
 Tiles.Vec2D --o Tiles.Sea
 Tiles.Vec2D --o Tiles.Tile
 
+
+
 class Simulation {
   - corporations: List<Corporation>
   - allEvents: List<Event>
   - tick: Int
   - maxTick: Int
   - map: Sea
+  - tasks: List<Task>
   + start(): Unit
   + tick(): Unit
   - runCorporations(): Unit
@@ -76,6 +79,7 @@ class Simulation {
 Corporation --o Simulation
 Tiles.Sea --o Simulation
 
+Task --o Simulation
 package Events {
   abstract class Event {
     - id: Int,
@@ -182,9 +186,10 @@ package Parser {
   class ScenarioJSONParser{
 
     + ScenarioJSONParser(accumulator:Accumulator):ScenarioJSONParser
-    + parseEvents(json: String): Boolean
-    + parseGarbage(garbage: String): Boolean
-
+    + parseEvents(EventJSON: String): Boolean
+    + parseGarbage(garbageJSON: String): Boolean
+    +parseTasks(taskJSON: String): Boolean
+    +parseReward(rewardJSON: String): Boolean
 
     - validateGarbages(garbages:List<JSONObject>): Boolean
     - validateGarbage(garbage: JSONObject): Boolean
@@ -192,6 +197,10 @@ package Parser {
     - validateEvent(event: JSONObject): Boolean
     - createGarbage(garbage: JSONObject): Garbage
     - createEvent(event: JSONObject): Event
+    - validateTask(task: JSONObject): Boolean
+    - createTask(task: JSONObject): Task
+    - validateReward(reward: JSONObject): Boolean
+    - createReward(reward: JSONObject): Reward
 '    - validateGarbageUniqueId(): Boolean
 '    - validateGarbageType(): Boolean
 '    - validateGarbageLocationExists(): Boolean
@@ -357,16 +366,25 @@ class Task {
     -taskShip: Ship
     -reward: Reward
     -rewardShip: Ship
+    -targetTile: Tile
 }
+package Reward {
+
 class Reward{
     -id: Int
-    -visibilityRange: Int
-
-
-
-
 }
-Task o-- Reward
+class Container {
+    -capacity: Int
+    -garbageType: GarbageType
+}
+class Telescope {
+    -visibleRange: Int
+}
+Telescope --|> Reward
+Container --|> Reward
+'this is just an initial thought, still to be finalized
+}
+Task o-- Reward.Reward
 package Loggers {
   class Logger {
     ' - writer: PrintWriter = new PrintWriter(System.out)
