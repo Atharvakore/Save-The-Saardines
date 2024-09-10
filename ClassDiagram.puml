@@ -274,7 +274,7 @@ package Tiles {
     - adjacentTiles: Tile[6]
     - shipTraversable: Boolean
     - garbage: List<Garbage>
-    ' Stores the amount of garbage drifted to this tile this tick.
+    ' Stores the amount of garbage drifted from this tile this tick.
     ' This is important because the garbage drifts to the next tile
     ' and we want to drift only as much as the current allows,
     ' but on the other hand we don't want to drift garbage twice.
@@ -391,7 +391,7 @@ package Ships {
 }
 
 package TasksRewards {
-  Event --|> Task
+  Task --|> Event
   abstract class Task {
     - tick: Int
     - id: Int
