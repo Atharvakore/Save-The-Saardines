@@ -17,6 +17,7 @@ package GeneralEnums {
   }
 }
 
+Task --o Corporation
 class Corporation {
   - id:Int,
   ' Garbage of the corporation that we have cooperated with.
@@ -26,6 +27,9 @@ class Corporation {
   - acceptedGarbageTypes: List<GarbageType>
   - ownedHarbors: List<Shore>
   - ownedShips: List<Ship>
+  - tasks: List<Task>
+  ' Garbage that has trackers owned by this corporation.
+  - trackedGarbage: List<Garbage>
   + cooperateWith(c1: Corporation): Unit
   + run(Map): Unit
   - moveShips(Map): Unit
@@ -275,11 +279,13 @@ package Tiles {
     + areChemicalsPresent(): Boolean
   }
 
+  Garbage o--o Corporation
   class Garbage {
     - id: Int,
     - amount: Int,
     - type: GarbageType,
     - static maxId: Int,
+    - trackedBy: Set<Corporation>
     + drift(Tile): Unit
     + static getNextId(): Int
     + canDriftAtOnce(Int): Boolean
@@ -315,6 +321,7 @@ package Tiles {
 }
 'Ships
 package Ships {
+  ShipCapability --o Ships.Ship
   abstract class Ship {
     - id: Int,
     - name: String,
@@ -324,44 +331,62 @@ package Ships {
     - acceleration: Int,
     - fuelCapacity: Int,
     - fuelConsumption: Int,
+    - capabilities: Set<ShipCapability>
     + refuel(): Unit
     + drift(): Unit
     + setTile(Tile): Unit
     + isFuelSufficient(Tile, List<Shore>): Boolean
   }
 
-  ScoutingShip --|> Ship
-  CoordinatingShip --|> Ship
-  CollectingShip --|> Ship
+  interface ShipCapability {
+  }
+
+  class Container {
+    - garbageType: GarbageType
+    - capacity: Int
+  }
+
+  ScoutingShip --|> ShipCapability
+  CoordinatingShip --|> ShipCapability
+  CollectingShip --|> ShipCapability
+  ShipWithTracker --|> ShipCapability
 
   class ScoutingShip {
+    ' Telescope just increments te visibleRange.
     - visibleRange: Int
     + getTilesWithGarbageInFoV(): List<Tile>
   }
   class CoordinatingShip {
     - visibleRange: Int,
-    + getImmediateTilesWithGarbage(): List<Tile>
+    ' getImmediateTilesWithGarbage()?
+    + getTilesWithGarbageInFoV(): List<Tile>
   }
+
+  GarbageType --o CollectingShip
   class CollectingShip {
-    - visibleRange: Int,
-    - garbageType: GarbageType
+    - garbageType: Set<GarbageType>
     - garbageCapacity: Int,
     - garbageLoad: Int,
+    - auxiliaryContainers: List<Container>
     + giveGarbage(): Unit
-    + hasGarbageCap(List<Garbage>): Boolean
+    + hasGarbageCapacity(List<Garbage>): Boolean
+  }
+
+  class ShipWithTracker {
   }
 }
 
-class Task {
-  - tick: Int
-  - id: Int
-  - taskShip: Ship
-  - reward: Reward
-  - rewardShip: Ship
-}
-class Reward{
-  - id: Int
-  - visibilityRange: Int
+package TasksRewards {
+  class Task {
+    - tick: Int
+    - id: Int
+    - taskShip: Ship
+    - reward: Reward
+    - rewardShip: Ship
+  }
+  class Reward {
+    - id: Int
+  }
 }
 
 Task o-- Reward
