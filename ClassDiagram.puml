@@ -400,22 +400,6 @@ package TasksRewards {
     - rewardShip: Ship
     - corporation: Corporation
   }
-
-  class Reward {
-      -id: Int
-      }
-Task o-- Reward
-
-Task --o Simulation
-
-
-
-'this is just an initial thought, still to be finalized
-
-
-
-
-
   CollectGarbageTask --|> Task
   ExploreMapTask --|> Task
   FindGarbageTask --|> Task
