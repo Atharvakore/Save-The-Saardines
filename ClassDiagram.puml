@@ -353,21 +353,17 @@ package Ships {
 }
 
 class Task {
-
-    -tick: Int
-    -id: Int
-    -taskShip: Ship
-    -reward: Reward
-    -rewardShip: Ship
+  - tick: Int
+  - id: Int
+  - taskShip: Ship
+  - reward: Reward
+  - rewardShip: Ship
 }
 class Reward{
-    -id: Int
-    -visibilityRange: Int
-
-
-
-
+  - id: Int
+  - visibilityRange: Int
 }
+
 Task o-- Reward
 package Loggers {
   class Logger {
