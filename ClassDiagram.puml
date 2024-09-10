@@ -437,19 +437,27 @@ package TasksRewards {
     - id: Int
     + abstract applyReward(ship: Ship): Unit
   }
+  ScoutingShip --o TelescopeReward
+  CollectingShip --o ContainerReward
+  CoordinatingShip --o RadioReward
+  ShipWithTracker --o TrackerReward
   class TelescopeReward {
     - additiveFieldOfView: Int
+    - capability: ScoutingShip
     + override applyReward(ship: Ship): Unit
   }
   class ContainerReward {
     - capacity: Int
     - typeOfGarbage: GarbageType
+    - capability: CollectingShip
     + override applyReward(ship: Ship): Unit
   }
   class RadioReward {
+    - capability: CoordinatingShip
     + override applyReward(ship: Ship): Unit
   }
   class TrackerReward {
+    - capability: ShipWithTracker
     + override applyReward(ship: Ship): Unit
   }
 }
