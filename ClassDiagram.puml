@@ -378,7 +378,7 @@ package Ships {
 }
 
 package TasksRewards {
-  Event --|> Task
+  Task --|> Event
   abstract class Task {
     - tick: Int
     - id: Int
