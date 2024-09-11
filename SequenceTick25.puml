@@ -102,8 +102,11 @@ deactivate scouting
 c1 -> scouting: move(pathToShip)
 activate scouting
 
-loop for tile in pathToShip
+note left of scouting
+reverse pathToShip
+end note
 
+loop for tile in pathToTile
 scouting -> scouting: setTile(t66)
 activate scouting
 
@@ -144,8 +147,11 @@ deactivate collecting
 c1 -> collecting: move(pathToShip)
 activate collecting
 
+note left of collecting
+reverse pathToShip
+end note
 
-loop for tile in pathToShip
+loop for tile in pathToTile
 
 collecting -> collecting: setTile(t65)
 activate collecting
@@ -202,11 +208,9 @@ activate m
 m --> s : listOfTiles
 deactivate m
 
-s -> s: filterDeepOceanTiles({t1,..,t100})
-activate s
-
-s --> s: listOfDeepOceanTiles
-deactivate
+note left of s
+Filter DeepOcean tiles
+end note
 
 
 s -> s: driftGarbage()
@@ -266,16 +270,10 @@ oil --> oil
 deactivate oil
 
 'need loop to check other tiles if space is not availabel
-oil -> t67: isSpaceAvailable(50)
+oil -> t67: isSpaceAvailable(OIL,50)
 activate t67
 
 t67 --> oil: true
-
-oil -> t67 : isOilPresent()
-
-t67 --> oil: false
-
-
 
 oil -> oil: createGarbage(OIL,50)
 activate oil

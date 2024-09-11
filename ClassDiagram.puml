@@ -298,9 +298,6 @@ package Tiles {
     + isSpaceAvailable(amount: Int): Boolean
     + getTileInDirection(distance: Int, dir: Direction): Tile
     + addGarbage(garbage: Garbage): Unit
-    + isOilPresent(): Boolean
-    + isPlasticPresent(): Boolean
-    + areChemicalsPresent(): Boolean
     + getAmountOfType(type: GarbageType): Int
     + removeGarbageOfType(type: GarbageType, amount: Int): Unit
   }
