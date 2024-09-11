@@ -1,3 +1,21 @@
+Tasks up for grabs (I/T - implementation, test)
+- [ ] I/T: Implement the parser and validator for scenarios (into accumulator).
+- [ ] I/T: Implement the parser and validator for corporations (into accumulator).
+- [ ] I/T: Implement the parser and validator for map (into accumulator).
+- [ ] I/T: Translation layer between accumulator and the overall class UML diagram.
+- [ ] I/T: Dijkstra.
+- [ ] I/T: Logger.
+- [ ] I/T: Map logic: implement all classes in the Tiles package; Vec2D, tile data classes, garbage drifting.
+- [ ] I/T: Implement Ships package logic: getTilesInFoV, data classes.
+- [ ] I/T: Implement Events.
+- [ ] I/T: Implement Tasks and Rewards (applying rewards, condition checking, etc).
+- [ ] I/T: Implement Corporation's collectGarbage, refuelShips, unloadShips, helper methods.
+- [ ] I/T: Implement Corporation's moveShips.
+- [ ] I/T: Implement glue logic in Main, Simulation.
+- [ ] T: Implement system tests.
+- [ ] T: Implement remote mutant tests.
+26 tasks in total, 11 days.
+
 Fri 13
   Before lunch:
     - [ ] Kamila:

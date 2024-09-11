@@ -375,12 +375,12 @@ package Ships {
   class ScoutingShip {
     ' Telescope just increments te visibleRange.
     - visibleRange: Int
-    + getTilesWithGarbageInFoV(): List<Tile>
+    + getTilesWithGarbageInFoV(Sea): List<Tile>
   }
   class CoordinatingShip {
     - visibleRange: Int,
     ' getImmediateTilesWithGarbage()?
-    + getTilesWithGarbageInFoV(): List<Tile>
+    + getTilesWithGarbageInFoV(Sea): List<Tile>
   }
 
   GarbageType --o CollectingShip
