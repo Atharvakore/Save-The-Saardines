@@ -296,7 +296,6 @@ package Tiles {
     + amountOfGarbageDriftedThisTick: Int
     + Tile(id: Int, pos: Vec2D, shipTraversable: Boolean): Tile
     + isSpaceAvailable(amount: Int): Boolean
-    + driftGarbage(garbage: GarbageType, Int): Unit
     + getTileInDirection(distance: Int, dir: Direction): Tile
     + addGarbage(garbage: Garbage): Unit
     + isOilPresent(): Boolean
@@ -366,7 +365,6 @@ package Ships {
     + setTile(destination: Tile): Unit
     + isFuelSufficient(pathLength: Int): Boolean
     + addCapability(capability: ShipCapability): Unit
-    - reversePath(path: List<Tile>) : List<Tile>
   }
 
   interface ShipCapability {

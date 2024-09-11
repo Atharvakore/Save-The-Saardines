@@ -102,13 +102,7 @@ deactivate scouting
 c1 -> scouting: move(pathToShip)
 activate scouting
 
-scouting -> scouting: reversePath(pathToShip)
-activate scouting
-
-scouting --> scouting: pathToTile
-deactivate scouting
-
-loop for tile in pathToTile
+loop for tile in pathToShip
 
 scouting -> scouting: setTile(t66)
 activate scouting
@@ -150,13 +144,8 @@ deactivate collecting
 c1 -> collecting: move(pathToShip)
 activate collecting
 
-collecting -> collecting: reversePath(pathToShip)
-activate collecting
 
-collecting --> collecting: pathToTile
-deactivate collecting
-
-loop for tile in pathToTile
+loop for tile in pathToShip
 
 collecting -> collecting: setTile(t65)
 activate collecting
