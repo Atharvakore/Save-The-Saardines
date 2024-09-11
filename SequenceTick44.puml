@@ -276,7 +276,7 @@ end note
 c1 -> c1: refillAndUnloadShips()
 activate c1
 
-c1 -> c1:getAllShipsFromHarbors()
+c1 -> c1:getShipsFromHarbors()
 activate c1
 c1 --> c1: {}
 deactivate c1
