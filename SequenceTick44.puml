@@ -12,6 +12,8 @@ participant "t67:DeepOcean" as t67
 participant "current:Current" as current
 participant "oil:Garbage" as oil
 participant "newOil:Garbage" as oil
+participant "d: Dijkstra" as d
+
 
 activate sim
 
@@ -64,8 +66,147 @@ activate c1
 c1 --> sim
 deactivate c1
 end
+deactivate sim
+
+sim --> sim: tick()
+activate sim
+
+loop for corporation in {c1}
+
+sim -> c1: run(sea)
+activate c1
+
+c1 -> c1: moveShips(sea)
+activate c1
+
+c1 -> c1: filterCollectingShips()
+activate c1
+
+c1 --> c1: {s1,s2}
+deactivate c1
+
+c1 -> c1: filterScoutingShips()
+activate c1
+
+c1 --> c1: {s1}
+deactivate c1
+
+c1 -> c1: getActiveTasks()
+activate c1
+
+c1-->c1: {}
+deactivate c1
+
+loop for ship in {s1}
+
+c1 -> s1: getTilesWithGarbageInFoV()
+activate s1
+
+s1 --> c1: {t66}
+deactivate s1
+end
+
+loop for tile in {t66}
+
+c1 -> t66: getGarbageByType({OIL})
+activate t66
+
+t66 -> c1: {oil}
+deactivate t66
+end
+
+c1 -> d: execute(t66)
+activate d
+
+d --> c1: MapTilesToPath
+deactivate d
+
+
+c1 -> c1: findClosestShip(MapTilesToPath, {s1})
+activate c1
+
+c1 --> c1: pathToShip
+deactivate c1
+
+c1 -> c1: findClosestHarbor(MapTilesToPath, ownedHarbors)
+activate c1
+
+c1 --> c1: pathToHarbor
+deactivate c1
+
+loop for scoutingShip in {s1}
+
+c1 -> s1: isFuelSufficient(pathToShip.length + pathToHarbor.length)
+activate s1
+
+s1 --> c1: true
+deactivate s1
+
+c1 -> s1: move(pathToShip)
+activate s1
+loop for tile in pathToShip
+
+s1 -> s1: setTile(t66)
+activate s1
+
+s1 --> s1:
+deactivate s1
+end
+s1 --> c1
+deactivate s1
+end
+
+
+c1 -> c1: findClosestShip(MapTilesToPath, {s1,s2})
+activate c1
+
+c1 --> c1: pathToShip
+deactivate c1
+
+c1 -> c1: findClosestHarbor(MapTilesToPath, ownedHarbors)
+activate c1
+
+c1 --> c1: pathToHarbor
+deactivate c1
+
+loop for collectingShip in {s1,s2}
+
+c1 -> s1: isFuelSufficient(pathToShip.length + pathToHarbor.length)
+activate s1
+
+s1 --> c1: true
+deactivate s1
+
+c1 -> s1: HasGarbageCapacity({oil})
+activate s1
+
+s1 --> c1: true
+deactivate s1
+
+
+c1 -> s1: move(pathToShip)
+activate s1
+loop for tile in pathToShip
+
+s1 -> s1: setTile(t66)
+activate s1
+
+s1 --> s1:
+deactivate s1
+end
+s1 --> c1
+deactivate s1
+end
+
+c1 --> c1
+deactivate c1
+
+c1 --> sim:
+deactivate c1
+end
 sim --> sim
 deactivate sim
+
 
 
 

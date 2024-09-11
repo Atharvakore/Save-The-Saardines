@@ -10,7 +10,7 @@ participant "t67:DeepOcean" as t67
 participant "current:Current" as current
 participant "oil:Garbage" as oil
 participant "newOil:Garbage" as newoil
-participant "d: dijkstra" as d
+participant "d: Dijkstra" as d
 
 
 
@@ -48,13 +48,7 @@ activate c1
 c1 --> c1: {}
 deactivate c1
 
-loop for ship in {s1,s2}
-
-c1 -> c1: listOfCollectingShips.contains(s1)
-activate c1
-
-c1 --> c1: false
-deactivate c1
+loop for ship in {s1}
 
 c1 -> scouting: getTilesWithGarbageInFoV()
 activate scouting
@@ -157,14 +151,6 @@ deactivate collecting
 c1 -> collecting: move(pathToShip)
 activate collecting
 loop for tile in pathToShip
-
-
-collecting -> t65: getShipTraversable()
-
-activate t65
-
-t65 --> collecting: true
-deactivate t65
 
 collecting -> collecting: setTile(t66)
 activate collecting
