@@ -35,6 +35,7 @@ class Corporation {
   ' Garbage that has trackers owned by this corporation.
   - trackedGarbage: List<Garbage>
   - lastCoordinatingCorporation: Corporation
+  + cooperate(ships: List<Ship>)
   + cooperateWith(c1: Corporation): Unit
   + run(sea: Sea, otherShips: List<Ship>): Unit
   + getActiveTasks(): List<Task>

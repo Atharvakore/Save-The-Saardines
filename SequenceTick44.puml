@@ -259,7 +259,7 @@ note left of c1
 Trying to cooperate with other Corporations
 end note
 
-c1 -> c1: cooperate()
+c1 -> c1: cooperate(listOfShips)
 activate c1
 c1 -> c1 : filterCooperatingShips()
 activate c1
