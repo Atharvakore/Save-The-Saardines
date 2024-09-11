@@ -7,18 +7,18 @@ participant "s2:CollectingShip" as s2
 participant "reward:ContainerReward" as reward
 participant "m:Sea" as m
 participant "t23:ShallowOcean" as t23
-participant "t66:DeepOcean" as t66
-participant "t67:DeepOcean" as t67
+participant "tile66:DeepOcean" as tile66
+participant "tile67:DeepOcean" as tile67
 participant "current:Current" as current
 participant "oil:Garbage" as oil
-participant "newOil:Garbage" as oil
 participant "d: Dijkstra" as d
 
 
 activate sim
 
-sim -> sim: tick()
-activate sim
+note left of sim
+    The simulation of tick 44 is done before
+end note
 
 loop for corporation in {c1}
 sim -> c1: getActiveTasks()
@@ -66,8 +66,9 @@ activate c1
 c1 --> sim
 deactivate c1
 end
-deactivate sim
-
+note left of sim
+Start of tick 45
+end note
 sim --> sim: tick()
 activate sim
 
@@ -85,8 +86,11 @@ deactivate c1
 end
 
 loop for corporation in {c1}
-
-sim -> c1: run(sea, listOfShips)
+note left of sim
+Moving the scoutingShips
+end note
+loop for corporation in {c1}
+sim -> c1: run(sea, listOfShipsOfOtherCorporations = {})
 activate c1
 
 c1 -> c1: moveShips(sea)
@@ -115,20 +119,20 @@ loop for ship in {s1}
 c1 -> s1: getTilesWithGarbageInFoV()
 activate s1
 
-s1 --> c1: {t66}
+s1 --> c1: {tile66}
 deactivate s1
 end
 
-loop for tile in {t66}
+loop for tile in {tile66}
 
-c1 -> t66: getGarbageByType({OIL})
-activate t66
+c1 -> tile66: getGarbageByType({OIL})
+activate tile66
 
-t66 -> c1: {oil}
-deactivate t66
+tile66 -> c1: {oil}
+deactivate tile66
 end
 
-c1 -> d: execute(t66)
+c1 -> d: execute(tile66)
 activate d
 
 d --> c1: MapTilesToPath
@@ -138,7 +142,7 @@ deactivate d
 c1 -> c1: findClosestShip(MapTilesToPath, {s1})
 activate c1
 
-c1 --> c1: pathToShip
+c1 --> c1: pathToShipS1
 deactivate c1
 
 c1 -> c1: findClosestHarbor(MapTilesToPath, ownedHarbors)
@@ -149,17 +153,17 @@ deactivate c1
 
 loop for scoutingShip in {s1}
 
-c1 -> s1: isFuelSufficient(pathToShip.length + pathToHarbor.length)
+c1 -> s1: isFuelSufficient(pathToShipS1.length + pathToHarbor.length)
 activate s1
 
 s1 --> c1: true
 deactivate s1
 
-c1 -> s1: move(pathToShip)
+c1 -> s1: move(pathToShipS1)
 activate s1
-loop for tile in pathToShip
+loop for tile in pathToShipS1
 
-s1 -> s1: setTile(t66)
+s1 -> s1: setTile(tile66)
 activate s1
 
 s1 --> s1:
@@ -170,10 +174,14 @@ deactivate s1
 end
 
 
+
+note left of c1
+Proceed to move collectingShips to Garbages
+end note
 c1 -> c1: findClosestShip(MapTilesToPath, {s1,s2})
 activate c1
 
-c1 --> c1: pathToShip
+c1 --> c1: pathToShipS1
 deactivate c1
 
 c1 -> c1: findClosestHarbor(MapTilesToPath, ownedHarbors)
@@ -184,7 +192,7 @@ deactivate c1
 
 loop for collectingShip in {s1,s2}
 
-c1 -> s1: isFuelSufficient(pathToShip.length + pathToHarbor.length)
+c1 -> s1: isFuelSufficient(pathToShipS1.length + pathToHarbor.length)
 activate s1
 
 s1 --> c1: true
@@ -197,11 +205,11 @@ s1 --> c1: true
 deactivate s1
 
 
-c1 -> s1: move(pathToShip)
+c1 -> s1: move(pathToShipS1)
 activate s1
-loop for tile in pathToShip
+loop for tile in pathToShipS1
 
-s1 -> s1: setTile(t66)
+s1 -> s1: setTile(tile66)
 activate s1
 
 s1 --> s1:
@@ -212,12 +220,67 @@ deactivate s1
 end
 
 c1 --> c1
+c1 -> c1: collectGarbage()
+activate c1
+c1 -> c1: filterCollectingShips()
+activate c1
+c1 --> c1: {s1,s2}
 deactivate c1
-
+note left of c1
+Collecting all garbage possible
+end note
+loop for ship in {s1,s2}
+c1 -> s1: collectGarbageFromCurrentTile()
+activate s1
+s1-> tile66:getAmountOfType(OIL)
+activate tile66
+tile66--> s1: 800
+s1 -> tile66: removeGarbageOfType(OIL, 800)
+tile66 --> s1:
+deactivate tile66
+s1 --> c1:
+deactivate s1
 c1 --> sim:
 deactivate c1
 end
+c1 -->c1:
+deactivate c1
+note left of c1
+Trying to cooperate with other Corporations
+end note
+
+c1 -> c1: cooperate()
+activate c1
+c1 -> c1 : filterCooperatingShips()
+activate c1
+c1 --> c1: {}
+deactivate c1
+c1 --> c1
+deactivate c1
+
+
+note left of c1
+Trying to process ships which are on harbor
+end note
+
+c1 -> c1: refillAndUnloadShips()
+activate c1
+c1 -> c1:getAllShipsFromHarbors()
+activate c1
+c1 --> c1: {}
+deactivate c1
+c1 --> c1
+deactivate c1
+c1 --> sim
+deactivate c1
+
+end
+note left of sim
+End of simulation tick 45
+end note
+
 sim --> sim
+
 deactivate sim
 
 
