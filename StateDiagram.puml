@@ -20,18 +20,21 @@ SimulationStarted --> TickStarted : tick()
 TickStarted --> CorporationPresent : checkCorporations()
 CorporationPresent --> ShipsMoved : moveShips() [corporationsPresent]
 ShipsMoved --> GarbageCollected : collectGarbage()
-GarbageCollected --> CorporationsCorporated : corporate()
-CorporationsCorporated --> ShipsUnloaded : unloadShips()
+GarbageCollected --> CorporationsCooperated : cooperate()
+CorporationsCooperated --> ShipsUnloaded : unloadShips()
 ShipsUnloaded --> ShipsRefueled : refuelShips()
 ShipsRefueled --> CorporationPresent : checkCorporations()[True]
 CorporationPresent --> GarbageDrifted : driftGarbage() [corporationsAbsent]
 GarbageDrifted --> ShipsDrifted : driftShips()
-ShipsDrifted --> EventsProcessed : processEVents()
-EventsProcessed --> TickStarted : [currentTick!=eventTick]
-EventsProcessed --> EventsStarted : [currentTick=eventTick]
-EventsStarted --> TickStarted : []
+ShipsDrifted --> TasksProcessed : processTasks()
+TasksProcessed --> TasksProcessed : processTask()
+TasksProcessed --> RewardsGiven: giveRewards()
+RewardsGiven --> EventsProcessed: processEvents()
+EventsProcessed --> TickStarted : tick() [currentTick!=eventTick]
+EventsProcessed --> EventsStarted : startEvent()[currentTick=eventTick]
+EventsStarted --> EventsProcessed : processEvents()
 TickStarted --> SimulationStatistics : [CurrentTick=max_ticks]
-SimulationStatistics --> SimulationSuccessful 
+SimulationStatistics --> SimulationSuccessful : logStatistics()
 SimulationSuccessful --> [*]
 @enduml
 
