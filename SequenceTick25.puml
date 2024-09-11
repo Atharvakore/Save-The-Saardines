@@ -186,7 +186,7 @@ end
 c1--> c1
 deactivate c1
 
-c1 -> c1: cooperate()
+c1 -> c1: cooperate(listOfShips)
 activate c1
 c1 -> c1 : filterCooperatingShips()
 activate c1
