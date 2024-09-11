@@ -34,6 +34,7 @@ class Corporation {
   - tasks: List<Task>
   ' Garbage that has trackers owned by this corporation.
   - trackedGarbage: List<Garbage>
+  - lastCoordinatingCorporation: Corporation
   + cooperateWith(c1: Corporation): Unit
   + run(sea: Sea): Unit
   - moveShips(sea: Sea): Unit
@@ -406,6 +407,7 @@ package TasksRewards {
     - reward: Reward
     - rewardShip: Ship
     - corporation: Corporation
+    + checkCondition(): Boolean
   }
   'this is just an initial thought, still to be finalized
   CollectGarbageTask --|> Task
