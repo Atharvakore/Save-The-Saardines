@@ -320,12 +320,9 @@ package Tiles {
   DeepOcean --|> Tile
   ShallowOcean --|> Tile
   class Current {
-    - speed: Int,
-    - direction: Direction,
-    - intensity: Int,
-    + getSpeed(): Int
-    + getIntensity(): Int
-    + getDirection(): Direction
+    - speed: Int
+    - direction: Direction
+    - intensity: Int
   }
   class Shore {
     + hasHarbor: boolean
