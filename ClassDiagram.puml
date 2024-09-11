@@ -36,7 +36,7 @@ class Corporation {
   - trackedGarbage: List<Garbage>
   - lastCoordinatingCorporation: Corporation
   + cooperateWith(c1: Corporation): Unit
-  + run(sea: Sea): Unit
+  + run(sea: Sea, otherShips: List<Ship>): Unit
   - moveShips(sea: Sea): Unit
   - collectGarbage(sea: Sea): Unit
   - refuelShips(sea: Sea): Unit
