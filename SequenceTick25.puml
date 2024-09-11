@@ -382,6 +382,13 @@ s --> s
 deactivate s
 s -> s: processEvents()
 activate s
+
+s -> s: getActiveEvents()
+activate s
+
+s --> s: {}
+deactivate s
+
 s --> s
 deactivate s
 

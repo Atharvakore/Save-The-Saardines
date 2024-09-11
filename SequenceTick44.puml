@@ -20,6 +20,9 @@ note left of sim
     The simulation of tick 44 is done before
 end note
 
+sim -> sim: tick ()
+activate sim
+
 loop for corporation in {c1}
 sim -> c1: getActiveTasks()
 activate c1
@@ -66,6 +69,9 @@ activate c1
 c1 --> sim
 deactivate c1
 end
+sim --> sim
+deactivate sim
+
 note left of sim
 Start of tick 45
 end note
@@ -283,16 +289,27 @@ sim --> sim
 
 deactivate sim
 
+sim -> sim: processEvents()
+activate sim
 
+sim -> sim: getActiveEvents()
+activate sim
 
+sim --> sim: {}
+deactivate sim
 
+sim --> sim
+deactivate sim
 
+loop for corporation in {c1}
+sim-> c1: getActiveTasks()
+activate c1
 
+c1 -> sim: {}
+deactivate c1
+end
 
-
-
-
-
-
+sim --> sim
+deactivate sim
 
 @enduml
