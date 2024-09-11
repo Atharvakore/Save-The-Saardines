@@ -300,10 +300,10 @@ activate t67
 t67 --> oil: true
 deactivate t67
 
-oil -> oil: getMaxId()
+oil -> oil: getNextId()
 activate oil
 
-oil --> oil: 1
+oil --> oil: 2
 deactivate oil
 
 oil -> oil: createGarbage(2, OIL,50)
