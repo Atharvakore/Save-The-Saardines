@@ -417,7 +417,7 @@ package TasksRewards {
     - reward: Reward
     - rewardShip: Ship
     - corporation: Corporation
-    + checkCondition(): Boolean
+    - abstract checkCondition(): Boolean
   }
   'this is just an initial thought, still to be finalized
   CollectGarbageTask --|> Task
@@ -427,19 +427,23 @@ package TasksRewards {
   class CollectGarbageTask {
     - tile: Tile
     + override actUponTick(currentTick: Int): Boolean
+    - override checkCondition(): Boolean
   }
   class ExploreMapTask {
     - tile: Tile
     + override actUponTick(currentTick: Int): Boolean
+    - override checkCondition(): Boolean
   }
   class FindGarbageTask {
     - tile: Tile
     + override actUponTick(currentTick: Int): Boolean
+    - override checkCondition(): Boolean
   }
   class CooperateTask {
     - tile: Tile
     - otherCorporation: Corporation
     + override actUponTick(currentTick: Int): Boolean
+    - override checkCondition(): Boolean
   }
   TelescopeReward --|> Reward
   ContainerReward --|> Reward
