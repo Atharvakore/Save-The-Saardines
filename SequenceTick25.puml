@@ -182,13 +182,32 @@ deactivate collecting
 end
 
 
+
 c1--> c1
 deactivate c1
 
-c1 -> c1: getShipsOnHarbor()
+c1 -> c1: cooperate()
+activate c1
+c1 -> c1 : filterCooperatingShips()
+activate c1
+c1 --> c1: {}
+deactivate c1
+c1 --> c1
+deactivate c1
+
+
+note left of c1
+Trying to process ships which are on harbor
+end note
+
+c1 -> c1: refillAndUnloadShips()
 activate c1
 
+c1 -> c1:getShipsFromHarbors()
+activate c1
 c1 --> c1: {}
+deactivate c1
+c1 --> c1
 deactivate c1
 
 c1 --> c1
@@ -197,8 +216,6 @@ deactivate c1
 c1 --> s
 deactivate c1
 end
-
-
 
 s --> s
 deactivate s
