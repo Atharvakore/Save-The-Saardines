@@ -1,8 +1,8 @@
 @startuml
 participant "sim:Simulator" as s
 participant "c1:Corporation" as c1
-participant "s1:ScoutingShip" as scouting
-participant "s2:CollectingShip" as collecting
+participant "scouting:Ship" as scouting
+participant "collecting:Ship" as collecting
 participant "m:Map" as m
 participant "t65:DeepOcean" as t65
 participant "t66:DeepOcean" as t66
