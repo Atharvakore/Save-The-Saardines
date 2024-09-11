@@ -37,12 +37,14 @@ class Corporation {
   - lastCoordinatingCorporation: Corporation
   + cooperateWith(c1: Corporation): Unit
   + run(sea: Sea, otherShips: List<Ship>): Unit
+  + getActiveTasks(): List<Task>
   - moveShips(sea: Sea): Unit
   - collectGarbage(sea: Sea): Unit
   - refuelShips(sea: Sea): Unit
   - unloadShips(sea: Sea): Unit
   - isAcceptedGarbagePresent(listOfGarbage: List<Garbage>): Boolean
   - areShipsOnHarbor(): Boolean
+
 }
 Tiles.Shore --o Corporation
 class Dijkstra {
