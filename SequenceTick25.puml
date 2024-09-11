@@ -392,6 +392,8 @@ deactivate s
 s --> s
 deactivate s
 
+s -> s: processTasks()
+activate s
 loop for corporation in {c1}
 s -> c1: getActiveTasks()
 activate c1
@@ -399,7 +401,8 @@ activate c1
 c1 -> s: {}
 deactivate c1
 end
-
+s --> s
+deactivate s
 s --> s
 deactivate s
 
