@@ -13,7 +13,8 @@ Tasks up for grabs (I/T - implementation, test)
 - [ ] I/T: Implement Corporation's moveShips.
 - [ ] I/T: Implement glue logic in Main, Simulation.
 - [ ] T: Implement system tests.
-- [ ] T: Implement remote mutant tests.
+- [ ] T: Implement remote simulation mutant tests.
+- [ ] T: Implement remote parsing mutant tests.
 26 tasks in total, 11 days.
 
 Fri 13
