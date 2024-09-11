@@ -12,21 +12,26 @@ participant "oil:Garbage" as oil
 participant "newOil:Garbage" as newoil
 participant "d: Dijkstra" as d
 
-
-
-
 activate s
 
 s -> s: tick()
 activate s
 
-
-
 s -> s: runCorporations()
 activate s
 
-loop for corporation in Corporation
-s -> c1: run(sea)
+loop for corporation in {c1}
+
+s -> c1: getOwnedShips()
+activate c1
+
+c1 --> s: listOfShips = {s1,s2}
+deactivate c1
+
+end
+
+loop for corporation in {c1}
+s -> c1: run(sea,listOfShips)
 activate c1
 
 c1 -> c1: moveShips(sea)
@@ -119,7 +124,6 @@ end
 scouting --> c1
 deactivate scouting
 end
-
 
 c1 -> c1: findClosestShip(MapTilesToPath, {s2})
 activate c1
