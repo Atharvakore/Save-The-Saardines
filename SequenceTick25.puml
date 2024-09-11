@@ -168,7 +168,7 @@ collecting --> c1
 deactivate collecting
 end
 
-c1 -> c1: collectGarbage()
+c1 -> c1: collectGarbage(sea)
 activate c1
 
 loop for ship in listOfCollectingShips
