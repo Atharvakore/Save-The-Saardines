@@ -78,7 +78,7 @@ sim --> sim
 deactivate sim
 
 note left of sim
-Start of tick 45
+Log tick
 end note
 sim --> sim: tick()
 activate sim
@@ -99,6 +99,7 @@ end
 loop for corporation in {c1}
 note left of sim
 Moving the scoutingShips
+Log Corporation Ship Movement
 end note
 loop for corporation in {c1}
 sim -> c1: run(sea, listOfShips)
@@ -171,6 +172,9 @@ s1 --> c1: true
 deactivate s1
 
 c1 -> s1: move(pathToShipS1)
+note left of sim
+Log ship movement
+end note
 activate s1
 loop for tile in pathToShipS1
 
@@ -216,6 +220,9 @@ s1 --> c1: true
 deactivate s1
 
 
+note left of sim
+log Corporation Ship Movement
+end note
 c1 -> s1: move(pathToShipS1)
 activate s1
 loop for tile in pathToShipS1
@@ -235,6 +242,9 @@ deactivate c1
 c1 -> c1: collectGarbage()
 activate c1
 
+note left of sim
+log Corporation Garbage Collection Start
+end note
 note left of c1
 Collecting all garbage possible
 end note
@@ -259,6 +269,9 @@ note left of c1
 Trying to cooperate with other Corporations
 end note
 
+note left of sim
+log Corporation Cooperation Start
+end note
 c1 -> c1: cooperate(listOfShips)
 activate c1
 c1 -> c1 : filterCooperatingShips()
