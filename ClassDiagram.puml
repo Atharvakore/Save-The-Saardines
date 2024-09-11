@@ -295,7 +295,7 @@ package Tiles {
     ' to make sure that we don't drift more than the capacity
     + amountOfGarbageDriftedThisTick: Int
     + Tile(id: Int, pos: Vec2D, shipTraversable: Boolean): Tile
-    + isSpaceAvailable(GarbageType, amount: Int): Boolean
+    + isSpaceAvailable(type: GarbageType, amount: Int): Boolean
     + getTileInDirection(distance: Int, dir: Direction): Tile
     + addGarbage(garbage: Garbage): Unit
     + getAmountOfType(type: GarbageType): Int
