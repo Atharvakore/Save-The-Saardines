@@ -88,6 +88,7 @@ class Simulation {
   - driftGarbage(): Unit
   - driftShips(): Unit
   - processEvents(): Unit
+  - getActiveEvents(): List<Event>
 }
 
 Corporation --o Simulation
