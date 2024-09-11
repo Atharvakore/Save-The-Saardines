@@ -486,6 +486,7 @@ package Loggers {
     + logSimulationTick(tick:Int): Unit
     + logCorporationStartMoveShips(corporationId:Int): Unit
     + logShipMovement(shipId:Int,speed:Int,tileId:Int): Unit
+    + logCorporationAttachedTracker(corporationId: Int, garbageId: Int, shipId: Int)
     + logCorporationStartCollectGarbage(corporateId): Unit
     + logGarbageCollectionByShip(shipId:Int,garbageType:GarbageType,garbageId:Int): Unit
     + logCorporationCooperationStart(corporationId:Int): Unit
@@ -497,6 +498,8 @@ package Loggers {
     + logCurrentDriftGarbage(garbageType:GarbageType, garbageId:Int, amount:Int, startTileId:Int, endTileId:Int): Unit
     + logCurrentDriftShip(shipId:Int,startTileId:Int, endTileId:Int): Unit
     + logEventStart(eventId:Int,eventType:EventType): Unit
+    + logTaskAddedToShip(taskId: Int, taskType: TaskType, shipId: Int, tileId: Int)
+    + logRewardReceived(taskId: Int, shipId: Int, rewardType: RewardType)
     + logSimulationStatisticsCalculated(): Unit
     + logSimulationStatistics(): Unit
   }

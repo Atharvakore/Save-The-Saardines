@@ -69,6 +69,9 @@ deactivate task
 sim -> c1: removeTask(task)
 activate c1
 
+note left of sim
+log Reward given
+end note
 c1 --> sim
 deactivate c1
 end
