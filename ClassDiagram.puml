@@ -302,7 +302,8 @@ package Tiles {
     + isOilPresent(): Boolean
     + isPlasticPresent(): Boolean
     + areChemicalsPresent(): Boolean
-    + getGarbageByType(types: List<GarbageType>): List<Garbage>
+    + getAmountOfType(type: GarbageType): Int
+    + removeGarbageOfType(type: GarbageType, amount: Int): Unit
   }
 
   Garbage o--o Corporation

@@ -64,10 +64,10 @@ end
 
 loop for tile in {t66}
 
-c1 -> t66: getGarbageByType({OIL})
+c1 -> t66: getAmountOfType(OIL)
 activate t66
 
-t66 -> c1: {oil}
+t66 -> c1: 800
 deactivate t66
 end
 
@@ -227,7 +227,7 @@ activate s
 
 loop for tile in listOfDeepOceanTiles
 
-s -> t66: isGarbagePresent()
+s -> t66: isOilPresent()
 activate t66
 
 t66--> s: true

@@ -131,10 +131,10 @@ end
 
 loop for tile in {tile66}
 
-c1 -> tile66: getGarbageByType({OIL})
+c1 -> tile66: getAmountOfType(OIL)
 activate tile66
 
-tile66 -> c1: {oil}
+tile66 -> c1: 800
 deactivate tile66
 end
 
@@ -204,7 +204,7 @@ activate s1
 s1 --> c1: true
 deactivate s1
 
-c1 -> s1: HasGarbageCapacity({oil})
+c1 -> s1: hasGarbageCapacity({oil})
 activate s1
 
 s1 --> c1: true
@@ -226,15 +226,14 @@ deactivate s1
 end
 
 c1 --> c1
+deactivate c1
 c1 -> c1: collectGarbage()
 activate c1
-c1 -> c1: filterCollectingShips()
-activate c1
-c1 --> c1: {s1,s2}
-deactivate c1
+
 note left of c1
 Collecting all garbage possible
 end note
+
 loop for ship in {s1,s2}
 c1 -> s1: collectGarbageFromCurrentTile()
 activate s1
@@ -246,11 +245,11 @@ tile66 --> s1:
 deactivate tile66
 s1 --> c1:
 deactivate s1
-c1 --> sim:
-deactivate c1
 end
-c1 -->c1:
+
+
 deactivate c1
+c1 -->c1:
 note left of c1
 Trying to cooperate with other Corporations
 end note
@@ -271,12 +270,14 @@ end note
 
 c1 -> c1: refillAndUnloadShips()
 activate c1
+
 c1 -> c1:getAllShipsFromHarbors()
 activate c1
 c1 --> c1: {}
 deactivate c1
 c1 --> c1
 deactivate c1
+
 c1 --> sim
 deactivate c1
 
