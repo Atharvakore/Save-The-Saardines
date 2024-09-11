@@ -176,10 +176,10 @@ loop for ship in listOfCollectingShips
 c1 -> collecting: collectGarbageOnCurrentTile()
 activate collecting
 
-collecting -> t65: getGarbageByType({OIL})
+collecting -> t65: getAmountOfType(OIL)
 activate t65
 
-t65 --> collecting: {}
+t65 --> collecting: 0
 deactivate t65
 
 collecting --> c1:
