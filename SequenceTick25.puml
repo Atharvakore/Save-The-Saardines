@@ -222,7 +222,7 @@ loop for tile in listOfDeepOceanTiles
 
 
 
-s -> t66: getListOfGarbage()
+s -> t66: getGarbage()
 activate t66
 
 t66 --> s: L= {oil}
@@ -238,14 +238,13 @@ activate t66
 t66 --> oil: current
 deactivate t66
 
-oil -> current: getIntensity()
-activate current
 
-current --> oil: 1
 
 
 
 oil -> current: getSpeed()
+activate current
+
 current-> oil: 10
 
 oil -> current: getDirection()
@@ -257,10 +256,17 @@ activate t66
 t66 --> oil: t67
 deactivate t66
 
-oil -> oil: canDriftAtOnce(50)
-activate oil
-oil --> oil: false
-deactivate oil
+oil -> t66: amountToBeDrifted()
+activate t66
+
+t66 -> current: getIntensity()
+activate current
+
+current --> t66: 1
+deactivate current
+
+t66 --> oil: 50
+deactivate t66
 
 
 oil -> oil: removeAmount(50)
@@ -274,8 +280,15 @@ oil -> t67: isSpaceAvailable(OIL,50)
 activate t67
 
 t67 --> oil: true
+deactivate t67
 
-oil -> oil: createGarbage(OIL,50)
+oil -> oil: getMaxId()
+activate oil
+
+oil --> oil: 1
+deactivate oil
+
+oil -> oil: createGarbage(2, OIL,50)
 activate oil
 
 oil --> oil: newOil
@@ -286,29 +299,29 @@ deactivate oil
 ' query getIntensity() and getSpeed() which makes no sense at this point.
 
 
-
-
-
-
-oil -> t67: addGarabge(newOil)
-t67 --> oil
-deactivate t67
-
 oil --> s
 deactivate oil
 end
+
+end
+
+note right of s
+add all drifted garbage to tiles
+end note
+
 s --> s
 deactivate s
-end
 
 s -> s: driftShips()
 activate s
 
+loop for corporation in {c1}
 s -> c1: getShips()
 activate c1
 
 c1 --> s: {s1,s2}
 deactivate c1
+end
 
 loop for ship in {s1,s2}
 
