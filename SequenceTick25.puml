@@ -13,6 +13,9 @@ participant "newOil:Garbage" as newOil
 participant "d: Dijkstra" as d
 
 activate s
+note left of s
+log Tick
+end note
 
 s -> s: tick()
 activate s
@@ -30,9 +33,13 @@ deactivate c1
 
 end
 
+note left of s
+log Corporation Ship Movement
+end note
 loop for corporation in {c1}
 s -> c1: run(sea,listOfShips)
 activate c1
+
 
 c1 -> c1: moveShips(sea)
 activate c1
@@ -101,6 +108,9 @@ deactivate scouting
 
 c1 -> scouting: move(pathToShip)
 activate scouting
+note left of s
+log Ship Move
+end note
 
 note left of scouting
 reverse pathToShip
@@ -165,7 +175,9 @@ end
 
 c1 -> c1: collectGarbage(sea)
 activate c1
-
+note left of s
+log Corporation Collect Garbage
+end note
 loop for ship in listOfCollectingShips
 
 c1 -> collecting: collectGarbageOnCurrentTile()
@@ -173,7 +185,9 @@ activate collecting
 
 collecting -> t65: getAmountOfType(OIL)
 activate t65
-
+note left of c1
+log CollectingGarbage
+end note
 t65 --> collecting: 0
 deactivate t65
 
@@ -186,6 +200,12 @@ end
 c1--> c1
 deactivate c1
 
+<<<<<<< HEAD
+=======
+note left of s
+log Corporation Cooperate Start
+end note
+>>>>>>> cded8f939a98a93032ab62dbb18d605b8e502a11
 c1 -> c1: cooperate(listOfShips)
 activate c1
 c1 -> c1 : filterCooperatingShips()
@@ -216,7 +236,9 @@ deactivate c1
 c1 --> s
 deactivate c1
 end
-
+note left of s
+log Corporation Action End
+end note
 s --> s
 deactivate s
 
@@ -311,7 +333,9 @@ activate oil
 
 oil --> oil: newOil
 deactivate oil
-
+note left of s
+log Current Drift Garbage
+end note
 ' Here the problem is: Current can drift more than 1 tile, but we call drift(t67,curr)
 ' without actually computing the destination tile, we just assume it goes there and then
 ' query getIntensity() and getSpeed() which makes no sense at this point.
@@ -393,8 +417,12 @@ deactivate
 
 
 scouting --> s
+note left of s
+log Current Drift Ship
+end note
 deactivate scouting
 end
+
 s --> s
 deactivate s
 s -> s: processEvents()
