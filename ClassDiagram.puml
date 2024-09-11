@@ -354,11 +354,12 @@ package Ships {
     - acceleration: Int,
     - fuelCapacity: Int,
     - fuelConsumption: Int,
-    - capabilities: Set<ShipCapability>
+    - capabilities: List<ShipCapability>
     + refuel(): Unit
     + drift(): Unit
     + setTile(destination: Tile): Unit
     + isFuelSufficient(tile: Tile,harbors: List<Shore>): Boolean
+    + addCapability(capability: ShipCapability): Unit
   }
 
   interface ShipCapability {
