@@ -301,6 +301,7 @@ package Tiles {
     + addGarbage(garbage: Garbage): Unit
     + getAmountOfType(type: GarbageType): Int
     + removeGarbageOfType(type: GarbageType, amount: Int): Unit
+    + amountToBeDrifted(): Unit
   }
 
   Garbage o--o Corporation
@@ -312,8 +313,7 @@ package Tiles {
     - trackedBy: Set<Corporation>
     + drift(currentTile: Tile): Unit
     + static getNextId(): Int
-    + canDriftAtOnce(amount: Int): Boolean
-    + removeAmount(amount: Int): Unit
+    - removeAmount(amount: Int): Unit
   }
 
   Garbage --o Tile
