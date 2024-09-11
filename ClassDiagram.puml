@@ -323,9 +323,6 @@ package Tiles {
     - speed: Int,
     - direction: Direction,
     - intensity: Int,
-    + getSpeed(): Int
-    + getIntensity(): Int
-    + getDirection(): Direction
   }
   class Shore {
     + hasHarbor: boolean
@@ -359,6 +356,7 @@ package Ships {
     - capabilities: List<ShipCapability>
     + refuel(): Unit
     + drift(): Unit
+    + move(path: List<Tile>)
     + setTile(destination: Tile): Unit
     + isFuelSufficient(pathLength: Int): Boolean
     + addCapability(capability: ShipCapability): Unit
