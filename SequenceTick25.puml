@@ -29,6 +29,8 @@ loop for corporation in Corporation
 s -> c1: run(sea)
 activate c1
 
+c1 -> c1: moveShips(sea)
+activate c1
 c1 -> c1: filterCollectingShips()
 activate c1
 
@@ -40,10 +42,6 @@ activate c1
 
 c1 --> c1: {s1}
 deactivate c1
-
-c1 -> c1: moveShips(sea)
-activate c1
-
 c1 -> c1: getActiveTasks()
 activate c1
 
@@ -80,7 +78,6 @@ activate d
 d --> c1: MapTilesToPath
 deactivate d
 
-loop for scoutingShip in {s1}
 c1 -> c1: findClosestShip(MapTilesToPath, {s1})
 activate c1
 
@@ -92,6 +89,8 @@ activate c1
 
 c1 --> c1: pathToHarbor
 deactivate c1
+
+loop for scoutingShip in {s1}
 
 c1 -> scouting: isFuelSufficient(pathToShip.length + pathToHarbor.length)
 activate scouting
@@ -127,7 +126,6 @@ scouting --> c1
 deactivate scouting
 end
 
-loop for collectingShip in {s2}
 
 c1 -> c1: findClosestShip(MapTilesToPath, {s2})
 activate c1
@@ -141,6 +139,8 @@ activate c1
 c1 --> c1: pathToHarbor
 deactivate c1
 
+loop for collectingShip in {s2}
+
 c1 -> collecting: isFuelSufficient(pathToShip.length + pathToHarbor.length)
 activate collecting
 
@@ -153,15 +153,10 @@ activate collecting
 collecting --> c1: true
 deactivate collecting
 
-c1 -> c1: reversePath(pathToShip)
-activate c1
 
-c1 --> c1: pathToTile
-deactivate c1
-
-c1 -> collecting: move(pathToTile)
+c1 -> collecting: move(pathToShip)
 activate collecting
-loop for tile in pathToTile
+loop for tile in pathToShip
 
 
 collecting -> t65: getShipTraversable()
