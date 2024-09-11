@@ -65,7 +65,7 @@ class Main {
  - parse(): Accumulator
 }
 
-Main -- Simulation
+Main o-- Simulation
 
 Events.Event --o Simulation
 Ships.Ship --o Corporation
@@ -315,6 +315,7 @@ package Tiles {
     + drift(currentTile: Tile): Unit
     + static getNextId(): Int
     - removeAmount(amount: Int): Unit
+    - createGarbage(id: Int, type: GarbageType, amount: Int): Garbage
   }
 
   Garbage --o Tile

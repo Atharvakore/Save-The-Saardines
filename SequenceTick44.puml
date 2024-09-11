@@ -267,7 +267,7 @@ deactivate tile66
 s1 --> c1:
 deactivate s1
 end
-
+Main -- 
 c1 -->c1
 deactivate c1
 note left of c1
