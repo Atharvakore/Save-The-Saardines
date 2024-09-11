@@ -227,12 +227,11 @@ activate s
 
 loop for tile in listOfDeepOceanTiles
 
-s -> t66: isOilPresent()
-activate t66
 
-t66--> s: true
 
 s -> t66: getListOfGarbage()
+activate t66
+
 t66 --> s: L= {oil}
 deactivate t66
 
