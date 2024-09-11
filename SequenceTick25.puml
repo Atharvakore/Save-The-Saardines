@@ -200,12 +200,9 @@ end
 c1--> c1
 deactivate c1
 
-<<<<<<< HEAD
-=======
 note left of s
 log Corporation Cooperate Start
 end note
->>>>>>> cded8f939a98a93032ab62dbb18d605b8e502a11
 c1 -> c1: cooperate(listOfShips)
 activate c1
 c1 -> c1 : filterCooperatingShips()

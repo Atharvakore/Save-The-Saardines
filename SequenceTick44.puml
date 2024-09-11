@@ -262,7 +262,7 @@ end note
 
 c1 -> c1: cooperate(listOfShips)
 activate c1
-c1 -> c1 : filterCooperatingShips()
+c1 -> c1 : filterCoordinatingShips()
 activate c1
 c1 --> c1: {}
 deactivate c1
