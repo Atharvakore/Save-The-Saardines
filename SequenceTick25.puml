@@ -9,7 +9,7 @@ participant "t66:DeepOcean" as t66
 participant "t67:DeepOcean" as t67
 participant "current:Current" as current
 participant "oil:Garbage" as oil
-participant "newOil:Garbage" as newoil
+participant "newOil:Garbage" as newOil
 participant "d: Dijkstra" as d
 
 activate s
@@ -97,23 +97,18 @@ activate scouting
 scouting --> c1: true
 deactivate scouting
 
-c1 -> c1: reversePath(pathToShip)
-activate c1
 
-c1 --> c1: pathToTile
-deactivate c1
 
-c1 -> scouting: move(pathToTile)
+c1 -> scouting: move(pathToShip)
 activate scouting
+
+scouting -> scouting: reversePath(pathToShip)
+activate scouting
+
+scouting --> scouting: pathToTile
+deactivate scouting
+
 loop for tile in pathToTile
-
-
-scouting -> t66: getShipTraversable()
-
-activate t66
-
-t66 --> scouting: true
-deactivate t66
 
 scouting -> scouting: setTile(t66)
 activate scouting
@@ -145,7 +140,7 @@ activate collecting
 collecting --> c1: true
 deactivate collecting
 
-c1 -> collecting: HasGarbageCapacity({oil})
+c1 -> collecting: hasGarbageCapacity({oil})
 activate collecting
 
 collecting --> c1: true
@@ -154,9 +149,16 @@ deactivate collecting
 
 c1 -> collecting: move(pathToShip)
 activate collecting
-loop for tile in pathToShip
 
-collecting -> collecting: setTile(t66)
+collecting -> collecting: reversePath(pathToShip)
+activate collecting
+
+collecting --> collecting: pathToTile
+deactivate collecting
+
+loop for tile in pathToTile
+
+collecting -> collecting: setTile(t65)
 activate collecting
 
 collecting --> collecting:
@@ -171,46 +173,27 @@ activate c1
 
 loop for ship in listOfCollectingShips
 
-c1 -> collecting: getTile()
+c1 -> collecting: collectGarbageOnCurrentTile()
 activate collecting
 
-collecting --> c1: t65
-
-c1 -> collecting: getGarbageType()
-
-collecting --> c1: OIL
-deactivate collecting
-
-c1 -> t65: isOilPresent()
+collecting -> t65: getGarbageByType({OIL})
 activate t65
 
-t65 --> c1: false
+t65 --> collecting: {}
 deactivate t65
+
+collecting --> c1:
+deactivate collecting
 end
 
-c1--> c1
-deactivate c1
-
-
-c1 -> c1: refuelShips()
-activate c1
-
-c1 -> c1: areShipsOnHarbor()
-activate c1
-
-c1 --> c1: false
-deactivate c1
 
 c1--> c1
 deactivate c1
 
-c1 -> c1: unloadShips()
+c1 -> c1: getShipsOnHarbor()
 activate c1
 
-c1 -> c1: areShipsOnHarbor()
-activate c1
-
-c1 --> c1: false
+c1 --> c1: {}
 deactivate c1
 
 c1 --> c1
