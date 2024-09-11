@@ -23,6 +23,9 @@ end note
 sim -> sim: tick ()
 activate sim
 
+sim -> sim : processTasks()
+activate sim
+
 loop for corporation in {c1}
 sim -> c1: getActiveTasks()
 activate c1
@@ -69,6 +72,8 @@ activate c1
 c1 --> sim
 deactivate c1
 end
+sim --> sim
+deactivate sim
 sim --> sim
 deactivate sim
 
@@ -284,9 +289,11 @@ deactivate c1
 end
 
 
+
 sim --> sim
 
 deactivate sim
+
 
 sim -> sim: processEvents()
 activate sim
@@ -300,15 +307,26 @@ deactivate sim
 sim --> sim
 deactivate sim
 
+sim -> sim : processTasks()
+activate sim
+
 loop for corporation in {c1}
 sim-> c1: getActiveTasks()
 activate c1
 
 c1 -> sim: {}
 deactivate c1
+sim --> sim
 end
+sim --> sim
+deactivate sim
+
+
+
+
 
 sim --> sim
+
 
 note left of sim
 End of simulation tick 45
