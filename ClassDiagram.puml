@@ -301,6 +301,7 @@ package Tiles {
     + isOilPresent(): Boolean
     + isPlasticPresent(): Boolean
     + areChemicalsPresent(): Boolean
+    + getGarbageByType(types: List<GarbageType>): List<Garbage>
   }
 
   Garbage o--o Corporation
@@ -361,8 +362,9 @@ package Ships {
     + refuel(): Unit
     + drift(): Unit
     + setTile(destination: Tile): Unit
-    + isFuelSufficient(tile: Tile,harbors: List<Shore>): Boolean
+    + isFuelSufficient(pathLength: Int): Boolean
     + addCapability(capability: ShipCapability): Unit
+    - reversePath(path: List<Tile>) : List<Tile>
   }
 
   interface ShipCapability {
