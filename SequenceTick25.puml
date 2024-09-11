@@ -9,7 +9,8 @@ participant "t66:DeepOcean" as t66
 participant "t67:DeepOcean" as t67
 participant "current:Current" as current
 participant "oil:Garbage" as oil
-participant "newOil:Garbage" as oil
+participant "newOil:Garbage" as newoil
+participant "d: dijkstra" as d
 
 
 
@@ -19,17 +20,34 @@ activate s
 s -> s: tick()
 activate s
 
+
+
 s -> s: runCorporations()
 activate s
 
 loop for corporation in Corporation
-s -> c1: run()
+s -> c1: run(sea)
 activate c1
 
 c1 -> c1: filterCollectingShips()
 activate c1
 
-c1 --> c1: listOfCollectingShips
+c1 --> c1: {s2}
+deactivate c1
+
+c1 -> c1: filterScoutingShips()
+activate c1
+
+c1 --> c1: {s1}
+deactivate c1
+
+c1 -> c1: moveShips(sea)
+activate c1
+
+c1 -> c1: checkTasks()
+activate c1
+
+c1 --> c1: {}
 deactivate c1
 
 loop for ship in {s1,s2}
@@ -47,44 +65,121 @@ scouting --> c1: {t66}
 deactivate scouting
 end
 
-c1 -> scouting: isFuelSufficient(t66, ownedHarbors)
+loop for tile in {t66}
+
+c1 -> t66: getGarbageByType({OIL})
+activate t66
+
+t66 -> c1: {oil}
+deactivate t66
+end
+
+c1 -> d: execute(t66)
+activate d
+
+d --> c1: MapTilesToPath
+deactivate d
+
+loop for scoutingShip in {s1}
+c1 -> c1: findClosestShip(MapTilesToPath, {s1})
+activate c1
+
+c1 --> c1: pathToShip
+deactivate c1
+
+c1 -> c1: findClosestHarbor(MapTilesToPath, ownedHarbors)
+activate c1
+
+c1 --> c1: pathToHarbor
+deactivate c1
+
+c1 -> scouting: isFuelSufficient(pathToShip.length + pathToHarbor.length)
 activate scouting
 
 scouting --> c1: true
-
-c1 -> scouting: setDestinationTile(t66)
-
-scouting --> c1
 deactivate scouting
 
-loop for tile in {t66}
-
-c1 -> t66: getGarbage()
-activate t66
-
-t66 --> c1: listOfGarbage
-deactivate t66
-
-c1 -> c1: isAcceptedGarbagePresent(listOfGarbage)
+c1 -> c1: reversePath(pathToShip)
 activate c1
 
-c1 --> c1: true
-deactivate
+c1 --> c1: pathToTile
+deactivate c1
+
+c1 -> scouting: move(pathToTile)
+activate scouting
+loop for tile in pathToTile
+
+
+scouting -> t66: getShipTraversable()
+
+activate t66
+
+t66 --> scouting: true
+deactivate t66
+
+scouting -> scouting: setTile(t66)
+activate scouting
+
+scouting --> scouting:
+deactivate scouting
+end
+scouting --> c1
+deactivate scouting
 end
 
-c1 -> collecting: isFuelSufficient(t66, ownedHarbors)
+loop for collectingShip in {s2}
+
+c1 -> c1: findClosestShip(MapTilesToPath, {s2})
+activate c1
+
+c1 --> c1: pathToShip
+deactivate c1
+
+c1 -> c1: findClosestHarbor(MapTilesToPath, ownedHarbors)
+activate c1
+
+c1 --> c1: pathToHarbor
+deactivate c1
+
+c1 -> collecting: isFuelSufficient(pathToShip.length + pathToHarbor.length)
 activate collecting
 
 collecting --> c1: true
+deactivate collecting
 
-c1 -> collecting: hasGarbageCapacity(listOfGarbage)
+c1 -> collecting: HasGarbageCapacity({oil})
+activate collecting
+
 collecting --> c1: true
+deactivate collecting
+
+c1 -> c1: reversePath(pathToShip)
+activate c1
+
+c1 --> c1: pathToTile
+deactivate c1
+
+c1 -> collecting: move(pathToTile)
+activate collecting
+loop for tile in pathToTile
 
 
-c1 -> collecting: setDestinationTile(t66)
+collecting -> t65: getShipTraversable()
 
+activate t65
+
+t65 --> collecting: true
+deactivate t65
+
+collecting -> collecting: setTile(t66)
+activate collecting
+
+collecting --> collecting:
+deactivate collecting
+end
 collecting --> c1
 deactivate collecting
+end
 
 c1 -> c1: collectGarbage()
 activate c1
@@ -321,6 +416,14 @@ s -> s: processEvents()
 activate s
 s --> s
 deactivate s
+
+loop for corporation in {c1}
+s -> c1: getActiveTasks()
+activate c1
+
+c1 -> s: {}
+deactivate c1
+end
 
 s --> s
 deactivate s

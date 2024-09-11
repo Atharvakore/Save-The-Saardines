@@ -1,0 +1,84 @@
+@startuml
+participant "sim:Simulator" as sim
+participant "c1:Corporation" as c1
+participant "task: CollectGarbageTask" as task
+participant "s1:ScoutingShip" as s1
+participant "s2:CollectingShip" as s2
+participant "reward:ContainerReward" as reward
+participant "m:Sea" as m
+participant "t23:ShallowOcean" as t23
+participant "t66:DeepOcean" as t66
+participant "t67:DeepOcean" as t67
+participant "current:Current" as current
+participant "oil:Garbage" as oil
+participant "newOil:Garbage" as oil
+
+activate sim
+
+sim -> sim: tick()
+activate sim
+
+loop for corporation in {c1}
+sim -> c1: getActiveTasks()
+activate c1
+
+c1 -> sim: {task}
+deactivate c1
+end
+
+loop for task in {task}
+
+sim -> task: actUponTick(44)
+activate task
+
+task -> task: checkCondition()
+activate task
+
+task -> s2: getPos()
+activate s2
+
+s2 --> task: t23
+deactivate s2
+
+task --> task: true
+deactivate task
+
+task -> reward: applyReward(s1)
+activate reward
+
+reward -> s1: addCapability (capability)
+activate s1
+
+s1 --> reward
+deactivate
+
+reward --> task
+deactivate reward
+
+task --> sim: true
+deactivate task
+
+sim -> c1: removeTask(task)
+activate c1
+
+c1 --> sim
+deactivate c1
+end
+sim --> sim
+deactivate sim
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@enduml
