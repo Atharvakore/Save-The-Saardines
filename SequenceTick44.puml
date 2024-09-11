@@ -71,13 +71,15 @@ deactivate sim
 sim --> sim: tick()
 activate sim
 
+sim -> sim: runCorporations()
+activate sim
 
 loop for corporation in {c1}
 
-s -> c1: getOwnedShips()
+sim -> c1: getOwnedShips()
 activate c1
 
-c1 --> s: listOfShips = {s1,s2}
+c1 --> sim: listOfShips = {s1,s2}
 deactivate c1
 
 end
@@ -217,9 +219,6 @@ deactivate c1
 end
 sim --> sim
 deactivate sim
-
-
-
 
 
 
