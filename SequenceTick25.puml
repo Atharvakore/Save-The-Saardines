@@ -153,15 +153,10 @@ activate collecting
 collecting --> c1: true
 deactivate collecting
 
-c1 -> c1: reversePath(pathToShip)
-activate c1
 
-c1 --> c1: pathToTile
-deactivate c1
-
-c1 -> collecting: move(pathToTile)
+c1 -> collecting: move(pathToShip)
 activate collecting
-loop for tile in pathToTile
+loop for tile in pathToShip
 
 
 collecting -> t65: getShipTraversable()
