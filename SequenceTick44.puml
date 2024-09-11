@@ -96,7 +96,7 @@ note left of sim
 Moving the scoutingShips
 end note
 loop for corporation in {c1}
-sim -> c1: run(sea, listOfShipsOfOtherCorporations = {})
+sim -> c1: run(sea, listOfShips)
 activate c1
 
 c1 -> c1: moveShips(sea)
@@ -282,9 +282,7 @@ c1 --> sim
 deactivate c1
 
 end
-note left of sim
-End of simulation tick 45
-end note
+
 
 sim --> sim
 
@@ -311,6 +309,10 @@ deactivate c1
 end
 
 sim --> sim
+
+note left of sim
+End of simulation tick 45
+end note
 deactivate sim
 
 @enduml
