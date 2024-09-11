@@ -44,7 +44,7 @@ deactivate c1
 c1 -> c1: moveShips(sea)
 activate c1
 
-c1 -> c1: checkTasks()
+c1 -> c1: getActiveTasks()
 activate c1
 
 c1 --> c1: {}
