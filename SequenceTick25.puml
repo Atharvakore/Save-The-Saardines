@@ -202,21 +202,22 @@ end
 
 s --> s
 deactivate s
+
+
+
+
+
+s -> s: driftGarbage()
+
+activate s
 s -> m: getTiles()
 activate m
 
 m --> s : listOfTiles
 deactivate m
-
 note left of s
 Filter DeepOcean tiles
 end note
-
-
-s -> s: driftGarbage()
-activate s
-
-
 
 loop for tile in listOfDeepOceanTiles
 
