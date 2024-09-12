@@ -33,7 +33,7 @@ ShipsDrifted --> EventsProcessed : processEvents()
 EventsProcessed --> EventsStarted: startEvent()[currentTick=eventTick]
 EventsStarted --> EventsProcessed : processEvent()
 EventsProcessed --> EventsProcessed : processEvent()
-EventsStarted --> TasksProcessed : processTaks
+EventsStarted --> TasksProcessed : processTasks()
 TasksProcessed --> TasksProcessed : processTask()
 TasksProcessed --> TaskStarted : startTask()[ currentTick = taskTick]
 TaskStarted --> TasksProcessed : processTask()
