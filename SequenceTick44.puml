@@ -7,8 +7,8 @@ participant "s2:Ship" as s2
 participant "reward:ContainerReward" as reward
 participant "m:Sea" as m
 participant "t23:ShallowOcean" as t23
-participant "tile66:DeepOcean" as tile66
-participant "tile67:DeepOcean" as tile67
+participant "t66:DeepOcean" as t66
+participant "t67:DeepOcean" as t67
 participant "current:Current" as current
 participant "oil:Garbage" as oil
 participant "d: Dijkstra" as d
@@ -30,7 +30,7 @@ loop for corporation in {c1}
 sim -> c1: getActiveTasks()
 activate c1
 
-c1 -> sim: {task}
+c1 --> sim: {task}
 deactivate c1
 end
 
@@ -83,6 +83,10 @@ deactivate sim
 note left of sim
 Log tick
 end note
+
+note left of sim
+Start of tick 45
+end note
 sim --> sim: tick()
 activate sim
 
@@ -99,9 +103,7 @@ deactivate c1
 
 end
 
-loop for corporation in {c1}
 note left of sim
-Moving the scoutingShips
 Log Corporation Ship Movement
 end note
 loop for corporation in {c1}
@@ -134,20 +136,20 @@ loop for ship in {s1}
 c1 -> s1: getTilesWithGarbageInFoV()
 activate s1
 
-s1 --> c1: {tile66}
+s1 --> c1: {t66}
 deactivate s1
 end
 
-loop for tile in {tile66}
+loop for tile in {t66}
 
-c1 -> tile66: getAmountOfType(OIL)
-activate tile66
+c1 -> t66: getAmountOfType(OIL)
+activate t66
 
-tile66 -> c1: 800
-deactivate tile66
+t66 --> c1: 800
+deactivate t66
 end
 
-c1 -> d: execute(tile66)
+c1 -> d: execute(t66)
 activate d
 
 d --> c1: MapTilesToPath
@@ -169,6 +171,7 @@ deactivate c1
 note left of c1
 Moving the scoutingShips
 end note
+
 loop for scoutingShip in {s1}
 
 c1 -> s1: isFuelSufficient(pathToShipS1.length + pathToHarbor.length)
@@ -184,7 +187,7 @@ end note
 activate s1
 loop for tile in pathToShipS1
 
-s1 -> s1: setTile(tile66)
+s1 -> s1: setTile(t66)
 activate s1
 
 s1 --> s1:
@@ -233,7 +236,7 @@ c1 -> s1: move(pathToShipS1)
 activate s1
 loop for tile in pathToShipS1
 
-s1 -> s1: setTile(tile66)
+s1 -> s1: setTile(t66)
 activate s1
 
 s1 --> s1:
@@ -258,12 +261,12 @@ end note
 loop for ship in {s1,s2}
 c1 -> s1: collectGarbageFromCurrentTile()
 activate s1
-s1-> tile66:getAmountOfType(OIL)
-activate tile66
-tile66--> s1: 800
-s1 -> tile66: removeGarbageOfType(OIL, 800)
-tile66 --> s1:
-deactivate tile66
+s1-> t66:getAmountOfType(OIL)
+activate t66
+t66--> s1: 800
+s1 -> t66: removeGarbageOfType(OIL, 800)
+t66 --> s1:
+deactivate t66
 s1 --> c1:
 deactivate s1
 end
@@ -378,11 +381,7 @@ activate oil
 oil --> oil:
 deactivate oil
 
-oil -> t67: isSpaceAvailable(OIL,50)
-activate t67
 
-t67 --> oil: true
-deactivate t67
 
 oil -> oil: getNextId()
 activate oil
@@ -396,6 +395,11 @@ activate oil
 oil --> oil:
 deactivate oil
 
+oil -> t67: isSpaceAvailable(OIL,50)
+activate t67
+
+t67 --> oil: true
+deactivate t67
 
 
 
@@ -472,9 +476,11 @@ activate s1
 
 s1 --> s1:
 deactivate s1
+
+s1 --> sim
+deactivate s1
+
 end
-
-
 sim --> sim
 deactivate sim
 
