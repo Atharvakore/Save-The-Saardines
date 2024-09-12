@@ -108,6 +108,7 @@ activate ship
 ship -->corparser: s
 deactivate ship
 corparser --> corparser: s
+deactivate corparser
 corparser -> accu: addShip(id, s)
 
 activate accu
@@ -139,18 +140,15 @@ activate corparser
 loop for corporationObject in objects
 corparser -> corparser: ValidateCorporation(corporationObject)
 activate corparser
-corparser -> corparser: validateHarborTiles(homeHarbors)
-activate corparser
+
 loop for id in homeHarbors
 corparser -> accu: getTilebyId(id)
 activate accu
 accu --> corparser : t
 deactivate accu
 end
-corparser --> corparser: True
-deactivate corparser
-corparser -> corparser: validateCorporationShip(ships)
-activate corparser
+
+
 loop for id in ships
 corparser -> accu: getShipById(id)
 activate accu
@@ -161,23 +159,24 @@ corparser -> accu : getShipsOfCorp(id)
 activate accu
 accu --> corparser : shouldBeShips: List<Int>
 deactivate accu
-corparser --> corparser: True
-deactivate corparser
+
 create "corporation: Corporation" as corp
 corparser -> corp : Corporation(id, name, ships, homeHarbors, garbage)
 activate corp
 corp --> corparser: corp
+deactivate corp
 corparser -> accu: addCorporation(id, corp)
 activate accu
 accu --> corparser
 deactivate accu
 deactivate corp
-deactivate corparser
-corparser --> corparser : True
+corparser --> corparser: True
 deactivate corparser
 end
 corparser --> corparser : True
 deactivate corparser
+
+
 
 corparser -> log : logInitializationInfoSuccess(corporations.json)
 activate log
@@ -202,14 +201,13 @@ activate scparser
 loop for garbageObject in objects
 scparser -> scparser : validateGarbage(garbageObject)
 activate scparser
-scparser -> scparser: validateGarbageLocation(locationId)
-activate scparser
+
 scparser -> map : getTilebyId(locationId)
 activate map
 map --> scparser: t
 deactivate map
 scparser --> scparser: True
-deactivate scparser
+
 scparser ->scparser : createGarbage(garbageObject)
 activate scparser
 create "g: Garbage " as garbage
@@ -277,8 +275,7 @@ activate scparser
 loop rewardObject in rewards
 scparser -> scparser: validateReward(rewardObject)
 activate scparser
-scparser --> scparser
-deactivate scparser
+
 scparser -> scparser : createReward(rewardObject)
 activate scparser
 create "reward: Reward" as reward
@@ -286,7 +283,7 @@ scparser -> reward: Reward(id)
 activate reward
 reward --> scparser: reward
 deactivate reward
-scparser --> scparser: True
+scparser --> scparser: reward
 deactivate scparser
 scparser -> accu: addReward(id, reward)
 activate accu
@@ -296,6 +293,7 @@ scparser --> scparser: True
 deactivate scparser
 end
 scparser --> scparser: True
+deactivate scparser
 scparser --> Main: True
 deactivate scparser
 
@@ -315,35 +313,35 @@ accu --> scparser: reward
 deactivate accu
 scparser -> accu: getShipById(taskShipId)
 activate accu
-accu --> scparser: ship1
+accu --> scparser: taskShip
 deactivate accu
 scparser -> accu: getShipById(rewardShipId)
 activate accu
-accu --> scparser: ship2
+accu --> scparser: rewardShip
 deactivate accu
-scparser -> scparser: ship1.getOwner().equals(ship2.getOwner)
+scparser -> scparser: ship1.getOwner().equals(ship2.getOwner())
 activate scparser
 scparser --> scparser
 deactivate scparser
-scparser --> scparser
-deactivate scparser
+
 scparser -> scparser : createTask(taskObject)
 activate scparser
 create "task: Task" as task
-scparser -> task: Task(id, tick, taskShip, reward, rewardShip, corporation)
+scparser -> task: Task(id, tick, taskShip, reward, rewardShip, ship1.getOwner())
 activate task
 task --> scparser: task
 deactivate task
-scparser --> scparser: True
+scparser --> scparser: task
 deactivate scparser
-scparser -> accu: addTask(id, task)
+scparser -> accu: addEvent(id, task)
 activate accu
 accu --> scparser
 deactivate accu
 scparser --> scparser: True
-deactivate scparserx
+deactivate scparser
 end
 scparser --> scparser: True
+deactivate scparser
 scparser --> Main: True
 deactivate scparser
 
