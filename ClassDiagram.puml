@@ -297,6 +297,7 @@ package Tiles {
     ' within the tick, and this field actually stores the amount
     ' to make sure that we don't drift more than the capacity
     + amountOfGarbageDriftedThisTick: Int
+    + amountOfShipsDriftedThisTick: Int
     + Tile(id: Int, pos: Vec2D, shipTraversable: Boolean): Tile
     + isSpaceAvailable(type: GarbageType, amount: Int): Boolean
     + getTileInDirection(distance: Int, dir: Direction): Tile
