@@ -154,6 +154,7 @@ activate d
 
 d --> c1: MapTilesToPath
 deactivate d
+loop for scoutingShip in {s1}
 
 
 c1 -> c1: findClosestShip(MapTilesToPath, {s1})
@@ -172,7 +173,6 @@ note left of c1
 Moving the scoutingShips
 end note
 
-loop for scoutingShip in {s1}
 
 c1 -> s1: isFuelSufficient(pathToShipS1.length + pathToHarbor.length)
 activate s1
@@ -202,6 +202,9 @@ end
 note left of c1
 Proceed to move collectingShips to Garbages
 end note
+
+loop for collectingShip in {s1,s2}
+
 c1 -> c1: findClosestShip(MapTilesToPath, {s1,s2})
 activate c1
 
@@ -214,7 +217,6 @@ activate c1
 c1 --> c1: pathToHarbor
 deactivate c1
 
-loop for collectingShip in {s1,s2}
 
 c1 -> s1: isFuelSufficient(pathToShipS1.length + pathToHarbor.length)
 activate s1
