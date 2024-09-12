@@ -35,8 +35,8 @@ EventsStarted --> EventsProcessed : processEvent()
 EventsProcessed --> EventsProcessed : processEvent()
 EventsStarted --> TasksProcessed : processTaks
 TasksProcessed --> TasksProcessed : processTask()
-TasksProcessed --> TaskStarted : startTask()
-TaskStarted --> TasksProcessed : processTaks()
+TasksProcessed --> TaskStarted : startTask()[ currentTick = taskTick]
+TaskStarted --> TasksProcessed : processTask()
 TasksProcessed --> RewardsGiven: giveRewards()
 RewardsGiven --> TickStarted : tick() [currentTick!=eventTick]
 
