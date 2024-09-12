@@ -56,14 +56,14 @@ parser -> parser: createMap()
 activate parser
 
 
-create "m:Map" as map
+create "s: Sea" as map
 parser -> map : Map(accu.tiles.getValues(), accu.tilesbyCoord)
 activate map
-map --> parser: m
+map --> parser: s
 deactivate map
-parser --> parser: m
+parser --> parser: s
 deactivate parser
-parser -> accu: setMap(m)
+parser -> accu: setMap(s)
 activate accu
 accu --> parser:
 deactivate accu
