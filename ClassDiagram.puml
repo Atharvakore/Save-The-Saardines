@@ -246,6 +246,7 @@ package Parser {
     + ships: Map<Int, Ship>
     + events: Map<Int, Event>
     + garbage: Map<Int, Garbage>
+    + Tasks: Map<Int, Task>
     + rewards: Map<Int, Reward>
     + mapCorporationToHarbor: Map<Int, List<Tile>>
     + mapCorporationToShips: Map<Int, List<Int>>
@@ -254,6 +255,8 @@ package Parser {
     + getShipsIDofCorporation(corporationId: Int): List<Int>
     + getTileFromMap(tileId: Int): Tile
     + getRewardById(rewardId: Int): Reward
+    + addTask(taskId: Int, task: Task): Unit
+    + getTaskById(taskId: Int): Task
     + getTileFromMap(tileCoordinates:Vec2D): Tile
     + addTile(id: Int, t: Tile): Unit
     + addTileByCoordinates(coord: Vec2D, t: Tile): Unit
@@ -404,7 +407,7 @@ package Ships {
 }
 
 package TasksRewards {
-  Task --|> Event
+
   abstract class Task {
     - tick: Int
     - id: Int
