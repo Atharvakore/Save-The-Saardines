@@ -401,6 +401,7 @@ package Ships {
     - auxiliaryContainers: List<Container>
     + giveGarbage(): Unit
     + hasGarbageCapacity(garbageOnTile: List<Garbage>): Boolean
+    + collectGarbageFromCurrentTile(): Unit
   }
 
   class ShipWithTracker {
