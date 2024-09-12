@@ -418,6 +418,7 @@ package TasksRewards {
     - rewardShip: Ship
     - corporation: Corporation
     - abstract checkCondition(): Boolean
+    + abstract actUponTick(Tick: Int): Boolean
   }
   'this is just an initial thought, still to be finalized
   CollectGarbageTask --|> Task
