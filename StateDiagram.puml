@@ -26,15 +26,21 @@ ShipsUnloaded --> ShipsRefueled : refuelShips()
 ShipsRefueled --> CorporationPresent : checkCorporations()[True]
 CorporationPresent --> GarbageDrifted : driftGarbage() [corporationsAbsent]
 GarbageDrifted --> ShipsDrifted : driftShips()
-ShipsDrifted --> TasksProcessed : processTasks()
+ShipsDrifted --> EventsProcessed : processEvents()
+
+
+
+EventsProcessed --> EventsStarted: startEvent()[currentTick=eventTick]
+EventsStarted --> EventsProcessed : processEvents()
+EventsStarted --> TasksProcessed : processTaks
 TasksProcessed --> TasksProcessed : processTask()
 TasksProcessed --> RewardsGiven: giveRewards()
-RewardsGiven --> EventsProcessed: processEvents()
-EventsProcessed --> TickStarted : tick() [currentTick!=eventTick]
-EventsProcessed --> EventsStarted : startEvent()[currentTick=eventTick]
-EventsStarted --> EventsProcessed : processEvents()
+RewardsGiven --> TickStarted : tick() [currentTick!=eventTick]
+
+
 TickStarted --> SimulationStatistics : [CurrentTick=max_ticks]
 SimulationStatistics --> SimulationSuccessful : logStatistics()
+
 SimulationSuccessful --> [*]
 @enduml
 
