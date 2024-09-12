@@ -33,10 +33,10 @@ ShipsDrifted --> EventsProcessed : processEvents()
 EventsProcessed --> EventsStarted: startEvent()[currentTick=eventTick]
 EventsStarted --> EventsProcessed : processEvent()
 EventsProcessed --> EventsProcessed : processEvent()
-EventsStarted --> TasksProcessed : processTaks
+EventsStarted --> TasksProcessed : processTasks()
 TasksProcessed --> TasksProcessed : processTask()
-TasksProcessed --> TaskStarted : startTask()
-TaskStarted --> TasksProcessed : processTaks()
+TasksProcessed --> TaskStarted : startTask()[ currentTick = taskTick]
+TaskStarted --> TasksProcessed : processTask()
 TasksProcessed --> RewardsGiven: giveRewards()
 RewardsGiven --> TickStarted : tick() [currentTick!=eventTick]
 
