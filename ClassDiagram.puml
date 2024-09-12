@@ -253,7 +253,7 @@ package Parser {
     + getHarborsOfCorporation(corporationId: Int): List<Tile>
     + getShipsIDofCorporation(corporationId: Int): List<Int>
     + getTileFromMap(tileId: Int): Tile
-    + getRewardById(rewardId: Int): Rewar
+    + getRewardById(rewardId: Int): Reward
     + getTileFromMap(tileCoordinates:Vec2D): Tile
     + addTile(id: Int, t: Tile): Unit
     + addTileByCoordinates(coord: Vec2D, t: Tile): Unit
