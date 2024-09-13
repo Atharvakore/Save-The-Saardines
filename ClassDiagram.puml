@@ -54,7 +54,10 @@ Tiles.Shore --o Corporation
 class Dijkstra {
   ' Returns a mapping that, for each path from the source to destination
   ' tiles, maps the destination tile to the path.
-  + execute(source: Tile): Map<Tile,List<Tile>>
+  + computePredecessors(source: Tile): Map<Tile,Tile?>
+  + computePath(predecessors: Map<Tile,Tile?>, destination: Tile): List<Tile>
+  + computeAllPaths(predecessors: Map<Tile,Tile?>): Map<Tile, List<Tile>>
+  + computeAllShorterPaths(predecessors: Map<Tile,Tile?>, maxLength: Int): Map<Tile, List<Tile>>
 }
 
 Dijkstra --o Simulation
