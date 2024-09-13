@@ -2,7 +2,7 @@ package de.unisaarland.cs.se.selab.parser
 
 import org.json.JSONObject
 
-class ScenarioParser(accumulator: Accumulator) {
+class ScenarioJSONParser(accumulator: Accumulator) {
     public fun parseEvent(EventJSON: String): Boolean {
 
     }
