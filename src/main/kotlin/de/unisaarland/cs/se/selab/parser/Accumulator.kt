@@ -5,7 +5,7 @@ import de.unisaarland.cs.se.selab.corporation.Corporation
 class Accumulator {
     private var map: Sea = null
     private var corporations: MutableMap<Int, Corporation> = mutableMapOf()
-    private var ships : MutableList<Ship> = mutableListOf()
+    private var ships : MutableMap<Int, Ship> = mutableMapOf()
     private var events: MutableMap<Int, Event> = mutableMapOf()
     private var garbage: MutableMap<Int, Garbage> = mutableMapOf()
     private var Tasks: MutableMap<Int, Task> = mutableMapOf()
@@ -16,10 +16,10 @@ class Accumulator {
     public fun getHarborsOfCorporation(corporationId: Int): List<Tile>? {
         return mapCorporationToHarbor[corporationId]
     }
-    public fun getShipsIDofCorporation(corporationId: Int): List<Int>{
-        return ships[corporationId]
+    public fun getShipsbyId(shipId: Int): Ship? {
+        return ships[shipId]
     }
-    public fun getTileFromMap(tileId: Int): Tile? {
+    public fun getTileById(tileId: Int): Tile? {
 
     }
     public fun getRewardById(rewardId: Int): Reward? {
@@ -31,7 +31,7 @@ class Accumulator {
     public fun getTaskById(taskId: Int): Task? {
         return tasks[taskId]
     }
-    public fun getTileFromMap(tileCoordinates:Vec2D): Tile {
+    public fun getTileByCoordinate(tileCoordinates:Vec2D): Tile {
 
     }
     public fun addTile(id: Int, t: Tile): Unit {
@@ -55,6 +55,9 @@ class Accumulator {
     }
     public fun addGarbage(garbageId: Int, garbage: Garbage){
         garbage[garbageId] = garbage
+    }
+    public fun getGarbageById(garbageId: Int): Garbage?{
+        return garbage[garbageId]
     }
 
 
