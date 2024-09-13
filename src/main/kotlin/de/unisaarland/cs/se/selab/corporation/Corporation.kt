@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.corporation
 import de.unisaarland.cs.se.selab.tiles.Tile
+import de.unisaarland.cs.se.selab.tiles.Vec2D
 
 class Corporation(
     val id: Int,
@@ -15,23 +16,38 @@ class Corporation(
 
 
     public fun cooperate(ships: List<Ship>): Corporation {
-        TODO("yet to implement")
-    }
 
-    public fun cooperateWith(ships : List<Ship>) {
+        // ships can cooperate if they have the same position (are on the same tile)
+        // if 
 
-        TODO("yet to implement")
+        val myCoordinatingShips : List<Ship> = filterCoordinatingShips()
+
+        myCoordinatingShips.forEach {
+            val otherShip: Ship? = ships.find { it.position == it.position }
+            if (otherShip != null) {
+                for(ship in otherShip.getOwner().ownedShips) {
+                    if(ship.capabilities.find { it is CoordinatingShip }){
+                        TODO("implementation remains")
+                    }
+                }
+            }
+
+        }
+
 
     }
 
     public fun run(sea: Sea, otherShips: List<Ship>): Unit {
 
-        TODO("yet to implement")
+        moveShips(sea)
+        collectGarbage(sea)
+        refuelAndUnloadShips(sea)
     }
 
     public fun getActiveTasks(): List<Task> {
 
-        TODO("yet to implement")
+        return tasks.filter { it.checkCondition() }
+
     }
 
     private fun moveShips(sea: Sea): Unit {
