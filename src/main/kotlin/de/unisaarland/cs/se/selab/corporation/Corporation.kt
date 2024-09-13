@@ -1,4 +1,5 @@
 package de.unisaarland.cs.se.selab.corporation
+import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
 
@@ -18,7 +19,7 @@ class Corporation(
     public fun cooperate(ships: List<Ship>): Corporation {
 
         // ships can cooperate if they have the same position (are on the same tile)
-        // if 
+        // if
 
         val myCoordinatingShips : List<Ship> = filterCoordinatingShips()
 
@@ -62,10 +63,18 @@ class Corporation(
 
     private fun refuelAndUnloadShips(sea: Sea): Unit {
 
-        TODO("yet to implement")
+        val shipsOnHarbor: List<Ship> = getShipsOnHarbor()
+        if(shipsOnHarbor.isNotEmpty()){
+            for(ship in shipsOnHarbor){
+                if(ship.capabilities.find { it is CollectingShip }){
+                    ship.unload()
+                }
+                ship.refuel()
+            }
+        }
     }
 
-    private fun getShipsOnHarbor(): Boolean {
+    private fun getShipsOnHarbor(): List<Ship> {
 
         TODO("yet to implement")
     }
