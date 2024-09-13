@@ -9,4 +9,6 @@ class Tile {
      * The amount of restrictions acting on this tile. If > 0, then tile is not traversable.
      */
     private var restrictions: Int = 0
+
+    public fun getId(): Int {return this.id}
 }

@@ -4,39 +4,48 @@ import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.logger.Logger
 import org.json.JSONObject
 
-class CorporationJSONParser(override val accumulator: Accumulator,
-) :JSONParser {
+class CorporationJSONParser(
+    override val accumulator: Accumulator,
+) : JSONParser {
 
     /** Parsing function **/
-    public fun parseCorporations(filePath:String): Boolean{
-     return false;
-    }
-    public fun parseShips(filePath:String): Boolean{
+    public fun parseCorporations(filePath: String): Boolean {
         return false;
     }
 
-    private fun createCorporationObjects(filePath: String):List<JSONObject>{
+    public fun parseShips(filePath: String): Boolean {
+        return false;
+    }
+
+    private fun createCorporationObjects(filePath: String): List<JSONObject> {
         //TODO
     }
-    private fun validateCorporations(corpObjects: List<JSONObject>):Boolean{
+
+    private fun validateCorporations(corpObjects: List<JSONObject>): Boolean {
         return false;
     }
-    private  fun validateCorporation(corporation:JSONObject):Boolean{
+
+    private fun validateCorporation(corporation: JSONObject): Boolean {
         return false;
     }
-    private fun createShipObjects(filePath: String):List<JSONObject>{
+
+    private fun createShipObjects(filePath: String): List<JSONObject> {
 
     }
-    private fun createShip(ship:JSONObject):Ship{
+
+    private fun createShip(ship: JSONObject): Ship {
 
     }
-    private fun createCorporation(corporation:JSONObject): Corporation {
+
+    private fun createCorporation(corporation: JSONObject): Corporation {
 
     }
-    private fun validateShip(shipObject:JSONObject):Boolean{
+
+    private fun validateShip(shipObject: JSONObject): Boolean {
         return false;
     }
-    private fun validateShips(corporationObjects:List<JSONObject>):Boolean{
+
+    private fun validateShips(corporationObjects: List<JSONObject>): Boolean {
         return false;
     }
 }
