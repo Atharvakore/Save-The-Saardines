@@ -35,9 +35,7 @@ class Dijkstra(start: Tile) {
      * @throws IllegalArgumentException if there is no path to the target vertex
      */
     fun shortestPathTo(target: Tile): List<Tile> {
-        if (!hasPathTo(target)) {
-            throw IllegalArgumentException("No path to target")
-        }
+        require(hasPathTo(target)) { "No path to target" }
         val path = mutableListOf<Tile>()
         var current: Tile? = target
         while (current != null) {
