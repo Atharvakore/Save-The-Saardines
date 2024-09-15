@@ -5,9 +5,9 @@ package de.unisaarland.cs.se.selab.tiles
  * @property x the x-coordinate of the vector
  * @property y the y-coordinate of the vector
  */
-class Vec2D(private var x: Int, private var y: Int) {
+class Vec2D( var posX: Int,  var posY: Int) {
     override fun toString(): String {
-        return "($x, $y)"
+        return "($posX, $posY)"
     }
 
     /**
@@ -17,7 +17,7 @@ class Vec2D(private var x: Int, private var y: Int) {
         for (dx in -radius..radius) {
             for (dy in -radius..radius) {
                 if (dx + dy in -radius..radius) {
-                    yield(Vec2D(x + dx, y + dy))
+                    yield(Vec2D(posX + dx, posY + dy))
                 }
             }
         }
