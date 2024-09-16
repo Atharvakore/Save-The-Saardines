@@ -4,7 +4,6 @@ import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.ships.ShipCapability
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Dijkstra
 import de.unisaarland.cs.se.selab.tiles.Garbage
@@ -12,7 +11,6 @@ import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
-import de.unisaarland.cs.se.selab.tiles.Vec2D
 
 const val TODO: String = "Yet to implement"
 
@@ -30,29 +28,26 @@ class Corporation(
     var lastCoordinatingCorporation: Corporation? = null
 
     /** Documentation for cooperate Function **/
-    fun cooperate(otherShips: List<Ship>): Corporation {
+    fun cooperate(otherShips: List<Ship>) {
         val myCoordinatingShips: List<Ship> = filterCoordinatingShips()
 
         myCoordinatingShips.forEach { coordinatingShip ->
-            val otherShipsOnTile: List<Ship> = otherShips.filter { coordinatingShip.getPos() == it.getPos() }
+            val otherShipsOnTile: List<Ship> = otherShips
+                .filter { coordinatingShip.getPos() == it.getPos() && it.getOwner() != lastCoordinatingCorporation }
             val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.getOwner() }.distinct()
 
-            otherCorporations.forEach { otherCorporation ->
-                val otherScoutingShips: List<Ship> = otherCorporation.filterScoutingShips()
+            val otherShipsToCooperate: List<Ship> = otherShips.filter { otherCorporations.contains(it.getOwner()) }
 
-                otherScoutingShips.forEach { otherScoutingShip ->
-                    val telescopes: MutableList<ShipCapability> = otherScoutingShip.capabilities
-
-                    telescopes.forEach { telescope ->
-                        val tilesWithGarbage: List<Tile> = (telescope as ScoutingShip).getTilesWithGarbageInFoV(Sea)
-                        partnerGarbage[otherCorporation.id] = tilesWithGarbage
-                    }
-
+            otherShipsToCooperate.forEach { otherShipToCooperate ->
+                val telescopes: List<ScoutingShip> = otherShipToCooperate.capabilities
+                    .filterIsInstance<ScoutingShip>()
+                telescopes.forEach {
+                    val tilesWithGarbage: List<Tile> = it.getTilesWithGarbageInFoV(otherShipToCooperate.getPos()!!)
+                    partnerGarbage[otherShipToCooperate.getOwner().id] = tilesWithGarbage
                 }
             }
         }
 
-        TODO(TODO)
     }
 
     /** Documentation for run Function **/
