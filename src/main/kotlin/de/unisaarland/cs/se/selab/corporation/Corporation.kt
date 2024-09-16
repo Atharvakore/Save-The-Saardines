@@ -28,7 +28,7 @@ class Corporation(
             val otherShip: Ship? = ships.find { it.pos == it.pos }
             if (otherShip != null) {
                 for(ship in otherShip.getOwner().ownedShips) {
-                    if(ship.capabilities.find { it is CoordinatingShip }){
+                    if(ship.capabilities.find { it is CoordinatingShip } != null){
                         TODO("implementation remains")
                     }
                 }
