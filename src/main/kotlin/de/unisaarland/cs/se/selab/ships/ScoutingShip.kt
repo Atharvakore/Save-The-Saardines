@@ -5,7 +5,7 @@ import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 
 
-class ScoutingShip (private val visibilityRange: Int): ShipCapability {
+class ScoutingShip (var visibilityRange: Int): ShipCapability {
     private val directions = listOf(
         Direction.D0, Direction.D60, Direction.D120,
         Direction.D180, Direction.D240, Direction.D300

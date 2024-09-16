@@ -4,8 +4,7 @@ import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Tile
 class CollectingShip (
-    // change to the design
-    private var auxiliaryContainers: List<Container>
+    var auxiliaryContainers: MutableList<Container>
 ): ShipCapability {
 
     public fun unload(): Unit{
