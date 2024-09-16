@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.corporation
 import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
+import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Garbage
@@ -9,6 +10,8 @@ import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
+
+const val TODO: String = "Yet to implement"
 
 /** Documentation for Corporation Class **/
 class Corporation(
@@ -25,30 +28,28 @@ class Corporation(
 
     /** Documentation for cooperate Function **/
     public fun cooperate(ships: List<Ship>): Corporation {
-        // ships can cooperate if they have the same position (are on the same tile)
-        // if
-
         val myCoordinatingShips: List<Ship> = filterCoordinatingShips()
 
-        myCoordinatingShips.forEach {
-            val otherShip: Ship? = ships.find { it.pos == it.pos }
+        myCoordinatingShips.forEach { coordinatingShip ->
+            val otherShip: Ship? = ships.find { coordinatingShip.pos == it.pos }
             if (otherShip != null) {
                 for (ship in otherShip.getOwner().ownedShips) {
                     val coordinatingCapability = ship.capabilities.find { it is CoordinatingShip }
                     if (coordinatingCapability != null) {
-                        TODO("implement me")
+                        TODO(TODO)
                     }
                 }
             }
         }
 
-        TODO("implement")
+        TODO(TODO)
     }
 
     /** Documentation for run Function **/
     public fun run(sea: Sea, otherShips: List<Ship>) {
         moveShips(sea)
         collectGarbage(sea)
+        cooperate(otherShips)
         refuelAndUnloadShips(sea)
     }
 
@@ -59,12 +60,12 @@ class Corporation(
 
     /** Documentation for getShipsOnHarbor Function **/
     private fun moveShips(sea: Sea) {
-        TODO("yet to implement")
+        TODO(TODO)
     }
 
     /** Documentation for collectGarbage Function **/
     private fun collectGarbage(sea: Sea) {
-        TODO("yet to implement")
+        TODO(TODO)
     }
 
     /** Documentation for refuelAndUnloadShips Function **/
@@ -83,31 +84,33 @@ class Corporation(
 
     /** Documentation for getShipsOnHarbor Function **/
     private fun getShipsOnHarbor(): List<Ship> {
-        TODO("yet to implement")
+        val seaInstance: Sea = Sea
+        val harborTiles: List<Tile> = seaInstance.tiles.filter { (it as Shore).harbor }
+        return ownedShips.filter { harborTiles.contains(it.pos) }
     }
 
     /** Documentation for findClosestShip Function **/
     private fun findClosestShip(sourceMap: Map<Tile, List<Tile>>, ships: List<Ship>) {
-        TODO("yet to implement")
+        TODO(TODO)
     }
 
     /** Documentation for findClosestHarbor Function **/
     private fun findClosestHarbor(sourceMap: Map<Tile, List<Tile>>, harbors: List<Shore>) {
-        TODO("yet to implement")
+        TODO(TODO)
     }
 
     /** Documentation for filterCollectingShip Function **/
     private fun filterCollectingShip(): List<Ship> {
-        TODO("yet to implement")
+        return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is CollectingShip } }
     }
 
     /** Documentation for filterScoutingShips Function **/
     private fun filterScoutingShips(): List<Ship> {
-        TODO("yet to implement")
+        return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is ScoutingShip } }
     }
 
     /** Documentation for filterCoordinatingShips Function **/
     private fun filterCoordinatingShips(): List<Ship> {
-        TODO("yet to implement")
+        return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is CoordinatingShip } }
     }
 }

@@ -1,15 +1,18 @@
 package de.unisaarland.cs.se.selab.tiles
 
+/**
+ * Shore class
+ */
+
 class Shore(
     id: Int,
     pos: Vec2D,
-    adjacentTiles: Array<Tile?>,
-    garbage: List<Garbage>
+    adjacentTiles: List<Tile>,
+    garbage: List<Garbage>,
+    val harbor:Boolean
 ) : Tile(
     id,
     pos,
     adjacentTiles,
-    garbage,
-) {
-    public fun hasHarbor() = Boolean
-}
+    garbage,0
+)
