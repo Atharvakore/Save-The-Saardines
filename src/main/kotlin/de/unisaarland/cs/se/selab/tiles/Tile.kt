@@ -16,7 +16,6 @@ abstract class Tile(
     val adjacentTiles: List<Tile>,
     var garbages: List<Garbage>,
     var amountOfGarbageDriftedThisTick: Int,
-    var amountOfShipsDriftedThisTick: Int,
 ) {
     /* private var id: Int = 0
     private var pos: Vec2D = Vec2D(0, 0)
