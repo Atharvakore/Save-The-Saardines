@@ -10,7 +10,15 @@ class Container(
     val garbageType: GarbageType,
     private val garbageCapacity: Int,
 ) {
-    private var garbageLoad: Int = 0
+    var garbageLoad: Int = 0
+
+    /**
+     * return max garbage capacity
+     * */
+    fun getGarbageCapacity(): Int{
+        return this.garbageCapacity
+    }
+
     /**
      * unload garbage
      */

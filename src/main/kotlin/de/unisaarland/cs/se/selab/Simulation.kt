@@ -7,6 +7,9 @@ import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 
+/**
+ * class that represents and handles the simulation
+ */
 class Simulation(
     private val corporations: List<Corporation>,
     private val allEvents: List<Event>,
