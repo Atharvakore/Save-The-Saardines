@@ -1,12 +1,13 @@
 package de.unisaarland.cs.se.selab.corporation
 import de.unisaarland.cs.se.selab.ships.CollectingShip
-import de.unisaarland.cs.se.selab.tiles.Tile
-import de.unisaarland.cs.se.selab.tiles.Vec2D
+import de.unisaarland.cs.se.selab.ships.CoordinatingShip
+import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.tiles.*
 
 class Corporation(
     val id: Int,
     val name: String,
-    val ownedShips: List<Ship>,
+    val ownedShips: MutableList<Ship>,
     val ownedHarbors: List<Shore>,
     val acceptedGarbageType: List<GarbageType>,
     val tasks: List<Task>
@@ -24,7 +25,7 @@ class Corporation(
         val myCoordinatingShips : List<Ship> = filterCoordinatingShips()
 
         myCoordinatingShips.forEach {
-            val otherShip: Ship? = ships.find { it.position == it.position }
+            val otherShip: Ship? = ships.find { it.pos == it.pos }
             if (otherShip != null) {
                 for(ship in otherShip.getOwner().ownedShips) {
                     if(ship.capabilities.find { it is CoordinatingShip }){

@@ -1,9 +1,10 @@
 package de.unisaarland.cs.se.selab.parser
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.tiles.Sea
 
 class Accumulator {
-    private var map: Sea = null
+    private var map: Sea? = null
     private var corporations: MutableMap<Int, Corporation> = mutableMapOf()
     private var ships : MutableMap<Int, Ship> = mutableMapOf()
     private var events: MutableMap<Int, Event> = mutableMapOf()
@@ -13,6 +14,9 @@ class Accumulator {
     private var mapCorporationToHarbor: Map<Int, MutableList<Tile>> = mutableMapOf()
     private var mapCorporationToShips: Map<Int, MutableList<Int>> = mutableMapOf()
 
+    public fun getMap(): Sea? {
+        return map
+    }
     public fun getHarborsOfCorporation(corporationId: Int): List<Tile>? {
         return mapCorporationToHarbor[corporationId]
     }

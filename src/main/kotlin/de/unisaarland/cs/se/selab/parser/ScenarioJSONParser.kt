@@ -70,25 +70,41 @@ class ScenarioJSONParser(override val accumulator: Accumulator): JSONParser {
     }
 
 
-    public fun parseTasks(taskJSON: String): Boolean{}
+    public fun parseTasks(taskJSON: String): Boolean{
+        try {
+            val tasks = JSONObject(File(taskJSON).readText()).getJSONArray("tasks")
+            return createTasks(tasks)
+        }
+        catch(error: Exception){
+            return False
+        }
+    }
+    public fun createTasks(tasks: JSONArray): Boolean{
+        for (task in tasks){
+            if (validateTask(task as JSONObject)){
+                return createTask(task)
+            }
+        }
+        return false
+    }
+
+    private fun validateTask(task: JSONObject): Boolean{
+        val uniqueId: Boolean = accumulator.getTaskById(task.getInt("id")) == null
+        if (uniqueId){
+            val taskObj : Task? = createTask(task)
+            accumulator.addTask(taskObj.getId(), taskObj)
+            return true
+        }
+        return false
+    }
+
     public fun parseRewards(rewardJSON: String): Boolean{
 
     }
 
 
 
-    private fun validateTasks(tasks: List<JSONObject>): Boolean{
-        for (task in tasks){validateTask(task)}
-    }
-    private fun validateTask(task: JSONObject): Boolean{
-        val uniqueId: Boolean = accumulator.getTaskById(task.getInt("id")) == null
-        if (uniqueId){
-            val taskObj : Task = createTask(task)
-            accumulator.addTask(taskObj.getId(), taskObj)
-            return true
-        }
-        return false
-    }
+
     private fun validateRewards(rewards: List<JSONObject>): Boolean{
         for (reward in rewards){validateReward(reward)}
     }
@@ -103,7 +119,14 @@ class ScenarioJSONParser(override val accumulator: Accumulator): JSONParser {
         return false
     }
     private fun createGarbage(garbage: JSONObject): Garbage{}
-    private fun createEvent(event: JSONObject): Event{}
+    private fun createEvent(event: JSONObject): Event{
+        val eventId= event.getInt("id")
+        val eventType: String= event.getString("type")
+        val eventTick: Int = event.getInt("tick")
+        when (eventType){
+            "STORM" -> return Storm(eventId, eventTick, accumulator.get)
+        }
+    }
     private fun createReward(reward: JSONObject): Reward{}
     private fun createTask(task: JSONObject): Task{}
 

@@ -5,10 +5,10 @@ import kotlin.math.sqrt
 abstract class Tile(
     val id: Int,
     val pos: Vec2D,
-    val adjacentTiles: List<Tile>,
+    val adjacentTiles: Array<Tile?>,
     var garbages: List<Garbage>,
     var amountOfGarbageDriftedThisTick: Int,
-    var amountOfShipsDriftedThisTick: Int,
+    var amountOfShipsDriftedThisTick: Int
 ) {
     /* private var id: Int = 0
     private var pos: Vec2D = Vec2D(0, 0)
@@ -17,11 +17,7 @@ abstract class Tile(
     /**
      * The amount of restrictions acting on this tile. If > 0, then tile is not traversable.
      */
-    private var restrictions: Int = 0
-
-    public fun getId(): Int {return this.id}
-
-    var shipTransversable: Boolean = true
+    public var restrictions: Int = 0
 
     init {
         val six = 6
@@ -40,7 +36,7 @@ abstract class Tile(
 
         for (garbage in garbages) {
             if (garbage.type == GarbageType.OIL) {
-                a += garbage.ammount
+                a += garbage.amount
             }
         }
         return (a + amount) < 100
@@ -82,7 +78,7 @@ abstract class Tile(
         var acc = 0
         for (garbage in garbages) {
             if (type.type == garbage.type) {
-                acc += garbage.ammount
+                acc += garbage.amount
             }
         }
         return acc
@@ -90,20 +86,20 @@ abstract class Tile(
 
     public fun removeGarbageOfType(
         type: GarbageType,
-        ammount: Int,
+        amount: Int,
     ) {
-        var toBeRemoved = ammount
+        var toBeRemoved = amount
         var filteredList =
             this.garbages
                 .filter { it.type == type }
-                .sortedBy(Garbage::ammount)
+                .sortedBy(Garbage::amount)
 
         for (g in filteredList) {
-            if (toBeRemoved >= g.ammount) {
-                toBeRemoved -= g.ammount
+            if (toBeRemoved >= g.amount) {
+                toBeRemoved -= g.amount
                 filteredList = filteredList.filterIndexed { index, _ -> index != 0 }
             }
-            filteredList[0].ammount -= toBeRemoved
+            filteredList[0].amount -= toBeRemoved
         }
 
         // TOdo YET TO BE COMPLETED
@@ -112,5 +108,4 @@ abstract class Tile(
     public fun amountTOBeDrifted() {
         // TOdo
     }
-
 }

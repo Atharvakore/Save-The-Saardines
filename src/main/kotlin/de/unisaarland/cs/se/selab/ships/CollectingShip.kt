@@ -1,14 +1,17 @@
 package de.unisaarland.cs.se.selab.ships
 
+import de.unisaarland.cs.se.selab.tiles.GarbageType
+import de.unisaarland.cs.se.selab.tiles.Garbage
 
-class CollectingShip: ShipCabapility() {
-    private var garbageType: Set<GarbageType>
-    private var garbageCapacity: Int
-    private var garbageLoad: Int
-    private var auxiliaryContainers: <Container>
+class CollectingShip(
+    private var garbageType: Set<GarbageType>,
+    private var garbageCapacity: Int,
+    private var garbageLoad: Int,
+    private var auxiliaryContainers: Container
+): ShipCapability() {
 
     /**
-     * Call: when a collecting ship is on the harbor and it has to unload
+     * Call: when a collecting ship is on the harbor, and it has to unload
      * Logic: gets rid of the garbage load
      */
     /**
@@ -21,7 +24,7 @@ class CollectingShip: ShipCabapility() {
     /**
      * Call: when a collecting ship is being checked if it can collect the garbage
      * Logic: it checks if this ship can collect the garbage based on the garabge type
-     * If it is oil then it return true if it can collect any amount, if plastic it returns true if it can
+     * If it is oil then it returns true if it can collect any amount, if plastic it returns true if it can
      * collect the whole amount of plastic
      *
      * @param  a list of garbage
