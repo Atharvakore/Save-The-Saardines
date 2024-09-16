@@ -60,7 +60,7 @@ class Simulation(
         val deepOceanTiles = tiles.filterIsInstance<DeepOcean>()
 
         for (tile in deepOceanTiles) {
-            val garbageList = tile.garbages
+            val garbageList = tile.garbage
             for (garbage in garbageList) {
                 garbage.drift(tile)
             }
