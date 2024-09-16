@@ -10,5 +10,13 @@ class Tile {
      */
     private var restrictions: Int = 0
 
-    public fun getId(): Int {return this.id}
+    /** Getter for Id**/
+    public fun getId(): Int {
+        return this.id
+    }
+
+    /** Getter for Position**/
+    public fun getCoordinates(): Vec2D {
+        return this.pos
+    }
 }
