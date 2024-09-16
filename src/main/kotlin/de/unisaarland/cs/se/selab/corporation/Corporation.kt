@@ -5,11 +5,12 @@ import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
-import de.unisaarland.cs.se.selab.tiles.Shore
-import de.unisaarland.cs.se.selab.tiles.Vec2D
 import de.unisaarland.cs.se.selab.tiles.Sea
+import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
+import de.unisaarland.cs.se.selab.tiles.Vec2D
 
+/** Documentation for Corporation Class **/
 class Corporation(
     val id: Int,
     val name: String,
@@ -22,6 +23,7 @@ class Corporation(
     var partnerGarbage: MutableMap<Int, Vec2D> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
 
+    /** Documentation for cooperate Function **/
     public fun cooperate(ships: List<Ship>): Corporation {
         // ships can cooperate if they have the same position (are on the same tile)
         // if
@@ -43,24 +45,29 @@ class Corporation(
         TODO("implement")
     }
 
+    /** Documentation for run Function **/
     public fun run(sea: Sea, otherShips: List<Ship>) {
         moveShips(sea)
         collectGarbage(sea)
         refuelAndUnloadShips(sea)
     }
 
+    /** Documentation for getActiveTasks Function **/
     public fun getActiveTasks(): List<Task> {
         return tasks.filter { it.checkCondition() }
     }
 
+    /** Documentation for getShipsOnHarbor Function **/
     private fun moveShips(sea: Sea) {
         TODO("yet to implement")
     }
 
+    /** Documentation for collectGarbage Function **/
     private fun collectGarbage(sea: Sea) {
         TODO("yet to implement")
     }
 
+    /** Documentation for refuelAndUnloadShips Function **/
     private fun refuelAndUnloadShips(sea: Sea) {
         val shipsOnHarbor: List<Ship> = getShipsOnHarbor()
         if (shipsOnHarbor.isNotEmpty()) {
@@ -74,26 +81,32 @@ class Corporation(
         }
     }
 
+    /** Documentation for getShipsOnHarbor Function **/
     private fun getShipsOnHarbor(): List<Ship> {
         TODO("yet to implement")
     }
 
+    /** Documentation for findClosestShip Function **/
     private fun findClosestShip(sourceMap: Map<Tile, List<Tile>>, ships: List<Ship>) {
         TODO("yet to implement")
     }
 
+    /** Documentation for findClosestHarbor Function **/
     private fun findClosestHarbor(sourceMap: Map<Tile, List<Tile>>, harbors: List<Shore>) {
         TODO("yet to implement")
     }
 
+    /** Documentation for filterCollectingShip Function **/
     private fun filterCollectingShip(): List<Ship> {
         TODO("yet to implement")
     }
 
+    /** Documentation for filterScoutingShips Function **/
     private fun filterScoutingShips(): List<Ship> {
         TODO("yet to implement")
     }
 
+    /** Documentation for filterCoordinatingShips Function **/
     private fun filterCoordinatingShips(): List<Ship> {
         TODO("yet to implement")
     }
