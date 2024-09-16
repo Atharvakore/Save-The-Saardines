@@ -1,6 +1,5 @@
 package de.unisaarland.cs.se.selab.tiles
-import kotlin.math.floor
-import kotlin.math.sqrt
+
 
 const val HUNDRED = 100
 const val TWO = 2
@@ -56,6 +55,9 @@ abstract class Tile(
         return a + amount < HUNDRED
     }
 
+    /**
+     * Get tiles in specified Direction
+     */
     public fun getTileInDirection(
         distance: Int,
         dir: Direction,
