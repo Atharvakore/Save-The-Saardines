@@ -23,6 +23,7 @@ import org.json.JSONObject
 import java.io.File
 
 class TasksRewardsParser(override val accumulator: Accumulator): JSONParser  {
+    private var id: String = "id"
     public fun parseTasks(taskJSON: String): Boolean {
         try {
             val tasks = JSONObject(File(taskJSON).readText()).getJSONArray("tasks")
@@ -41,7 +42,7 @@ class TasksRewardsParser(override val accumulator: Accumulator): JSONParser  {
     }
 
     private fun validateTask(task: JSONObject): Boolean {
-        val uniqueId: Boolean = accumulator.getTaskById(task.getInt("id")) == null
+        val uniqueId: Boolean = accumulator.getTaskById(task.getInt(id)) == null
         // val targetIsNotShore: Boolean = targetTile !is Land
         val taskShip: Ship? = accumulator.getShipsById(task.getInt("shipID"))
         val rewardShip: Ship? =  accumulator.getShipsById(task.getInt("rewardShipID"))
@@ -58,32 +59,33 @@ class TasksRewardsParser(override val accumulator: Accumulator): JSONParser  {
         return false
     }
     private fun createTask(task: JSONObject): Boolean {
-        val taskId = task.getInt("id")
+        val taskId = task.getInt(id)
         val taskType = task.getString("type")
         val taskTick = task.getInt("tick")
-        val taskShip = accumulator.getShipsById(task.getInt("shipID")) ?: return false
-        val rewardShip =  accumulator.getShipsById(task.getInt("rewardShipID")) ?: return false
-        val taskCorporation = rewardShip.getOwner()
+        val taskShip = accumulator.getShipsById(task.getInt("shipID"))
+        val rewardShip =  accumulator.getShipsById(task.getInt("rewardShipID"))
+        val taskCorporation = rewardShip!!.getOwner()
         val reward: Reward? = accumulator.getRewardById(task.getInt("rewardID"))
-        val targetTile: Tile = accumulator.getTileById(task.getInt("targetTile")) ?: return false
+        val targetTile: Tile? = accumulator.getTileById(task.getInt("targetTile"))
         when (taskType) {
             "COLLECT" -> {
                 if (reward is ContainerReward){
-                    val taskObj = CollectGarbageTask(taskTick, taskId, taskShip, reward, rewardShip, taskCorporation)
+                    val taskObj = CollectGarbageTask(taskTick, taskId, taskShip!!,
+                        reward, rewardShip, taskCorporation)
                     accumulator.addTask(taskId, taskObj)
                     return true
                 }
             }
             "EXPLORE" -> {
                 if (reward is TelescopeReward){
-                    val taskObj = ExploreMapTask(taskTick, taskId, taskShip, reward, rewardShip, taskCorporation)
+                    val taskObj = ExploreMapTask(taskTick, taskId, taskShip!!, reward, rewardShip, taskCorporation)
                     accumulator.addTask(taskId, taskObj)
                     return true
                 }
             }
             "FIND" -> {
                 if (reward is TrackerReward){
-                    val taskObj = FindGarbageTask(taskTick, taskId, taskShip, reward, rewardShip, taskCorporation)
+                    val taskObj = FindGarbageTask(taskTick, taskId, taskShip!!, reward, rewardShip, taskCorporation)
                     accumulator.addTask(taskId, taskObj)
                     return true
                 }
@@ -94,7 +96,7 @@ class TasksRewardsParser(override val accumulator: Accumulator): JSONParser  {
                     condition = targetTile.harbor
                 }
                 if (reward is RadioReward && condition){
-                    val taskObj = CooperateTask(taskTick, taskId, taskShip, reward, rewardShip, taskCorporation)
+                    val taskObj = CooperateTask(taskTick, taskId, taskShip!!, reward, rewardShip, taskCorporation)
                     accumulator.addTask(taskId, taskObj)
                     return true
                 }
@@ -119,14 +121,14 @@ class TasksRewardsParser(override val accumulator: Accumulator): JSONParser  {
         return true
     }
     private fun validateReward(reward: JSONObject): Boolean {
-        val uniqueId: Boolean = accumulator.getRewardById(reward.getInt("id")) == null
+        val uniqueId: Boolean = accumulator.getRewardById(reward.getInt(id)) == null
         if (uniqueId) {
             return createReward(reward)
         }
         return false
     }
     private fun createReward(reward: JSONObject): Boolean {
-        val rewardId: Int = reward.getInt("id")
+        val rewardId: Int = reward.getInt(id)
         val rewardType: String = reward.getString("type")
         when (rewardType) {
             "TELESCOPE" -> {
