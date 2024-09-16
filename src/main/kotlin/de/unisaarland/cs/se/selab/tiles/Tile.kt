@@ -34,27 +34,6 @@ abstract class Tile(
         require(id > 0) { "Id Should be greater than 0" }
         require(adjacentTiles.size == SIX) { "A tile has 6 neighbours" }
     }
-
-    /**
-     * checks for capacity of garbage type in a particular tile
-     */
-     fun isSpaceAvailable(
-        type: GarbageType,
-        amount: Int,
-    ): Boolean {
-        var a = 0
-        if (type == GarbageType.PLASTIC || type == GarbageType.CHEMICALS) {
-            return true
-        }
-
-        for (garbage in garbage) {
-            if (garbage.type == GarbageType.OIL) {
-                a += garbage.amount
-            }
-        }
-        return a + amount < HUNDRED
-    }
-
     /**
      * Get tiles in specified Direction
      */

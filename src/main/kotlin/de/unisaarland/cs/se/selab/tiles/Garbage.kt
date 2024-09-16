@@ -78,11 +78,4 @@ class Garbage(
         }
     }
 
-
-    /**
-     * removes garbage ammount
-     */
-    fun removeAmount(amount: Int) {
-        this.amount -= amount
-    }
 }
