@@ -5,7 +5,7 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Current
 
-abstract class Ship (
+abstract class Ship(
     private val id: Int,
     private val owner: Corporation,
     private val maxVelocity: Int,
@@ -41,6 +41,7 @@ abstract class Ship (
             }
         }
     }
+
     private var name: String = ""
     private var pos: Tile? = null
     private var consumedFuel: Int = 0
@@ -65,9 +66,10 @@ abstract class Ship (
         return this.owner;
     }
 
-    fun getPos(): Tile?{
+    fun getPos(): Tile? {
         return this.pos
     }
+
     /**
      * Call: when the ship is on the harbor
      * Logic: the ship has to max its fuelCapacity
@@ -75,6 +77,7 @@ abstract class Ship (
     fun refuel(): Unit {
         this.consumedFuel = 0
     }
+
     /**
      *  Call: when a ship is on a deepOcean tile
      *  Logic: the ship has to check if its tile has a current,
@@ -84,16 +87,17 @@ abstract class Ship (
         val deepOcean = this.pos as? DeepOcean
         val current = deepOcean?.getCurrent()
         if (current != null) {
-             handleCurrentDrift(current)
+            handleCurrentDrift(current)
         }
     }
-    private fun handleCurrentDrift(current: Current) : Unit {
+
+    private fun handleCurrentDrift(current: Current): Unit {
         val speed = current.speed
         val direction = current.direction
 
         if (speed != null && direction != null) {
-            val desTile = this.pos?.getTileInDirection(speed/10,direction)
-            if (desTile != null){
+            val desTile = this.pos?.getTileInDirection(speed / 10, direction)
+            if (desTile != null) {
                 this.pos = desTile
             }
         }
@@ -111,6 +115,7 @@ abstract class Ship (
     fun move(path: List<Tile>): Unit {
         TODO("")
     }
+
     /**
      * Call: when corp checks if the ship can be sent
      * Logic: gets length of the path the ship has to traverse
@@ -123,6 +128,7 @@ abstract class Ship (
         val neededFuel = fuelConsumption * pathLength * 10
         return neededFuel <= fuelCapacity - consumedFuel
     }
+
     /**
      * Call: when a task is done, and the reward needs to be applied
      * Logic: adds a capability to the ship and handles the adding logic

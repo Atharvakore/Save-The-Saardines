@@ -24,7 +24,7 @@ class DeepOcean(
      */
 
      fun amountTOBeDrifted() : Int {
-        var intensity = getCurrent()?.getIntensity()
+        val intensity = getCurrent()?.intensity
         if (intensity != null) {
             return intensity * FIFTY
         }

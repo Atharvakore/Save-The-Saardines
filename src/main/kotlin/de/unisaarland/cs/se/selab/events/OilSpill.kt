@@ -22,10 +22,10 @@ class OilSpill(
             // Each tile can hold 1000 units of oil
             location.pos.tilesInRadius(radius).forEach {
                 val tile = map.getTileByPos(it) ?: return@forEach
-                val garbageTiles = tile.garbages.filter { it.type == GarbageType.OIL }
+                val garbageTiles = tile.garbage.filter { it.type == GarbageType.OIL }
                 val oilGarbageAmount = OIL_TILE_MAX - garbageTiles.sumOf { it.amount }
                 val newGarbageAmount = min(amount, oilGarbageAmount)
-                tile.garbages = tile.garbages.plus(Garbage.createGarbage(newGarbageAmount, GarbageType.OIL))
+                tile.garbage = tile.garbage.plus(Garbage.createGarbage(newGarbageAmount, GarbageType.OIL))
             }
             return true
         }

@@ -14,7 +14,7 @@ abstract class Tile(
     val id: Int,
     val pos: Vec2D,
     val adjacentTiles: List<Tile>,
-    var garbages: List<Garbage>,
+    var garbage: List<Garbage>,
     var amountOfGarbageDriftedThisTick: Int,
 ) {
     /* private var id: Int = 0
@@ -23,9 +23,12 @@ abstract class Tile(
 
     /**
      * The amount of restrictions acting on this tile. If > 0, then tile is not traversable.
+     * Atharva, do not remove it. It was here for a reason. The reason was explained by this
+     * comment above. Merely 'shipTraversable' doesn't work and we've discussed this in the defense.
+     * What if you have two overlapping restrictions and want to lift one? Then you have
+     * made restricted tiles traversable.
      */
-
-    var shipTransversable: Boolean = true
+    var restrictions: Int = 0
 
     init {
 
@@ -45,7 +48,7 @@ abstract class Tile(
             return true
         }
 
-        for (garbage in garbages) {
+        for (garbage in garbage) {
             if (garbage.type == GarbageType.OIL) {
                 a += garbage.amount
             }
@@ -101,7 +104,7 @@ abstract class Tile(
      * adds given Garbage to the List of already present Garbage
      */
     public fun addGarbage(garbage: Garbage) {
-        garbages += garbage
+        this.garbage += garbage
     }
 
     /**
@@ -109,7 +112,7 @@ abstract class Tile(
      */
     public fun getAmountOfType(type: Garbage): Int {
         var acc = 0
-        for (garbage in garbages) {
+        for (garbage in garbage) {
             if (type.type == garbage.type) {
                 acc += garbage.amount
             }
@@ -126,7 +129,7 @@ abstract class Tile(
     ) {
         var toBeRemoved = ammount
         var filteredList =
-            this.garbages
+            this.garbage
                 .filter { it.type == type }
                 .sortedBy(Garbage::id)
         while (toBeRemoved > 0 && filteredList.isNotEmpty()) {
