@@ -142,10 +142,5 @@ abstract class Tile(
         }
     }
 
-    /**
-     * Calculates amount which can be drifted  in a single drift in one tick
-     */
-    public fun amountTOBeDrifted() {
-        // TOdo
-    }
+
 }
