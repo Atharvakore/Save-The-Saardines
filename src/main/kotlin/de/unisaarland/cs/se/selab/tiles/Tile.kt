@@ -36,7 +36,7 @@ abstract class Tile(
 
         for (garbage in garbages) {
             if (garbage.type == GarbageType.OIL) {
-                a += garbage.ammount
+                a += garbage.amount
             }
         }
         return (a + amount) < 100
@@ -78,7 +78,7 @@ abstract class Tile(
         var acc = 0
         for (garbage in garbages) {
             if (type.type == garbage.type) {
-                acc += garbage.ammount
+                acc += garbage.amount
             }
         }
         return acc
@@ -86,20 +86,20 @@ abstract class Tile(
 
     public fun removeGarbageOfType(
         type: GarbageType,
-        ammount: Int,
+        amount: Int,
     ) {
-        var toBeRemoved = ammount
+        var toBeRemoved = amount
         var filteredList =
             this.garbages
                 .filter { it.type == type }
-                .sortedBy(Garbage::ammount)
+                .sortedBy(Garbage::amount)
 
         for (g in filteredList) {
-            if (toBeRemoved >= g.ammount) {
-                toBeRemoved -= g.ammount
+            if (toBeRemoved >= g.amount) {
+                toBeRemoved -= g.amount
                 filteredList = filteredList.filterIndexed { index, _ -> index != 0 }
             }
-            filteredList[0].ammount -= toBeRemoved
+            filteredList[0].amount -= toBeRemoved
         }
 
         // TOdo YET TO BE COMPLETED

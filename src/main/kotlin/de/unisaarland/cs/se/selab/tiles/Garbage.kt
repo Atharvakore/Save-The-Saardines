@@ -1,15 +1,22 @@
 package de.unisaarland.cs.se.selab.tiles
 
+import de.unisaarland.cs.se.selab.corporation.Corporation
+
 class Garbage(
     val id: Int,
-    var ammount: Int,
+    var amount: Int,
     val type: GarbageType,
     private var trackedBy: Set<Corporation>?,
 ) {
     companion object {
         var maxId: Int = 0
 
-        fun getNextId(): Int = maxId++
+        private fun getNextId(): Int = maxId++
+
+        fun createGarbage(
+            amount: Int,
+            type: GarbageType,
+        ): Garbage = Garbage(getNextId(), amount, type, null)
     }
 
     public fun drift(currentTile: DeepOcean) {
@@ -21,13 +28,7 @@ class Garbage(
         }
     }
 
-    private fun removeAmount(ammount: Int) {
-        this.ammount -= ammount
+    private fun removeAmount(amount: Int) {
+        this.amount -= amount
     }
-
-    private fun createGarbage(
-        id: Int,
-        amount: Int,
-        type: GarbageType,
-    ): Garbage = Garbage(getNextId(), amount, type, null)
 }
