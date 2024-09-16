@@ -25,7 +25,7 @@ class Corporation(
         val myCoordinatingShips : List<Ship> = filterCoordinatingShips()
 
         myCoordinatingShips.forEach {
-            val otherShip: Ship? = ships.find { it.position == it.position }
+            val otherShip: Ship? = ships.find { it.pos == it.pos }
             if (otherShip != null) {
                 for(ship in otherShip.getOwner().ownedShips) {
                     if(ship.capabilities.find { it is CoordinatingShip }){

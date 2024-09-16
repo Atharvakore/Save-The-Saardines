@@ -9,7 +9,7 @@ class Ship (
         private val owner: Corporation,
         private val maxVelocity: Int,
         private val acceleration: Int,
-        private var pos: Tile,
+        var pos: Tile,
         private var fuelCapacity: Int,
         private var fuelConsumption: Int,
         var capabilities: List<ShipCapability>,
