@@ -39,7 +39,7 @@ abstract class Tile(
     /**
      * checks for capacity of garbage type in a particular tile
      */
-    public fun isSpaceAvailable(
+     fun isSpaceAvailable(
         type: GarbageType,
         amount: Int,
     ): Boolean {
@@ -94,7 +94,7 @@ abstract class Tile(
     /**
      * removes garbage of particular type
      */
-    public fun removeGarbageOfType(
+     fun removeGarbageOfType(
         type: GarbageType,
         ammount: Int,
     ) {
@@ -116,5 +116,16 @@ abstract class Tile(
         }
     }
 
+    /**
+     * returns current oil level of the Tile
+     * Note this should not exceed 1000
+     */
+    fun currentOilLevel () : Int {
+        var ac=  0
+        for (o in this.garbage.filter { it.type == GarbageType.OIL }) {
+            ac += o.amount
+        }
+        return ac
+    }
 
 }

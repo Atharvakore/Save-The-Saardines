@@ -1,5 +1,11 @@
 package de.unisaarland.cs.se.selab.tiles
-import de.unisaarland.cs.se.selab.corporation .Corporation
+
+import de.unisaarland.cs.se.selab.corporation.Corporation
+
+
+const val FIFTY = 50
+const val TEN = 10
+const val THOUSAND = 1000
 
 /**
  * Garbage class implementing all minor stuff related to Garbage
@@ -29,17 +35,54 @@ class Garbage(
      */
     public fun drift(currentTile: DeepOcean) {
         val localcurrent: Current? = currentTile.getCurrent()
-        if (localcurrent?.speed != 0 && localcurrent?.intensity != 0 && localcurrent?.direction != null) {
-            var speed = localcurrent.speed
-            var intensity = localcurrent.intensity
-            var direction = localcurrent.direction
+        var ammounttobedrifted = localcurrent?.intensity?.times(FIFTY)
+        var toBedrifted = localcurrent?.speed?.div(TEN)
+            ?.let { localcurrent.direction?.let { it1 -> currentTile.getTileInDirection(it, it1) } }
+        for (g in currentTile.garbage.sortedBy { it.id }) {
+            if(g.amount + currentTile.amountOfGarbageDriftedThisTick < ammounttobedrifted!!) {
+                if (g.type == GarbageType.OIL) {
+                    driftOil(g, currentTile, toBedrifted)
+                    ammounttobedrifted = ammounttobedrifted?.minus(g.amount)
+                }
+                driftPlasticandChemicals(g, currentTile, toBedrifted)
+                ammounttobedrifted = ammounttobedrifted?.minus(g.amount)
+            }
+        }
+
+
+    }
+
+    /**
+     * drifts oil
+     */
+    private fun driftOil(g: Garbage, source: DeepOcean, target: Tile?) {
+        if (target != null) {
+            if (target.currentOilLevel() + g.amount <= THOUSAND) {
+                target.addGarbage(g)
+                source.garbages.filter { it == g }
+                source.amountOfGarbageDriftedThisTick += g.amount
+            }
         }
     }
 
     /**
+     * drifts plastic and chemicals
+     */
+    private fun driftPlasticandChemicals(g: Garbage, source: DeepOcean, target: Tile?){
+        if (target != null) {
+            if (target.currentOilLevel() + g.amount <= THOUSAND) {
+                target.addGarbage(g)
+                source.garbages.filter { it == g }
+                source.amountOfGarbageDriftedThisTick += g.amount
+            }
+        }
+    }
+
+
+    /**
      * removes garbage ammount
      */
-     fun removeAmount(amount: Int) {
+    fun removeAmount(amount: Int) {
         this.amount -= amount
     }
 }
