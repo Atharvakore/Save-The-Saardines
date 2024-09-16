@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.corporation
 import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.*
 
 class Corporation(
@@ -28,15 +29,16 @@ class Corporation(
             val otherShip: Ship? = ships.find { it.pos == it.pos }
             if (otherShip != null) {
                 for(ship in otherShip.getOwner().ownedShips) {
-                    if(ship.capabilities.find { it is CoordinatingShip }){
-                        TODO("implementation remains")
+                    val coordinatingCapability = ship.capabilities.find { it is CoordinatingShip }
+                    if (coordinatingCapability != null) {
+                        TODO("implement me")
                     }
                 }
             }
 
         }
 
-
+        TODO("implement")
     }
 
     public fun run(sea: Sea, otherShips: List<Ship>): Unit {
@@ -67,8 +69,9 @@ class Corporation(
         val shipsOnHarbor: List<Ship> = getShipsOnHarbor()
         if(shipsOnHarbor.isNotEmpty()){
             for(ship in shipsOnHarbor){
-                if(ship.capabilities.find { it is CollectingShip }){
-                    ship.unload()
+                val collectingCapability = ship.capabilities.find { it is CollectingShip }
+                if (collectingCapability != null) {
+                    (collectingCapability as CollectingShip).giveGarbage()
                 }
                 ship.refuel()
             }

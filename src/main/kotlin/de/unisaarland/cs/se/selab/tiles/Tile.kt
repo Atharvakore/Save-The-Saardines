@@ -7,8 +7,6 @@ abstract class Tile(
     val pos: Vec2D,
     val adjacentTiles: Array<Tile?>,
     var garbages: List<Garbage>,
-    var amountOfGarbageDriftedThisTick: Int,
-    var amountOfShipsDriftedThisTick: Int
 ) {
     /* private var id: Int = 0
     private var pos: Vec2D = Vec2D(0, 0)
@@ -18,6 +16,8 @@ abstract class Tile(
      * The amount of restrictions acting on this tile. If > 0, then tile is not traversable.
      */
     public var restrictions: Int = 0
+    public var amountOfGarbageDriftedThisTick: Int = 0
+    public var amountOfShipsDriftedThisTick: Int = 0
 
     init {
         val six = 6
