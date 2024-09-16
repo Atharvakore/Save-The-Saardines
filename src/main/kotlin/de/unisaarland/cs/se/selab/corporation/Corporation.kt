@@ -31,7 +31,7 @@ class Corporation(
         val myCoordinatingShips: List<Ship> = filterCoordinatingShips()
 
         myCoordinatingShips.forEach { coordinatingShip ->
-            val otherShip: Ship? = ships.find { coordinatingShip.pos == it.pos }
+            val otherShip: Ship? = ships.find { coordinatingShip.getPos() == it.getPos() }
             if (otherShip != null) {
                 for (ship in otherShip.getOwner().ownedShips) {
                     val coordinatingCapability = ship.capabilities.find { it is CoordinatingShip }
@@ -68,7 +68,7 @@ class Corporation(
         val collectingShips: List<Ship> = filterCollectingShip()
         for (ship in collectingShips) {
             for (collectingCapability in ship.capabilities) {
-                (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship.pos)
+                (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship.getPos())
             }
         }
     }
@@ -91,7 +91,7 @@ class Corporation(
     private fun getShipsOnHarbor(): List<Ship> {
         val seaInstance: Sea = Sea
         val harborTiles: List<Tile> = seaInstance.tiles.filter { (it as Shore).harbor }
-        return ownedShips.filter { harborTiles.contains(it.pos) }
+        return ownedShips.filter { harborTiles.contains(it.getPos()) }
     }
 
     /** Documentation for findClosestShip Function **/

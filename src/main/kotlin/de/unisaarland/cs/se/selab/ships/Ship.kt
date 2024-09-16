@@ -44,7 +44,7 @@ abstract class Ship (
     private var name: String = ""
     private var pos: Tile? = null
     private var consumedFuel: Int = 0
-    private var hasTaskAssigned: Boolean = false
+    var hasTaskAssigned: Boolean = false
 
     constructor(
         id: Int,

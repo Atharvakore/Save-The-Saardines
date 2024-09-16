@@ -28,7 +28,6 @@ class DeepOcean(
         if (intensity != null) {
             return intensity * FIFTY
         }
-
         return 0
     }
 }
