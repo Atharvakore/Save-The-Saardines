@@ -93,15 +93,21 @@ abstract class Tile(
         var filteredList =
             this.garbages
                 .filter { it.type == type }
-                .sortedBy(Garbage::ammount)
-
-        for (g in filteredList) {
-            if (toBeRemoved >= g.ammount) {
-                toBeRemoved -= g.ammount
-                filteredList = filteredList.filterIndexed { index, _ -> index != 0 }
+                .sortedBy(Garbage::id)
+        for(g in filteredList) {
+            if(toBeRemoved > g.ammount && toBeRemoved >=0){
+                toBeRemoved-= g.ammount
+                filteredList = filteredList.filterIndexed { index, _ -> index != 0 } //TO remove garbage at index 0
             }
-            filteredList[0].ammount -= toBeRemoved
+            if(toBeRemoved <= g.ammount && toBeRemoved >=0 ){
+                g.ammount -= toBeRemoved
+                toBeRemoved-= g.ammount
+
+            }
         }
+
+
+
 
         // TOdo YET TO BE COMPLETED
     }

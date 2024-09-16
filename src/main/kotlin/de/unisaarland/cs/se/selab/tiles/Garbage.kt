@@ -1,4 +1,5 @@
 package de.unisaarland.cs.se.selab.tiles
+import de.unisaarland.cs.se.selab.corporation .Corporation
 
 class Garbage(
     val id: Int,
