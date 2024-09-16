@@ -67,8 +67,8 @@ class Corporation(
     private fun refuelAndUnloadShips(sea: Sea): Unit {
 
         val shipsOnHarbor: List<Ship> = getShipsOnHarbor()
-        if(shipsOnHarbor.isNotEmpty()){
-            for(ship in shipsOnHarbor){
+        if (shipsOnHarbor.isNotEmpty()) {
+            for (ship in shipsOnHarbor) {
                 val collectingCapability = ship.capabilities.find { it is CollectingShip }
                 if (collectingCapability != null) {
                     (collectingCapability as CollectingShip).giveGarbage()

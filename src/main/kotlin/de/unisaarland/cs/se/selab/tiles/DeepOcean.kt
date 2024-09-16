@@ -7,10 +7,10 @@ class DeepOcean(
     garbage: List<Garbage>,
     private var current: Current?,
 ) : Tile(
-        id,
-        pos,
-        adjacentTiles,
-        garbage,
+    id,
+    pos,
+    adjacentTiles,
+    garbage,
 ) {
     public fun getCurrent(): Current? = current
 }

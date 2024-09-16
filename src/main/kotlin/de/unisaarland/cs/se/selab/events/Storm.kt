@@ -11,7 +11,7 @@ class Storm(
     private val radius: Int
 ) : LocalEvent(id, fireTick, map, location, radius) {
     override fun actUponTick(currentTick: Int): Boolean {
-        if(currentTick == fireTick) {
+        if (currentTick == fireTick) {
             // TODO.
             return true
         }

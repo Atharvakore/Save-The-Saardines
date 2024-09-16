@@ -11,7 +11,7 @@ class Restriction(
     private val radius: Int
 ) : LocalEvent(id, fireTick, map, location, radius) {
     override fun actUponTick(currentTick: Int): Boolean {
-        if(currentTick == fireTick) {
+        if (currentTick == fireTick) {
             location.pos.tilesInRadius(radius).forEach {
                 val tile = map.getTileByPos(it)
                 tile?.restrictions?.inc()

@@ -3,7 +3,7 @@ package de.unisaarland.cs.se.selab.events
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 
-abstract class LocalEvent (
+abstract class LocalEvent(
     private val id: Int,
     private val fireTick: Int,
     private val map: Sea,
