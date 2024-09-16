@@ -12,7 +12,7 @@ class Ship (
         private var pos: Tile,
         private var fuelCapacity: Int,
         private var fuelConsumption: Int,
-        private var capabilities: List<ShipCapability>,
+        var capabilities: List<ShipCapability>,
         private var hasTaskAssigned: Boolean = false
         ) {
 

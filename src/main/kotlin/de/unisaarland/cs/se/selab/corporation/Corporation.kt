@@ -1,12 +1,13 @@
 package de.unisaarland.cs.se.selab.corporation
 import de.unisaarland.cs.se.selab.ships.CollectingShip
-import de.unisaarland.cs.se.selab.tiles.Tile
-import de.unisaarland.cs.se.selab.tiles.Vec2D
+import de.unisaarland.cs.se.selab.ships.CoordinatingShip
+import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.tiles.*
 
 class Corporation(
     val id: Int,
     val name: String,
-    val ownedShips: List<Ship>,
+    val ownedShips: MutableList<Ship>,
     val ownedHarbors: List<Shore>,
     val acceptedGarbageType: List<GarbageType>,
     val tasks: List<Task>
