@@ -46,11 +46,11 @@ class Corporation(
     }
 
     /** Documentation for run Function **/
-    public fun run(sea: Sea, otherShips: List<Ship>) {
-        moveShips(sea)
-        collectGarbage(sea)
+    public fun run(otherShips: List<Ship>) {
+        moveShips()
+        collectGarbage()
         cooperate(otherShips)
-        refuelAndUnloadShips(sea)
+        refuelAndUnloadShips()
     }
 
     /** Documentation for getActiveTasks Function **/
@@ -59,23 +59,28 @@ class Corporation(
     }
 
     /** Documentation for getShipsOnHarbor Function **/
-    private fun moveShips(sea: Sea) {
+    private fun moveShips() {
         TODO(TODO)
     }
 
     /** Documentation for collectGarbage Function **/
-    private fun collectGarbage(sea: Sea) {
-        TODO(TODO)
+    private fun collectGarbage() {
+        val collectingShips: List<Ship> = filterCollectingShip()
+        for (ship in collectingShips) {
+            for (collectingCapability in ship.capabilities) {
+                (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship.pos)
+            }
+        }
     }
 
     /** Documentation for refuelAndUnloadShips Function **/
-    private fun refuelAndUnloadShips(sea: Sea) {
+    private fun refuelAndUnloadShips() {
         val shipsOnHarbor: List<Ship> = getShipsOnHarbor()
         if (shipsOnHarbor.isNotEmpty()) {
             for (ship in shipsOnHarbor) {
                 val collectingCapability = ship.capabilities.find { it is CollectingShip }
                 if (collectingCapability != null) {
-                    (collectingCapability as CollectingShip).giveGarbage()
+                    (collectingCapability as CollectingShip).unload()
                 }
                 ship.refuel()
             }
