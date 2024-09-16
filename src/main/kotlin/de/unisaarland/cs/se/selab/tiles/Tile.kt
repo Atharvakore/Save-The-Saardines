@@ -13,7 +13,7 @@ const val SIX = 6
 abstract class Tile(
     val id: Int,
     val pos: Vec2D,
-    val adjacentTiles: List<Tile>,
+    val adjacentTiles: List<Tile?>,
     var garbage: List<Garbage>,
     var amountOfGarbageDriftedThisTick: Int,
 ) {
@@ -56,47 +56,18 @@ abstract class Tile(
         return a + amount < HUNDRED
     }
 
-    /**
-     * gives a tile In direction uses basic trigonometry rules to calculate vec2D
-     */
     public fun getTileInDirection(
         distance: Int,
         dir: Direction,
     ): Tile? {
-        var temp: Vec2D
-
-        when (dir) {
-            Direction.D0 -> temp = Vec2D(this.pos.posX + distance, this.pos.posY)
-            Direction.D60 ->
-                temp =
-                    Vec2D(
-                        this.pos.posX + (distance / 2),
-                        this.pos.posY - floor(distance * (sqrt(THREE) / TWO)).toInt()
-                    )
-
-            Direction.D120 ->
-                temp =
-                    Vec2D(
-                        this.pos.posX - (distance / 2),
-                        this.pos.posY - floor(distance * (sqrt(THREE) / TWO)).toInt()
-                    )
-
-            Direction.D180 -> temp = Vec2D(this.pos.posX - distance, this.pos.posY)
-            Direction.D240 ->
-                temp =
-                    Vec2D(
-                        this.pos.posX - (distance / 2),
-                        this.pos.posY + floor(distance * (sqrt(THREE) / TWO)).toInt()
-                    )
-
-            Direction.D300 ->
-                temp =
-                    Vec2D(
-                        this.pos.posX + (distance / 2),
-                        this.pos.posY + floor(distance * (sqrt(THREE) / TWO)).toInt()
-                    )
+        var tile: Tile? = this
+        for (i in 0..distance) {
+            if (tile?.adjacentTiles?.get(dir.ordinal) == null) {
+                return tile
+            }
+            tile = tile.adjacentTiles[dir.ordinal]!!
         }
-        return Sea.getTileByPos(temp)
+        return tile
     }
 
     /**
