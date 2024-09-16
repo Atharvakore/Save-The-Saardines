@@ -1,5 +1,4 @@
 package de.unisaarland.cs.se.selab.tiles
-
 import kotlin.math.floor
 import kotlin.math.sqrt
 

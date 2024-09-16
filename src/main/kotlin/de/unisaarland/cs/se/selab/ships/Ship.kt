@@ -9,10 +9,10 @@ class Ship (
         private val owner: Corporation,
         private val maxVelocity: Int,
         private val acceleration: Int,
-        private var pos: Tile,
+        var pos: Tile,
         private var fuelCapacity: Int,
         private var fuelConsumption: Int,
-        private var capabilities: List<ShipCapability>,
+        var capabilities: List<ShipCapability>,
         private var hasTaskAssigned: Boolean = false
         ) {
 

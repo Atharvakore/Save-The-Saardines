@@ -8,6 +8,7 @@ import java.util.PriorityQueue
 class Dijkstra(start: Tile) {
     private var predecessor: MutableMap<Tile, Tile> = mutableMapOf()
     private var distances: MutableMap<Tile, Int> = mutableMapOf()
+    private val accountForRestrictions = start.restrictions == 0
 
     init {
         val queue = PriorityQueue<Pair<Tile, Int>>(compareBy { it.second })
@@ -15,8 +16,11 @@ class Dijkstra(start: Tile) {
         distances[start] = 0
         while (queue.isNotEmpty()) {
             val (current, currentDistance) = queue.poll()
-            for (neighbour in current.neighbours) {
+            for (neighbour in current.adjacentTiles) {
                 if (neighbour != null) {
+                    if (accountForRestrictions && neighbour.restrictions > 0) {
+                        continue
+                    }
                     val newDistance = currentDistance + 1 // all edges have weight 1
                     if (newDistance < distances.getOrDefault(neighbour, Int.MAX_VALUE)) {
                         distances[neighbour] = newDistance
