@@ -3,7 +3,9 @@ package de.unisaarland.cs.se.selab.ships
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 
-
+/**
+ * class representing the coordinating ship capability
+ * */
 class CoordinatingShip (private val visibilityRange: Int) : ShipCapability {
     /**
      * Call: from corporation run method to gather information

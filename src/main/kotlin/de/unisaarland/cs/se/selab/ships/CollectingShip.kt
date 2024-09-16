@@ -3,10 +3,17 @@ package de.unisaarland.cs.se.selab.ships
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Tile
+
+/**
+ * class representing the collecting ship capability
+ */
 class CollectingShip (
     var auxiliaryContainers: MutableList<Container>
 ): ShipCapability {
 
+    /**
+     * unloads all the containers of the ship
+     */
     fun unload(){
         for (container in auxiliaryContainers){
             container.giveGarbage()

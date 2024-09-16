@@ -5,6 +5,9 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Current
 
+/**
+ * class representing a ship
+ */
 abstract class Ship(
     private val id: Int,
     private val owner: Corporation,
@@ -14,30 +17,31 @@ abstract class Ship(
     private var fuelConsumption: Int,
     var capabilities: MutableList<ShipCapability>,
 ) {
+
     init {
         require(capabilities.isNotEmpty())
 
         val defaultCapability = capabilities.first()
         when (defaultCapability) {
             is ScoutingShip -> {
-                require(maxVelocity in 10..100)
-                require(acceleration in 5..25)
-                require(fuelCapacity in 3000..10000)
-                require(fuelConsumption in 7..10)
+                require(maxVelocity in MIN_VELOCITY_SCOUTING..MAX_VELOCITY_SCOUTING)
+                require(acceleration in MIN_ACCELERATION_SCOUTING..MAX_ACCELERATION_SCOUTING)
+                require(fuelCapacity in MIN_FUEL_CAPACITY_SCOUTING..MAX_FUEL_CAPACITY_SCOUTING)
+                require(fuelConsumption in MIN_FUEL_CONSUMPTION_SCOUTING..MAX_FUEL_CONSUMPTION_SCOUTING)
             }
 
             is CoordinatingShip -> {
-                require(maxVelocity in 10..50)
-                require(acceleration in 5..15)
-                require(fuelCapacity in 3000..5000)
-                require(fuelConsumption in 5..7)
+                require(maxVelocity in MIN_VELOCITY_COORDINATING..MAX_VELOCITY_COORDINATING)
+                require(acceleration in MIN_ACCELERATION_COORDINATING..MAX_ACCELERATION_COORDINATING)
+                require(fuelCapacity in MIN_FUEL_CAPACITY_COORDINATING..MAX_FUEL_CAPACITY_COORDINATING)
+                require(fuelConsumption in MIN_FUEL_CONSUMPTION_COORDINATING..MAX_FUEL_CONSUMPTION_COORDINATING)
             }
 
             is CollectingShip -> {
-                require(maxVelocity in 10..50)
-                require(acceleration in 5..10)
-                require(fuelCapacity in 3000..5000)
-                require(fuelConsumption in 5..9)
+                require(maxVelocity in MIN_VELOCITY_COLLECTING..MAX_VELOCITY_COLLECTING)
+                require(acceleration in MIN_ACCELERATION_COLLECTING..MAX_ACCELERATION_COLLECTING)
+                require(fuelCapacity in MIN_FUEL_CAPACITY_COLLECTING..MAX_FUEL_CAPACITY_COLLECTING)
+                require(fuelConsumption in MIN_FUEL_CONSUMPTION_COLLECTING..MAX_FUEL_CONSUMPTION_COLLECTING)
             }
         }
     }
@@ -62,10 +66,15 @@ abstract class Ship(
         this.pos = pos
     }
 
+    /**
+     * return owner corporation
+     */
     fun getOwner(): Corporation {
         return this.owner
     }
-
+    /**
+     * return ship current tile
+     */
     fun getPos(): Tile? {
         return this.pos
     }
@@ -96,7 +105,7 @@ abstract class Ship(
         val direction = current.direction
 
         if (speed != null && direction != null) {
-            val desTile = this.pos?.getTileInDirection(speed / 10, direction)
+            val desTile = this.pos?.getTileInDirection(speed / TEN, direction)
             if (desTile != null) {
                 this.pos = desTile
             }
@@ -124,7 +133,7 @@ abstract class Ship(
      * @return if the ship can complete this path
      */
     fun isFuelSufficient(pathLength: Int): Boolean {
-        val neededFuel = fuelConsumption * pathLength * 10
+        val neededFuel = fuelConsumption * pathLength * TEN
         return neededFuel <= fuelCapacity - consumedFuel
     }
 
