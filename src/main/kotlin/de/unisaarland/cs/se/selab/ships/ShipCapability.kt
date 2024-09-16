@@ -1,4 +1,6 @@
 package de.unisaarland.cs.se.selab.ships
 
-interface ShipCapability {
-}
+/**
+ * interface representing the ship capability
+ */
+interface ShipCapability

@@ -1,18 +1,16 @@
 package de.unisaarland.cs.se.selab.tasks
 
 import de.unisaarland.cs.se.selab.ships.CollectingShip
+import de.unisaarland.cs.se.selab.ships.Container
 import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.tiles.GarbageType
 
-/*
-Class for Reward of type Container
- */
-class ContainerReward(
-    override val id: Int,
-    val capacity: Int,
-    val typeOfGarbage: GarbageType,
-    val capability: CollectingShip) : Reward(id) {
+class ContainerReward(id: Int, private val capability: CollectingShip, private val container: Container) : Reward(id) {
     override fun applyReward(ship: Ship) {
-        TODO("Not yet implemented")
+        if (!ship.capabilities.any { it is CollectingShip }) {
+            ship.capabilities.add(capability)
+        }
+        ship.capabilities.filterIsInstance<CollectingShip>().forEach {
+            it.auxiliaryContainers.add(container)
+        }
     }
 }

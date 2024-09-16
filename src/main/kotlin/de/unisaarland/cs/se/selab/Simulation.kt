@@ -18,7 +18,7 @@ class Simulation(
     /**
      * starts the whole simulation and enters a loop that runs tick() until maxTick is reached
      */
-    fun start(): Unit {
+    fun start(){
         while (tick <= maxTick) {
             tick()
             tick++
@@ -29,7 +29,7 @@ class Simulation(
      * each call to tick corresponds to one tick in the simulation
      * it handles all the simulation logic by calling the different methods in order
      */
-    private fun tick(): Unit {
+    private fun tick() {
         runCorporations()
         driftGarbage()
         driftShips()
@@ -40,7 +40,7 @@ class Simulation(
     /**
      * iterates over all corporations and calls run() on them
      */
-    private fun runCorporations(): Unit {
+    private fun runCorporations(){
         val allShips = mutableListOf<Ship>()
         for (corporation in corporations) {
             allShips.addAll(corporation.ownedShips)
@@ -55,12 +55,12 @@ class Simulation(
     /**
      * handles the drift garbage logic
      */
-    private fun driftGarbage(): Unit {
+    private fun driftGarbage() {
         val tiles = sea.tiles
         val deepOceanTiles = tiles.filterIsInstance<DeepOcean>()
 
         for (tile in deepOceanTiles) {
-            val garbageList = tile.garbages
+            val garbageList = tile.garbage
             for (garbage in garbageList) {
                 garbage.drift(tile)
             }
@@ -70,7 +70,7 @@ class Simulation(
     /**
      * handles the drift ships logic
      */
-    private fun driftShips(): Unit {
+    private fun driftShips() {
         val tiles = sea.tiles
         val deepOceanTiles = tiles.filterIsInstance<DeepOcean>()
 
@@ -87,7 +87,7 @@ class Simulation(
     /**
      * iterates over all events and call actUponTick on them
      */
-    private fun processEvents(): Unit {
+    private fun processEvents() {
         for (event in allEvents) {
             event.actUponTick(tick)
         }
@@ -96,7 +96,7 @@ class Simulation(
     /**
      * starts new tasks and updates active tasks
      */
-    private fun processTasks(): Unit {
+    private fun processTasks() {
         val tasks = collectActiveTasks()
 
         for (task in tasks) {

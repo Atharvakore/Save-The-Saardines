@@ -3,19 +3,18 @@ package de.unisaarland.cs.se.selab.ships
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 
+/**
+ *  Container that holds info about the garbage: GarbageType, Capacity, current Load
+ */
 class Container(
     val garbageType: GarbageType,
     private val garbageCapacity: Int,
-    private var garbageLoad: Int,  // change to the design
 ) {
-
-    public fun getGarbageLoad(): Int{
-        return this.garbageLoad
-    }
+    private var garbageLoad: Int = 0
     /**
      * unload garbage
      */
-    fun giveGarbage(): Unit {
+    fun giveGarbage(){
         this.garbageLoad = 0
     }
 

@@ -1,4 +1,6 @@
 package de.unisaarland.cs.se.selab.ships
 
-class ShipWithTracker : ShipCapability {
-}
+/**
+ * class representing the ship with tracker capability
+ * */
+class ShipWithTracker : ShipCapability

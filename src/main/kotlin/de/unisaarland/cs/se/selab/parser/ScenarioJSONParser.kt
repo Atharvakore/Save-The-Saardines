@@ -11,6 +11,7 @@ import de.unisaarland.cs.se.selab.ships.Container
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.ships.ShipWithTracker
 import de.unisaarland.cs.se.selab.tasks.CollectGarbageTask
 import de.unisaarland.cs.se.selab.tasks.ContainerReward
 import de.unisaarland.cs.se.selab.tasks.CooperateTask
@@ -31,6 +32,7 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import javax.sound.midi.Track
 
 class ScenarioJSONParser(override val accumulator: Accumulator): JSONParser {
      fun parseEvents(eventsFile: String): Boolean {
@@ -253,22 +255,23 @@ class ScenarioJSONParser(override val accumulator: Accumulator): JSONParser {
         when (rewardType) {
             "TELESCOPE" -> {
                 val visibility: Int = reward.getInt("visibilityRange")
-                accumulator.addReward(rewardId, TelescopeReward(rewardId, visibility, ScoutingShip(visibility)))
+                accumulator.addReward(rewardId, TelescopeReward(rewardId,  ScoutingShip(visibility), visibility))
             }
             "RADIO" -> {
                 accumulator.addReward(rewardId, RadioReward(rewardId, CoordinatingShip(0)))
             }
             "CONTAINER" -> {
                 val capacity: Int = reward.getInt("capacity")
-                val garbageType: GarbageType = GarbageType.valueOf(garbage.getString("type"))
+                val garbageType: GarbageType = GarbageType.valueOf(reward.getString("garbageType"))
                 val container: Container = Container(garbageType, capacity)
                 val collectingShip = CollectingShip(mutableListOf(container))
-                accumulator.addReward(rewardId, ContainerReward(collectingShip))
+                accumulator.addReward(rewardId, ContainerReward(rewardId, collectingShip, container))
             }
             "TRACKER" -> {
-
+                accumulator.addReward(rewardId, TrackerReward(rewardId, ShipWithTracker()))
             }
         }
-
+        return true
     }
+
 }
