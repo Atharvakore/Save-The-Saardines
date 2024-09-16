@@ -76,7 +76,10 @@ class ScenarioJSONParser(override val accumulator: Accumulator): JSONParser {
                 val eventTile: Tile = accumulator.getTileById(eventLocation) ?: return false
                 val eventRadius: Int = event.getInt("radius")
                 val eventAmount: Int = event.getInt("amount")
-                val oilSpill = OilSpill(eventId, eventTick, accumulator.getMap(), eventTile, eventRadius, eventAmount)
+                if (accumulator.getMap() != null) {
+                    val oilSpill =
+                        OilSpill(eventId, eventTick, accumulator.getMap()!!, eventTile, eventRadius, eventAmount)
+                }
                 accumulator.addEvent(eventId, oilSpill)
             }
             "PIRATE_ATTACK" -> {
