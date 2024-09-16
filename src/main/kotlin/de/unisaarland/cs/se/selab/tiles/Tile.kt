@@ -48,7 +48,7 @@ abstract class Tile(
 
         for (garbage in garbages) {
             if (garbage.type == GarbageType.OIL) {
-                a += garbage.ammount
+                a += garbage.amount
             }
         }
         return a + amount < HUNDRED
@@ -112,7 +112,7 @@ abstract class Tile(
         var acc = 0
         for (garbage in garbages) {
             if (type.type == garbage.type) {
-                acc += garbage.ammount
+                acc += garbage.amount
             }
         }
         return acc
@@ -131,12 +131,12 @@ abstract class Tile(
                 .filter { it.type == type }
                 .sortedBy(Garbage::id)
         while (toBeRemoved > 0 && filteredList.isNotEmpty()) {
-            if (toBeRemoved >= filteredList[0].ammount) {
-                toBeRemoved -= filteredList[0].ammount
+            if (toBeRemoved >= filteredList[0].amount) {
+                toBeRemoved -= filteredList[0].amount
                 filteredList = filteredList.filterIndexed { index, _ -> index != 0 } //removes element at 0th Index
             }
-            if (toBeRemoved < filteredList[0].ammount) {
-                filteredList[0].ammount -= toBeRemoved
+            if (toBeRemoved < filteredList[0].amount) {
+                filteredList[0].amount -= toBeRemoved
                 toBeRemoved = 0
                 break
             }
