@@ -20,7 +20,8 @@ class Accumulator {
     private var rewards: MutableMap<Int, Reward> = mutableMapOf()
     private var mapCorporationToHarbor: Map<Int, MutableList<Tile>> = mutableMapOf()
     private var mapCorporationToShips: Map<Int, MutableList<Int>> = mutableMapOf()
-
+    private var tiles: MutableMap<Int, Tile> = mutableMapOf()
+    private var tilesByCoordinate: MutableMap<Vec2D, Tile> = mutableMapOf()
     public fun getMap(): Sea? {
         return map
     }
@@ -49,10 +50,10 @@ class Accumulator {
         return map?.getTileByPos(tileCoordinates)
     }
     public fun addTile(id: Int, t: Tile) {
-
+        tiles[id] = t
     }
     public fun addTileByCoordinates(coord: Vec2D, t: Tile) {
-
+        tilesByCoordinate[coord] = t
     }
     public fun addShip(shipId: Int, ship: Ship) {
         ships[shipId] = ship
