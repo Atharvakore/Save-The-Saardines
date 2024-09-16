@@ -64,11 +64,13 @@ class Garbage(
             if (target!!.currentOilLevel() + g.amount <= THOUSAND) {
                target.addGarbage( createGarbage(ammounttobedrifted, GarbageType.OIL))
                 source.garbage [source.garbage.indexOf(g)].amount-=ammounttobedrifted
+                return
             }
         }
         target!!.addGarbage( createGarbage(ammounttobedrifted, g.type))
         source.garbage [source.garbage.indexOf(g)].amount-=ammounttobedrifted
         source.amountOfGarbageDriftedThisTick = ammounttobedrifted
+        return
     }
 
     /**
@@ -82,6 +84,7 @@ class Garbage(
                 source.amountOfGarbageDriftedThisTick += g.amount
             }
         }
+        return
     }
 
     /**
