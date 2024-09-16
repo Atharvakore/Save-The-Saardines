@@ -5,6 +5,7 @@ class Shore(
     pos: Vec2D,
     adjacentTiles: Array<Tile?>,
     garbage: List<Garbage>
+    harbor:Boolean
 ) : Tile(
     id,
     pos,
