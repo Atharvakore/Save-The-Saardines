@@ -26,6 +26,6 @@ class CoordinatingShip (private val visibilityRange: Int) : ShipCapability {
     }
     private fun filterTilesWithGarbage(tiles: List<Tile?>): List<Tile> {
         return tiles.filterNotNull()
-            .filter { it.garbages.isNotEmpty() }
+            .filter { it.garbage.isNotEmpty() }
     }
 }
