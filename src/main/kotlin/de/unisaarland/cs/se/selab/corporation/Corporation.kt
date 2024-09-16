@@ -24,7 +24,7 @@ class Corporation(
     val tasks: List<Task>
 ) {
     var trackedGarbage: MutableList<Garbage> = mutableListOf()
-    var partnerGarbage: MutableMap<Int, List<Tile>> = mutableMapOf()
+    var partnerGarbage: MutableMap<Int, MutableList<Tile>> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
 
     /** Documentation for cooperate Function **/
@@ -33,7 +33,7 @@ class Corporation(
 
         myCoordinatingShips.forEach { coordinatingShip ->
             val otherShipsOnTile: List<Ship> = otherShips
-                .filter { coordinatingShip.getPos() == it.getPos() && it.getOwner() != lastCoordinatingCorporation }
+                .filter { coordinatingShip.getPos() == it.getPos() && it.getOwner() != lastCoordinatingCorporation}
             val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.getOwner() }.distinct()
 
             val otherShipsToCooperate: List<Ship> = otherShips.filter { otherCorporations.contains(it.getOwner()) }
@@ -43,7 +43,7 @@ class Corporation(
                     .filterIsInstance<ScoutingShip>()
                 telescopes.forEach {
                     val tilesWithGarbage: List<Tile> = it.getTilesWithGarbageInFoV(otherShipToCooperate.getPos()!!)
-                    partnerGarbage[otherShipToCooperate.getOwner().id] = tilesWithGarbage
+                    partnerGarbage.getOrPut(otherShipToCooperate.getOwner().id) { mutableListOf() } += tilesWithGarbage
                 }
             }
         }
