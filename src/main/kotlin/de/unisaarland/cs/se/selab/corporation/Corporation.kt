@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.corporation
 import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
+import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Garbage
@@ -27,13 +28,10 @@ class Corporation(
 
     /** Documentation for cooperate Function **/
     public fun cooperate(ships: List<Ship>): Corporation {
-        // ships can cooperate if they have the same position (are on the same tile)
-        // if
-
         val myCoordinatingShips: List<Ship> = filterCoordinatingShips()
 
-        myCoordinatingShips.forEach {
-            val otherShip: Ship? = ships.find { it.pos == it.pos }
+        myCoordinatingShips.forEach { coordinatingShip ->
+            val otherShip: Ship? = ships.find { coordinatingShip.pos == it.pos }
             if (otherShip != null) {
                 for (ship in otherShip.getOwner().ownedShips) {
                     val coordinatingCapability = ship.capabilities.find { it is CoordinatingShip }
@@ -51,6 +49,7 @@ class Corporation(
     public fun run(sea: Sea, otherShips: List<Ship>) {
         moveShips(sea)
         collectGarbage(sea)
+        cooperate(otherShips)
         refuelAndUnloadShips(sea)
     }
 
@@ -71,7 +70,7 @@ class Corporation(
 
     /** Documentation for refuelAndUnloadShips Function **/
     private fun refuelAndUnloadShips(sea: Sea) {
-        val shipsOnHarbor: List<Ship> = getShipsOnHarbor()
+        val shipsOnHarbor: List<Ship> = getShipsOnHarbor(sea)
         if (shipsOnHarbor.isNotEmpty()) {
             for (ship in shipsOnHarbor) {
                 val collectingCapability = ship.capabilities.find { it is CollectingShip }
@@ -84,7 +83,7 @@ class Corporation(
     }
 
     /** Documentation for getShipsOnHarbor Function **/
-    private fun getShipsOnHarbor(): List<Ship> {
+    private fun getShipsOnHarbor(sea: Sea): List<Ship> {
         TODO(TODO)
     }
 
@@ -100,16 +99,16 @@ class Corporation(
 
     /** Documentation for filterCollectingShip Function **/
     private fun filterCollectingShip(): List<Ship> {
-        TODO(TODO)
+        return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is CollectingShip } }
     }
 
     /** Documentation for filterScoutingShips Function **/
     private fun filterScoutingShips(): List<Ship> {
-        TODO(TODO)
+        return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is ScoutingShip } }
     }
 
     /** Documentation for filterCoordinatingShips Function **/
     private fun filterCoordinatingShips(): List<Ship> {
-        TODO(TODO)
+        return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is CoordinatingShip } }
     }
 }
