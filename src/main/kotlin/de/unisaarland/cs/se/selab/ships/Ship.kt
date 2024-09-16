@@ -116,12 +116,13 @@ abstract class Ship(
      * Logic: the ship gets a path (a list of tiles from destination to ship), has to reverse path and move along it
      * the ship moves along the path as long as it can
      *
-     */
-    /**
-     * TODO: Implement.
+     * moving logic is simplified and needs to be improved
      */
     fun move(path: List<Tile>) {
-        TODO("")
+        val pathShipToTile = path.reversed()
+        val distanceLength = maxVelocity / TEN
+        val desTile = pathShipToTile[distanceLength]
+        this.pos = desTile
     }
 
     /**

@@ -20,25 +20,58 @@ class CollectingShip (
         }
     }
     /**
-     * Call: when a collecting ship is being checked if it can collect the garbage
-     * Logic: it checks if this ship can collect the garbage based on the garbage type
-     * If it is oil then it returns true if it can collect any amount, if plastic it returns true if it can
-     * collect the whole amount of plastic
      *
-     * @return true/false depending if the ship can collect the garbage based on its type
+     * checks if the ship can collect any amount of oil
      * */
-    /**
-     * TODO: Implement.
-     */
-    fun hasGarbageCapacity(garbage: List<Garbage>): Boolean {
-        TODO("")
+    fun hasOilCapacity(): Boolean {
+        val oilContainers = auxiliaryContainers.filter{it.garbageType == GarbageType.OIL}
+        if (oilContainers.isEmpty()){
+            return false
+        } else {
+            var oilCapacity = 0
+            for (container in oilContainers){
+                oilCapacity += container.getGarbageCapacity() - container.garbageLoad
+            }
+            return oilCapacity > 0
+        }
     }
+
+    /**
+     *
+     * checks if the ship can collect any amount of chemicals
+     * */
+    fun hasChemicalsCapacity(): Boolean {
+        val chemicalsContainers = auxiliaryContainers.filter{it.garbageType == GarbageType.CHEMICALS}
+        if (chemicalsContainers.isEmpty()){
+            return false
+        } else {
+            var chemicalsCapacity = 0
+            for (container in chemicalsContainers){
+                chemicalsCapacity += container.getGarbageCapacity() - container.garbageLoad
+            }
+            return chemicalsCapacity > 0
+        }
+    }
+
+    /**
+     * checks the amount of plastic the ship can collect
+     * */
+    fun hasPlasticCapacity (): Int {
+        val plasticContainers = auxiliaryContainers.filter{it.garbageType == GarbageType.PLASTIC}
+        if (plasticContainers.isEmpty()){
+            return 0
+        } else {
+            var plasticCapacity= 0
+            for (container in plasticContainers){
+                plasticCapacity += container.getGarbageCapacity() - container.garbageLoad
+            }
+            return plasticCapacity
+        }
+    }
+
     /**
      * Call: when the corporation is calling on its ships to collect the garbage
      * Logic: checks the garbage of its tile, collects it if it can
-     */
-    /**
-     * TODO: Implement.
      */
     fun collectGarbageFromCurrentTile(currentTile: Tile?){
         val garbageList = currentTile?.garbage
@@ -57,4 +90,5 @@ class CollectingShip (
     private fun collectGarbage(garbage: Garbage): Boolean {
         return auxiliaryContainers.any { it.collect(garbage) }
     }
+
 }
