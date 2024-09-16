@@ -33,13 +33,14 @@ class Corporation(
         myCoordinatingShips.forEach { coordinatingShip ->
             val otherShip: Ship? = ships.find { coordinatingShip.pos == it.pos }
             if (otherShip != null) {
-                for (ship in otherShip.getOwner().ownedShips) {
+                for(ship in otherShip.getOwner().ownedShips) {
                     val coordinatingCapability = ship.capabilities.find { it is CoordinatingShip }
                     if (coordinatingCapability != null) {
                         TODO(TODO)
                     }
                 }
             }
+
         }
 
         TODO(TODO)
@@ -55,7 +56,9 @@ class Corporation(
 
     /** Documentation for getActiveTasks Function **/
     public fun getActiveTasks(): List<Task> {
+
         return tasks.filter { it.checkCondition() }
+
     }
 
     /** Documentation for getShipsOnHarbor Function **/
@@ -111,4 +114,5 @@ class Corporation(
     private fun filterCoordinatingShips(): List<Ship> {
         return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is CoordinatingShip } }
     }
+
 }
