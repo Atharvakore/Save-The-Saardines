@@ -42,7 +42,7 @@ class Corporation(
                 val telescopes: List<ScoutingShip> = otherShipToCooperate.capabilities
                     .filterIsInstance<ScoutingShip>()
                 telescopes.forEach {
-                    val tilesWithGarbage: List<Tile> = it.getTilesWithGarbageInFoV(otherShipToCooperate.getPos()!!)
+                    val tilesWithGarbage: List<Tile> = it.getTilesWithGarbageInFoV(Sea, otherShipToCooperate.getPos()!!)
                     partnerGarbage.getOrPut(otherShipToCooperate.getOwner().id) { mutableListOf() } += tilesWithGarbage
                 }
             }
