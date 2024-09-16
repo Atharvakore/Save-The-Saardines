@@ -63,7 +63,7 @@ abstract class Ship(
     }
 
     fun getOwner(): Corporation {
-        return this.owner;
+        return this.owner
     }
 
     fun getPos(): Tile? {
@@ -74,7 +74,7 @@ abstract class Ship(
      * Call: when the ship is on the harbor
      * Logic: the ship has to max its fuelCapacity
      */
-    fun refuel(): Unit {
+    fun refuel(){
         this.consumedFuel = 0
     }
 
@@ -83,7 +83,7 @@ abstract class Ship(
      *  Logic: the ship has to check if its tile has a current,
      *  if so do the logic of drifting
      */
-    fun drift(): Unit {
+    fun drift(){
         val deepOcean = this.pos as? DeepOcean
         val current = deepOcean?.getCurrent()
         if (current != null) {
@@ -91,7 +91,7 @@ abstract class Ship(
         }
     }
 
-    private fun handleCurrentDrift(current: Current): Unit {
+    private fun handleCurrentDrift(current: Current){
         val speed = current.speed
         val direction = current.direction
 
@@ -107,12 +107,11 @@ abstract class Ship(
      * Logic: the ship gets a path (a list of tiles from destination to ship), has to reverse path and move along it
      * the ship moves along the path as long as it can
      *
-     * @param path a list of tiles between destination and ship
      */
     /**
      * TODO: Implement.
      */
-    fun move(path: List<Tile>): Unit {
+    fun move(path: List<Tile>) {
         TODO("")
     }
 
@@ -121,7 +120,7 @@ abstract class Ship(
      * Logic: gets length of the path the ship has to traverse
      * check if it can traverse it
      *
-     * @param  length of path
+     * @param  pathLength of path
      * @return if the ship can complete this path
      */
     fun isFuelSufficient(pathLength: Int): Boolean {
@@ -133,10 +132,9 @@ abstract class Ship(
      * Call: when a task is done, and the reward needs to be applied
      * Logic: adds a capability to the ship and handles the adding logic
      *
-     * @param a ship capability
+     * @param capability ship capability
      */
-
-    public fun addCapability(capability: ShipCapability): Unit {
+    fun addCapability(capability: ShipCapability) {
         capabilities.add(capability)
     }
 }

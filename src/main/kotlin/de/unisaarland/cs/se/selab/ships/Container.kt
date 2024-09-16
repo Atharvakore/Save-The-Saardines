@@ -8,14 +8,10 @@ class Container(
     private val garbageCapacity: Int,
     private var garbageLoad: Int,  // change to the design
 ) {
-
-    public fun getGarbageLoad(): Int{
-        return this.garbageLoad
-    }
     /**
      * unload garbage
      */
-    fun giveGarbage(): Unit {
+    fun giveGarbage(){
         this.garbageLoad = 0
     }
 

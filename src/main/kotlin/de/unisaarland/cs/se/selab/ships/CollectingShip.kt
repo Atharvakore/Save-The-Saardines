@@ -7,24 +7,23 @@ class CollectingShip (
     var auxiliaryContainers: MutableList<Container>
 ): ShipCapability {
 
-    public fun unload(): Unit{
+    fun unload(){
         for (container in auxiliaryContainers){
             container.giveGarbage()
         }
     }
     /**
      * Call: when a collecting ship is being checked if it can collect the garbage
-     * Logic: it checks if this ship can collect the garbage based on the garabge type
+     * Logic: it checks if this ship can collect the garbage based on the garbage type
      * If it is oil then it returns true if it can collect any amount, if plastic it returns true if it can
      * collect the whole amount of plastic
      *
-     * @param  a list of garbage
      * @return true/false depending if the ship can collect the garbage based on its type
      * */
     /**
      * TODO: Implement.
      */
-    public fun hasGarbageCapacity(garbage: List<Garbage>): Boolean {
+    fun hasGarbageCapacity(garbage: List<Garbage>): Boolean {
         TODO("")
     }
     /**
@@ -34,7 +33,7 @@ class CollectingShip (
     /**
      * TODO: Implement.
      */
-    public fun collectGarbageFromCurrentTile(currentTile: Tile?): Unit {
+    fun collectGarbageFromCurrentTile(currentTile: Tile?){
         val garbageList = currentTile?.garbage
         val acceptableGarbageType = garbageTypes()
         if (garbageList != null) {

@@ -1,7 +1,6 @@
 package de.unisaarland.cs.se.selab.ships
 
 import de.unisaarland.cs.se.selab.tiles.Direction
-import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 
 
@@ -14,11 +13,10 @@ class CoordinatingShip (private val visibilityRange: Int) : ShipCapability {
      * Call: from corporation run method to gather information
      * Logic: the ship checks all tiles in its Visibility range for garbage and returns them
      *
-     * @param  sea the whole map with all the tiles
      * @param  shipTile the tile the ship is currently on
      * @return the list of all the tiles within its visibility range
      */
-    fun getTilesWithGarbageInFoV(sea: Sea, shipTile: Tile): List<Tile> {
+    fun getTilesWithGarbageInFoV(shipTile: Tile): List<Tile> {
         val tilesInFov = directions.map { direction ->
             shipTile.getTileInDirection(visibilityRange, direction)
         }
