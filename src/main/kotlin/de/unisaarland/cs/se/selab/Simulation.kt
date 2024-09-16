@@ -1,23 +1,25 @@
 package de.unisaarland.cs.se.selab
 
-
-class Simulation (
-        private val corporations: List<Corporation>,
-        private val allEvents:    List<Event>,
-        private val maxTick:      Int,
-        private val sea:          Sea,
+import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.tiles.Sea
+import de.unisaarland.cs.se.selab.events.Event
+class Simulation(
+    private val corporations: List<Corporation>,
+    private val allEvents: List<Event>,
+    private val maxTick: Int,
+    private val sea: Sea,
 ) {
-    private var tick: Int
+    private var tick: Int = 0
 
-    public fun getCorporations() : List<Corporations> {
+    public fun getCorporations(): List<Corporation> {
         return this.corporations
     }
 
-    public fun getAllEvents() : List<Event> {
+    public fun getAllEvents(): List<Event> {
         return this.allEvents
     }
 
-    public fun getSea() : Sea {
+    public fun getSea(): Sea {
         return this.sea
     }
 
@@ -87,7 +89,7 @@ class Simulation (
     /**
      * TODO: Implement.
      */
-    private fun processEvents() : Unit {
+    private fun processEvents(): Unit {
         TODO("")
     }
 }

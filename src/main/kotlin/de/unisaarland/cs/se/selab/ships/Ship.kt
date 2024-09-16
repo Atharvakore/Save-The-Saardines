@@ -1,17 +1,39 @@
 package de.unisaarland.cs.se.selab.ships
 
+import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.tiles.Tile
+
 class Ship (
         private val id: Int,
         private val name: String,
         private val owner: Corporation,
         private val maxVelocity: Int,
         private val acceleration: Int,
+        private var pos: Tile,
+        private var fuelCapacity: Int,
+        private var fuelConsumption: Int,
+        private var capabilities: List<ShipCapability>,
+        private var hasTaskAssigned: Boolean = false
         ) {
-    private var pos: Tile
-    private var fuelCapacity: Int
-    private var fuelConsumption: Int
-    private var capabilities: List<ShipCapability>
-    private var hasTaskAssigned: Boolean
+
+    // does the velocity, acceleration etc. change when a ship gets new capability ?
+    init {
+        require(capabilities.isNotEmpty()) { "Ship must have at least one capability" }
+
+        val defaultCapability = capabilities.first()
+        when (defaultCapability) {
+            is ScoutingShip -> {
+                require(maxVelocity <= 100) { "Scouting ships must have a max velocity greater than 100, but was $maxVelocity" }
+            }
+            is CollectingShip -> {
+                require(maxVelocity <= 50) { "Collecting ships must have a max velocity less than or equal to 50, but was $maxVelocity" }
+            }
+            is CoordinatingShip -> {
+                require(maxVelocity <= 50) { "Scouting ships must have a max velocity greater than 50, but was $maxVelocity" }
+            }
+        }
+    }
+
     public fun getOwner(): Corporation{
         return this.owner;
     }
