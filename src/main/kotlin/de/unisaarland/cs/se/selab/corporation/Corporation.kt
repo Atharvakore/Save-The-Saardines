@@ -104,7 +104,7 @@ class Corporation(
         var shortestPath: List<Tile> = listOf()
 
         for (ship in ships) {
-            val path: List<Tile>? = shortestPaths[ship.pos]
+            val path: List<Tile>? = shortestPaths[ship.getPos()]
             if (path != null && path.size < shortestPathLen) {
                 shortestPathLen = path.size
                 shortestPath = path
