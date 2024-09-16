@@ -1,42 +1,64 @@
 package de.unisaarland.cs.se.selab.parser
 
+import de.unisaarland.cs.se.selab.tiles.Current
+import de.unisaarland.cs.se.selab.tiles.DeepOcean
+import de.unisaarland.cs.se.selab.tiles.Direction
+import de.unisaarland.cs.se.selab.tiles.Sea
+import de.unisaarland.cs.se.selab.tiles.ShallowOcean
+import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
-import java.lang.System.Logger
+import java.io.FileNotFoundException
+import java.io.IOException
 
+/** Parser and Validator for extracting data from Map File  **/
 class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
 
-    /** **/
-    public fun parseMap(pathFile: String): Boolean {
+    private val logger = KotlinLogging.logger {}
 
+    /** main function which will execute the parsing stuff **/
+    public fun parseMap(pathFile: String): Boolean {
         val tiles = createTileObjects(pathFile)
         if (tiles.isEmpty) {
             return false
         }
-        return validateTiles(tiles)
+        if (validateTiles(tiles)) {
+            createMap()
+            return true
+        }
+        return false
     }
 
-    /** **/
+    /** extracting the JSONObjects from file **/
     private fun createTileObjects(filePath: String): JSONArray {
+        val file: File
+        val jsonTiles: JSONArray
         try {
-            val jsonTiles = JSONObject(File(filePath).readText()).getJSONArray("tiles")
+            file = File(filePath)
+        } catch (error: FileNotFoundException) {
+            logger.error { "file '$filePath' does not exist." }
+            return JSONArray()
+        }
+        try {
+            jsonTiles = JSONObject(file.readText()).getJSONArray("tiles")
             return jsonTiles
-        } catch (error: Exception) {
-
+        } catch (error: IOException) {
+            logger.error { "Error while parsing {$filePath}" }
         }
         return JSONArray()
     }
 
-    /** **/
+    /** validating all tiles **/
     private fun validateTiles(objects: JSONArray): Boolean {
         for (elem in objects) {
-            if (validateTile(elem as JSONObject)) {
+            if (validateTile(elem as JSONObject) && elem.getString(CATEGORY) != LAND) {
                 val tile = this.createTile(elem)
-                accumulator.addTile(tile.getId(), tile);
-                accumulator.addTileByCoordinates(tile.getCoordinates(), tile);
+                accumulator.addTile(tile.id, tile)
+                accumulator.addTileByCoordinates(tile.pos, tile)
             } else {
                 return false
             }
@@ -44,36 +66,173 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         return true
     }
 
-    /** **/
+    /** validating specific tile **/
     private fun validateTile(tile: JSONObject): Boolean {
+        var validated = true
+        val id: Int = tile.optInt(ID, -1)
+        val coordinates = tile.optJSONObject(COORDINATES, null)
+        if (coordinates == null) validated = false
+        val x: Int?
+        val y: Int?
+        if (coordinates.has(X)) {
+            x = coordinates.getInt("x")
+        } else {
+            x = null
+            validated = false
+        }
+        if (coordinates.has(Y)) {
+            y = coordinates.getInt(Y)
+        } else {
+            y = null
+            validated = false
+        }
+        if (x == null || y == null) return false
 
+        validated = validated && checkTileIdAndCoordinates(id, x, y)
+        validated = validated && validateTileCategory(tile)
+
+        return validated
     }
 
-    private fun createTile(tile: JSONObject): Tile {
-        val id = tile.getString("id")
-        val coordinate_x = tile.getJSONObject("coordinates").getInt("x")
-        val coordinate_y = tile.getJSONObject("coordinates").getInt("y")
-        val coordinates = Vec2D(coordinate_x, coordinate_y)
-        val category = tile.getString("category")
+    /** Validate the category of tile **/
+    private fun validateTileCategory(tile: JSONObject): Boolean {
+        var validated = true
+        val category = tile.optString(CATEGORY, null) ?: return false
+        if (!Companion.category.contains(category)) validated = false
         when (category) {
-            "DEEP_OCEAN" -> {
-                val current = tile.getBoolean("current")
-                return Tile()
-
+            SHORE -> {
+                if (Companion.requiredForCurrent.any { tile.has(it) }) {
+                    validated = false
+                }
+                val harbor = tile.opt(HARBOR)
+                if (harbor !is Boolean) {
+                    validated = false
+                }
             }
 
-            "SHALLOW_OCEAN" -> {
-                val harbor = tile.getBoolean("harbor")
-                return Tile()
+            DEEP_OCEAN -> {
+                validated = validated && validateDeepOcean(tile)
             }
 
             else -> {
-                return Tile()
+                if (tile.has(HARBOR)) return false
+                if (Companion.requiredForCurrent.any { tile.has(it) }) {
+                    validated = false
+                }
+            }
+        }
+        return validated
+    }
+
+    private fun validateDeepOcean(tile: JSONObject): Boolean {
+        if (tile.has(HARBOR)) return false
+        val current = tile.getBoolean(CURRENT)
+        return if (current && requiredForCurrent.all { tile.has(it) }) {
+            this.validateCurrent(tile)
+        } else {
+            false
+        }
+    }
+
+    /** Validate the id and coordinates of a tile **/
+    private fun checkTileIdAndCoordinates(id: Int, x: Int, y: Int): Boolean {
+        if (id < 0) return false
+        if (accumulator.getTileById(id) != null) return false
+
+        val coord = Vec2D(x, y)
+        if (accumulator.getTileByCoordinate(coord) != null) return false
+
+        return true
+    }
+
+    private fun validateCurrent(tile: JSONObject): Boolean {
+        val intensity = tile.getInt(INTENSITY)
+        val speed = tile.getInt(SPEED)
+        val direction = tile.getInt(DIRECTION)
+        if (direction < 0 || direction > DIRECTION300 || direction % DIRECTION60 != 0) return false
+        if (speed < 0 || speed > MAX_SPEED) return false
+        if (intensity < 0 || intensity > MAX_INTENSITY) return false
+        return true
+    }
+
+    private fun getDirection(direction: Int): Direction {
+        return when (direction) {
+            DIRECTION0 -> Direction.D0
+            DIRECTION60 -> Direction.D60
+            DIRECTION120 -> Direction.D120
+            DIRECTION180 -> Direction.D180
+            DIRECTION240 -> Direction.D240
+            else -> Direction.D300
+        }
+    }
+
+    /** Create a tile **/
+    private fun createTile(tile: JSONObject): Tile {
+        val id = tile.getInt(ID)
+        val coordinateX = tile.getJSONObject(COORDINATES).getInt(X)
+        val coordinateY = tile.getJSONObject(COORDINATES).getInt(Y)
+        val coordinates = Vec2D(coordinateX, coordinateY)
+        val category = tile.getString(CATEGORY)
+        when (category) {
+            DEEP_OCEAN -> {
+                val current = tile.getBoolean(CURRENT)
+                if (current) {
+                    val direction = tile.getInt(DIRECTION)
+                    val speed = tile.getInt(SPEED)
+                    val intensity = tile.getInt(INTENSITY)
+                    val currentObject = Current(speed, getDirection(direction), intensity)
+                    return DeepOcean(id, coordinates, listOf(), listOf(), currentObject)
+                }
+                return DeepOcean(id, coordinates, listOf(), listOf(), null)
+            }
+
+            SHALLOW_OCEAN -> {
+                val harbor = tile.getBoolean(HARBOR)
+                return ShallowOcean(id, coordinates, listOf(), listOf())
+            }
+
+            SHORE -> {
+                val harbor = tile.getBoolean(HARBOR)
+                return Shore(id, coordinates, listOf(), listOf(), harbor)
+            }
+
+            else -> {
+                throw IllegalArgumentException("There should be an Ocean tile")
             }
         }
     }
 
-    private fun createMap(): Sea {
+    /** Create Map based on the information from Accumulator **/
+    private fun createMap() {
+        for (element in accumulator.tiles.values) {
+            Sea.tiles.add(element)
+        }
+    }
 
+    companion object Companion {
+        const val CURRENT = "current"
+        const val ID = "id"
+        const val COORDINATES = "coordinates"
+        const val CATEGORY = "category"
+        const val HARBOR = "harbor"
+        const val DIRECTION = "direction"
+        const val INTENSITY = "intensity"
+        const val SPEED = "speed"
+        const val X = "x"
+        const val Y = "y"
+        const val DEEP_OCEAN = "DEEP_OCEAN"
+        const val SHALLOW_OCEAN = "SHALLOW_OCEAN"
+        const val LAND = "LAND"
+        const val SHORE = "SHORE"
+        const val DIRECTION0 = 0
+        const val DIRECTION60 = 60
+        const val DIRECTION120 = 120
+        const val DIRECTION180 = 180
+        const val DIRECTION240 = 240
+        const val DIRECTION300 = 300
+        const val MAX_SPEED = 30
+        const val MAX_INTENSITY = 10
+        val category: Array<String> = arrayOf(LAND, SHORE, SHALLOW_OCEAN, DEEP_OCEAN)
+        val requiredForCurrent: Array<String> = arrayOf(CURRENT, DIRECTION, INTENSITY, SPEED)
     }
 }
