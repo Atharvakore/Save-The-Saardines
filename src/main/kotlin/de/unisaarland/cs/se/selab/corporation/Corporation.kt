@@ -10,6 +10,8 @@ import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
 
+const val TODO: String = "Yet to implement"
+
 /** Documentation for Corporation Class **/
 class Corporation(
     val id: Int,
@@ -36,13 +38,13 @@ class Corporation(
                 for (ship in otherShip.getOwner().ownedShips) {
                     val coordinatingCapability = ship.capabilities.find { it is CoordinatingShip }
                     if (coordinatingCapability != null) {
-                        TODO("implement me")
+                        TODO(TODO)
                     }
                 }
             }
         }
 
-        TODO("implement")
+        TODO(TODO)
     }
 
     /** Documentation for run Function **/
@@ -59,12 +61,12 @@ class Corporation(
 
     /** Documentation for getShipsOnHarbor Function **/
     private fun moveShips(sea: Sea) {
-        TODO("yet to implement")
+        TODO(TODO)
     }
 
     /** Documentation for collectGarbage Function **/
     private fun collectGarbage(sea: Sea) {
-        TODO("yet to implement")
+        TODO(TODO)
     }
 
     /** Documentation for refuelAndUnloadShips Function **/
@@ -83,31 +85,31 @@ class Corporation(
 
     /** Documentation for getShipsOnHarbor Function **/
     private fun getShipsOnHarbor(): List<Ship> {
-        TODO("yet to implement")
+        TODO(TODO)
     }
 
     /** Documentation for findClosestShip Function **/
     private fun findClosestShip(sourceMap: Map<Tile, List<Tile>>, ships: List<Ship>) {
-        TODO("yet to implement")
+        TODO(TODO)
     }
 
     /** Documentation for findClosestHarbor Function **/
     private fun findClosestHarbor(sourceMap: Map<Tile, List<Tile>>, harbors: List<Shore>) {
-        TODO("yet to implement")
+        TODO(TODO)
     }
 
     /** Documentation for filterCollectingShip Function **/
     private fun filterCollectingShip(): List<Ship> {
-        TODO("yet to implement")
+        TODO(TODO)
     }
 
     /** Documentation for filterScoutingShips Function **/
     private fun filterScoutingShips(): List<Ship> {
-        TODO("yet to implement")
+        TODO(TODO)
     }
 
     /** Documentation for filterCoordinatingShips Function **/
     private fun filterCoordinatingShips(): List<Ship> {
-        TODO("yet to implement")
+        TODO(TODO)
     }
 }
