@@ -2,71 +2,101 @@ package de.unisaarland.cs.se.selab.ships
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.tiles.Tile
+import de.unisaarland.cs.se.selab.tiles.DeepOcean
+import de.unisaarland.cs.se.selab.tiles.Current
 
 abstract class Ship (
     private val id: Int,
-    private val name: String,
     private val owner: Corporation,
     private val maxVelocity: Int,
     private val acceleration: Int,
-    var pos: Tile,
     private var fuelCapacity: Int,
     private var fuelConsumption: Int,
     var capabilities: List<ShipCapability>,
-    private var hasTaskAssigned: Boolean = false,
-    private var currentFuelCapacity: Int = 0
 ) {
     init {
-        require(capabilities.isNotEmpty()) { "Ship must have at least one capability" }
+        require(capabilities.isNotEmpty())
 
         val defaultCapability = capabilities.first()
         when (defaultCapability) {
             is ScoutingShip -> {
-                require(maxVelocity in 10..100) { "Scouting ships must have a max velocity greater than 100, but was $maxVelocity" }
+                require(maxVelocity in 10..100)
                 require(acceleration in 5..25)
                 require(fuelCapacity in 3000..10000)
                 require(fuelConsumption in 7..10)
             }
 
             is CoordinatingShip -> {
-                require(maxVelocity in 10..50) { "Scouting ships must have a max velocity greater than 50, but was $maxVelocity" }
+                require(maxVelocity in 10..50)
                 require(acceleration in 5..15)
                 require(fuelCapacity in 3000..5000)
                 require(fuelConsumption in 5..7)
             }
 
             is CollectingShip -> {
-                require(maxVelocity in 10..50) { "Collecting ships must have a max velocity less than or equal to 50, but was $maxVelocity" }
+                require(maxVelocity in 10..50)
                 require(acceleration in 5..10)
                 require(fuelCapacity in 3000..5000)
                 require(fuelConsumption in 5..9)
             }
         }
     }
+    private var name: String = ""
+    private var pos: Tile? = null
+    private var consumedFuel: Int = 0
+    private var hasTaskAssigned: Boolean = false
+
+    constructor(
+        id: Int,
+        owner: Corporation,
+        maxVelocity: Int,
+        acceleration: Int,
+        fuelCapacity: Int,
+        fuelConsumption: Int,
+        capabilities: List<ShipCapability>,
+        name: String,
+        pos: Tile? = null
+    ) : this(id, owner, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities) {
+        this.name = name
+        this.pos = pos
+    }
 
     fun getOwner(): Corporation {
         return this.owner;
+    }
+
+    fun getPos(): Tile?{
+        return this.pos
     }
     /**
      * Call: when the ship is on the harbor
      * Logic: the ship has to max its fuelCapacity
      */
-    /**
-     * TODO: Implement.
-     */
     fun refuel(): Unit {
-        this.currentFuelCapacity = 0
+        this.consumedFuel = 0
     }
     /**
      *  Call: when a ship is on a deepOcean tile
      *  Logic: the ship has to check if its tile has a current,
      *  if so do the logic of drifting
      */
-    /**
-     * TODO: Implement.
-     */
     fun drift(): Unit {
-        TODO("")
+        val deepOcean = this.pos as? DeepOcean
+        val current = deepOcean?.getCurrent()
+        if (current != null) {
+             handleCurrentDrift(current)
+        }
+    }
+    private fun handleCurrentDrift(current: Current) : Unit {
+        val speed = current.speed
+        val direction = current.direction
+
+        if (speed != null && direction != null) {
+            val desTile = this.pos?.getTileInDirection(speed/10,direction)
+            if (desTile != null){
+                this.pos = desTile
+            }
+        }
     }
     /**
      * Call: when a ship is the closest one to the garbage or when the ship has to return to the harbor
@@ -89,12 +119,9 @@ abstract class Ship (
      * @param  length of path
      * @return if the ship can complete this path
      */
-    /**
-     * TODO: Implement.
-     */
     fun isFuelSufficient(pathLength: Int): Boolean {
         val neededFuel = fuelConsumption * pathLength * 10
-        return neededFuel <= fuelCapacity - currentFuelCapacity
+        return neededFuel <= fuelCapacity - consumedFuel
     }
     /**
      * Call: when a task is done, and the reward needs to be applied
@@ -102,11 +129,8 @@ abstract class Ship (
      *
      * @param a ship capability
      */
-    /**
-     * TODO: Implement.
-     */
-    public fun addCapability(capability: ShipCapability): Unit {
-        TODO("")
-    }
 
+    public fun addCapability(capability: ShipCapability): Unit {
+        capabilities.addLast(capability)
+    }
 }
