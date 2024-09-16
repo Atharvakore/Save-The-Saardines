@@ -2,8 +2,8 @@ package de.unisaarland.cs.se.selab.tiles
 
 /**
  * A simple 2D vector class. It is used to represent positions on the sea.
- * @property x the x-coordinate of the vector
- * @property y the y-coordinate of the vector
+ * @property posX the x-coordinate of the vector
+ * @property posY the y-coordinate of the vector
  */
 class Vec2D(var posX: Int, var posY: Int) {
     override fun toString(): String {

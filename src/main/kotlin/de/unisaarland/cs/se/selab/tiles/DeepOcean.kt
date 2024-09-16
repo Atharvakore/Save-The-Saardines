@@ -18,12 +18,12 @@ class DeepOcean(
     /**
      * gives current
      */
-    public fun getCurrent(): Current? = current
+     fun getCurrent(): Current? = current
     /**
      * Calculates amount which can be drifted  in a single drift in one tick
      */
 
-    public fun amountTOBeDrifted() : Int {
+     fun amountTOBeDrifted() : Int {
         var intensity = getCurrent()?.getIntensity()
         if (intensity != null) {
             return intensity * FIFTY

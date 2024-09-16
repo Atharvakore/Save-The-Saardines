@@ -11,7 +11,7 @@ data class Current(
     /**
      * returns Intensity
      */
-   public fun getIntensity (): Int? {
+ fun getIntensity (): Int? {
         return this.intensity
     }
 }
