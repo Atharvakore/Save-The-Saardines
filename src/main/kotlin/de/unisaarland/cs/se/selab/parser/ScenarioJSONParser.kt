@@ -6,9 +6,21 @@ import de.unisaarland.cs.se.selab.events.OilSpill
 import de.unisaarland.cs.se.selab.events.PirateAttack
 import de.unisaarland.cs.se.selab.events.Restriction
 import de.unisaarland.cs.se.selab.events.Storm
+import de.unisaarland.cs.se.selab.ships.CollectingShip
+import de.unisaarland.cs.se.selab.ships.Container
+import de.unisaarland.cs.se.selab.ships.CoordinatingShip
+import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.tasks.CollectGarbageTask
+import de.unisaarland.cs.se.selab.tasks.ContainerReward
+import de.unisaarland.cs.se.selab.tasks.CooperateTask
+import de.unisaarland.cs.se.selab.tasks.ExploreMapTask
+import de.unisaarland.cs.se.selab.tasks.FindGarbageTask
+import de.unisaarland.cs.se.selab.tasks.RadioReward
 import de.unisaarland.cs.se.selab.tasks.Reward
 import de.unisaarland.cs.se.selab.tasks.Task
+import de.unisaarland.cs.se.selab.tasks.TelescopeReward
+import de.unisaarland.cs.se.selab.tasks.TrackerReward
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Direction
 import de.unisaarland.cs.se.selab.tiles.Garbage
@@ -128,17 +140,10 @@ class ScenarioJSONParser(override val accumulator: Accumulator): JSONParser {
         val garbageType: GarbageType = GarbageType.valueOf(garbage.getString("type"))
         val garbageLocation: Tile = accumulator.getTileById(garbage.getInt("location")) ?: return false
         val amount: Int = garbage.getInt("amount")
-        when (garbageType) {
-            GarbageType.PLASTIC -> {
-                accumulator.addGarbage(garbageId, )
-            }
-            GarbageType.OIL-> {
-                accumulator.addGarbage(garbageId, )
-            }
-            GarbageType.CHEMICALS -> {
-                accumulator.addGarbage(garbageId, )
-            }
-        }
+        val g = Garbage(garbageId, amount, garbageType, mutableSetOf())
+        accumulator.addGarbage(garbageId, g)
+        garbageLocation.addGarbage(g)
+        return true
     }
     public fun parseTasks(taskJSON: String): Boolean {
         try {
@@ -159,16 +164,16 @@ class ScenarioJSONParser(override val accumulator: Accumulator): JSONParser {
 
     private fun validateTask(task: JSONObject): Boolean {
         val uniqueId: Boolean = accumulator.getTaskById(task.getInt("id")) == null
-        val targetTile: Tile = accumulator.getTileById(task.getInt("targetTile")) ?: return false
-        val targetIsNotShore: Boolean = targetTile !is Shore
+        // val targetIsNotShore: Boolean = targetTile !is Land
         val taskShip: Ship? = accumulator.getShipsById(task.getInt("shipID"))
         val rewardShip: Ship? =  accumulator.getShipsById(task.getInt("rewardShipID"))
-        val rewardExists: Boolean = accumulator.getRewardById(task.getInt("rewardID")) != null
+        val reward: Reward? = accumulator.getRewardById(task.getInt("rewardID"))
+        val rewardExists: Boolean = reward != null
         val taskShipExists: Boolean = taskShip != null
         val rewardShipExists: Boolean = rewardShip != null
         val sameCorpRewardAndTask: Boolean = taskShip?.getOwner() == rewardShip?.getOwner()
-        var condition: Boolean = uniqueId && targetIsNotShore && rewardExists
-        condition = condition && rewardShipExists && taskShipExists && sameCorpRewardAndTask
+        var condition: Boolean = uniqueId && rewardExists && rewardShipExists
+        condition = condition && taskShipExists && sameCorpRewardAndTask
         if (condition){
             return createTask(task)
         }
@@ -178,18 +183,46 @@ class ScenarioJSONParser(override val accumulator: Accumulator): JSONParser {
         val taskId = task.getInt("id")
         val taskType = task.getString("type")
         val taskTick = task.getInt("tick")
-        val taskShip = accumulator.getShipsById(task.getInt("shipID"))
-        val targetTile = accumulator
-        when (task.getString("type")) {
+        val taskShip = accumulator.getShipsById(task.getInt("shipID")) ?: return false
+        val rewardShip =  accumulator.getShipsById(task.getInt("rewardShipID")) ?: return false
+        val taskCorporation = rewardShip.getOwner()
+        val reward: Reward? = accumulator.getRewardById(task.getInt("rewardID"))
+        val targetTile: Tile = accumulator.getTileById(task.getInt("targetTile")) ?: return false
+        when (taskType) {
             "COLLECT" -> {
-
+                if (reward is ContainerReward){
+                    val taskObj = CollectGarbageTask(taskTick, taskId, taskShip, reward, rewardShip, taskCorporation)
+                    accumulator.addTask(taskId, taskObj)
+                    return true
+                }
             }
             "EXPLORE" -> {
-
+                if (reward is TelescopeReward){
+                    val taskObj = ExploreMapTask(taskTick, taskId, taskShip, reward, rewardShip, taskCorporation)
+                    accumulator.addTask(taskId, taskObj)
+                    return true
+                }
             }
-            "FIND" -> {}
-            "COOPERATE" -> {}
+            "FIND" -> {
+                if (reward is TrackerReward){
+                    val taskObj = FindGarbageTask(taskTick, taskId, taskShip, reward, rewardShip, taskCorporation)
+                    accumulator.addTask(taskId, taskObj)
+                    return true
+                }
+            }
+            "COOPERATE" -> {
+                var condition: Boolean = false
+                if (targetTile is Shore){
+                    condition = targetTile.harbor
+                }
+                if (reward is RadioReward && condition){
+                    val taskObj = CooperateTask(taskTick, taskId, taskShip, reward, rewardShip, taskCorporation)
+                    accumulator.addTask(taskId, taskObj)
+                    return true
+                }
+            }
         }
+        return false
     }
     public fun parseRewards(rewardJSON: String): Boolean {
         try {
@@ -209,7 +242,6 @@ class ScenarioJSONParser(override val accumulator: Accumulator): JSONParser {
     }
     private fun validateReward(reward: JSONObject): Boolean {
         val uniqueId: Boolean = accumulator.getRewardById(reward.getInt("id")) == null
-        // TODO: Validation condition
         if (uniqueId) {
             return createReward(reward)
         }
@@ -218,6 +250,25 @@ class ScenarioJSONParser(override val accumulator: Accumulator): JSONParser {
     private fun createReward(reward: JSONObject): Boolean {
         val rewardId: Int = reward.getInt("id")
         val rewardType: String = reward.getString("type")
+        when (rewardType) {
+            "TELESCOPE" -> {
+                val visibility: Int = reward.getInt("visibilityRange")
+                accumulator.addReward(rewardId, TelescopeReward(rewardId, visibility, ScoutingShip(visibility)))
+            }
+            "RADIO" -> {
+                accumulator.addReward(rewardId, RadioReward(rewardId, CoordinatingShip(0)))
+            }
+            "CONTAINER" -> {
+                val capacity: Int = reward.getInt("capacity")
+                val garbageType: GarbageType = GarbageType.valueOf(garbage.getString("type"))
+                val container: Container = Container(garbageType, capacity)
+                val collectingShip = CollectingShip(mutableListOf(container))
+                accumulator.addReward(rewardId, ContainerReward(collectingShip))
+            }
+            "TRACKER" -> {
+
+            }
+        }
 
     }
 }
