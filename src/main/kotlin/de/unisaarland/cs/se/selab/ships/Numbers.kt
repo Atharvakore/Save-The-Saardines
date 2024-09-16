@@ -1,6 +1,5 @@
 package de.unisaarland.cs.se.selab.ships
 
-import org.apache.commons.collections.keyvalue.TiedMapEntry
 
 const val MIN_VELOCITY_SCOUTING = 10
 const val MAX_VELOCITY_SCOUTING = 100
