@@ -36,7 +36,7 @@ class Garbage(
         }
     }
 
-    private fun removeAmount(amount: Int) {
+     fun removeAmount(amount: Int) {
         this.amount -= amount
     }
 }
