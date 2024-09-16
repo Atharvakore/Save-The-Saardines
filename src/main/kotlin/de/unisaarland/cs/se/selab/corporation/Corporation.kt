@@ -67,8 +67,10 @@ class Corporation(
         val shipsOnHarbor: List<Ship> = getShipsOnHarbor()
         if(shipsOnHarbor.isNotEmpty()){
             for(ship in shipsOnHarbor){
-                if(ship.capabilities.find { it is CollectingShip }){
-                    ship.unload()
+                if(ship.capabilities.find { it is CollectingShip } != null){
+                    ship.capabilities.filterIsInstance<CollectingShip>().forEach {
+                        (it as CollectingShip).giveGarbage()
+                    }
                 }
                 ship.refuel()
             }
