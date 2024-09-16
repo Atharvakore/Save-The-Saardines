@@ -59,7 +59,7 @@ class Garbage(
         if (target != null) {
             if (target.currentOilLevel() + g.amount <= THOUSAND) {
                 target.addGarbage(g)
-                source.garbages.filter { it == g }
+                source.garbage.filter { it == g }
                 source.amountOfGarbageDriftedThisTick += g.amount
             }
         }
@@ -72,7 +72,7 @@ class Garbage(
         if (target != null) {
             if (target.currentOilLevel() + g.amount <= THOUSAND) {
                 target.addGarbage(g)
-                source.garbages.filter { it == g }
+                source.garbage.filter { it == g }
                 source.amountOfGarbageDriftedThisTick += g.amount
             }
         }
