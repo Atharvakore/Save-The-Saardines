@@ -3,7 +3,12 @@ import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
-import de.unisaarland.cs.se.selab.tiles.*
+import de.unisaarland.cs.se.selab.tiles.Garbage
+import de.unisaarland.cs.se.selab.tiles.GarbageType
+import de.unisaarland.cs.se.selab.tiles.Shore
+import de.unisaarland.cs.se.selab.tiles.Vec2D
+import de.unisaarland.cs.se.selab.tiles.Sea
+import de.unisaarland.cs.se.selab.tiles.Tile
 
 class Corporation(
     val id: Int,
