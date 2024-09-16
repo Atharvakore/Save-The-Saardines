@@ -32,7 +32,8 @@ class Corporation(
         val myCoordinatingShips: List<Ship> = filterCoordinatingShips()
 
         myCoordinatingShips.forEach { coordinatingShip ->
-            val otherShipsOnTile: List<Ship> = otherShips.filter { coordinatingShip.getPos() == it.getPos() }
+            val otherShipsOnTile: List<Ship> = otherShips
+                .filter { coordinatingShip.getPos() == it.getPos() && it.getOwner() != lastCoordinatingCorporation }
             val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.getOwner() }.distinct()
 
             val otherShipsToCooperate: List<Ship> = otherShips.filter { otherCorporations.contains(it.getOwner()) }
