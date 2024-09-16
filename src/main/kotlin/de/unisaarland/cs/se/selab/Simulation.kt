@@ -3,6 +3,10 @@ package de.unisaarland.cs.se.selab
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.events.Event
+import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.tasks.Task
+import de.unisaarland.cs.se.selab.tiles.DeepOcean
+
 class Simulation(
     private val corporations: List<Corporation>,
     private val allEvents: List<Event>,
@@ -11,86 +15,101 @@ class Simulation(
 ) {
     private var tick: Int = 0
 
-    public fun getCorporations(): List<Corporation> {
-        return this.corporations
-    }
-
-    public fun getAllEvents(): List<Event> {
-        return this.allEvents
-    }
-
-    public fun getSea(): Sea {
-        return this.sea
-    }
-
     /**
      * starts the whole simulation and enters a loop that runs tick() until maxTick is reached
      */
-    /**
-     * TODO: Implement.
-     */
     fun start(): Unit {
-        TODO("")
+        while (tick <= maxTick) {
+            tick()
+            tick++
+        }
     }
 
     /**
      * each call to tick corresponds to one tick in the simulation
      * it handles all the simulation logic by calling the different methods in order
      */
-    /**
-     * TODO: Implement.
-     */
-    fun tick(): Unit {
-        TODO("")
+    private fun tick(): Unit {
+        runCorporations()
+        driftGarbage()
+        driftShips()
+        processEvents()
+        processTasks()
     }
 
     /**
      * iterates over all corporations and calls run() on them
      */
-    /**
-     * TODO: Implement.
-     */
     private fun runCorporations(): Unit {
-        TODO("")
+        val allShips = mutableListOf<Ship>()
+        for (corporation in corporations) {
+            allShips.addAll(corporation.ownedShips)
+        }
+
+        for (corporation in corporations) {
+            val otherShips = allShips.filter { it.getOwner() != corporation }
+            corporation.run(otherShips)
+        }
     }
 
     /**
      * handles the drift garbage logic
      */
-    /**
-     * TODO: Implement.
-     */
     private fun driftGarbage(): Unit {
-        TODO("")
+        val tiles = sea.tiles
+        val deepOceanTiles = tiles.filterIsInstance<DeepOcean>()
+
+        for (tile in deepOceanTiles) {
+            val garbageList = tile.garbages
+            for (garbage in garbageList) {
+                garbage.drift(tile)
+            }
+        }
     }
 
     /**
      * handles the drift ships logic
      */
-    /**
-     * TODO: Implement.
-     */
     private fun driftShips(): Unit {
-        TODO("")
+        val tiles = sea.tiles
+        val deepOceanTiles = tiles.filterIsInstance<DeepOcean>()
+
+        val shipsOnDOTiles = mutableListOf<Ship>()
+        for (corporation in corporations) {
+            shipsOnDOTiles.addAll(corporation.ownedShips.filter { deepOceanTiles.contains(it.getPos()) })
+        }
+
+        for (ship in shipsOnDOTiles) {
+            ship.drift()
+        }
+    }
+
+    /**
+     * iterates over all events and call actUponTick on them
+     */
+    private fun processEvents(): Unit {
+        for (event in allEvents) {
+            event.actUponTick(tick)
+        }
     }
 
     /**
      * starts new tasks and updates active tasks
      */
-    /**
-     * TODO: Implement.
-     */
     private fun processTasks(): Unit {
-        TODO("")
+        val tasks = collectActiveTasks()
+
+        for (task in tasks) {
+            task.actUponTick(tick)
+        }
     }
-    /**
-     * iterates over all events and call actUponTick on them
-     */
-    /**
-     * TODO: Implement.
-     */
-    private fun processEvents(): Unit {
-        TODO("")
+
+    private fun collectActiveTasks(): List<Task> {
+        val allTasks = mutableListOf<Task>()
+        for (corporation in corporations) {
+            allTasks.addAll(corporation.getActiveTasks())
+        }
+        return allTasks
     }
 }
 
