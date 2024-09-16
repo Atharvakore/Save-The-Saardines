@@ -1,7 +1,16 @@
 package de.unisaarland.cs.se.selab.tiles
+
 import kotlin.math.floor
 import kotlin.math.sqrt
 
+const val HUNDRED = 100
+const val TWO = 2
+const val THREE = 3.0
+const val SIX = 6
+
+/**
+ *class tile includes all basic functionality related tiles
+ */
 abstract class Tile(
     val id: Int,
     val pos: Vec2D,
@@ -17,15 +26,18 @@ abstract class Tile(
     /**
      * The amount of restrictions acting on this tile. If > 0, then tile is not traversable.
      */
-    private var restrictions: Int = 0
+
     var shipTransversable: Boolean = true
 
     init {
-        val six = 6
+
         require(id > 0) { "Id Should be greater than 0" }
-        require(adjacentTiles.size == six) { "A tile has 6 neighbours" }
+        require(adjacentTiles.size == SIX) { "A tile has 6 neighbours" }
     }
 
+    /**
+     * checks for capacity of garbage type in a particular tile
+     */
     public fun isSpaceAvailable(
         type: GarbageType,
         amount: Int,
@@ -40,41 +52,63 @@ abstract class Tile(
                 a += garbage.ammount
             }
         }
-        return (a + amount) < 100
+        return a + amount < HUNDRED
     }
 
+    /**
+     * gives a tile In direction uses basic trigonometry rules to calculate vec2D
+     */
     public fun getTileInDirection(
         distance: Int,
         dir: Direction,
     ): Tile? {
         var temp: Vec2D
-        val three = 3.0
+
         when (dir) {
             Direction.D0 -> temp = Vec2D(this.pos.posX + distance, this.pos.posY)
             Direction.D60 ->
                 temp =
-                    Vec2D(this.pos.posX + (distance / 2), (this.pos.posY - floor(distance * (sqrt(three) / 2)).toInt()))
+                    Vec2D(
+                        this.pos.posX + (distance / 2),
+                        this.pos.posY - floor(distance * (sqrt(THREE) / TWO)).toInt()
+                    )
 
             Direction.D120 ->
                 temp =
-                    Vec2D(this.pos.posX - (distance / 2), (this.pos.posY - floor(distance * (sqrt(three) / 2)).toInt()))
+                    Vec2D(
+                        this.pos.posX - (distance / 2),
+                        this.pos.posY - floor(distance * (sqrt(THREE) / TWO)).toInt()
+                    )
 
-            Direction.D180 -> temp = Vec2D(this.pos.posX - (distance), this.pos.posY)
+            Direction.D180 -> temp = Vec2D(this.pos.posX - distance, this.pos.posY)
             Direction.D240 ->
                 temp =
-                    Vec2D(this.pos.posX - (distance / 2), (this.pos.posY + floor(distance * (sqrt(three) / 2)).toInt()))
+                    Vec2D(
+                        this.pos.posX - (distance / 2),
+                        this.pos.posY + floor(distance * (sqrt(THREE) / TWO)).toInt()
+                    )
 
             Direction.D300 ->
                 temp =
-                    Vec2D(this.pos.posX + (distance / 2), (this.pos.posY + floor(distance * (sqrt(three) / 2)).toInt()))
+                    Vec2D(
+                        this.pos.posX + (distance / 2),
+                        this.pos.posY + floor(distance * (sqrt(THREE) / TWO)).toInt()
+                    )
         }
         return Sea.getTileByPos(temp)
     }
 
+    /**
+     *
+     * adds given Garbage to the List of already present Garbage
+     */
     public fun addGarbage(garbage: Garbage) {
         garbages += garbage
     }
 
+    /**
+     * Takes a garbnage type and returns total ammount of garbage of that type
+     */
     public fun getAmountOfType(type: Garbage): Int {
         var acc = 0
         for (garbage in garbages) {
@@ -85,6 +119,9 @@ abstract class Tile(
         return acc
     }
 
+    /**
+     * removes garbage of particular type
+     */
     public fun removeGarbageOfType(
         type: GarbageType,
         ammount: Int,
@@ -94,24 +131,22 @@ abstract class Tile(
             this.garbages
                 .filter { it.type == type }
                 .sortedBy(Garbage::id)
-        for(g in filteredList) {
-            if(toBeRemoved > g.ammount && toBeRemoved >=0){
-                toBeRemoved-= g.ammount
-                filteredList = filteredList.filterIndexed { index, _ -> index != 0 } //TO remove garbage at index 0
+        while (toBeRemoved > 0 && filteredList.isNotEmpty()) {
+            if (toBeRemoved >= filteredList[0].ammount) {
+                toBeRemoved -= filteredList[0].ammount
+                filteredList = filteredList.filterIndexed { index, _ -> index != 0 } //removes element at 0th Index
             }
-            if(toBeRemoved <= g.ammount && toBeRemoved >=0 ){
-                g.ammount -= toBeRemoved
-                toBeRemoved-= g.ammount
-
+            if (toBeRemoved < filteredList[0].ammount) {
+                filteredList[0].ammount -= toBeRemoved
+                toBeRemoved = 0
+                break
             }
         }
-
-
-
-
-        // TOdo YET TO BE COMPLETED
     }
 
+    /**
+     * Calculates amount which can be drifted  in a single drift in one tick
+     */
     public fun amountTOBeDrifted() {
         // TOdo
     }
