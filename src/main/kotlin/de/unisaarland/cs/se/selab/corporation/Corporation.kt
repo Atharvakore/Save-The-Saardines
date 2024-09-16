@@ -33,14 +33,13 @@ class Corporation(
         myCoordinatingShips.forEach { coordinatingShip ->
             val otherShip: Ship? = ships.find { coordinatingShip.pos == it.pos }
             if (otherShip != null) {
-                for(ship in otherShip.getOwner().ownedShips) {
+                for (ship in otherShip.getOwner().ownedShips) {
                     val coordinatingCapability = ship.capabilities.find { it is CoordinatingShip }
                     if (coordinatingCapability != null) {
                         TODO(TODO)
                     }
                 }
             }
-
         }
 
         TODO(TODO)
@@ -56,9 +55,7 @@ class Corporation(
 
     /** Documentation for getActiveTasks Function **/
     public fun getActiveTasks(): List<Task> {
-
         return tasks.filter { it.checkCondition() }
-
     }
 
     /** Documentation for getShipsOnHarbor Function **/
@@ -73,7 +70,7 @@ class Corporation(
 
     /** Documentation for refuelAndUnloadShips Function **/
     private fun refuelAndUnloadShips(sea: Sea) {
-        val shipsOnHarbor: List<Ship> = getShipsOnHarbor(sea)
+        val shipsOnHarbor: List<Ship> = getShipsOnHarbor()
         if (shipsOnHarbor.isNotEmpty()) {
             for (ship in shipsOnHarbor) {
                 val collectingCapability = ship.capabilities.find { it is CollectingShip }
@@ -86,8 +83,10 @@ class Corporation(
     }
 
     /** Documentation for getShipsOnHarbor Function **/
-    private fun getShipsOnHarbor(sea: Sea): List<Ship> {
-        TODO(TODO)
+    private fun getShipsOnHarbor(): List<Ship> {
+        val seaInstance: Sea = Sea
+        val harborTiles: List<Tile> = seaInstance.tiles.filter { (it as Shore).harbor }
+        return ownedShips.filter { harborTiles.contains(it.pos) }
     }
 
     /** Documentation for findClosestShip Function **/
@@ -114,5 +113,4 @@ class Corporation(
     private fun filterCoordinatingShips(): List<Ship> {
         return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is CoordinatingShip } }
     }
-
 }
