@@ -4,6 +4,7 @@ import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
+import de.unisaarland.cs.se.selab.tiles.Dijkstra
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
@@ -95,13 +96,41 @@ class Corporation(
     }
 
     /** Documentation for findClosestShip Function **/
-    private fun findClosestShip(sourceMap: Map<Tile, List<Tile>>, ships: List<Ship>) {
-        TODO(TODO)
+    private fun findClosestShip(tile: Tile, ships: List<Ship>): List<Tile> {
+        val dijkstra: Dijkstra = Dijkstra(tile)
+        val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
+
+        var shortestPathLen: Int = Int.MAX_VALUE
+        var shortestPath: List<Tile> = listOf()
+
+        for (ship in ships) {
+            val path: List<Tile>? = shortestPaths[ship.pos]
+            if (path != null && path.size < shortestPathLen) {
+                shortestPathLen = path.size
+                shortestPath = path
+            }
+        }
+
+        return shortestPath
     }
 
     /** Documentation for findClosestHarbor Function **/
-    private fun findClosestHarbor(sourceMap: Map<Tile, List<Tile>>, harbors: List<Shore>) {
-        TODO(TODO)
+    private fun findClosestHarbor(tile: Tile, harbors: List<Shore>): List<Tile>{
+        val dijkstra: Dijkstra = Dijkstra(tile)
+        val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
+
+        var shortestPathLen: Int = Int.MAX_VALUE
+        var shortestPath: List<Tile> = listOf()
+
+        for (harbor in harbors) {
+            val path: List<Tile>? = shortestPaths[harbor]
+            if (path != null && path.size < shortestPathLen) {
+                shortestPathLen = path.size
+                shortestPath = path
+            }
+        }
+
+        return shortestPath
     }
 
     /** Documentation for filterCollectingShip Function **/
