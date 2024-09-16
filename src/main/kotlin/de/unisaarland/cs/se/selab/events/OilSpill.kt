@@ -9,7 +9,7 @@ import kotlin.math.min
 class OilSpill(
     private val id: Int,
     private val fireTick: Int,
-    private val map: Sea?,
+    private val map: Sea,
     private val location: Tile,
     private val radius: Int,
     private val amount: Int
