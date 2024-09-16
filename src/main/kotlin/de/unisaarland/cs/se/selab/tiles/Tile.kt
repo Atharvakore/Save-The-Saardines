@@ -1,6 +1,5 @@
 package de.unisaarland.cs.se.selab.tiles
-import kotlin.math.floor
-import kotlin.math.sqrt
+
 
 const val HUNDRED = 100
 const val TWO = 2
@@ -35,27 +34,9 @@ abstract class Tile(
         require(id > 0) { "Id Should be greater than 0" }
         require(adjacentTiles.size == SIX) { "A tile has 6 neighbours" }
     }
-
     /**
-     * checks for capacity of garbage type in a particular tile
+     * Get tiles in specified Direction
      */
-     fun isSpaceAvailable(
-        type: GarbageType,
-        amount: Int,
-    ): Boolean {
-        var a = 0
-        if (type == GarbageType.PLASTIC || type == GarbageType.CHEMICALS) {
-            return true
-        }
-
-        for (garbage in garbage) {
-            if (garbage.type == GarbageType.OIL) {
-                a += garbage.amount
-            }
-        }
-        return a + amount < HUNDRED
-    }
-
     public fun getTileInDirection(
         distance: Int,
         dir: Direction,
