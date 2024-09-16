@@ -27,7 +27,6 @@ abstract class Tile(
 
     var shipTransversable: Boolean = true
 
-
     init {
 
         require(id > 0) { "Id Should be greater than 0" }
@@ -143,20 +142,5 @@ abstract class Tile(
         }
     }
 
-    /**
-     * Calculates amount which can be drifted  in a single drift in one tick
-     */
-    public fun amountTOBeDrifted() {
-        // TOdo
-    }
-    /** Getter for Id**/
-    public fun getId(): Int {
-        return this.id
-    }
 
-    /** Getter for Position**/
-    public fun getCoordinates(): Vec2D {
-        return this.pos
-
-    }
 }

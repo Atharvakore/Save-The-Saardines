@@ -35,12 +35,14 @@ class CollectingShip (
     /**
      * TODO: Implement.
      */
-    public fun collectGarbageFromCurrentTile(currentTile: Tile): Unit {
-        val garbageList = currentTile.garbages
+    public fun collectGarbageFromCurrentTile(currentTile: Tile?): Unit {
+        val garbageList = currentTile?.garbages
         val acceptableGarbageType = garbageTypes()
-        for (garbage in garbageList) {
-            if (garbage.type in acceptableGarbageType) {
-                collectGarbage(garbage)
+        if (garbageList != null) {
+            for (garbage in garbageList) {
+                if (garbage.type in acceptableGarbageType) {
+                    collectGarbage(garbage)
+                }
             }
         }
     }

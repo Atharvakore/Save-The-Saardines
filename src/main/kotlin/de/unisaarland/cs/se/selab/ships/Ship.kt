@@ -12,7 +12,7 @@ abstract class Ship (
     private val acceleration: Int,
     private var fuelCapacity: Int,
     private var fuelConsumption: Int,
-    var capabilities: List<ShipCapability>,
+    var capabilities: MutableList<ShipCapability>,
 ) {
     init {
         require(capabilities.isNotEmpty())
@@ -44,7 +44,7 @@ abstract class Ship (
     private var name: String = ""
     private var pos: Tile? = null
     private var consumedFuel: Int = 0
-    private var hasTaskAssigned: Boolean = false
+    var hasTaskAssigned: Boolean = false
 
     constructor(
         id: Int,
@@ -53,7 +53,7 @@ abstract class Ship (
         acceleration: Int,
         fuelCapacity: Int,
         fuelConsumption: Int,
-        capabilities: List<ShipCapability>,
+        capabilities: MutableList<ShipCapability>,
         name: String,
         pos: Tile? = null
     ) : this(id, owner, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities) {
@@ -131,6 +131,6 @@ abstract class Ship (
      */
 
     public fun addCapability(capability: ShipCapability): Unit {
-        capabilities.addLast(capability)
+        capabilities.add(capability)
     }
 }
