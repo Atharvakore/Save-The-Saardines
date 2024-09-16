@@ -4,7 +4,7 @@ package de.unisaarland.cs.se.selab.tiles
  * Sea as static class
  */
 public object Sea {
-    val tiles: List<Tile> = listOf()
+    val tiles: MutableList<Tile> = mutableListOf()
     val tileIndex: Map<Vec2D, Tile> = mapOf()
 
     /**
@@ -17,6 +17,7 @@ public object Sea {
         }
         return null
     }
+
     /**
      * gives tile with the position given as argument
      */
