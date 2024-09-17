@@ -5,32 +5,23 @@ import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Tile
 
 class CooperateTask(
-    override val tick: Int,
-    override val id: Int,
-    override val taskShip: Ship,
-    override val reward: Reward,
-    override val rewardShip: Ship,
-    override val corporation: Corporation,
+    tick: Int,
+    id: Int,
+    taskShip: Ship,
+    reward: Reward,
+    rewardShip: Ship,
+    corporation: Corporation,
+    private val destinationHomeHarbor: Tile
 ): Task(tick, id, taskShip, reward, rewardShip, corporation) {
-    private var otherCorporation: Corporation? = null
-    private var tile: Tile? = null
-    public fun getTile(): Tile? {
-        return tile
-    }
-    public fun getOtherCorporation(): Corporation? {
-        return otherCorporation
-    }
-    public fun setTile(t: Tile) {
-        this.tile = t
-    }
-    public fun setOtherCorporation(corporation: Corporation) {
-        this.otherCorporation = corporation
-    }
     override fun checkCondition(): Boolean {
-        TODO("Not yet implemented")
+        return taskShip.getPos().pos == destinationHomeHarbor.pos
     }
 
     override fun actUponTick(currentTick: Int): Boolean {
-        TODO("Not yet implemented")
+        if (checkCondition()) {
+            reward.applyReward(rewardShip)
+            return true
+        }
+        return false
     }
 }

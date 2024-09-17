@@ -17,6 +17,8 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
 
 class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
     private val id: String = "id"
@@ -26,7 +28,10 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
         try {
             val events = JSONObject(File(eventsFile).readText()).getJSONArray("events")
             return createEvents(events)
-        } catch (error: Exception) {
+        }catch (e: IOException){
+            return false
+        }
+        catch (error: FileNotFoundException) {
             return false
         }
     }

@@ -39,7 +39,10 @@ class Garbage(
         var toBedrifted = localcurrent?.speed?.div(TEN)
             ?.let { localcurrent.direction?.let { it1 -> currentTile.getTileInDirection(it, it1) } }
         for (g in currentTile.garbage.sortedBy { it.id }) {
-            if(g.amount + currentTile.amountOfGarbageDriftedThisTick < ammounttobedrifted!!) {
+            if(g.amount >= ammounttobedrifted!!){
+                driftBigGarbages(ammounttobedrifted,g,currentTile,toBedrifted)
+            }
+            if (g.amount + currentTile.amountOfGarbageDriftedThisTick < ammounttobedrifted!!) {
                 if (g.type == GarbageType.OIL) {
                     driftOil(g, currentTile, toBedrifted)
                     ammounttobedrifted = ammounttobedrifted?.minus(g.amount)
@@ -53,36 +56,48 @@ class Garbage(
     }
 
     /**
+     * drifts big garbage which have more amount than Intensity * 50
+     */
+
+    private fun driftBigGarbages (ammounttobedrifted:Int, g: Garbage, source: DeepOcean, target: Tile?){
+        if(g.type == GarbageType.OIL){
+            if (target!!.currentOilLevel() + g.amount <= THOUSAND) {
+               target.addGarbage( createGarbage(ammounttobedrifted, GarbageType.OIL))
+                source.garbage [source.garbage.indexOf(g)].amount-=ammounttobedrifted
+                return
+            }
+        }
+        target!!.addGarbage( createGarbage(ammounttobedrifted, g.type))
+        source.garbage [source.garbage.indexOf(g)].amount-=ammounttobedrifted
+        source.amountOfGarbageDriftedThisTick = ammounttobedrifted
+        return
+    }
+
+    /**
      * drifts oil
      */
     private fun driftOil(g: Garbage, source: DeepOcean, target: Tile?) {
         if (target != null) {
             if (target.currentOilLevel() + g.amount <= THOUSAND) {
                 target.addGarbage(g)
-                source.garbages.filter { it == g }
+                source.garbage.filter { it == g }
                 source.amountOfGarbageDriftedThisTick += g.amount
             }
         }
+        return
     }
 
     /**
      * drifts plastic and chemicals
      */
-    private fun driftPlasticandChemicals(g: Garbage, source: DeepOcean, target: Tile?){
+    private fun driftPlasticandChemicals(g: Garbage, source: DeepOcean, target: Tile?) {
         if (target != null) {
-            if (target.currentOilLevel() + g.amount <= THOUSAND) {
+
                 target.addGarbage(g)
-                source.garbages.filter { it == g }
+                source.garbage.filter { it == g }
                 source.amountOfGarbageDriftedThisTick += g.amount
-            }
+
         }
     }
 
-
-    /**
-     * removes garbage ammount
-     */
-    fun removeAmount(amount: Int) {
-        this.amount -= amount
-    }
 }

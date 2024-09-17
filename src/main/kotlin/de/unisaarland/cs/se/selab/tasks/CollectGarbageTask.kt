@@ -5,25 +5,23 @@ import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Tile
 
 class CollectGarbageTask(
-    override val tick: Int,
-    override val id: Int,
-    override val taskShip: Ship,
-    override val reward: Reward,
-    override val rewardShip: Ship,
-    override val corporation: Corporation,
-    ): Task(tick, id, taskShip, reward, rewardShip, corporation) {
-    private var tile: Tile? = null
-    fun getTile(): Tile? {
-        return tile
-    }
-    fun setTile(t: Tile) {
-        this.tile = t
-    }
+    tick: Int,
+    id: Int,
+    taskShip: Ship,
+    reward: Reward,
+    rewardShip: Ship,
+    corporation: Corporation,
+    private val targetTile: Tile
+): Task(tick, id, taskShip, reward, rewardShip, corporation) {
     override fun checkCondition(): Boolean {
-        TODO("Not yet implemented")
+        return taskShip.getPos().pos == targetTile.pos
     }
 
     override fun actUponTick(currentTick: Int): Boolean {
-        TODO("Not yet implemented")
+        if (checkCondition()) {
+            reward.applyReward(rewardShip)
+            return true
+        }
+        return false
     }
 }
