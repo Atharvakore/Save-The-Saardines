@@ -1,7 +1,6 @@
 package de.unisaarland.cs.se.selab.ships
 
 import de.unisaarland.cs.se.selab.tiles.GarbageType
-import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Tile
 
 /**

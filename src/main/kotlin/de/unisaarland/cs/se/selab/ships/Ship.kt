@@ -9,15 +9,12 @@ import de.unisaarland.cs.se.selab.tiles.Current
  * class representing a ship
  */
 abstract class Ship(
-    val id: Int,
-    val owner: Corporation,
-
+    private val shipInformation: ShipInformation,
     private val maxVelocity: Int,
     private val acceleration: Int,
     private var fuelCapacity: Int,
     private var fuelConsumption: Int,
     var capabilities: MutableList<ShipCapability>,
-    private var pos: Tile
 ) {
 
     init {
@@ -47,37 +44,22 @@ abstract class Ship(
             }
         }
     }
-
-    private var name: String = ""
     private var consumedFuel: Int = 0
     var hasTaskAssigned: Boolean = false
 
-    constructor(
-        id: Int,
-        owner: Corporation,
-        maxVelocity: Int,
-        acceleration: Int,
-        fuelCapacity: Int,
-        fuelConsumption: Int,
-        capabilities: MutableList<ShipCapability>,
-        name: String,
-        pos: Tile
-    ) : this(id, owner, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities, pos) {
-        this.name = name
-    }
 
     /**
      * return owner corporation
      */
     fun getOwner(): Corporation {
-        return this.owner
+        return this.shipInformation.owner
     }
 
     /**
      * return ship current tile
      */
     fun getPos(): Tile {
-        return this.pos
+        return this.shipInformation.pos
     }
 
     /**
@@ -94,7 +76,7 @@ abstract class Ship(
      *  if so do the logic of drifting
      */
     fun drift() {
-        val deepOcean = this.pos as? DeepOcean
+        val deepOcean = getPos() as? DeepOcean
         val current = deepOcean?.getCurrent()
         if (current != null) {
             handleCurrentDrift(current)
@@ -105,10 +87,10 @@ abstract class Ship(
         val speed = current.speed
         val direction = current.direction
 
-        if (speed != null && direction != null) {
-            val desTile = this.pos?.getTileInDirection(speed / TEN, direction)
+        if (direction != null) {
+            val desTile = getPos().getTileInDirection(speed / TEN, direction)
             if (desTile != null) {
-                this.pos = desTile
+                this.shipInformation.pos = desTile
             }
         }
     }
@@ -123,7 +105,7 @@ abstract class Ship(
         val pathShipToTile = path.reversed()
         val distanceLength = maxVelocity / TEN
         val desTile = pathShipToTile[distanceLength]
-        this.pos = desTile
+        this.shipInformation.pos = desTile
     }
 
     /**

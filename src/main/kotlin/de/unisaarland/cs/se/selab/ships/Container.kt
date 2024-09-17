@@ -1,6 +1,5 @@
 package de.unisaarland.cs.se.selab.ships
 
-import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 /**
  *  Container that holds info about the garbage: GarbageType, Capacity, current Load
