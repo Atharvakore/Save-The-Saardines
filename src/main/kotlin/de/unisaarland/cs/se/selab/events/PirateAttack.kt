@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.events
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.Ship
 
+/** The pirate attack event. */
 class PirateAttack(
     private val id: Int,
     private val fireTick: Int,

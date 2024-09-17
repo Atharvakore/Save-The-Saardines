@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.events
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 
+/** The restriction event. */
 class Restriction(
     private val id: Int,
     private val fireTick: Int,

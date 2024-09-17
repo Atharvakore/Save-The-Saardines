@@ -187,7 +187,6 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             }
 
             SHALLOW_OCEAN -> {
-                val harbor = tile.getBoolean(HARBOR)
                 return ShallowOcean(id, coordinates, listOf(), listOf())
             }
 
@@ -209,6 +208,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         }
     }
 
+    /** String/integer constants for the map parser. */
     companion object Companion {
         const val CURRENT = "current"
         const val ID = "id"
