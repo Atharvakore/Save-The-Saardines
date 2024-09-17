@@ -41,16 +41,24 @@ class Corporation(
 
         myCoordinatingShips.forEach { coordinatingShip ->
             val otherShipsOnTile: List<Ship> = otherShips
-                .filter { coordinatingShip.getPosition() == it.getPosition() && it.getOwnerCorporation() != lastCoordinatingCorporation }
+                .filter {
+                    coordinatingShip.getPosition() == it.getPosition() &&
+                        it.getOwnerCorporation() != lastCoordinatingCorporation
+                }
+
             val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.getOwnerCorporation() }.distinct()
-            val otherShipsToCooperate: List<Ship> = otherShips.filter { otherCorporations.contains(it.getOwnerCorporation()) }
+            val otherShipsToCooperate: List<Ship> =
+                otherShips.filter { otherCorporations.contains(it.getOwnerCorporation()) }
 
             otherShipsToCooperate.forEach { otherShipToCooperate ->
                 val telescopes: List<ScoutingShip> = otherShipToCooperate.capabilities
                     .filterIsInstance<ScoutingShip>()
                 telescopes.forEach {
-                    val tilesWithGarbage: List<Tile> = it.getTilesWithGarbageInFoV(Sea, otherShipToCooperate.getPosition()!!)
-                    partnerGarbage.getOrPut(otherShipToCooperate.getOwnerCorporation().id) { mutableListOf() } += tilesWithGarbage
+                    val tilesWithGarbage: List<Tile> =
+                        it.getTilesWithGarbageInFoV(Sea, otherShipToCooperate.getPosition())
+                    partnerGarbage.getOrPut(otherShipToCooperate.getOwnerCorporation().id) {
+                        mutableListOf()
+                    } += tilesWithGarbage
                 }
             }
             val lastCorporation: Corporation? = otherCorporations.maxByOrNull { it.id }
@@ -65,8 +73,8 @@ class Corporation(
      *
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
-    fun run(sea: Sea, otherShips: List<Ship>) {
-        moveShips(sea)
+    fun run(otherShips: List<Ship>) {
+        moveShips()
         collectGarbage()
         cooperate(otherShips)
         refuelAndUnloadShips()
@@ -83,9 +91,9 @@ class Corporation(
         return tasks.filter { it.checkCondition() }
     }
 
-    /** Documentation for getShipsOnHarbor Function **/
-    private fun moveShips(sea: Sea) {
-        val availableShips: MutableSet<Ship> = ownedShips.toMutableSet();
+    /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
+    private fun moveShips() {
+        val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
         // 0. For each ship that has an assigned destination, tick the
         // ship and remove the ship from the available ships
         availableShips.forEach { if (it.hasTaskAssigned) it.tickTask() }
@@ -164,11 +172,12 @@ class Corporation(
      * Takes destination tile and list of ships as input, then uses Dijkstra's algorithm to find the
      * shortest path to the closest ship
      *
+     * make it private later
      * @param tile Destination tile
      * @param ships List of ships
      * @return List of tiles representing the shortest path to the closest ship
      */
-    private fun findClosestShip(tile: Tile, ships: List<Ship>): List<Tile> {
+    fun findClosestShip(tile: Tile, ships: List<Ship>): List<Tile> {
         val dijkstra: Dijkstra = Dijkstra(tile)
         val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
 
@@ -229,10 +238,11 @@ class Corporation(
      * Filter scouting ships
      *
      * Filters the owned ships to get only the ships that have the ScoutingShip capability
+     * make it private later
      *
      * @return List of scouting ships
      */
-    private fun filterScoutingShips(): List<Ship> {
+    fun filterScoutingShips(): List<Ship> {
         return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is ScoutingShip } }
     }
 
