@@ -35,7 +35,6 @@ class Corporation(
             val otherShipsOnTile: List<Ship> = otherShips
                 .filter { coordinatingShip.getPos() == it.getPos() && it.getOwner() != lastCoordinatingCorporation}
             val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.getOwner() }.distinct()
-
             val otherShipsToCooperate: List<Ship> = otherShips.filter { otherCorporations.contains(it.getOwner()) }
 
             otherShipsToCooperate.forEach { otherShipToCooperate ->
@@ -46,6 +45,8 @@ class Corporation(
                     partnerGarbage.getOrPut(otherShipToCooperate.getOwner().id) { mutableListOf() } += tilesWithGarbage
                 }
             }
+            val lastCorporation: Corporation? = otherCorporations.maxByOrNull { it.id }
+            lastCoordinatingCorporation = lastCorporation
         }
 
     }
