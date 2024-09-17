@@ -6,6 +6,7 @@ import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 import kotlin.math.min
 
+/** Oil Spill Event */
 class OilSpill(
     private val id: Int,
     private val fireTick: Int,
@@ -17,6 +18,7 @@ class OilSpill(
     override fun toString(): String {
         return "Oil Spill"
     }
+    /** Constants in the oil spill event */
     companion object {
         private const val OIL_TILE_MAX = 1000
     }

@@ -63,10 +63,8 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
                 val eventTile: Tile? = accumulator.getTileById(eventLocation) ?: return false
                 val eventRadius: Int = event.getInt("radius")
                 val eventSpeed: Int = event.getInt("speed")
-                val eventDirection: Direction? = Direction.getDirection(event.getInt("direction"))
-                val storm: Storm = Storm(eventId, eventTick, accumulator.map, eventTile, eventRadius)
-                storm.setSpeed(eventSpeed)
-                storm.setDirection(eventDirection)
+                val eventDirection: Direction = Direction.getDirection(event.getInt("direction"))!!
+                val storm: Storm = Storm(eventId, eventTick, accumulator.map, eventTile, eventRadius, eventSpeed, eventDirection)
                 accumulator.addEvent(eventId, storm)
             }
             "RESTRICTION" -> {
