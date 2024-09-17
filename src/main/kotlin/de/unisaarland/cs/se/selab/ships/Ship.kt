@@ -99,12 +99,20 @@ abstract class Ship(
      * Logic: the ship gets a path (a list of tiles from destination to ship), has to reverse path and move along it
      * the ship moves along the path as long as it can
      *
-     * moving logic is simplified and needs to be improved
+     * distance = (velocity^2 / 2 * acceleration)
      */
     fun move(path: List<Tile>) {
         val pathShipToTile = path.reversed()
-        val distanceLength = maxVelocity / TEN
-        val desTile = pathShipToTile[distanceLength]
+        // the distance the ship can traverse
+        val distanceLength = (maxVelocity * maxVelocity / (2 * acceleration)) / TEN
+        var desTile = getPos()
+        if (pathShipToTile.size >= distanceLength){
+            desTile = pathShipToTile[distanceLength]
+            consumedFuel += distanceLength * TEN * fuelConsumption
+        } else {
+            desTile = pathShipToTile.last()
+            consumedFuel += pathShipToTile.size * TEN * fuelConsumption
+        }
         this.shipInformation.pos = desTile
     }
 
@@ -119,15 +127,5 @@ abstract class Ship(
     fun isFuelSufficient(pathLength: Int): Boolean {
         val neededFuel = fuelConsumption * pathLength * TEN
         return neededFuel <= fuelCapacity - consumedFuel
-    }
-
-    /**
-     * Call: when a task is done, and the reward needs to be applied
-     * Logic: adds a capability to the ship and handles the adding logic
-     *
-     * @param capability ship capability
-     */
-    fun addCapability(capability: ShipCapability) {
-        capabilities.add(capability)
     }
 }
