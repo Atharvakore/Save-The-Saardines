@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.events
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 
+/** Event which will end the Restriction Event*/
 class EndRestriction(
     private val id: Int,
     private val fireTick: Int,
@@ -13,6 +14,7 @@ class EndRestriction(
     override fun toString(): String {
         return "End Restriction"
     }
+
     override fun actUponTick(currentTick: Int): Boolean {
         if (currentTick == fireTick) {
             location.pos.tilesInRadius(radius).forEach {
