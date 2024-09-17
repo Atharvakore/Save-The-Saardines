@@ -39,7 +39,32 @@ fun main(args: Array<String>) {
         sim.start()
     }
 }
-
+private fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
+    val contents = validate(files) ?: return null
+    val accumulator = Accumulator()
+    val mapParser = MapJSONParser(accumulator)
+    if (maxTicks != null && mapParser.parseMap(contents[0])) {
+        Logger.logInitializationInfoSuccess(files[0]!!)
+    } else {
+        return null
+    }
+    val corpParser = CorporationJSONParser(accumulator)
+    if (corpParser.parseCorporationsFile(contents[1])) {
+        Logger.logInitializationInfoSuccess(files[1]!!)
+    } else {
+        return null
+    }
+    val scenarioParser = ScenarioJSONParser(accumulator)
+    val taskPars = TasksRewardsParser(accumulator)
+    var validScenario = scenarioParser.parseGarbage(contents[2]) && scenarioParser.parseEvents(contents[2])
+    validScenario = validScenario && taskPars.parseRewards(contents[2]) && taskPars.parseTasks(contents[2])
+    if (validScenario) {
+        Logger.logInitializationInfoSuccess(files[2]!!)
+    } else {
+        return null
+    }
+    return accumulator
+}
 private fun validate(files: List<String?>): List<String>? {
     val contents: MutableList<String> = mutableListOf()
     val validatingSchemas: MutableList<String> = mutableListOf("resources/schema/map.schema")
@@ -76,29 +101,4 @@ private fun validate(files: List<String?>): List<String>? {
     }
     return contents
 }
-private fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
-    val contents = validate(files) ?: return null
-    val accumulator = Accumulator()
-    val mapParser = MapJSONParser(accumulator)
-    if (maxTicks != null && mapParser.parseMap(contents[0])) {
-        Logger.logInitializationInfoSuccess(files[0]!!)
-    } else {
-        return null
-    }
-    val corpParser = CorporationJSONParser(accumulator)
-    if (corpParser.parseCorporationsFile(contents[1])) {
-        Logger.logInitializationInfoSuccess(files[1]!!)
-    } else {
-        return null
-    }
-    val scenarioParser = ScenarioJSONParser(accumulator)
-    val taskPars = TasksRewardsParser(accumulator)
-    var validScenario = scenarioParser.parseGarbage(contents[2]) && scenarioParser.parseEvents(contents[2])
-    validScenario = validScenario && taskPars.parseRewards(contents[2]) && taskPars.parseTasks(contents[2])
-    if (validScenario) {
-        Logger.logInitializationInfoSuccess(files[2]!!)
-    } else {
-        return null
-    }
-    return accumulator
-}
+

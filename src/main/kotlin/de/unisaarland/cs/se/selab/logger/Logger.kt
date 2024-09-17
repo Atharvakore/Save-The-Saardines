@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.logger
 import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.tasks.Reward
 import de.unisaarland.cs.se.selab.tasks.Task
+import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import java.io.PrintWriter
 
@@ -99,7 +100,7 @@ object Logger {
     fun  logSimulationStatisticsCalculated() {
         log("Simulation Info: Simulation statistics are calculated.")
     }
-    fun logSimulationStatistics(){
+    fun logSimulationStatistics(corporations: List<Corporation>){
         //Yet to be completed as no idea where we can pass arguments here a list ot call this function iteratively in simulator
         TODO()
     }
