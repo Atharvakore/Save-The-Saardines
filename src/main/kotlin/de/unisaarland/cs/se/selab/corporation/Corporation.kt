@@ -27,13 +27,21 @@ class Corporation(
     var partnerGarbage: MutableMap<Int, MutableList<Tile>> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
 
-    /** Documentation for cooperate Function **/
+    /**
+     * Cooperation between ships
+     *
+     * Takes a list of all other ships in the simulation, checks which ships are on the same tile as the current ship,
+     * then gets the field of view of the owner corporation of those ships and adds all garbage tiles to the
+     * partnerGarbage map.
+     *
+     * @param otherShips List of all ships in the simulation
+     */
     fun cooperate(otherShips: List<Ship>) {
         val myCoordinatingShips: List<Ship> = filterCoordinatingShips()
 
         myCoordinatingShips.forEach { coordinatingShip ->
             val otherShipsOnTile: List<Ship> = otherShips
-                .filter { coordinatingShip.getPos() == it.getPos() && it.getOwner() != lastCoordinatingCorporation}
+                .filter { coordinatingShip.getPos() == it.getPos() && it.getOwner() != lastCoordinatingCorporation }
             val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.getOwner() }.distinct()
             val otherShipsToCooperate: List<Ship> = otherShips.filter { otherCorporations.contains(it.getOwner()) }
 
@@ -48,10 +56,15 @@ class Corporation(
             val lastCorporation: Corporation? = otherCorporations.maxByOrNull { it.id }
             lastCoordinatingCorporation = lastCorporation
         }
-
     }
 
-    /** Documentation for run Function **/
+    /**
+     * Main function to run the simulation
+     *
+     * Moves ships, collects garbage, cooperates with other ships, and refuels and unloads ships
+     *
+     * @param otherShips List of all ships in the simulation other than the current corporation's ships
+     */
     fun run(otherShips: List<Ship>) {
         moveShips()
         collectGarbage()
@@ -59,7 +72,13 @@ class Corporation(
         refuelAndUnloadShips()
     }
 
-    /** Documentation for getActiveTasks Function **/
+    /**
+     * Gets all active tasks
+     *
+     * Filters the tasks list to get only the tasks that are currently active
+     *
+     * @return List of active tasks
+     */
     fun getActiveTasks(): List<Task> {
         return tasks.filter { it.checkCondition() }
     }
@@ -69,7 +88,13 @@ class Corporation(
         TODO(TODO)
     }
 
-    /** Documentation for collectGarbage Function **/
+    /**
+     * Collects garbage from the current tile
+     *
+     * Filters the ships to get only the ships that have the CollectingShip capability, then collects garbage from the
+     * current tile of each ship
+     *
+     */
     private fun collectGarbage() {
         val collectingShips: List<Ship> = filterCollectingShip()
         for (ship in collectingShips) {
@@ -79,7 +104,13 @@ class Corporation(
         }
     }
 
-    /** Documentation for refuelAndUnloadShips Function **/
+    /**
+     * Refuels and unloads ships
+     *
+     * Gets all the ships on the harbor, then unloads the ships that have the CollectingShip capability
+     * and refuels all the ships
+     *
+     */
     private fun refuelAndUnloadShips() {
         val shipsOnHarbor: List<Ship> = getShipsOnHarbor()
         if (shipsOnHarbor.isNotEmpty()) {
@@ -93,14 +124,29 @@ class Corporation(
         }
     }
 
-    /** Documentation for getShipsOnHarbor Function **/
+    /**
+     * Gets all the ships on the harbor
+     *
+     * Filters the owned ships to get only the ships that are on a harbor tile
+     *
+     * @return List of ships on the harbor
+     */
     private fun getShipsOnHarbor(): List<Ship> {
         val seaInstance: Sea = Sea
         val harborTiles: List<Tile> = seaInstance.tiles.filter { (it as Shore).harbor }
         return ownedShips.filter { harborTiles.contains(it.getPos()) }
     }
 
-    /** Documentation for findClosestShip Function **/
+    /**
+     * Find the closest ship to a tile
+     *
+     * Takes destination tile and list of ships as input, then uses Dijkstra's algorithm to find the
+     * shortest path to the closest ship
+     *
+     * @param tile Destination tile
+     * @param ships List of ships
+     * @return List of tiles representing the shortest path to the closest ship
+     */
     private fun findClosestShip(tile: Tile, ships: List<Ship>): List<Tile> {
         val dijkstra: Dijkstra = Dijkstra(tile)
         val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
@@ -119,7 +165,16 @@ class Corporation(
         return shortestPath
     }
 
-    /** Documentation for findClosestHarbor Function **/
+    /**
+     * Find the closest harbor to a tile
+     *
+     * Takes destination tile and list of harbors as input, then uses Dijkstra's algorithm to find the
+     * shortest path to the closest harbor
+     *
+     * @param tile Destination tile
+     * @param harbors List of harbors
+     * @return List of tiles representing the shortest path to the closest harbor
+     */
     private fun findClosestHarbor(tile: Tile, harbors: List<Shore>): List<Tile> {
         val dijkstra: Dijkstra = Dijkstra(tile)
         val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
@@ -138,17 +193,35 @@ class Corporation(
         return shortestPath
     }
 
-    /** Documentation for filterCollectingShip Function **/
+    /**
+     * Filter collecting ships
+     *
+     * Filters the owned ships to get only the ships that have the CollectingShip capability
+     *
+     * @return List of collecting ships
+     */
     private fun filterCollectingShip(): List<Ship> {
         return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is CollectingShip } }
     }
 
-    /** Documentation for filterScoutingShips Function **/
+    /**
+     * Filter scouting ships
+     *
+     * Filters the owned ships to get only the ships that have the ScoutingShip capability
+     *
+     * @return List of scouting ships
+     */
     private fun filterScoutingShips(): List<Ship> {
         return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is ScoutingShip } }
     }
 
-    /** Documentation for filterCoordinatingShips Function **/
+    /**
+     * Filter coordinating ships
+     *
+     * Filters the owned ships to get only the ships that have the CoordinatingShip capability
+     *
+     * @return List of coordinating ships
+     */
     private fun filterCoordinatingShips(): List<Ship> {
         return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is CoordinatingShip } }
     }
