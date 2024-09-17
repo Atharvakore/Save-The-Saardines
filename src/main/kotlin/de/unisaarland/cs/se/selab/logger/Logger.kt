@@ -60,39 +60,51 @@ object Logger {
     fun logCorporationCooperationStart(corporationId:Int){
          log("Corporation Action: Corporation $corporationId is starting to cooperate with other corporations.")
     }
-    fun  logCooperationBetweenCorporations(corporationId:Int, otherCorporationId: Int, shipId:Int, cooperatedShipId: Int) {
+    /** Log the cooperation between corporations. */
+    fun logCooperationBetweenCorporations(corporationId:Int, otherCorporationId: Int, shipId:Int, cooperatedShipId: Int) {
          log("Cooperation: Corporation $corporationId cooperated with corporation $otherCorporationId with ship $shipId to ship $cooperatedShipId.")
     }
-    fun  logCorporationRefueling(corporationId:Int){
+    /** Logged whenever refueling is started. */
+    fun logCorporationRefueling(corporationId:Int){
         log("Corporation Action: Corporation $corporationId is starting to refuel.")
     }
-    fun  logRefuelingShip(shipId:Int, tileId: Int) {
+    /** Logged whenever a ship is refueled. */
+    fun logRefuelingShip(shipId:Int, tileId: Int) {
         log("Refueling: Ship $shipId refueled at harbor $tileId.")
     }
-    fun  logUnloadShip(shipId:Int, amount:Int, garbageType:GarbageType, tileId:Int){
+    /** Logged whenever a ship is unloaded. */
+    fun logUnloadShip(shipId:Int, amount:Int, garbageType:GarbageType, tileId:Int){
         log("Unload: Ship $shipId unloaded $amount of garbage $garbageType at harbor $tileId.")
     }
-    fun  logCorporationFinishedActions(corporationId:Int){
+    /** Logged whenever a corporation finishes its actions. */
+    fun logCorporationFinishedActions(corporationId:Int){
         log("Corporation Action: Corporation $corporationId finished its actions.")
     }
-    fun  logCurrentDriftGarbage(garbageType:GarbageType, garbageId:Int, amount:Int, startTileId:Int, endTileId:Int) {
+    /** Log drifting of garbage. */
+    fun logCurrentDriftGarbage(garbageType:GarbageType, garbageId:Int, amount:Int, startTileId:Int, endTileId:Int) {
         log("Current Drift: $garbageType $garbageId with amount $amount drifted from tile $startTileId to tile $endTileId.")
     }
-    fun  logCurrentDriftShip(shipId:Int,startTileId:Int, endTileId:Int){
+    /** Log drifting of ships. */
+    fun logCurrentDriftShip(shipId:Int,startTileId:Int, endTileId:Int){
         log("Current Drift: Ship $shipId drifted from tile $startTileId to tile $endTileId.")
     }
-    fun  logEventStart(eventId:Int, eventType: Event){
+    /** Log the start of an event. */
+    fun logEventStart(eventId:Int, eventType: Event){
         log("Event: Event $eventId of type $eventType happened.")
     }
-    fun  logTaskAddedToShip(taskId: Int, taskType: Task, shipId: Int, tileId: Int) {
+    /** Log a task being added to a ship. */
+    fun logTaskAddedToShip(taskId: Int, taskType: Task, shipId: Int, tileId: Int) {
         log("Task: Task $taskId of type $taskType with ship $shipId is added with destination $tileId.")
     }
-    fun  logRewardReceived(taskId: Int, shipId: Int, rewardType: Reward){
+    /** Log a reward being received. */
+    fun logRewardReceived(taskId: Int, shipId: Int, rewardType: Reward){
         log("Reward: Task $taskId: Ship $shipId received reward of type $rewardType.")
     }
-    fun  logSimulationStatisticsCalculated() {
+    /** Logged whenever statistics are calculated. */
+    fun logSimulationStatisticsCalculated() {
         log("Simulation Info: Simulation statistics are calculated.")
     }
+    /** Log the statistics of the simulation. */
     fun logSimulationStatistics(corporations: List<Corporation>){
         //Yet to be completed as no idea where we can pass arguments here a list ot call this function iteratively in simulator
         TODO()
