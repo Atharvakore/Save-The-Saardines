@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.tasks
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.tiles.Tile
 
 /*
 Superclass for tasks
@@ -16,4 +17,5 @@ abstract class Task(
 ) {
     abstract fun checkCondition(): Boolean
     abstract fun actUponTick(currentTick: Int): Boolean
+    abstract fun getGoal(): Tile
 }

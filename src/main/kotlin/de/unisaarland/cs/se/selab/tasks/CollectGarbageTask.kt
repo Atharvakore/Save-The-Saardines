@@ -11,7 +11,7 @@ class CollectGarbageTask(
     reward: Reward,
     rewardShip: Ship,
     corporation: Corporation,
-    private val targetTile: Tile
+    val targetTile: Tile
 ): Task(tick, id, taskShip, reward, rewardShip, corporation) {
     override fun checkCondition(): Boolean {
         return taskShip.getPos().pos == targetTile.pos
@@ -23,5 +23,9 @@ class CollectGarbageTask(
             return true
         }
         return false
+    }
+
+    override fun getGoal(): Tile {
+        return targetTile
     }
 }

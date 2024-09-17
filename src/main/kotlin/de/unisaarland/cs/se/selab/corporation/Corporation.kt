@@ -4,6 +4,8 @@ import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.tasks.CollectGarbageTask
+import de.unisaarland.cs.se.selab.tasks.CooperateTask
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Dijkstra
 import de.unisaarland.cs.se.selab.tiles.Garbage
@@ -85,7 +87,28 @@ class Corporation(
 
     /** Documentation for getShipsOnHarbor Function **/
     private fun moveShips(sea: Sea) {
-        TODO(TODO)
+        val availableShips: MutableSet<Ship> = ownedShips.toMutableSet();
+        // 0. For each ship that has an assigned destination, tick the
+        // ship and remove the ship from the available ships
+        availableShips.forEach { if (it.hasTaskAssigned) it.tickTask() }
+        availableShips.removeAll { it.hasTaskAssigned }
+        // 1. Process tasks. For each active task, assign the ship from the task to
+        // go to the target tile.
+        val activeTasks: List<Task> = getActiveTasks()
+        for (task in activeTasks) {
+            val ship: Ship = task.taskShip
+            val targetTile: Tile = task.getGoal()
+            Dijkstra(targetTile).allPaths()[ship.getPos()]?.let { path ->
+                if (ship.isFuelSufficient(path.size)) {
+                    ship.move(path)
+                    availableShips.remove(ship)
+                } else {
+                    val closestHarborPath: List<Tile> = findClosestHarbor(ship.getPos(), ownedHarbors)
+                    ship.moveUninterrupted(closestHarborPath)
+                    availableShips.remove(ship)
+                }
+            }
+        }
     }
 
     /**

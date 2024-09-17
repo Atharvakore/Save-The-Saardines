@@ -24,4 +24,8 @@ class ExploreMapTask(
         }
         return false
     }
+
+    override fun getGoal(): Tile {
+        return targetTile
+    }
 }

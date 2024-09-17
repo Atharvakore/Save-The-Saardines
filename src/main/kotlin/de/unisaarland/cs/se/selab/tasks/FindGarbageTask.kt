@@ -24,4 +24,8 @@ class FindGarbageTask(
         }
         return false
     }
+
+    override fun getGoal(): Tile {
+        return targetTile
+    }
 }
