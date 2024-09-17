@@ -1,17 +1,15 @@
 package de.unisaarland.cs.se.selab.ships
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
-import de.unisaarland.cs.se.selab.tiles.Tile
-import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Current
+import de.unisaarland.cs.se.selab.tiles.DeepOcean
+import de.unisaarland.cs.se.selab.tiles.Tile
 
 /**
  * class representing a ship
  */
-abstract class Ship(
+class Ship(
     val id: Int,
-    val owner: Corporation,
-
     private val maxVelocity: Int,
     private val acceleration: Int,
     private var fuelCapacity: Int,
@@ -51,6 +49,10 @@ abstract class Ship(
     private var pos: Tile? = null
     private var consumedFuel: Int = 0
     var hasTaskAssigned: Boolean = false
+    val owner: Corporation
+        get() {
+            return owner
+        }
 
     constructor(
         id: Int,
@@ -62,7 +64,7 @@ abstract class Ship(
         capabilities: MutableList<ShipCapability>,
         name: String,
         pos: Tile? = null
-    ) : this(id, owner, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities) {
+    ) : this(id, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities) {
         this.name = name
         this.pos = pos
     }
@@ -131,7 +133,7 @@ abstract class Ship(
      * Logic: gets length of the path the ship has to traverse
      * check if it can traverse it
      *
-     * @param  pathLength of path
+     * @param pathLength of path
      * @return if the ship can complete this path
      */
     fun isFuelSufficient(pathLength: Int): Boolean {
@@ -147,5 +149,10 @@ abstract class Ship(
      */
     fun addCapability(capability: ShipCapability) {
         capabilities.add(capability)
+    }
+
+    /** Set the current position of the Ship */
+    fun setTile(tile: Tile?) {
+        this.pos = tile
     }
 }
