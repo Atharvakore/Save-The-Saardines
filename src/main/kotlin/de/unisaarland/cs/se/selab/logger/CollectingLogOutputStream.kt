@@ -1,6 +1,6 @@
 package de.unisaarland.cs.se.selab.logger
 
-class CollectingLogOutputStream : LogOutputStream {
+class CollectingLogOutputStream: LogOutputStream {
     private val messages = mutableListOf<String>()
 
     override fun write(s: String) {

@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.tasks
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.tiles.Tile
 
 class CollectGarbageTask(
     tick: Int,
@@ -9,13 +10,18 @@ class CollectGarbageTask(
     taskShip: Ship,
     reward: Reward,
     rewardShip: Ship,
-    corporation: Corporation
+    corporation: Corporation,
+    private val targetTile: Tile
 ): Task(tick, id, taskShip, reward, rewardShip, corporation) {
     override fun checkCondition(): Boolean {
-        return true
+        return taskShip.getPos().pos == targetTile.pos
     }
 
     override fun actUponTick(currentTick: Int): Boolean {
-        return true
+        if (checkCondition()) {
+            reward.applyReward(rewardShip)
+            return true
+        }
+        return false
     }
 }
