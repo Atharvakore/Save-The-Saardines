@@ -1,11 +1,11 @@
 package de.unisaarland.cs.se.selab
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
-import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
+import de.unisaarland.cs.se.selab.tiles.Sea
 
 /**
  * class that represents and handles the simulation
@@ -21,7 +21,7 @@ class Simulation(
     /**
      * starts the whole simulation and enters a loop that runs tick() until maxTick is reached
      */
-    fun start(){
+    fun start() {
         while (tick <= maxTick) {
             tick()
             tick++
@@ -43,7 +43,7 @@ class Simulation(
     /**
      * iterates over all corporations and calls run() on them
      */
-    private fun runCorporations(){
+    private fun runCorporations() {
         val allShips = mutableListOf<Ship>()
         for (corporation in corporations) {
             allShips.addAll(corporation.ownedShips)
@@ -51,7 +51,7 @@ class Simulation(
 
         for (corporation in corporations) {
             val otherShips = allShips.filter { it.getOwnerCorporation() != corporation }
-            corporation.run(sea,otherShips)
+            corporation.run(otherShips)
         }
     }
 
@@ -115,4 +115,3 @@ class Simulation(
         return allTasks
     }
 }
-

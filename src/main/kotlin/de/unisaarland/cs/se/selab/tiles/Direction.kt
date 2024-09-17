@@ -11,6 +11,7 @@ enum class Direction(private val dir: Int) {
     D180(DIRECTION_WEST),
     D240(DIRECTION_SOUTHWEST),
     D300(DIRECTION_SOUTHEAST);
+
     /** Static methods of Direction. */
     companion object {
         /**
