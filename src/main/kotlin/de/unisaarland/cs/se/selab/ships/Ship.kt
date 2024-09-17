@@ -115,10 +115,6 @@ class Ship(
      * Call: when a ship is the closest one to the garbage or when the ship has to return to the harbor
      * Logic: the ship gets a path (a list of tiles from destination to ship), has to reverse path and move along it
      * the ship moves along the path as long as it can
-     *
-     */
-    /**
-     * TODO: Implement.
      */
     fun move(path: List<Tile>) {
         TODO("")
