@@ -1,10 +1,7 @@
 package de.unisaarland.cs.se.selab.tiles
 
 
-const val HUNDRED = 100
-const val TWO = 2
-const val THREE = 3.0
-const val SIX = 6
+
 
 /**
  *class tile includes all basic functionality related tiles

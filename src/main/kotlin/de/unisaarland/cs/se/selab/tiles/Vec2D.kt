@@ -10,6 +10,10 @@ class Vec2D(var posX: Int, var posY: Int) {
         return "($posX, $posY)"
     }
 
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Vec2D) return false

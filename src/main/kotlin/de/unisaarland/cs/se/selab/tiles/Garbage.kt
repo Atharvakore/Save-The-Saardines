@@ -14,7 +14,7 @@ class Garbage(
     val id: Int,
     var amount: Int,
     val type: GarbageType,
-    private var trackedBy: Set<Corporation>?,
+    var trackedBy: Set<Corporation>?,
 ) {
     companion object {
         var maxId: Int = 0
