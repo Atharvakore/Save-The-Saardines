@@ -10,6 +10,16 @@ class Vec2D(var posX: Int, var posY: Int) {
         return "($posX, $posY)"
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Vec2D) return false
+
+        if (posX != other.posX) return false
+        if (posY != other.posY) return false
+
+        return true
+    }
+
     /**
      * Returns an iterator over *all* the Vec2D instances in a given radius around this Vec2D.
      */

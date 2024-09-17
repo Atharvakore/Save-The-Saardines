@@ -16,6 +16,7 @@ abstract class Ship(
     private var fuelCapacity: Int,
     private var fuelConsumption: Int,
     var capabilities: MutableList<ShipCapability>,
+    private var pos: Tile
 ) {
 
     init {
@@ -47,7 +48,6 @@ abstract class Ship(
     }
 
     private var name: String = ""
-    private var pos: Tile? = null
     private var consumedFuel: Int = 0
     var hasTaskAssigned: Boolean = false
 
@@ -60,10 +60,9 @@ abstract class Ship(
         fuelConsumption: Int,
         capabilities: MutableList<ShipCapability>,
         name: String,
-        pos: Tile? = null
-    ) : this(id, owner, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities) {
+        pos: Tile
+    ) : this(id, owner, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities, pos) {
         this.name = name
-        this.pos = pos
     }
 
     /**
@@ -75,7 +74,7 @@ abstract class Ship(
     /**
      * return ship current tile
      */
-    fun getPos(): Tile? {
+    fun getPos(): Tile {
         return this.pos
     }
 
