@@ -98,12 +98,12 @@ abstract class Tile(
      * returns current oil level of the Tile
      * Note this should not exceed 1000
      */
-    fun currentOilLevel () : Int {
-        var ac=  0
-        for (o in this.garbage.filter { it.type == GarbageType.OIL }) {
-            ac += o.amount
+    fun currentOilLevel(): Int {
+        var accumulator=  0
+        for (oil in this.garbage.filter { it.type == GarbageType.OIL }) {
+            accumulator += oil.amount
         }
-        return ac
+        return accumulator
     }
 
 }
