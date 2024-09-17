@@ -6,28 +6,29 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 /**
  * class representing the collecting ship capability
  */
-class CollectingShip (
+class CollectingShip(
     var auxiliaryContainers: MutableList<Container>
-): ShipCapability {
+) : ShipCapability {
     /**
      * unloads all the containers of the ship
      */
-    fun unload(){
-        for (container in auxiliaryContainers){
+    fun unload() {
+        for (container in auxiliaryContainers) {
             container.giveGarbage()
         }
     }
+
     /**
      *
      * checks if the ship can collect any amount of oil
      * */
     fun hasOilCapacity(): Boolean {
-        val oilContainers = auxiliaryContainers.filter{it.garbageType == GarbageType.OIL}
-        if (oilContainers.isEmpty()){
+        val oilContainers = auxiliaryContainers.filter { it.garbageType == GarbageType.OIL }
+        if (oilContainers.isEmpty()) {
             return false
         } else {
             var oilCapacity = 0
-            for (container in oilContainers){
+            for (container in oilContainers) {
                 oilCapacity += container.getGarbageCapacity() - container.garbageLoad
             }
             return oilCapacity > 0
@@ -39,12 +40,12 @@ class CollectingShip (
      * checks if the ship can collect any amount of chemicals
      * */
     fun hasChemicalsCapacity(): Boolean {
-        val chemicalsContainers = auxiliaryContainers.filter{it.garbageType == GarbageType.CHEMICALS}
-        if (chemicalsContainers.isEmpty()){
+        val chemicalsContainers = auxiliaryContainers.filter { it.garbageType == GarbageType.CHEMICALS }
+        if (chemicalsContainers.isEmpty()) {
             return false
         } else {
             var chemicalsCapacity = 0
-            for (container in chemicalsContainers){
+            for (container in chemicalsContainers) {
                 chemicalsCapacity += container.getGarbageCapacity() - container.garbageLoad
             }
             return chemicalsCapacity > 0
@@ -54,24 +55,25 @@ class CollectingShip (
     /**
      * checks the amount of plastic the ship can collect
      * */
-    fun hasPlasticCapacity (): Int {
-        val plasticContainers = auxiliaryContainers.filter{it.garbageType == GarbageType.PLASTIC}
-        if (plasticContainers.isEmpty()){
+    fun hasPlasticCapacity(): Int {
+        val plasticContainers = auxiliaryContainers.filter { it.garbageType == GarbageType.PLASTIC }
+        if (plasticContainers.isEmpty()) {
             return 0
         } else {
-            var plasticCapacity= 0
-            for (container in plasticContainers){
+            var plasticCapacity = 0
+            for (container in plasticContainers) {
                 plasticCapacity += container.getGarbageCapacity() - container.garbageLoad
             }
             return plasticCapacity
         }
     }
+
     /**
      * Call: when the corporation is calling on its ships to collect the garbage
      * Logic: checks the garbage of its tile, collects it if it can
      */
-    fun collectGarbageFromCurrentTile(currentTile: Tile?){
-        if (currentTile != null){
+    fun collectGarbageFromCurrentTile(currentTile: Tile?) {
+        if (currentTile != null) {
             val acceptableGarbageType = garbageTypes()
             for (garbageType in acceptableGarbageType) {
                 val amount = currentTile.getAmountOfType(garbageType)
@@ -81,12 +83,13 @@ class CollectingShip (
         }
     }
 
-    private fun garbageTypes() : Set<GarbageType> {
+    private fun garbageTypes(): Set<GarbageType> {
         return auxiliaryContainers.map { it.garbageType }.toSet()
     }
+
     private fun collectGarbage(amount: Int, garbageType: GarbageType): Int {
         var collected = 0
-        for (container in auxiliaryContainers){
+        for (container in auxiliaryContainers) {
             collected += container.collect(amount, garbageType)
         }
         return collected

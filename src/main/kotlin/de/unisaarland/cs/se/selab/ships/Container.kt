@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.ships
 
 import de.unisaarland.cs.se.selab.tiles.GarbageType
+
 /**
  *  Container that holds info about the garbage: GarbageType, Capacity, current Load
  */
@@ -13,13 +14,14 @@ class Container(
     /**
      * return max garbage capacity
      * */
-    fun getGarbageCapacity(): Int{
+    fun getGarbageCapacity(): Int {
         return this.garbageCapacity
     }
+
     /**
      * unload garbage
      */
-    fun giveGarbage(){
+    fun giveGarbage() {
         this.garbageLoad = 0
     }
 
