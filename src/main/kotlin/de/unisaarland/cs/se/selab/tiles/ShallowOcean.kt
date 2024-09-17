@@ -12,5 +12,6 @@ class ShallowOcean(
     id,
     pos,
     adjacentTiles,
-    garbage,0
+    garbage,
+    0
 )

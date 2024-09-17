@@ -1,5 +1,4 @@
 package de.unisaarland.cs.se.selab.tiles
-
 /**
  * Basic Current
  */

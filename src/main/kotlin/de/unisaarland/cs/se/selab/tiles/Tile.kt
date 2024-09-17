@@ -1,8 +1,5 @@
 package de.unisaarland.cs.se.selab.tiles
 
-
-
-
 /**
  *class tile includes all basic functionality related tiles
  */
@@ -31,6 +28,7 @@ abstract class Tile(
         require(id > 0) { "Id Should be greater than 0" }
         require(adjacentTiles.size == SIX) { "A tile has 6 neighbours" }
     }
+
     /**
      * Get tiles in specified Direction
      */
@@ -57,7 +55,7 @@ abstract class Tile(
     }
 
     /**
-     * Takes a garbnage type and returns total ammount of garbage of that type
+     * Takes a garbage type and returns total amount of garbage of that type
      */
     public fun getAmountOfType(type: GarbageType): Int {
         var acc = 0
@@ -72,11 +70,11 @@ abstract class Tile(
     /**
      * removes garbage of particular type
      */
-     fun removeGarbageOfType(
+    fun removeGarbageOfType(
         type: GarbageType,
-        ammount: Int,
+        amount: Int,
     ) {
-        var toBeRemoved = ammount
+        var toBeRemoved = amount
         var filteredList =
             this.garbage
                 .filter { it.type == type }
@@ -84,7 +82,7 @@ abstract class Tile(
         while (toBeRemoved > 0 && filteredList.isNotEmpty()) {
             if (toBeRemoved >= filteredList[0].amount) {
                 toBeRemoved -= filteredList[0].amount
-                filteredList = filteredList.filterIndexed { index, _ -> index != 0 } //removes element at 0th Index
+                filteredList = filteredList.filterIndexed { index, _ -> index != 0 } // removes element at 0th Index
             }
             if (toBeRemoved < filteredList[0].amount) {
                 filteredList[0].amount -= toBeRemoved
@@ -99,11 +97,10 @@ abstract class Tile(
      * Note this should not exceed 1000
      */
     fun currentOilLevel(): Int {
-        var accumulator=  0
+        var accumulator = 0
         for (oil in this.garbage.filter { it.type == GarbageType.OIL }) {
             accumulator += oil.amount
         }
         return accumulator
     }
-
 }

@@ -13,11 +13,11 @@ class DeepOcean(
     id,
     pos,
     adjacentTiles,
-    garbage,0
+    garbage,
+    0
 ) {
     /**
      * gives current
      */
-     fun getCurrent(): Current? = current
-
+    fun getCurrent(): Current? = current
 }

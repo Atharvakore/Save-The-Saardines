@@ -9,10 +9,11 @@ class Shore(
     pos: Vec2D,
     adjacentTiles: List<Tile>,
     garbage: List<Garbage>,
-    val harbor:Boolean
+    val harbor: Boolean
 ) : Tile(
     id,
     pos,
     adjacentTiles,
-    garbage,0
+    garbage,
+    0
 )
