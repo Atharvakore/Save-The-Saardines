@@ -7,6 +7,7 @@ import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.GarbageType
+import de.unisaarland.cs.se.selab.tiles.Shore
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.json.JSONArray
 import org.json.JSONObject
@@ -94,10 +95,25 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         }
         accumulator.addShip(shipInstance.id, shipInstance)
         accumulator.addShipToCorp(corporation, shipInstance.id)
+        return shipInstance
     }
 
     private fun createCorporation(corporation: JSONObject): Corporation {
-
+        val id = corporation.getInt(ID)
+        val name = corporation.getString(NAME)
+        val ships = corporation.getJSONArray("ships")
+        val ownnedShips: MutableList<Ship> = mutableListOf()
+        ships.forEach {
+            ownnedShips.add(accumulator.getShipsById(it as Int)!!)
+        }
+        val harbors = corporation.getJSONArray(HOMEHARBORS)
+        val ownedHarbors: MutableList<Shore> = mutableListOf()
+        harbors.forEach {
+            ownedHarbors.add(accumulator.getTileById(it as Int) as Shore)
+        }
+        val garbageTypes: List<GarbageType> = listOf(GarbageType.OIL, GarbageType.PLASTIC, GarbageType.CHEMICALS)
+        val corporationInstance = Corporation(id, name, ownnedShips, ownedHarbors, garbageTypes, mutableListOf())
+        return corporationInstance
     }
 
     private fun validateShip(shipObject: JSONObject): Boolean {
@@ -136,6 +152,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         const val PLASTIC = "PLASTIC"
         const val OIL = "OIL"
         const val CHEMICALS = "CHEMICALS"
+        const val HOMEHARBORS = "homeHarbors"
         val mapGarbageStringToType =
             mapOf(CHEMICALS to GarbageType.CHEMICALS, OIL to GarbageType.OIL, PLASTIC to GarbageType.PLASTIC)
     }
