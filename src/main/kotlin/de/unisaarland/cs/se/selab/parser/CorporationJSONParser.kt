@@ -111,7 +111,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         val ships = corporation.getJSONArray("ships")
         val ownnedShips: MutableList<Ship> = mutableListOf()
         ships.forEach {
-            ownnedShips.add(accumulator.getShipsById(it as Int)!!)
+            ownnedShips.add(accumulator.ships[it as Int]!!)
         }
         val harbors = corporation.getJSONArray(HOMEHARBORS)
         val ownedHarbors: MutableList<Shore> = mutableListOf()
