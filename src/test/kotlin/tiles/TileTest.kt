@@ -10,6 +10,7 @@ import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
@@ -22,7 +23,7 @@ class TileTest {
 
     @BeforeEach
     fun setup() {
-        sea.tiles = listOf(
+        sea.tiles = mutableListOf(
             Shore(1, Vec2D(0, 0), listOf(), listOf(), false),
             Shore(2, Vec2D(0, 1), listOf(), listOf(), false),
             DeepOcean(3, Vec2D(1, 0), listOf(), listOf(), Current(1, Direction.D60, 1)),
@@ -34,6 +35,10 @@ class TileTest {
         val garbageForTileFour: Garbage = Garbage(1, 500, GarbageType.PLASTIC, null)
         val tileFour: Tile? = sea.getTileById(4)
         tileFour?.addGarbage(garbageForTileFour)
+
+        val garbageForTileSix: Garbage = Garbage(2, 600, GarbageType.OIL, null)
+        val tileSix: Tile? = sea.getTileById(6)
+        tileSix?.addGarbage(garbageForTileSix)
     }
 
     /** Testing basic functionalities **/
@@ -61,12 +66,16 @@ class TileTest {
     }
 
     @Test
-    fun testRemoveAmountOfType() {
-
+    fun testRemoveGarbageOfType() {
+        val currTile: Tile? = sea.getTileById(4)
+        currTile?.removeGarbageOfType(GarbageType.PLASTIC, 500)
+        assertFalse(currTile?.garbage?.any { it.id == 1 }!!)
     }
 
     @Test
     fun testCurrentOilLevel() {
-        TODO("Not yet implemented")
+        val currTile: Tile? = sea.getTileById(6)
+        val oilLevel: Int = currTile?.currentOilLevel()!!
+        assert(oilLevel == 600)
     }
 }
