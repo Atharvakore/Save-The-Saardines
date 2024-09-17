@@ -10,6 +10,9 @@ class EndRestriction(
     private val location: Tile,
     private val radius: Int
 ) : LocalEvent(id, fireTick, map, location, radius) {
+    override fun toString(): String {
+        return "End Restriction"
+    }
     override fun actUponTick(currentTick: Int): Boolean {
         if (currentTick == fireTick) {
             location.pos.tilesInRadius(radius).forEach {

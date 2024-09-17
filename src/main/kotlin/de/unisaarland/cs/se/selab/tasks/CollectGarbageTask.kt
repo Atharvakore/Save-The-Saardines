@@ -13,6 +13,9 @@ class CollectGarbageTask(
     corporation: Corporation,
     val targetTile: Tile
 ): Task(tick, id, taskShip, reward, rewardShip, corporation) {
+    override fun toString(): String {
+        return "Collect Garbage"
+    }
     override fun checkCondition(): Boolean {
         return taskShip.getPos().pos == targetTile.pos
     }

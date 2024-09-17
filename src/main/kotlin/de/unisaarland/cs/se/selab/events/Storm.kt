@@ -10,6 +10,9 @@ class Storm(
     private val location: Tile?,
     private val radius: Int
 ) : LocalEvent(id, fireTick, map, location, radius) {
+    override fun toString(): String {
+        return "Storm"
+    }
     override fun actUponTick(currentTick: Int): Boolean {
         if (currentTick == fireTick) {
             // TODO.

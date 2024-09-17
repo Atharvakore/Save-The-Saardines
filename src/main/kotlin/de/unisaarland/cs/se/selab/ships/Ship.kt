@@ -135,7 +135,7 @@ abstract class Ship(
      * */
     fun tickTask(){
         val lastTileIndex = destinationPath.size - 1
-        val reachedTileIndex = destinationPath.indexOf(getPos())
+        val reachedTileIndex = destinationPath.indexOf(getPos()) + 1
         destinationPath = destinationPath.subList(reachedTileIndex, lastTileIndex)
         move(destinationPath)
         if (getPos() == destinationPath.last()){

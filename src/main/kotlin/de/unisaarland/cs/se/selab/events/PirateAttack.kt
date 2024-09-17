@@ -9,6 +9,9 @@ class PirateAttack(
     private val ship: Ship,
     private val owningCorporation: Corporation
 ) : Event(id, fireTick) {
+    override fun toString(): String {
+        return "Pirate Attack"
+    }
     override fun actUponTick(currentTick: Int): Boolean {
         if (currentTick == fireTick) {
             owningCorporation.ownedShips.remove(ship)

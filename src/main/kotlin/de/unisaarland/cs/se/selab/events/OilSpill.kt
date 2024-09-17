@@ -14,6 +14,9 @@ class OilSpill(
     private val radius: Int,
     private val amount: Int
 ) : LocalEvent(id, fireTick, map, location, radius) {
+    override fun toString(): String {
+        return "Oil Spill"
+    }
     companion object {
         private const val OIL_TILE_MAX = 1000
     }
