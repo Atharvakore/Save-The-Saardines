@@ -4,8 +4,6 @@ import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.tasks.CollectGarbageTask
-import de.unisaarland.cs.se.selab.tasks.CooperateTask
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Dijkstra
 import de.unisaarland.cs.se.selab.tiles.Garbage
@@ -43,16 +41,16 @@ class Corporation(
 
         myCoordinatingShips.forEach { coordinatingShip ->
             val otherShipsOnTile: List<Ship> = otherShips
-                .filter { coordinatingShip.getPos() == it.getPos() && it.getOwner() != lastCoordinatingCorporation }
-            val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.getOwner() }.distinct()
-            val otherShipsToCooperate: List<Ship> = otherShips.filter { otherCorporations.contains(it.getOwner()) }
+                .filter { coordinatingShip.getPosition() == it.getPosition() && it.getOwnerCorporation() != lastCoordinatingCorporation }
+            val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.getOwnerCorporation() }.distinct()
+            val otherShipsToCooperate: List<Ship> = otherShips.filter { otherCorporations.contains(it.getOwnerCorporation()) }
 
             otherShipsToCooperate.forEach { otherShipToCooperate ->
                 val telescopes: List<ScoutingShip> = otherShipToCooperate.capabilities
                     .filterIsInstance<ScoutingShip>()
                 telescopes.forEach {
-                    val tilesWithGarbage: List<Tile> = it.getTilesWithGarbageInFoV(Sea, otherShipToCooperate.getPos()!!)
-                    partnerGarbage.getOrPut(otherShipToCooperate.getOwner().id) { mutableListOf() } += tilesWithGarbage
+                    val tilesWithGarbage: List<Tile> = it.getTilesWithGarbageInFoV(Sea, otherShipToCooperate.getPosition()!!)
+                    partnerGarbage.getOrPut(otherShipToCooperate.getOwnerCorporation().id) { mutableListOf() } += tilesWithGarbage
                 }
             }
             val lastCorporation: Corporation? = otherCorporations.maxByOrNull { it.id }
@@ -98,12 +96,12 @@ class Corporation(
         for (task in activeTasks) {
             val ship: Ship = task.taskShip
             val targetTile: Tile = task.getGoal()
-            Dijkstra(targetTile).allPaths()[ship.getPos()]?.let { path ->
+            Dijkstra(targetTile).allPaths()[ship.getPosition()]?.let { path ->
                 if (ship.isFuelSufficient(path.size)) {
                     ship.move(path)
                     availableShips.remove(ship)
                 } else {
-                    val closestHarborPath: List<Tile> = findClosestHarbor(ship.getPos(), ownedHarbors)
+                    val closestHarborPath: List<Tile> = findClosestHarbor(ship.getPosition(), ownedHarbors)
                     ship.moveUninterrupted(closestHarborPath)
                     availableShips.remove(ship)
                 }
@@ -122,7 +120,7 @@ class Corporation(
         val collectingShips: List<Ship> = filterCollectingShip()
         for (ship in collectingShips) {
             for (collectingCapability in ship.capabilities) {
-                (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship.getPos())
+                (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship.getPosition())
             }
         }
     }
@@ -157,7 +155,7 @@ class Corporation(
     private fun getShipsOnHarbor(): List<Ship> {
         val seaInstance: Sea = Sea
         val harborTiles: List<Tile> = seaInstance.tiles.filter { (it as Shore).harbor }
-        return ownedShips.filter { harborTiles.contains(it.getPos()) }
+        return ownedShips.filter { harborTiles.contains(it.getPosition()) }
     }
 
     /**
@@ -178,7 +176,7 @@ class Corporation(
         var shortestPath: List<Tile> = listOf()
 
         for (ship in ships) {
-            val path: List<Tile>? = shortestPaths[ship.getPos()]
+            val path: List<Tile>? = shortestPaths[ship.getPosition()]
             if (path != null && path.size < shortestPathLen) {
                 shortestPathLen = path.size
                 shortestPath = path

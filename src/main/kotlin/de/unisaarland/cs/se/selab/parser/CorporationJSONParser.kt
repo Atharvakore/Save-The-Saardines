@@ -70,15 +70,22 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         val acceleration = ship.getInt(ACCELERATION)
         val fuelCapacity = ship.getInt(FUELCAPACITY)
         val fuelConsumption = ship.getInt(FUELCONSUMPTION)
-        val shipInstance = Ship(id, maxVelocity, acceleration, fuelCapacity, fuelConsumption, mutableListOf())
-        shipInstance.setTile(accumulator.getTileById(location))
+        val shipInstance = Ship(
+            id,
+            maxVelocity,
+            acceleration,
+            fuelCapacity,
+            fuelConsumption,
+            mutableListOf(),
+            accumulator.getTileById(location)!!
+        )
         when (type) {
             COLLECTER -> {
                 val capacity = ship.getInt(CAPACITY)
                 val garbageType = ship.getString(GARBAGETYPE)
                 val container = Container(mapGarbageStringToType[garbageType]!!, capacity)
-                val collecterCapability = CollectingShip(mutableListOf(container))
-                shipInstance.addCapability(collecterCapability)
+                val collectorCapability = CollectingShip(mutableListOf(container))
+                shipInstance.addCapability(collectorCapability)
             }
 
             SCOUTING -> {
