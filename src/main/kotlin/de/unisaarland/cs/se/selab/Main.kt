@@ -10,9 +10,12 @@ import de.unisaarland.cs.se.selab.parser.CorporationJSONParser
 import de.unisaarland.cs.se.selab.parser.MapJSONParser
 import de.unisaarland.cs.se.selab.parser.ScenarioJSONParser
 import de.unisaarland.cs.se.selab.parser.TasksRewardsParser
+import io.github.oshai.kotlinlogging.KotlinLogging
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+
+private val logger = KotlinLogging.logger {}
 
 /**
  * this is the main class
@@ -42,8 +45,16 @@ fun main(args: Array<String>) {
 private fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
     val contents = validate(files) ?: return null
     val accumulator = Accumulator()
+    var cond: Boolean = maxTicks == null || outputFile == null
+    cond = cond || parseMap(files, contents, accumulator) == null
+    if (cond || parseScenario(files, contents, accumulator) == null) {
+        return null
+    }
+    return accumulator
+}
+private fun parseMap(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
     val mapParser = MapJSONParser(accumulator)
-    if (maxTicks != null && mapParser.parseMap(contents[0])) {
+    if (mapParser.parseMap(contents[0])) {
         Logger.logInitializationInfoSuccess(files[0]!!)
     } else {
         return null
@@ -54,6 +65,9 @@ private fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Ac
     } else {
         return null
     }
+    return accumulator
+}
+private fun parseScenario(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
     val scenarioParser = ScenarioJSONParser(accumulator)
     val taskPars = TasksRewardsParser(accumulator)
     var validScenario = scenarioParser.parseGarbage(contents[2]) && scenarioParser.parseEvents(contents[2])
@@ -70,35 +84,41 @@ private fun validate(files: List<String?>): List<String>? {
     val validatingSchemas: MutableList<String> = mutableListOf("resources/schema/map.schema")
     validatingSchemas.add("resources/schema/corporations.schema")
     validatingSchemas.add("resources/schema/scenario.schema")
-    var objectFile: File
     for (i in 0..2) {
         val file: String? = files[i]
         if (file != null) {
-            val schema: Schema = SchemaLoader.forURL(validatingSchemas[i]).load()
-            val validator: Validator = Validator.forSchema(schema)
-            var objects: String
-            try {
-                objectFile = File(file)
-            } catch (notFound: FileNotFoundException) {
-                Logger.logInitializationInfoFail(file)
-                return null
-            }
-            try {
-                objects = objectFile.readText()
-                val fail: ValidationFailure? = validator.validate(objects)
-                if (fail != null) {
-                    Logger.logInitializationInfoFail(file)
-                    return null
-                } else {
-                    contents.add(objects)
-                }
-            } catch (notFound: IOException) {
-                Logger.logInitializationInfoFail(file)
-            }
+            val validatedFile: String = readFile(validatingSchemas[i], file) ?: return null
+            contents.add(validatedFile)
         } else {
             return null
         }
     }
     return contents
 }
-
+private fun readFile(validatingSchema: String, file: String): String? {
+    val schema: Schema = SchemaLoader.forURL(validatingSchema).load()
+    val validator: Validator = Validator.forSchema(schema)
+    var objects: String
+    var objectFile: File
+    try {
+        objectFile = File(file)
+    } catch (notFound: FileNotFoundException) {
+        Logger.logInitializationInfoFail(file)
+        logger.error(notFound) { "error" }
+        return null
+    }
+    try {
+        objects = objectFile.readText()
+        val fail: ValidationFailure? = validator.validate(objects)
+        if (fail != null) {
+            Logger.logInitializationInfoFail(file)
+            return null
+        } else {
+            return objects
+        }
+    } catch (notFound: IOException) {
+        logger.error(notFound) { "error" }
+        Logger.logInitializationInfoFail(file)
+    }
+    return null
+}
