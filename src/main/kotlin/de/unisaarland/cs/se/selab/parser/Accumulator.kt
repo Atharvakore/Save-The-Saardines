@@ -11,10 +11,10 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
 
 class Accumulator {
-    private var map: Sea? = null
-    private var corporations: MutableMap<Int, Corporation> = mutableMapOf()
+    var map: Sea? = null
+    var corporations: MutableMap<Int, Corporation> = mutableMapOf()
     private var ships: MutableMap<Int, Ship> = mutableMapOf()
-    private var events: MutableMap<Int, Event> = mutableMapOf()
+    var events: MutableMap<Int, Event> = mutableMapOf()
     private var garbage: MutableMap<Int, Garbage> = mutableMapOf()
     private var tasks: MutableMap<Int, Task> = mutableMapOf()
     private var rewards: MutableMap<Int, Reward> = mutableMapOf()
@@ -22,9 +22,7 @@ class Accumulator {
     private var mapCorporationToShips: Map<Int, MutableList<Int>> = mutableMapOf()
     var tiles: MutableMap<Int, Tile> = mutableMapOf()
     var tilesByCoordinate: MutableMap<Vec2D, Tile> = mutableMapOf()
-    public fun getMap(): Sea? {
-        return map
-    }
+
 
     public fun getHarborsOfCorporation(corporationId: Int): List<Tile>? {
         return mapCorporationToHarbor[corporationId]

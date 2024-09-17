@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.events
 
+import de.unisaarland.cs.se.selab.tiles.Direction
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -10,6 +11,16 @@ class Storm(
     private val location: Tile?,
     private val radius: Int
 ) : LocalEvent(id, fireTick, map, location, radius) {
+
+    private var speed: Int? = null
+    private var direction: Direction? = null
+
+    public fun setSpeed(speed: Int){
+        this.speed= speed
+    }
+    public fun setDirection(direction: Direction?){
+        this.direction = direction
+    }
     override fun actUponTick(currentTick: Int): Boolean {
         if (currentTick == fireTick) {
             // TODO.

@@ -66,7 +66,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
         val rewardShip = accumulator.getShipsById(task.getInt("rewardShipID"))
         val taskCorporation = rewardShip!!.getOwner()
         val reward: Reward? = accumulator.getRewardById(task.getInt("rewardID"))
-        val targetTile: Tile? = accumulator.getTileById(task.getInt("targetTile"))
+        val targetTile: Tile = accumulator.getTileById(task.getInt("targetTile"))!!
         var returnCond = false
         when (taskType) {
             "COLLECT" -> {
