@@ -4,6 +4,8 @@ import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.tasks.Reward
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.GarbageType
+import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.corporation.Corporation
 import java.io.PrintWriter
 
 /**
@@ -11,6 +13,10 @@ import java.io.PrintWriter
  */
 object Logger {
     /** The stream that this logger writes to. */
+    private var totalOilCollected = 0
+    private var totalPlasticCollected = 0
+    private var totalChemicalsCollected = 0
+    lateinit var map: MutableMap<Int, Int>
     var output: LogOutputStream = BackedLogOutputStream(PrintWriter(System.out))
     private fun log(message: String) {
         output.write(message)
@@ -63,10 +69,19 @@ object Logger {
 
     /** Logged to signify that a ship has collected garbage. */
     fun logGarbageCollectionByShip(shipId: Int, garbageType: GarbageType, garbageId: Int, amount: Int) {
-        log("Garbage Collection: Ship $shipId collected $amount of garbage $garbageType with $garbageId.")
+        fun logGarbageCollectionByShip(ship: Ship, garbageType: GarbageType, garbageId: Int, amount: Int) {
+            val shipId: Int = ship.id
+            val corporationId: Int = ship.getOwnerCorporation().id
+            when (garbageType) {
+                GarbageType.OIL -> totalOilCollected += amount
+                GarbageType.PLASTIC -> totalPlasticCollected += amount
+                GarbageType.CHEMICALS -> totalChemicalsCollected += amount
+            }
+            map[corporationId] = map.getOrDefault(corporationId, 0) + amount
+            log("Garbage Collection: Ship $shipId collected $amount of garbage $garbageType with $garbageId.")
+        }
     }
-
-    /** Log the start of cooperation between corporations. */
+        /** Log the start of cooperation between corporations. */
     fun logCorporationCooperationStart(corporationId: Int) {
         log("Corporation Action: Corporation $corporationId is starting to cooperate with other corporations.")
     }
@@ -80,9 +95,9 @@ object Logger {
     ) {
         log(
             "Cooperation: Corporation $corporationId" +
-                " cooperated with corporation" +
-                " $otherCorporationId with ship" +
-                " $shipId to ship $cooperatedShipId."
+                    " cooperated with corporation" +
+                    " $otherCorporationId with ship" +
+                    " $shipId to ship $cooperatedShipId."
         )
     }
 
@@ -116,9 +131,9 @@ object Logger {
     ) {
         log(
             "Current Drift: $garbageType" +
-                " $garbageId with amount" +
-                " $amount drifted from tile" +
-                " $startTileId to tile $endTileId."
+                    " $garbageId with amount" +
+                    " $amount drifted from tile" +
+                    " $startTileId to tile $endTileId."
         )
     }
 
@@ -149,34 +164,43 @@ object Logger {
 
     /** Log the statistics of the simulation.
      * will have corporations: List<Corporation> */
-    fun logSimulationStatistics() {
-        // Yet to be completed as no idea where we can pass arguments
-        // here a list ot call this function iteratively in simulator
-        TODO()
+    fun logSimulationStatistics(corporations: MutableList<Corporation>) {
+        logSimulationStatisticsCalculated()
+        for (corporation in corporations) {
+            if (map.containsKey(corporation.id)) {
+                statsForCorporation(corporation.id, map[corporation.id]!!)
+            } else {
+                statsForCorporation(corporation.id, 0)
+            }
+        }
+        totalPlastic(totalPlasticCollected)
+        totalChemicals(totalChemicalsCollected)
+        totalOil(totalOilCollected)
+        totalGarbageInOcean(totalOilCollected + totalChemicalsCollected + totalOilCollected)
     }
 
     /** Statistics for corporation */
-    fun statsForCorporation(corporationId: Int, amount: Int) {
+    private fun statsForCorporation(corporationId: Int, amount: Int) {
         log("Simulation Statistics: Corporation $corporationId collected $amount of garbage.")
     }
 
     /** Statistics for Plastic*/
-    fun totalPlastic(amount: Int) {
+    private fun totalPlastic(amount: Int) {
         log("Simulation Statistics: Total amount of plastic collected: $amount")
     }
 
     /** Statistics for Oil*/
-    fun totalOil(amount: Int) {
+    private fun totalOil(amount: Int) {
         log("Simulation Statistics: Total amount of oil collected: $amount.")
     }
 
     /** Statistics for Chemicals*/
-    fun totalChemicals(amount: Int) {
+    private fun totalChemicals(amount: Int) {
         log("Simulation Statistics: Total amount of chemicals collected: $amount.")
     }
 
     /** Statistics for Garbage*/
-    fun totalGarbageInOcean(amount: Int) {
+    private fun totalGarbageInOcean(amount: Int) {
         log("Simulation Statistics: Total amount of garbage still in the ocean: $amount.")
     }
 }
