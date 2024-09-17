@@ -65,8 +65,8 @@ class Corporation(
      *
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
-    fun run(otherShips: List<Ship>) {
-        moveShips()
+    fun run(sea: Sea, otherShips: List<Ship>) {
+        moveShips(sea)
         collectGarbage()
         cooperate(otherShips)
         refuelAndUnloadShips()
@@ -84,7 +84,7 @@ class Corporation(
     }
 
     /** Documentation for getShipsOnHarbor Function **/
-    private fun moveShips() {
+    private fun moveShips(sea: Sea) {
         TODO(TODO)
     }
 
