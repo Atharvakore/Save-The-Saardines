@@ -1,6 +1,5 @@
 package de.unisaarland.cs.se.selab.logger
 
-import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.tasks.Reward
 import de.unisaarland.cs.se.selab.tasks.Task
@@ -80,7 +79,10 @@ object Logger {
         cooperatedShipId: Int
     ) {
         log(
-            "Cooperation: Corporation $corporationId cooperated with corporation $otherCorporationId with ship $shipId to ship $cooperatedShipId."
+            "Cooperation: Corporation $corporationId" +
+                " cooperated with corporation" +
+                " $otherCorporationId with ship" +
+                " $shipId to ship $cooperatedShipId."
         )
     }
 
@@ -113,7 +115,10 @@ object Logger {
         endTileId: Int
     ) {
         log(
-            "Current Drift: $garbageType $garbageId with amount $amount drifted from tile $startTileId to tile $endTileId."
+            "Current Drift: $garbageType" +
+                " $garbageId with amount" +
+                " $amount drifted from tile" +
+                " $startTileId to tile $endTileId."
         )
     }
 
@@ -142,30 +147,36 @@ object Logger {
         log("Simulation Info: Simulation statistics are calculated.")
     }
 
-    /** Log the statistics of the simulation. */
-    fun logSimulationStatistics(corporations: List<Corporation>) {
+    /** Log the statistics of the simulation.
+     * will have corporations: List<Corporation> */
+    fun logSimulationStatistics() {
         // Yet to be completed as no idea where we can pass arguments
         // here a list ot call this function iteratively in simulator
         TODO()
     }
 
-    private fun statsForCorporation(corporationId: Int, amount: Int) {
+    /** Statistics for corporation */
+    fun statsForCorporation(corporationId: Int, amount: Int) {
         log("Simulation Statistics: Corporation $corporationId collected $amount of garbage.")
     }
 
-    private fun totalPlastic(amount: Int) {
+    /** Statistics for Plastic*/
+    fun totalPlastic(amount: Int) {
         log("Simulation Statistics: Total amount of plastic collected: $amount")
     }
 
-    private fun totalOil(amount: Int) {
+    /** Statistics for Oil*/
+    fun totalOil(amount: Int) {
         log("Simulation Statistics: Total amount of oil collected: $amount.")
     }
 
-    private fun totalChemicals(amount: Int) {
+    /** Statistics for Chemicals*/
+    fun totalChemicals(amount: Int) {
         log("Simulation Statistics: Total amount of chemicals collected: $amount.")
     }
 
-    private fun totalGarbageInOcean(amount: Int) {
+    /** Statistics for Garbage*/
+    fun totalGarbageInOcean(amount: Int) {
         log("Simulation Statistics: Total amount of garbage still in the ocean: $amount.")
     }
 }
