@@ -24,7 +24,6 @@ class Accumulator {
     var tiles: MutableMap<Int, Tile> = mutableMapOf()
     var tilesByCoordinate: MutableMap<Vec2D, Tile> = mutableMapOf()
 
-
     /** getter of harbors for Corporation */
     public fun getHarborsOfCorporation(corporationId: Int): List<Tile>? {
         return mapCorporationToHarbor[corporationId]
@@ -114,6 +113,4 @@ class Accumulator {
     public fun getGarbageById(garbageId: Int): Garbage? {
         return garbage[garbageId]
     }
-
-
 }

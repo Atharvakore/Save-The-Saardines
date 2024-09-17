@@ -16,7 +16,6 @@ class Ship(
     private var fuelConsumption: Int,
     var capabilities: MutableList<ShipCapability>,
     var pos: Tile,
-    val owner: Corporation
 ) {
 
     init {
@@ -51,10 +50,10 @@ class Ship(
     private var consumedFuel: Int = 0
     var hasTaskAssigned: Boolean = false
     private var destinationPath = emptyList<Tile>()
+    lateinit var owner: Corporation
 
     constructor(
         id: Int,
-        owner: Corporation,
         maxVelocity: Int,
         acceleration: Int,
         fuelCapacity: Int,
@@ -62,7 +61,7 @@ class Ship(
         capabilities: MutableList<ShipCapability>,
         name: String,
         pos: Tile
-    ) : this(id, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities, pos, owner) {
+    ) : this(id, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities, pos) {
         this.name = name
     }
 
@@ -157,12 +156,12 @@ class Ship(
      * complete the movement of the ship along the destination path
      * if it has an assigned task
      * */
-    fun tickTask(){
+    fun tickTask() {
         val lastTileIndex = destinationPath.size - 1
         val reachedTileIndex = destinationPath.indexOf(getPos()) + 1
         destinationPath = destinationPath.subList(reachedTileIndex, lastTileIndex)
         move(destinationPath)
-        if (getPos() == destinationPath.last()){
+        if (getPos() == destinationPath.last()) {
             hasTaskAssigned = false
             destinationPath = emptyList()
         }
@@ -172,10 +171,10 @@ class Ship(
      * set destination for the ship
      * and store the path until its completed
      * */
-    fun moveUninterrupted(pathToHarbor: List<Tile>){
+    fun moveUninterrupted(pathToHarbor: List<Tile>) {
         hasTaskAssigned = true
         move(pathToHarbor)
-        if (getPos() == pathToHarbor.last()){
+        if (getPos() == pathToHarbor.last()) {
             hasTaskAssigned = false
             destinationPath = emptyList()
         }
