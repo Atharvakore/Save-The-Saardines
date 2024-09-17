@@ -53,6 +53,7 @@ class Ship(
         get() {
             return owner
         }
+    private var destinationPath = emptyList<Tile>()
 
     constructor(
         id: Int,
@@ -154,5 +155,33 @@ class Ship(
     /** Set the current position of the Ship */
     fun setTile(tile: Tile?) {
         this.pos = tile
+    }
+
+    /**
+     * complete the movement of the ship along the destination path
+     * if it has an assigned task
+     * */
+    fun tickTask(){
+        val lastTileIndex = destinationPath.size - 1
+        val reachedTileIndex = destinationPath.indexOf(getPos()) + 1
+        destinationPath = destinationPath.subList(reachedTileIndex, lastTileIndex)
+        move(destinationPath)
+        if (getPos() == destinationPath.last()){
+            hasTaskAssigned = false
+            destinationPath = emptyList()
+        }
+    }
+
+    /**
+     * set destination for the ship
+     * and store the path until its completed
+     * */
+    fun moveUninterrupted(pathToHarbor: List<Tile>){
+        hasTaskAssigned = true
+        move(pathToHarbor)
+        if (getPos() == pathToHarbor.last()){
+            hasTaskAssigned = false
+            destinationPath = emptyList()
+        }
     }
 }

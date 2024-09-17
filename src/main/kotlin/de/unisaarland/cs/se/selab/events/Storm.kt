@@ -11,12 +11,15 @@ class Storm(
     private val location: Tile?,
     private val radius: Int
 ) : LocalEvent(id, fireTick, map, location, radius) {
+    override fun toString(): String {
+        return "Storm"
+    }
 
     private var speed: Int? = null
     private var direction: Direction? = null
 
     public fun setSpeed(speed: Int){
-        this.speed= speed
+        this.speed = speed
     }
     public fun setDirection(direction: Direction?){
         this.direction = direction

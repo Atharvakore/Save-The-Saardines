@@ -11,8 +11,12 @@ class CooperateTask(
     reward: Reward,
     rewardShip: Ship,
     corporation: Corporation,
-    private val destinationHomeHarbor: Tile
+    val destinationHomeHarbor: Tile
 ): Task(tick, id, taskShip, reward, rewardShip, corporation) {
+
+    override fun toString(): String {
+        return "Cooperate with Other Corporation"
+    }
     override fun checkCondition(): Boolean {
         return taskShip.getPos().pos == destinationHomeHarbor.pos
     }
@@ -23,5 +27,9 @@ class CooperateTask(
             return true
         }
         return false
+    }
+
+    override fun getGoal(): Tile {
+        return destinationHomeHarbor
     }
 }

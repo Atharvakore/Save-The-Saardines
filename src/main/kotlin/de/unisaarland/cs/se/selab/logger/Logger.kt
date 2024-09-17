@@ -1,6 +1,5 @@
 package de.unisaarland.cs.se.selab.logger
 
-import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import java.io.PrintWriter
 
@@ -85,13 +84,13 @@ object Logger {
     fun  logCurrentDriftShip(shipId:Int,startTileId:Int, endTileId:Int){
         log("Current Drift: Ship $shipId drifted from tile $startTileId to tile $endTileId.")
     }
-    fun  logEventStart(eventId:Int,eventType:EventType){
+    fun  logEventStart(eventId:Int, eventType: Event){
         log("Event: Event $eventId of type $eventType happened.")
     }
-    fun  logTaskAddedToShip(taskId: Int, taskType: TaskType, shipId: Int, tileId: Int) {
+    fun  logTaskAddedToShip(taskId: Int, taskType: Task, shipId: Int, tileId: Int) {
         log("Task: Task $taskId of type $taskType with ship $shipId is added with destination $tileId.")
     }
-    fun  logRewardReceived(taskId: Int, shipId: Int, rewardType: RewardType){
+    fun  logRewardReceived(taskId: Int, shipId: Int, rewardType: Reward){
         log("Reward: Task $taskId: Ship $shipId received reward of type $rewardType.")
     }
     fun  logSimulationStatisticsCalculated() {
