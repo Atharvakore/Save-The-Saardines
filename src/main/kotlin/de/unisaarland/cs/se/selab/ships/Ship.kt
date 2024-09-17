@@ -46,7 +46,7 @@ abstract class Ship(
     }
     private var consumedFuel: Int = 0
     var hasTaskAssigned: Boolean = false
-
+    private var destinationPath = emptyList<Tile>()
 
     /**
      * return owner corporation
@@ -127,5 +127,33 @@ abstract class Ship(
     fun isFuelSufficient(pathLength: Int): Boolean {
         val neededFuel = fuelConsumption * pathLength * TEN
         return neededFuel <= fuelCapacity - consumedFuel
+    }
+
+    /**
+     * complete the movement of the ship along the destination path
+     * if it has an assigned task
+     * */
+    fun tickTask(){
+        val lastTileIndex = destinationPath.size - 1
+        val reachedTileIndex = destinationPath.indexOf(getPos())
+        destinationPath = destinationPath.subList(reachedTileIndex, lastTileIndex)
+        move(destinationPath)
+        if (getPos() == destinationPath.last()){
+            hasTaskAssigned = false
+            destinationPath = emptyList()
+        }
+    }
+
+    /**
+     * set destination for the ship
+     * and store the path until its completed
+     * */
+    fun moveUninterrupted(pathToHarbor: List<Tile>){
+        hasTaskAssigned = true
+        move(pathToHarbor)
+        if (getPos() == pathToHarbor.last()){
+            hasTaskAssigned = false
+            destinationPath = emptyList()
+        }
     }
 }

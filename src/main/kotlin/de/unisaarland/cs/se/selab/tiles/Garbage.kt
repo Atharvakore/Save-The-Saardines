@@ -2,11 +2,6 @@ package de.unisaarland.cs.se.selab.tiles
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
 
-
-const val FIFTY = 50
-const val TEN = 10
-const val THOUSAND = 1000
-
 /**
  * Garbage class implementing all minor stuff related to Garbage
  */
