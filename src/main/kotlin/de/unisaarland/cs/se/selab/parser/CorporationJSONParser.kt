@@ -1,5 +1,7 @@
 package de.unisaarland.cs.se.selab.parser
+
 import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.json.JSONArray
@@ -21,7 +23,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         try {
             file = File(filePath)
         } catch (err: FileNotFoundException) {
-            logger.error { "file '$filePath' does not exist." }
+            logger.error(err) { "file '$filePath' does not exist." }
             return false
         }
         try {
@@ -32,7 +34,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             corporations = objects.getJSONObject(CORPORATIONS) as JSONArray
             ships = objects.getJSONObject(SHIPS) as JSONArray
         } catch (err: IOException) {
-            logger.error { "Failed to parse file '$filePath'" }
+            logger.error(err) { "Failed to parse file '$filePath'" }
             return false
         }
         val result = validateShips(ships) && validateCorporations(corporations)
@@ -40,15 +42,44 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
     }
 
     private fun validateCorporations(corpObjects: JSONArray): Boolean {
-        return false
+        corpObjects.forEach {
+            if (validateCorporation(it as JSONObject)) {
+                this.createCorporation(it)
+            } else return false
+        }
     }
 
     private fun validateCorporation(corporation: JSONObject): Boolean {
-        return false
+        return corporation.has(ID)
     }
 
     private fun createShip(ship: JSONObject): Ship {
-        return  Ship()
+        val id = ship.getInt(ID)
+        val name = ship.getString(NAME)
+        val type = ship.getString(TYPE)
+        val corporation = ship.getInt(CORPORATION)
+        val location = ship.getInt(LOCATION)
+        val maxVelocity = ship.getString(MAXVELOCITY)
+        val acceleration = ship.getString(ACCELERATION)
+        val fuelCapacity = ship.getString(FUELCAPACITY)
+        val fuelConsumption = ship.getString(FUELCONSUMPTION)
+        val ship:Ship =  Ship(id,name,type,corporation,maxVelocity, acceleration, fuelCapacity, fuelConsumption, mutableListOf())
+        when (type) {
+            COLLECTER -> {
+
+            }
+
+            SCOUTING -> {
+
+            }
+
+            else -> {
+
+            }
+        }
+        accumulator.addShip(ship.id, ship)
+        accumulator.addShipToCorp(corporation, ship.id)
+
     }
 
     private fun createCorporation(corporation: JSONObject): Corporation {
@@ -56,15 +87,35 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
     }
 
     private fun validateShip(shipObject: JSONObject): Boolean {
-        return false
+        return shipObject.has(ID)
     }
 
-    private fun validateShips(corporationObjects: JSONArray): Boolean {
-        return false
+    private fun validateShips(shipObjects: JSONArray): Boolean {
+        shipObjects.forEach {
+            if (validateShip(it as JSONObject)) {
+                val ship = this.createShip(it)
+            } else return false
+        }
+        return true
     }
 
     companion object Companion {
         const val CORPORATIONS = "corporations"
         const val SHIPS = "ships"
+        const val ID = "id"
+        const val NAME = "name"
+        const val TYPE = "type"
+        const val CORPORATION = "corporation"
+        const val LOCATION = "location"
+        const val MAXVELOCITY = "maxVelocity"
+        const val ACCELERATION = "acceleration"
+        const val FUELCAPACITY = "fuelCapacity"
+        const val FUELCONSUMPTION = "fuelConsumption"
+        const val CAPACITY = "capacity"
+        const val GARBAGETYPE = "garbageType"
+        const val SCOUTING = "SCOUTING"
+        const val COLLECTER = "COLLECTING"
+        const val COORDINATING = "COORDINATING"
+
     }
 }

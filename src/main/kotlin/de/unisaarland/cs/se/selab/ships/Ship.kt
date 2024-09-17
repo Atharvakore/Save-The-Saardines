@@ -9,8 +9,9 @@ import de.unisaarland.cs.se.selab.tiles.Current
  * class representing a ship
  */
 abstract class Ship(
-    private val id: Int,
-    private val owner: Corporation,
+    val id: Int,
+    val owner: Corporation,
+
     private val maxVelocity: Int,
     private val acceleration: Int,
     private var fuelCapacity: Int,
@@ -72,6 +73,7 @@ abstract class Ship(
     fun getOwner(): Corporation {
         return this.owner
     }
+
     /**
      * return ship current tile
      */
@@ -83,7 +85,7 @@ abstract class Ship(
      * Call: when the ship is on the harbor
      * Logic: the ship has to max its fuelCapacity
      */
-    fun refuel(){
+    fun refuel() {
         this.consumedFuel = 0
     }
 
@@ -92,7 +94,7 @@ abstract class Ship(
      *  Logic: the ship has to check if its tile has a current,
      *  if so do the logic of drifting
      */
-    fun drift(){
+    fun drift() {
         val deepOcean = this.pos as? DeepOcean
         val current = deepOcean?.getCurrent()
         if (current != null) {
@@ -100,7 +102,7 @@ abstract class Ship(
         }
     }
 
-    private fun handleCurrentDrift(current: Current){
+    private fun handleCurrentDrift(current: Current) {
         val speed = current.speed
         val direction = current.direction
 
