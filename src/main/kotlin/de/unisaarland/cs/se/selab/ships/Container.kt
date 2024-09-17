@@ -2,7 +2,6 @@ package de.unisaarland.cs.se.selab.ships
 
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
-
 /**
  *  Container that holds info about the garbage: GarbageType, Capacity, current Load
  */
@@ -18,7 +17,6 @@ class Container(
     fun getGarbageCapacity(): Int{
         return this.garbageCapacity
     }
-
     /**
      * unload garbage
      */
@@ -29,19 +27,16 @@ class Container(
     /**
      * collect the garbage
      */
-    fun collect(garbage: Garbage): Boolean {
-        if (garbage.type == garbageType) {
-            val toBeCollected = garbage.amount
-            val collected = updateGarbageLoad(toBeCollected)
-            garbage.removeAmount(collected)
-            return true
-        } else {
-            return false
+    fun collect(amount: Int, type: GarbageType): Int {
+        var collected = 0
+        if (type == this.garbageType) {
+            collected = updateGarbageLoad(amount)
         }
+        return collected
     }
 
     /**
-     * helper fun for collect garbage
+     * helper fun for collect garbage, return the amount it collected
      */
     private fun updateGarbageLoad(amount: Int): Int {
         val collectableAmount = garbageCapacity - garbageLoad
