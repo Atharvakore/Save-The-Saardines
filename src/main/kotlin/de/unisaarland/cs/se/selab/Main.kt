@@ -43,29 +43,34 @@ fun main(args: Array<String>) {
     }
 }
 private fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
-    val contents = validate(files) ?: return null
+    val contents = validate(files)
     val accumulator = Accumulator()
-    var cond: Boolean = maxTicks == null || outputFile == null
-    cond = cond || parseMap(files, contents, accumulator) == null
-    if (cond || parseScenario(files, contents, accumulator) == null) {
+    var cond: Boolean = maxTicks == null || outputFile == null || contents == null
+    cond = cond || parseMap(files, contents!!, accumulator) == null
+    if (cond || parseScenario(files, contents!!, accumulator) == null) {
         return null
     }
     return accumulator
 }
 private fun parseMap(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
+    var condition: Boolean = true
     val mapParser = MapJSONParser(accumulator)
     if (mapParser.parseMap(contents[0])) {
         Logger.logInitializationInfoSuccess(files[0]!!)
     } else {
-        return null
+        condition = false
     }
     val corpParser = CorporationJSONParser(accumulator)
     if (corpParser.parseCorporationsFile(contents[1])) {
         Logger.logInitializationInfoSuccess(files[1]!!)
     } else {
-        return null
+        condition = false
     }
-    return accumulator
+    return if(condition){
+        accumulator
+    } else {
+        null
+    }
 }
 private fun parseScenario(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
     val scenarioParser = ScenarioJSONParser(accumulator)
@@ -90,7 +95,7 @@ private fun validate(files: List<String?>): List<String>? {
             val validatedFile: String = readFile(validatingSchemas[i], file) ?: return null
             contents.add(validatedFile)
         } else {
-            return null
+            break
         }
     }
     return contents
@@ -99,26 +104,28 @@ private fun readFile(validatingSchema: String, file: String): String? {
     val schema: Schema = SchemaLoader.forURL(validatingSchema).load()
     val validator: Validator = Validator.forSchema(schema)
     var objects: String
-    var objectFile: File
+    var objectFile: File? = null
+    var condition: Boolean = true
     try {
         objectFile = File(file)
     } catch (notFound: FileNotFoundException) {
         Logger.logInitializationInfoFail(file)
         logger.error(notFound) { "error" }
-        return null
+        condition = false
     }
-    try {
-        objects = objectFile.readText()
-        val fail: ValidationFailure? = validator.validate(objects)
-        if (fail != null) {
+    if (condition) {
+        try {
+            objects = objectFile!!.readText()
+            val fail: ValidationFailure? = validator.validate(objects)
+            if (fail != null) {
+                Logger.logInitializationInfoFail(file)
+            } else {
+                return objects
+            }
+        } catch (notFound: IOException) {
+            logger.error(notFound) { "error" }
             Logger.logInitializationInfoFail(file)
-            return null
-        } else {
-            return objects
         }
-    } catch (notFound: IOException) {
-        logger.error(notFound) { "error" }
-        Logger.logInitializationInfoFail(file)
     }
     return null
 }
