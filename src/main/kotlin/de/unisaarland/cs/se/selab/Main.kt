@@ -35,7 +35,8 @@ fun main(args: Array<String>) {
     }
     val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks, outputFile)
     if (acc != null) {
-        // TODO: Create SCENARIO
+        val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks!!, acc.map!!)
+        sim.start()
     }
 }
 
@@ -79,7 +80,7 @@ private fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Ac
     val contents = validate(files) ?: return null
     val accumulator = Accumulator()
     val mapParser = MapJSONParser(accumulator)
-    if (mapParser.parseMap(contents[0])) {
+    if (maxTicks != null && mapParser.parseMap(contents[0])) {
         Logger.logInitializationInfoSuccess(files[0]!!)
     } else {
         return null
