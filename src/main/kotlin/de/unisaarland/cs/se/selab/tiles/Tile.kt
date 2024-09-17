@@ -62,10 +62,10 @@ abstract class Tile(
     /**
      * Takes a garbnage type and returns total ammount of garbage of that type
      */
-    public fun getAmountOfType(type: Garbage): Int {
+    public fun getAmountOfType(type: GarbageType): Int {
         var acc = 0
         for (garbage in garbage) {
-            if (type.type == garbage.type) {
+            if (type == garbage.type) {
                 acc += garbage.amount
             }
         }
