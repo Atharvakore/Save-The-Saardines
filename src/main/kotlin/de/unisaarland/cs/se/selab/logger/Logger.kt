@@ -1,11 +1,11 @@
 package de.unisaarland.cs.se.selab.logger
 
+import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.events.Event
+import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Reward
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.GarbageType
-import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.corporation.Corporation
 import java.io.PrintWriter
 
 /**
@@ -81,7 +81,8 @@ object Logger {
             log("Garbage Collection: Ship $shipId collected $amount of garbage $garbageType with $garbageId.")
         }
     }
-        /** Log the start of cooperation between corporations. */
+
+    /** Log the start of cooperation between corporations. */
     fun logCorporationCooperationStart(corporationId: Int) {
         log("Corporation Action: Corporation $corporationId is starting to cooperate with other corporations.")
     }
@@ -95,9 +96,9 @@ object Logger {
     ) {
         log(
             "Cooperation: Corporation $corporationId" +
-                    " cooperated with corporation" +
-                    " $otherCorporationId with ship" +
-                    " $shipId to ship $cooperatedShipId."
+                " cooperated with corporation" +
+                " $otherCorporationId with ship" +
+                " $shipId to ship $cooperatedShipId."
         )
     }
 
@@ -131,9 +132,9 @@ object Logger {
     ) {
         log(
             "Current Drift: $garbageType" +
-                    " $garbageId with amount" +
-                    " $amount drifted from tile" +
-                    " $startTileId to tile $endTileId."
+                " $garbageId with amount" +
+                " $amount drifted from tile" +
+                " $startTileId to tile $endTileId."
         )
     }
 
