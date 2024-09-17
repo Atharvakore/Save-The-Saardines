@@ -4,7 +4,7 @@ package de.unisaarland.cs.se.selab.tiles
  * Sea as static class
  */
 object Sea {
-    var tiles: List<Tile> = listOf()
+    var tiles: MutableList<Tile> = mutableListOf()
     var tileIndex: Map<Vec2D, Tile> = mapOf()
 
     /**

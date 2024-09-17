@@ -15,6 +15,8 @@ class Ship(
     private var fuelCapacity: Int,
     private var fuelConsumption: Int,
     var capabilities: MutableList<ShipCapability>,
+    var pos: Tile,
+    val owner: Corporation
 ) {
 
     init {
@@ -46,13 +48,8 @@ class Ship(
     }
 
     private var name: String = ""
-    private var pos: Tile? = null
     private var consumedFuel: Int = 0
     var hasTaskAssigned: Boolean = false
-    val owner: Corporation
-        get() {
-            return owner
-        }
     private var destinationPath = emptyList<Tile>()
 
     constructor(
@@ -64,10 +61,9 @@ class Ship(
         fuelConsumption: Int,
         capabilities: MutableList<ShipCapability>,
         name: String,
-        pos: Tile? = null
-    ) : this(id, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities) {
+        pos: Tile
+    ) : this(id, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities, pos, owner) {
         this.name = name
-        this.pos = pos
     }
 
     /**
@@ -80,7 +76,7 @@ class Ship(
     /**
      * return ship current tile
      */
-    fun getPos(): Tile? {
+    fun getPos(): Tile {
         return this.pos
     }
 
@@ -153,7 +149,7 @@ class Ship(
     }
 
     /** Set the current position of the Ship */
-    fun setTile(tile: Tile?) {
+    fun setTile(tile: Tile) {
         this.pos = tile
     }
 
