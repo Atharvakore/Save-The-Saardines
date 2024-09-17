@@ -22,7 +22,7 @@ class Accumulator {
     private var mapCorporationToHarbor: Map<Int, MutableList<Tile>> = mutableMapOf()
     private var mapCorporationToShips: Map<Int, MutableList<Int>> = mutableMapOf()
     var tiles: MutableMap<Int, Tile> = mutableMapOf()
-    var tilesByCoordinate: MutableMap<Vec2D, Tile> = mutableMapOf()
+    private var tilesByCoordinate: MutableMap<Vec2D, Tile> = mutableMapOf()
 
 
     /** getter of harbors for Corporation */
