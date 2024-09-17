@@ -10,7 +10,6 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 class CollectingShip (
     var auxiliaryContainers: MutableList<Container>
 ): ShipCapability {
-
     /**
      * unloads all the containers of the ship
      */
@@ -68,27 +67,29 @@ class CollectingShip (
             return plasticCapacity
         }
     }
-
     /**
      * Call: when the corporation is calling on its ships to collect the garbage
      * Logic: checks the garbage of its tile, collects it if it can
      */
     fun collectGarbageFromCurrentTile(currentTile: Tile?){
-        val garbageList = currentTile?.garbage
-        val acceptableGarbageType = garbageTypes()
-        if (garbageList != null) {
-            for (garbage in garbageList) {
-                if (garbage.type in acceptableGarbageType) {
-                    collectGarbage(garbage)
-                }
+        if (currentTile != null){
+            val acceptableGarbageType = garbageTypes()
+            for (garbageType in acceptableGarbageType) {
+                val amount = currentTile.getAmountOfType(garbageType)
+                val collected = collectGarbage(amount, garbageType)
+                currentTile.removeGarbageOfType(garbageType, collected)
             }
         }
     }
+
     private fun garbageTypes() : Set<GarbageType> {
         return auxiliaryContainers.map { it.garbageType }.toSet()
     }
-    private fun collectGarbage(garbage: Garbage): Boolean {
-        return auxiliaryContainers.any { it.collect(garbage) }
+    private fun collectGarbage(amount: Int, garbageType: GarbageType): Int {
+        var collected = 0
+        for (container in auxiliaryContainers){
+            collected += container.collect(amount, garbageType)
+        }
+        return collected
     }
-
 }
