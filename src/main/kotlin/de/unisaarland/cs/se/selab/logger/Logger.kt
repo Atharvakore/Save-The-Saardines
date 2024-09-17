@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.logger
 
+import de.unisaarland.cs.se.selab.tiles.GarbageType
 import java.io.PrintWriter
 
 /**
@@ -56,7 +57,7 @@ object Logger {
     fun  logCorporationStartCollectGarbage(corporateId:Int){
         log("Corporation Action: Corporation $corporateId is starting to collect garbage.")
     }
-    fun  logGarbageCollectionByShip(shipId:Int,garbageType:GarbageType,garbageId:Int,amount:Int){
+    fun  logGarbageCollectionByShip(shipId:Int, garbageType: GarbageType, garbageId:Int, amount:Int){
          log("Garbage Collection: Ship $shipId collected $amount of garbage $garbageType with $garbageId.")
     }
     fun logCorporationCooperationStart(corporationId:Int){
@@ -68,7 +69,7 @@ object Logger {
     fun  logCorporationRefueling(corporationId:Int){
         log("Corporation Action: Corporation $corporationId is starting to refuel.")
     }
-    fun  logRefuelingShip(shipId:Int, tileId: Int){
+    fun  logRefuelingShip(shipId:Int, tileId: Int) {
         log("Refueling: Ship $shipId refueled at harbor $tileId.")
     }
     fun  logUnloadShip(shipId:Int, amount:Int, garbageType:GarbageType, tileId:Int){

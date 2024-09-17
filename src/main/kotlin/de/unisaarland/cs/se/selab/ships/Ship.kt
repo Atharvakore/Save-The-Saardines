@@ -1,15 +1,15 @@
 package de.unisaarland.cs.se.selab.ships
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
-import de.unisaarland.cs.se.selab.tiles.Tile
-import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Current
+import de.unisaarland.cs.se.selab.tiles.DeepOcean
+import de.unisaarland.cs.se.selab.tiles.Tile
 
 /**
  * class representing a ship
  */
-abstract class Ship(
-    private val shipInformation: ShipInformation,
+class Ship(
+    val id: Int,
     private val maxVelocity: Int,
     private val acceleration: Int,
     private var fuelCapacity: Int,
@@ -44,22 +44,43 @@ abstract class Ship(
             }
         }
     }
+
+    private var name: String = ""
+    private var pos: Tile? = null
     private var consumedFuel: Int = 0
     var hasTaskAssigned: Boolean = false
+    val owner: Corporation
+        get() {
+            return owner
+        }
 
+    constructor(
+        id: Int,
+        owner: Corporation,
+        maxVelocity: Int,
+        acceleration: Int,
+        fuelCapacity: Int,
+        fuelConsumption: Int,
+        capabilities: MutableList<ShipCapability>,
+        name: String,
+        pos: Tile? = null
+    ) : this(id, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities) {
+        this.name = name
+        this.pos = pos
+    }
 
     /**
      * return owner corporation
      */
     fun getOwner(): Corporation {
-        return this.shipInformation.owner
+        return this.owner
     }
 
     /**
      * return ship current tile
      */
-    fun getPos(): Tile {
-        return this.shipInformation.pos
+    fun getPos(): Tile? {
+        return this.pos
     }
 
     /**
@@ -76,7 +97,7 @@ abstract class Ship(
      *  if so do the logic of drifting
      */
     fun drift() {
-        val deepOcean = getPos() as? DeepOcean
+        val deepOcean = this.pos as? DeepOcean
         val current = deepOcean?.getCurrent()
         if (current != null) {
             handleCurrentDrift(current)
@@ -87,10 +108,10 @@ abstract class Ship(
         val speed = current.speed
         val direction = current.direction
 
-        if (direction != null) {
-            val desTile = getPos().getTileInDirection(speed / TEN, direction)
+        if (speed != null && direction != null) {
+            val desTile = this.pos?.getTileInDirection(speed / TEN, direction)
             if (desTile != null) {
-                this.shipInformation.pos = desTile
+                this.pos = desTile
             }
         }
     }
@@ -99,21 +120,12 @@ abstract class Ship(
      * Logic: the ship gets a path (a list of tiles from destination to ship), has to reverse path and move along it
      * the ship moves along the path as long as it can
      *
-     * distance = (velocity^2 / 2 * acceleration)
+     */
+    /**
+     * TODO: Implement.
      */
     fun move(path: List<Tile>) {
-        val pathShipToTile = path.reversed()
-        // the distance the ship can traverse
-        val distanceLength = (maxVelocity * maxVelocity / (2 * acceleration)) / TEN
-        var desTile = getPos()
-        if (pathShipToTile.size >= distanceLength){
-            desTile = pathShipToTile[distanceLength]
-            consumedFuel += distanceLength * TEN * fuelConsumption
-        } else {
-            desTile = pathShipToTile.last()
-            consumedFuel += pathShipToTile.size * TEN * fuelConsumption
-        }
-        this.shipInformation.pos = desTile
+        TODO("")
     }
 
     /**
@@ -121,11 +133,26 @@ abstract class Ship(
      * Logic: gets length of the path the ship has to traverse
      * check if it can traverse it
      *
-     * @param  pathLength of path
+     * @param pathLength of path
      * @return if the ship can complete this path
      */
     fun isFuelSufficient(pathLength: Int): Boolean {
         val neededFuel = fuelConsumption * pathLength * TEN
         return neededFuel <= fuelCapacity - consumedFuel
+    }
+
+    /**
+     * Call: when a task is done, and the reward needs to be applied
+     * Logic: adds a capability to the ship and handles the adding logic
+     *
+     * @param capability ship capability
+     */
+    fun addCapability(capability: ShipCapability) {
+        capabilities.add(capability)
+    }
+
+    /** Set the current position of the Ship */
+    fun setTile(tile: Tile?) {
+        this.pos = tile
     }
 }
