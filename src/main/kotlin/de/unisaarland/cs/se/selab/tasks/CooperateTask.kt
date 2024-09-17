@@ -4,6 +4,7 @@ import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Tile
 
+/** Task regarding cooperation between companies. */
 class CooperateTask(
     tick: Int,
     id: Int,

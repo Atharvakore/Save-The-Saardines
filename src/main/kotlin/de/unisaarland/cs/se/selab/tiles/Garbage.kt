@@ -11,6 +11,7 @@ class Garbage(
     val type: GarbageType,
     var trackedBy: Set<Corporation>?,
 ) {
+    /** Static methods of garbage (factory method) */
     companion object {
         var maxId: Int = 0
 

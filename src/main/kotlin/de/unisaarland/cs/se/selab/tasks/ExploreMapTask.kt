@@ -4,6 +4,7 @@ import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Tile
 
+/** Task that makes a ship go to a tile. */
 class ExploreMapTask(
     tick: Int,
     id: Int,

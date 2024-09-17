@@ -4,6 +4,7 @@ import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Tile
 
+/** Task for finding garbage. */
 class FindGarbageTask(
     tick: Int,
     id: Int,
@@ -16,6 +17,7 @@ class FindGarbageTask(
     override fun toString(): String {
         return "Find Garbage"
     }
+
     override fun checkCondition(): Boolean {
         return taskShip.getPosition().pos == targetTile.pos && targetTile.garbage.isNotEmpty()
     }
