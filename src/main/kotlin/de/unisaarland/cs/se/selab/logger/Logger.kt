@@ -8,62 +8,55 @@ import de.unisaarland.cs.se.selab.tiles.GarbageType
 import java.io.PrintWriter
 
 /**
- * A stub of the logger class. TODO: Actually fill this in.
+ * The logger class, responsible for logging the simulation events.
  */
-/*class Logger {
-    companion object {
-        var output: LogOutputStream = BackedLogOutputStream(PrintWriter(System.out))
-
-        fun log(message: String) {
-            output.write(message)
-        }
-
-        fun logCorporationBetweenCorporations(corporationId : Int, otherCorporationId : Int, shipId :Int, cooperatedShipId: Int) {
-            log("Cooperation: Corporation $corporationId cooperated with corporation $otherCorporationId with ship $shipId to ship $cooperatedShipId")
-        }
-
-
-    }
-}*/
-/**
- * I created separate logger . I have a feeling that whole class should be static and not only methods
- */
-
 object Logger {
+    /** The stream that this logger writes to. */
     var output: LogOutputStream = BackedLogOutputStream(PrintWriter(System.out))
-    fun log(message: String) {
+    private fun log(message: String) {
         output.write(message)
     }
-    fun  logInitializationInfoSuccess(filename:String) {
+    /** Log the initialization of the simulation. */
+    fun logInitializationInfoSuccess(filename:String) {
         log(" Initialization Info: $filename successfully parsed and validated.")
     }
+    /** Log the failure of the initialization of the simulation. */
     fun logInitializationInfoFail(filename:String) {
         log("Initialization Info: $filename is invalid.")
     }
-    fun  logSimulationStarted(){
+    /** Log the start of the simulation. */
+    fun logSimulationStarted(){
         log("Simulation Info: Simulation started.")
     }
-    fun  logSimulationEnded(){
+    /** Log the end of the simulation. */
+    fun logSimulationEnded(){
         log("Simulation Info: Simulation ended.")
     }
-    fun  logSimulationTick(tick:Int){
+    /** Log the start of a simulation tick. */
+    fun logSimulationTick(tick:Int){
         log("Simulation Info: Tick $tick started.")
     }
-    fun  logCorporationStartMoveShips(corporationId:Int){
+    /** Log a call of Corporation.moveShips(). */
+    fun logCorporationStartMoveShips(corporationId:Int){
         log("Corporation Action: Corporation $corporationId is starting to move its ships.")
     }
-    fun  logShipMovement (shipId:Int,speed:Int,tileId:Int){
+    /** Log a call of Ship.move(). */
+    fun logShipMovement (shipId:Int,speed:Int,tileId:Int){
         log("Ship Movement: Ship $shipId moved with speed $speed to tile $tileId.")
     }
-    fun  logCorporationAttachedTracker(corporationId: Int, garbageId: Int, shipId: Int){
+    /** Logged whenever a ship attaches a tracker to a garbage pile. */
+    fun logCorporationAttachedTracker(corporationId: Int, garbageId: Int, shipId: Int){
         log("Corporation Action: Corporation $corporationId attached tracker to garbage $garbageId with ship $shipId.")
     }
-    fun  logCorporationStartCollectGarbage(corporateId:Int){
+    /** Logged whenever Corporation.collectGarbage() is called. */
+    fun logCorporationStartCollectGarbage(corporateId:Int){
         log("Corporation Action: Corporation $corporateId is starting to collect garbage.")
     }
-    fun  logGarbageCollectionByShip(shipId:Int, garbageType: GarbageType, garbageId:Int, amount:Int){
+    /** Logged to signify that a ship has collected garbage. */
+    fun logGarbageCollectionByShip(shipId:Int, garbageType: GarbageType, garbageId:Int, amount:Int){
          log("Garbage Collection: Ship $shipId collected $amount of garbage $garbageType with $garbageId.")
     }
+    /** Log the start of cooperation between corporations. */
     fun logCorporationCooperationStart(corporationId:Int){
          log("Corporation Action: Corporation $corporationId is starting to cooperate with other corporations.")
     }
