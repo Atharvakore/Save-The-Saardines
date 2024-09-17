@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.logger
 
-class CollectingLogOutputStream: LogOutputStream {
+/** Collecting Log for Logger*/
+class CollectingLogOutputStream : LogOutputStream {
     private val messages = mutableListOf<String>()
 
     override fun write(s: String) {
@@ -11,6 +12,7 @@ class CollectingLogOutputStream: LogOutputStream {
         messages.add(String.format(format, *args))
     }
 
+    /** Getter for messages*/
     fun getMessages(): List<String> {
         return messages
     }

@@ -4,6 +4,7 @@ import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Tile
 
+/** Class for Collecting Garbage Task*/
 class CollectGarbageTask(
     tick: Int,
     id: Int,
@@ -12,10 +13,11 @@ class CollectGarbageTask(
     rewardShip: Ship,
     corporation: Corporation,
     val targetTile: Tile
-): Task(tick, id, taskShip, reward, rewardShip, corporation) {
+) : Task(tick, id, taskShip, reward, rewardShip, corporation) {
     override fun toString(): String {
         return "Collect Garbage"
     }
+
     override fun checkCondition(): Boolean {
         return taskShip.getPosition().pos == targetTile.pos
     }
