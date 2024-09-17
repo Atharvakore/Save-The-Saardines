@@ -15,8 +15,10 @@ abstract class Task(
 ) {
     /** Determine if the reward condition for a task is fulfilled. */
     abstract fun checkCondition(): Boolean
+
     /** Tick the task. */
     abstract fun actUponTick(currentTick: Int): Boolean
+
     /** Determine the goal tile of the task. */
     abstract fun getGoal(): Tile
 }

@@ -101,4 +101,3 @@ private fun validate(files: List<String?>): List<String>? {
     }
     return contents
 }
-
