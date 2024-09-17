@@ -50,7 +50,7 @@ class Simulation(
         }
 
         for (corporation in corporations) {
-            val otherShips = allShips.filter { it.getOwner() != corporation }
+            val otherShips = allShips.filter { it.getOwnerCorporation() != corporation }
             corporation.run(sea,otherShips)
         }
     }
@@ -79,7 +79,7 @@ class Simulation(
 
         val shipsOnDOTiles = mutableListOf<Ship>()
         for (corporation in corporations) {
-            shipsOnDOTiles.addAll(corporation.ownedShips.filter { deepOceanTiles.contains(it.getPos()) })
+            shipsOnDOTiles.addAll(corporation.ownedShips.filter { deepOceanTiles.contains(it.getPosition()) })
         }
 
         for (ship in shipsOnDOTiles) {

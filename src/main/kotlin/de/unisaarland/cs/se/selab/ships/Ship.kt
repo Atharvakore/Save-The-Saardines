@@ -68,14 +68,14 @@ class Ship(
     /**
      * return owner corporation
      */
-    fun getOwner(): Corporation {
+    fun getOwnerCorporation(): Corporation {
         return this.owner
     }
 
     /**
      * return ship current tile
      */
-    fun getPos(): Tile {
+    fun getPosition(): Tile {
         return this.pos
     }
 
@@ -158,10 +158,10 @@ class Ship(
      * */
     fun tickTask() {
         val lastTileIndex = destinationPath.size - 1
-        val reachedTileIndex = destinationPath.indexOf(getPos()) + 1
+        val reachedTileIndex = destinationPath.indexOf(getPosition()) + 1
         destinationPath = destinationPath.subList(reachedTileIndex, lastTileIndex)
         move(destinationPath)
-        if (getPos() == destinationPath.last()) {
+        if (getPosition() == destinationPath.last()) {
             hasTaskAssigned = false
             destinationPath = emptyList()
         }
@@ -174,7 +174,7 @@ class Ship(
     fun moveUninterrupted(pathToHarbor: List<Tile>) {
         hasTaskAssigned = true
         move(pathToHarbor)
-        if (getPos() == pathToHarbor.last()) {
+        if (getPosition() == pathToHarbor.last()) {
             hasTaskAssigned = false
             destinationPath = emptyList()
         }

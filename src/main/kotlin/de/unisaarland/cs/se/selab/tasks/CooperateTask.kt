@@ -18,7 +18,7 @@ class CooperateTask(
         return "Cooperate with Other Corporation"
     }
     override fun checkCondition(): Boolean {
-        return taskShip.getPos().pos == destinationHomeHarbor.pos
+        return taskShip.getPosition().pos == destinationHomeHarbor.pos
     }
 
     override fun actUponTick(currentTick: Int): Boolean {

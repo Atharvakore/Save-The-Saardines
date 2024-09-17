@@ -17,7 +17,7 @@ class FindGarbageTask(
         return "Find Garbage"
     }
     override fun checkCondition(): Boolean {
-        return taskShip.getPos().pos == targetTile.pos && targetTile.garbage.isNotEmpty()
+        return taskShip.getPosition().pos == targetTile.pos && targetTile.garbage.isNotEmpty()
     }
 
     override fun actUponTick(currentTick: Int): Boolean {

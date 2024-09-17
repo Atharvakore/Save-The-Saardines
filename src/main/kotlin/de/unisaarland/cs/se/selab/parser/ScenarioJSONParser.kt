@@ -90,7 +90,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
             "PIRATE_ATTACK" -> {
                 val eventShip: Int = event.getInt("shipID")
                 val ship: Ship = accumulator.getShipsById(eventShip) ?: return false
-                val shipCorp: Corporation = ship.getOwner()
+                val shipCorp: Corporation = ship.getOwnerCorporation()
                 accumulator.addEvent(eventId, PirateAttack(eventId, eventTick, ship, shipCorp))
             }
         }

@@ -17,7 +17,7 @@ class ExploreMapTask(
         return "Explore Map"
     }
     override fun checkCondition(): Boolean {
-        return taskShip.getPos().pos == targetTile.pos
+        return taskShip.getPosition().pos == targetTile.pos
     }
 
     override fun actUponTick(currentTick: Int): Boolean {

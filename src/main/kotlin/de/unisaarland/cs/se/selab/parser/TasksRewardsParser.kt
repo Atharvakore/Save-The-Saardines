@@ -50,7 +50,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
         val rewardExists: Boolean = reward != null
         val taskShipExists: Boolean = taskShip != null
         val rewardShipExists: Boolean = rewardShip != null
-        val sameCorpRewardAndTask: Boolean = taskShip?.getOwner() == rewardShip?.getOwner()
+        val sameCorpRewardAndTask: Boolean = taskShip?.getOwnerCorporation() == rewardShip?.getOwnerCorporation()
         var condition: Boolean = uniqueId && rewardExists && rewardShipExists
         condition = condition && taskShipExists && sameCorpRewardAndTask
         if (condition) {
@@ -64,7 +64,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
         val taskTick = task.getInt("tick")
         val taskShip = accumulator.getShipsById(task.getInt("shipID"))
         val rewardShip = accumulator.getShipsById(task.getInt("rewardShipID"))
-        val taskCorporation = rewardShip!!.getOwner()
+        val taskCorporation = rewardShip!!.getOwnerCorporation()
         val reward: Reward? = accumulator.getRewardById(task.getInt("rewardID"))
         val targetTile: Tile = accumulator.getTileById(task.getInt("targetTile"))!!
         var returnCond = false
