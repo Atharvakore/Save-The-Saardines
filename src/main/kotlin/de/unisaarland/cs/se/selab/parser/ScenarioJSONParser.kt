@@ -36,7 +36,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
      */
     fun parseEvents(eventsFile: String): Boolean {
         try {
-            val events = JSONObject(File(eventsFile).readText()).getJSONArray("events")
+            val events = JSONObject(eventsFile).getJSONArray("events")
             return createEvents(events)
         } catch (e: IOException) {
             logger.error { e }
@@ -114,7 +114,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
     /** function called from Main, parser the garbage and passes them to validators */
     fun parseGarbage(garbageJSON: String): Boolean {
         try {
-            val garbage = JSONObject(File(garbageJSON).readText()).getJSONArray("garbage")
+            val garbage = JSONObject(garbageJSON).getJSONArray("garbage")
             return createGarbage(garbage)
         } catch (e: IOException) {
             logger.error { e }

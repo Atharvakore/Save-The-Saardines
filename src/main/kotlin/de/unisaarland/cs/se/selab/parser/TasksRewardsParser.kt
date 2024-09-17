@@ -34,7 +34,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
     private var id: String = "id"
     public fun parseTasks(taskJSON: String): Boolean {
         try {
-            val tasks = JSONObject(File(taskJSON).readText()).getJSONArray("tasks")
+            val tasks = JSONObject(taskJSON).getJSONArray("tasks")
             return createTasks(tasks)
         } catch (e: IOException) {
             logger.error { e }
@@ -133,7 +133,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
     }
     public fun parseRewards(rewardJSON: String): Boolean {
         try {
-            val rewards = JSONObject(File(rewardJSON).readText()).getJSONArray("rewards")
+            val rewards = JSONObject(rewardJSON).getJSONArray("rewards")
             return createRewards(rewards)
         } catch (e: IOException) {
             logger.error { e }
