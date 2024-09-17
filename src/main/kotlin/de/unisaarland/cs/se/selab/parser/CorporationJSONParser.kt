@@ -2,7 +2,12 @@ package de.unisaarland.cs.se.selab.parser
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.CollectingShip
+import de.unisaarland.cs.se.selab.ships.Container
+import de.unisaarland.cs.se.selab.ships.CoordinatingShip
+import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.tiles.GarbageType
+import de.unisaarland.cs.se.selab.tiles.Shore
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.json.JSONArray
 import org.json.JSONObject
@@ -45,8 +50,11 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         corpObjects.forEach {
             if (validateCorporation(it as JSONObject)) {
                 this.createCorporation(it)
-            } else return false
+            } else {
+                return false
+            }
         }
+        return true
     }
 
     private fun validateCorporation(corporation: JSONObject): Boolean {
@@ -55,35 +63,57 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
 
     private fun createShip(ship: JSONObject): Ship {
         val id = ship.getInt(ID)
-        val name = ship.getString(NAME)
         val type = ship.getString(TYPE)
         val corporation = ship.getInt(CORPORATION)
         val location = ship.getInt(LOCATION)
-        val maxVelocity = ship.getString(MAXVELOCITY)
-        val acceleration = ship.getString(ACCELERATION)
-        val fuelCapacity = ship.getString(FUELCAPACITY)
-        val fuelConsumption = ship.getString(FUELCONSUMPTION)
-        val ship:Ship =  Ship(id,name,type,corporation,maxVelocity, acceleration, fuelCapacity, fuelConsumption, mutableListOf())
+        val maxVelocity = ship.getInt(MAXVELOCITY)
+        val acceleration = ship.getInt(ACCELERATION)
+        val fuelCapacity = ship.getInt(FUELCAPACITY)
+        val fuelConsumption = ship.getInt(FUELCONSUMPTION)
+        val shipInstance = Ship(id, maxVelocity, acceleration, fuelCapacity, fuelConsumption, mutableListOf())
+        shipInstance.setTile(accumulator.getTileById(location))
         when (type) {
             COLLECTER -> {
-
+                val capacity = ship.getInt(CAPACITY)
+                val garbageType = ship.getString(GARBAGETYPE)
+                val container = Container(mapGarbageStringToType[garbageType]!!, capacity)
+                val collecterCapability = CollectingShip(mutableListOf(container))
+                shipInstance.addCapability(collecterCapability)
             }
 
             SCOUTING -> {
-
+                val visibility = ship.getInt(VISIBILITY)
+                val scoutingShip = ScoutingShip(visibility)
+                shipInstance.addCapability(scoutingShip)
             }
 
             else -> {
-
+                val visibility = ship.getInt(VISIBILITY)
+                val coordinatingShip = CoordinatingShip(visibility)
+                shipInstance.addCapability(coordinatingShip)
             }
         }
-        accumulator.addShip(ship.id, ship)
-        accumulator.addShipToCorp(corporation, ship.id)
-
+        accumulator.addShip(shipInstance.id, shipInstance)
+        accumulator.addShipToCorp(corporation, shipInstance.id)
+        return shipInstance
     }
 
     private fun createCorporation(corporation: JSONObject): Corporation {
-        return Corporation()
+        val id = corporation.getInt(ID)
+        val name = corporation.getString(NAME)
+        val ships = corporation.getJSONArray("ships")
+        val ownnedShips: MutableList<Ship> = mutableListOf()
+        ships.forEach {
+            ownnedShips.add(accumulator.getShipsById(it as Int)!!)
+        }
+        val harbors = corporation.getJSONArray(HOMEHARBORS)
+        val ownedHarbors: MutableList<Shore> = mutableListOf()
+        harbors.forEach {
+            ownedHarbors.add(accumulator.getTileById(it as Int) as Shore)
+        }
+        val garbageTypes: List<GarbageType> = listOf(GarbageType.OIL, GarbageType.PLASTIC, GarbageType.CHEMICALS)
+        val corporationInstance = Corporation(id, name, ownnedShips, ownedHarbors, garbageTypes, mutableListOf())
+        return corporationInstance
     }
 
     private fun validateShip(shipObject: JSONObject): Boolean {
@@ -94,7 +124,9 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         shipObjects.forEach {
             if (validateShip(it as JSONObject)) {
                 val ship = this.createShip(it)
-            } else return false
+            } else {
+                return false
+            }
         }
         return true
     }
@@ -112,10 +144,16 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         const val FUELCAPACITY = "fuelCapacity"
         const val FUELCONSUMPTION = "fuelConsumption"
         const val CAPACITY = "capacity"
+        const val VISIBILITY = "visibility"
         const val GARBAGETYPE = "garbageType"
         const val SCOUTING = "SCOUTING"
         const val COLLECTER = "COLLECTING"
         const val COORDINATING = "COORDINATING"
-
+        const val PLASTIC = "PLASTIC"
+        const val OIL = "OIL"
+        const val CHEMICALS = "CHEMICALS"
+        const val HOMEHARBORS = "homeHarbors"
+        val mapGarbageStringToType =
+            mapOf(CHEMICALS to GarbageType.CHEMICALS, OIL to GarbageType.OIL, PLASTIC to GarbageType.PLASTIC)
     }
 }

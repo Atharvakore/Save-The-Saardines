@@ -72,7 +72,7 @@ object Logger {
     fun  logCorporationRefueling(corporationId:Int){
         log("Corporation Action: Corporation $corporationId is starting to refuel.")
     }
-    fun  logRefuelingShip(shipId:Int, tileId: Int){
+    fun  logRefuelingShip(shipId:Int, tileId: Int) {
         log("Refueling: Ship $shipId refueled at harbor $tileId.")
     }
     fun  logUnloadShip(shipId:Int, amount:Int, garbageType:GarbageType, tileId:Int){

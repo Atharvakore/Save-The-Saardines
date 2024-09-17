@@ -17,6 +17,8 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
 
 class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
     private val id: String = "id"
@@ -26,7 +28,10 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
         try {
             val events = JSONObject(File(eventsFile).readText()).getJSONArray("events")
             return createEvents(events)
-        } catch (error: Exception) {
+        }catch (e: IOException){
+            return false
+        }
+        catch (error: FileNotFoundException) {
             return false
         }
     }
@@ -59,7 +64,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
                 val eventRadius: Int = event.getInt("radius")
                 val eventSpeed: Int = event.getInt("speed")
                 val eventDirection: Direction? = Direction.getDirection(event.getInt("direction"))
-                val storm: Storm = Storm(eventId, eventTick, accumulator.getMap(), eventTile, eventRadius)
+                val storm: Storm = Storm(eventId, eventTick, accumulator.map, eventTile, eventRadius)
                 storm.setSpeed(eventSpeed)
                 storm.setDirection(eventDirection)
                 accumulator.addEvent(eventId, storm)
@@ -68,7 +73,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
                 val eventDuration: Int = event.getInt("duration")
                 val eventLocation: Int = event.getInt(location)
                 val eventTile: Tile = accumulator.getTileById(eventLocation) ?: return false
-                val restriction: Event = Restriction(eventId, eventTick, accumulator.getMap(), eventTile, eventDuration)
+                val restriction: Event = Restriction(eventId, eventTick, accumulator.map, eventTile, eventDuration)
                 accumulator.addEvent(eventId, restriction)
             }
             "OIL_SPILL" -> {
@@ -76,9 +81,9 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
                 val eventTile: Tile = accumulator.getTileById(eventLocation) ?: return false
                 val eventRadius: Int = event.getInt("radius")
                 val eventAmount: Int = event.getInt("amount")
-                if (accumulator.getMap() != null) {
+                if (accumulator.map != null) {
                     val oilSpill =
-                        OilSpill(eventId, eventTick, accumulator.getMap()!!, eventTile, eventRadius, eventAmount)
+                        OilSpill(eventId, eventTick, accumulator.map!!, eventTile, eventRadius, eventAmount)
                     accumulator.addEvent(eventId, oilSpill)
                 }
             }
