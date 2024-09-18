@@ -92,7 +92,7 @@ class Ship(
     fun move(path: List<Tile>) {
         val pathShipToTile = path.reversed()
         // the distance the ship can traverse
-        val distanceLength = (maxVelocity * maxVelocity / (2 * acceleration)) / TEN
+        val distanceLength = maxVelocity * maxVelocity / (2 * acceleration) / TEN
         var desTile = this.position
         if (pathShipToTile.size >= distanceLength) {
             desTile = pathShipToTile[distanceLength]
