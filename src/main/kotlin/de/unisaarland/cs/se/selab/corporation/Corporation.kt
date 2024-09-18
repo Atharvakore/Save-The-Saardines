@@ -99,6 +99,7 @@ class Corporation(
     }
 
     private fun tryMove(ship: Ship): Boolean {
+        var result: Boolean
         val capability = ship.capabilities.first()
         if (capability is ScoutingShip) {
             // 1. Update our knowledge about the garbage in the sea
@@ -127,17 +128,20 @@ class Corporation(
                     val closestHarborPath = findClosestHarbor(ship.position, ownedHarbors)
                     ship.moveUninterrupted(closestHarborPath)
                 }
-                return true
+                result = true
+            } else {
+                result = false
             }
-            return false
         } else if (capability is CollectingShip) {
             // TODO
-            return false
+            result = false
         } else if (capability is CoordinatingShip) {
             // TODO
-            return false
+            result = false
+        } else {
+            error("Unknown ship capability")
         }
-        error("Unknown ship capability")
+        return result
     }
 
     /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature

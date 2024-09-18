@@ -148,7 +148,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         val coordinateY = tile.getJSONObject(COORDINATES).getInt(Y)
         val coordinates = Vec2D(coordinateX, coordinateY)
         val category = tile.getString(CATEGORY)
-        when (category) {
+        val result = when (category) {
             DEEP_OCEAN -> {
                 val current = tile.getBoolean(CURRENT)
                 val direction = tile.getInt(DIRECTION)
@@ -158,22 +158,23 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                 if (current) {
                     currentObject = Current(speed, requireNotNull(Direction.getDirection(direction)), intensity)
                 }
-                return DeepOcean(id, coordinates, emptyList(), emptyList(), currentObject)
+                DeepOcean(id, coordinates, emptyList(), emptyList(), currentObject)
             }
 
             SHALLOW_OCEAN -> {
-                return ShallowOcean(id, coordinates, emptyList(), emptyList())
+                ShallowOcean(id, coordinates, emptyList(), emptyList())
             }
 
             SHORE -> {
                 val harbor = tile.getBoolean(HARBOR)
-                return Shore(id, coordinates, emptyList(), emptyList(), harbor)
+                Shore(id, coordinates, emptyList(), emptyList(), harbor)
             }
 
             else -> {
                 throw IllegalArgumentException("There should be an Ocean tile")
             }
         }
+        return result
     }
 
     /** Create Map based on the information from Accumulator **/
