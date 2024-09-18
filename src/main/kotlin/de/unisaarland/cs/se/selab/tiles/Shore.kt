@@ -7,7 +7,7 @@ package de.unisaarland.cs.se.selab.tiles
 class Shore(
     id: Int,
     pos: Vec2D,
-    adjacentTiles: List<Tile>,
+    adjacentTiles: List<Tile?>,
     garbage: List<Garbage>,
     val harbor: Boolean
 ) : Tile(

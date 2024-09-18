@@ -6,7 +6,7 @@ package de.unisaarland.cs.se.selab.tiles
 abstract class Tile(
     val id: Int,
     val pos: Vec2D,
-    val adjacentTiles: List<Tile?>,
+    var adjacentTiles: List<Tile?>,
     var garbage: List<Garbage>,
     var amountOfGarbageDriftedThisTick: Int,
 ) {
