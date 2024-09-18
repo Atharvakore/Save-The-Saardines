@@ -18,9 +18,9 @@ class Ship(
 ) {
 
     init {
-        require(capabilities.isNotEmpty())
+        // require(capabilities.isNotEmpty())
 
-        val defaultCapability = capabilities.first()
+        /* val defaultCapability = capabilities.first()
         when (defaultCapability) {
             is ScoutingShip -> {
                 require(maxVelocity in MIN_VELOCITY_SCOUTING..MAX_VELOCITY_SCOUTING)
@@ -42,7 +42,7 @@ class Ship(
                 require(fuelCapacity in MIN_FUEL_CAPACITY_COLLECTING..MAX_FUEL_CAPACITY_COLLECTING)
                 require(fuelConsumption in MIN_FUEL_CONSUMPTION_COLLECTING..MAX_FUEL_CONSUMPTION_COLLECTING)
             }
-        }
+        } */
     }
 
     lateinit var position: Tile
