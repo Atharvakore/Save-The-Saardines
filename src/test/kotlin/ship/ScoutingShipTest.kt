@@ -1,7 +1,6 @@
 package ship
 
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
-import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
@@ -20,7 +19,6 @@ class ScoutingShipTest {
     private lateinit var scoutingCapability: CoordinatingShip
     private lateinit var scoutingShip: Ship
     private val sea: Sea = Sea
-
 
     @BeforeEach
     fun setUp() {

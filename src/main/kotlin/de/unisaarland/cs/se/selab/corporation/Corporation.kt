@@ -95,6 +95,27 @@ class Corporation(
         return tasks.filter { it.checkCondition() }
     }
 
+    private fun tryMove(ship: Ship): Boolean {
+        val capability = ship.capabilities.first()
+        if (capability is ScoutingShip) {
+            // 1. Update our knowledge about the garbage in the sea
+            capability.getTilesWithGarbageInFoV(Sea, ship.position).forEach {
+                it.garbage
+                    .asSequence()
+                    .filter { acceptedGarbageType.contains(it.type) }
+                    .forEach { garbage -> partnerGarbage[garbage.id] = it }
+            }
+            // 2. Navigate to the closest garbage patch.
+            // TODO
+        } else if (capability is CollectingShip) {
+            // TODO
+        } else if (capability is CoordinatingShip) {
+            // TODO
+        }
+        // TODO
+        return false
+    }
+
     /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
     private fun moveShips() {
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
@@ -122,22 +143,9 @@ class Corporation(
         // 2. Iterate over available ships in increasing ID order
         val usedShips: MutableList<Int> = mutableListOf()
         for (ship in availableShips.sortedBy { it.id }) {
-            with(ship.capabilities.first()) {
-                if (this is ScoutingShip) {
-                    // 1. Update our knowledge about the garbage in the sea
-                    this.getTilesWithGarbageInFoV(Sea, ship.position).forEach {
-                        it.garbage
-                            .asSequence()
-                            .filter { acceptedGarbageType.contains(it.type) }
-                            .forEach { garbage -> partnerGarbage[garbage.id] = it }
-                    }
-                    // 2. Navigate to the closest garbage patch.
-                    // TODO
-                } else if (this is CollectingShip) {
-                    // TODO
-                } else if (this is CoordinatingShip) {
-                    // TODO
-                }
+            val status = tryMove(ship)
+            if (status) {
+                usedShips.add(ship.id)
             }
         }
         availableShips.removeAll { usedShips.contains(it.id) }
