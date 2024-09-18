@@ -224,18 +224,18 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             when (tile) {
                 is Shore -> {
                     correct =
-                        correct && adjacentTiles.all { it == null || it is Shore || it is ShallowOcean }
+                        correct && adjacentTiles.all { t -> t == null || t is Shore || t is ShallowOcean }
                 }
 
                 is DeepOcean -> {
                     correct =
-                        correct && adjacentTiles.all { it == null || it is DeepOcean || it is ShallowOcean }
+                        correct && adjacentTiles.all { t -> t == null || t is DeepOcean || t is ShallowOcean }
                 }
 
                 is ShallowOcean -> {
                     correct =
-                        correct && adjacentTiles.all {
-                            it == null || it is Shore || it is ShallowOcean || it is DeepOcean
+                        correct && adjacentTiles.all { t ->
+                            t == null || t is Shore || t is ShallowOcean || t is DeepOcean
                         }
                 }
 
