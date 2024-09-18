@@ -43,7 +43,7 @@ class Corporation(
             val otherShipsOnTile: List<Ship> = otherShips
                 .filter {
                     coordinatingShip.position == it.position &&
-                        it.owner != lastCoordinatingCorporation
+                            it.owner != lastCoordinatingCorporation
                 }
 
             val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.owner }.distinct()
@@ -103,11 +103,11 @@ class Corporation(
         val capability = ship.capabilities.first()
         if (capability is ScoutingShip) {
             // 1. Update our knowledge about the garbage in the sea
-            capability.getTilesWithGarbageInFoV(Sea, ship.position).forEach {
-                it.garbage
+            capability.getTilesWithGarbageInFoV(Sea, ship.position).forEach { tile ->
+                tile.garbage
                     .asSequence()
                     .filter { acceptedGarbageType.contains(it.type) }
-                    .forEach { garbage -> partnerGarbage[garbage.id] = it }
+                    .forEach { garbage -> partnerGarbage[garbage.id] = tile }
             }
             // 2. Navigate to the closest garbage patch.
             val paths = Dijkstra(ship.position).allPaths()

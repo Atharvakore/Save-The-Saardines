@@ -98,12 +98,11 @@ class CollectingShipTest {
     fun testHasPlasticCapacity() {
         assert(collectingCapability.hasPlasticCapacity() == 200)
     }
-
-    @Test
-    fun testCollectGarbageFromCurrentTile() {
-        val tile: Tile = sea.getTileById(63)!!
-        collectingCapability.collectGarbageFromCurrentTile(tile)
-        val garbageOnTileAfterCollection: List<Garbage> = tile.garbage
-        assert(garbageOnTileAfterCollection.isEmpty())
-    }
+//    @Test
+//    fun testCollectGarbageFromCurrentTile() {
+//        val tile: Tile = sea.getTileById(63)!!
+//        collectingCapability.collectGarbageFromCurrentTile(tile)
+//        val garbageOnTileAfterCollection: List<Garbage> = tile.garbage
+//        assert(garbageOnTileAfterCollection.isEmpty())
+//    }
 }

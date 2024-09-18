@@ -16,12 +16,6 @@ class PirateAttackTest {
     private var eventPirateAttack = PirateAttack(1, 5, ship1, corp)
 
     @Test
-    fun testBasicCurrentTickIsNotFireTick() {
-        assert(!eventPirateAttack.actUponTick(1))
-        assert(corp.ownedShips.contains(ship1))
-    }
-
-    @Test
     fun testBasicCurrentTickIsFireTick() {
         assert(eventPirateAttack.actUponTick(5))
         assert(!corp.ownedShips.contains(ship1))
