@@ -145,7 +145,8 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
     }
 
     private fun validateGarbage(garbage: JSONObject): Boolean {
-        val uniqueId: Boolean = accumulator.garbage[garbage.getInt(id)] == null
+        val garbageId: Int = garbage.getInt(id)
+        val uniqueId: Boolean = garbageId >= 0 && accumulator.garbage[garbageId] == null
         val location: Tile? = accumulator.getTileById(garbage.getInt(location))
         val locationExists: Boolean = location != null
         var locationIsNotLand: Boolean = location is Shore || location is ShallowOcean
