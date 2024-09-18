@@ -36,8 +36,8 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             if (!objects.has(CORPORATIONS) || !objects.has(SHIPS)) {
                 return false
             }
-            corporations = objects.getJSONObject(CORPORATIONS) as JSONArray
-            ships = objects.getJSONObject(SHIPS) as JSONArray
+            corporations = objects.getJSONArray(CORPORATIONS)
+            ships = objects.getJSONArray(SHIPS)
         } catch (err: IOException) {
             logger.error(err) { "Failed to parse file '$filePath'" }
             return false
