@@ -139,6 +139,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         return true
     }
 
+    /** String constants for the JSON keys **/
     companion object Companion {
         const val CORPORATIONS = "corporations"
         const val SHIPS = "ships"
