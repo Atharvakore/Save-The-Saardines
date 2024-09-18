@@ -101,7 +101,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
                 val eventShip: Int = event.getInt("shipID")
                 val ship: Ship? = accumulator.ships[eventShip]
                 if (ship != null) {
-                    val shipCorp: Corporation = ship.getOwnerCorporation()
+                    val shipCorp: Corporation = ship.owner
                     accumulator.addEvent(eventId, PirateAttack(eventId, eventTick, ship, shipCorp))
                 } else {
                     condition = false

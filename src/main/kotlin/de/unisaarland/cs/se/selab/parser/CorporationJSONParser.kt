@@ -77,8 +77,9 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             fuelCapacity,
             fuelConsumption,
             mutableListOf(),
-            accumulator.getTileById(location)!!
         )
+        shipInstance.position = accumulator.getTileById(location)!!
+
         when (type) {
             COLLECTER -> {
                 val capacity = ship.getInt(CAPACITY)

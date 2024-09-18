@@ -60,7 +60,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
         val rewardExists: Boolean = reward != null
         val taskShipExists: Boolean = taskShip != null
         val rewardShipExists: Boolean = rewardShip != null
-        val sameCorpRewardAndTask: Boolean = taskShip?.getOwnerCorporation() == rewardShip?.getOwnerCorporation()
+        val sameCorpRewardAndTask: Boolean = taskShip?.owner == rewardShip?.owner
         var condition: Boolean = uniqueId && rewardExists && rewardShipExists
         condition = condition && taskShipExists && sameCorpRewardAndTask
         val targetTile: Tile? = accumulator.getTileById(task.getInt("targetTile"))
@@ -79,7 +79,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
         val taskTick = task.getInt("tick")
         val taskShip = accumulator.ships[task.getInt("shipID")]
         val rewardShip = accumulator.ships[task.getInt("rewardShipID")]
-        val taskCorporation = rewardShip!!.getOwnerCorporation()
+        val taskCorporation = rewardShip!!.owner
         val reward: Reward? = accumulator.rewards[task.getInt("rewardID")]
         val targetTile: Tile = accumulator.getTileById(task.getInt("targetTile"))!!
         var returnCond = false
@@ -92,7 +92,6 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
                         taskShip!!,
                         reward,
                         rewardShip,
-                        taskCorporation,
                         targetTile
                     )
                     accumulator.addTask(taskId, taskObj)
@@ -102,7 +101,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
             "EXPLORE" -> {
                 if (reward is TelescopeReward) {
                     val taskObj = ExploreMapTask(taskTick,
-                        taskId, taskShip!!, reward, rewardShip, taskCorporation, targetTile
+                        taskId, taskShip!!, reward, rewardShip, targetTile
                     )
                     accumulator.addTask(taskId, taskObj)
                     returnCond = true
@@ -111,7 +110,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
             "FIND" -> {
                 if (reward is TrackerReward) {
                     val taskObj = FindGarbageTask(taskTick,
-                        taskId, taskShip!!, reward, rewardShip, taskCorporation, targetTile)
+                        taskId, taskShip!!, reward, rewardShip,  targetTile)
                     accumulator.addTask(taskId, taskObj)
                     returnCond = true
                 }
@@ -123,7 +122,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
                 }
                 if (reward is RadioReward && condition) {
                     val taskObj = CooperateTask(taskTick,
-                        taskId, taskShip!!, reward, rewardShip, taskCorporation, targetTile)
+                        taskId, taskShip!!, reward, rewardShip,  targetTile)
                     accumulator.addTask(taskId, taskObj)
                     returnCond = true
                 }

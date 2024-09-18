@@ -110,7 +110,7 @@ class Simulation(
     private fun collectActiveTasks(): List<Task> {
         val allTasks = mutableListOf<Task>()
         for (corporation in corporations) {
-            allTasks.addAll(corporation.getActiveTasks())
+            allTasks.addAll(corporation.getActiveTasks(tick))
         }
         return allTasks
     }

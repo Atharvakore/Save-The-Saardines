@@ -8,11 +8,11 @@ import kotlin.math.min
 
 /** Oil Spill Event */
 class OilSpill(
-    private val id: Int,
-    private val fireTick: Int,
-    private val map: Sea,
-    private val location: Tile,
-    private val radius: Int,
+    override val id: Int,
+    override val fireTick: Int,
+    override val map: Sea,
+    override val location: Tile,
+    override val radius: Int,
     private val amount: Int
 ) : LocalEvent(id, fireTick, map, location, radius) {
     override fun toString(): String {

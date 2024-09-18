@@ -5,11 +5,11 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 
 /** Event which will end the Restriction Event*/
 class EndRestriction(
-    private val id: Int,
-    private val fireTick: Int,
-    private val map: Sea,
-    private val location: Tile,
-    private val radius: Int
+    override val id: Int,
+    override val fireTick: Int,
+    override val map: Sea,
+    override val location: Tile,
+    override val radius: Int
 ) : LocalEvent(id, fireTick, map, location, radius) {
     override fun toString(): String {
         return "End Restriction"
