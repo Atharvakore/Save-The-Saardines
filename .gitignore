@@ -3,3 +3,5 @@
 .gradle/
 build/
 libs/
+
+.DS_Store
