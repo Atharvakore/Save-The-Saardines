@@ -120,6 +120,14 @@ class Corporation(
         for (ship in availableShips.sortedBy { it.id }) {
             with(ship.capabilities.first()) {
                 if (this is ScoutingShip) {
+                    // 1. Update our knowledge about the garbage in the sea
+                    this.getTilesWithGarbageInFoV(Sea, ship.position).forEach {
+                        it.garbage
+                            .asSequence()
+                            .filter { acceptedGarbageType.contains(it.type) }
+                            .forEach { garbage -> partnerGarbage[garbage.id] = it }
+                    }
+                    // 2. Navigate to the closest garbage patch.
                     // TODO
                 } else if (this is CollectingShip) {
                     // TODO
