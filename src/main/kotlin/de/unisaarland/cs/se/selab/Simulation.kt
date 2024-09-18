@@ -51,7 +51,7 @@ class Simulation(
 
         for (corporation in corporations) {
             val otherShips = allShips.filter { it.owner != corporation }
-            corporation.run(otherShips)
+            corporation.run(otherShips, tick)
         }
     }
 
