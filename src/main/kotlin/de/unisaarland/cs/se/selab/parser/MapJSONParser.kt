@@ -209,10 +209,10 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             var correct = true
             val adjacentTile0 = accumulator.getTileByCoordinate(Vec2D(x - 1, y))
             val adjacentTile60 = accumulator.getTileByCoordinate(Vec2D(x - 1, y - 1))
-            val adjacentTile120 = accumulator.getTileByCoordinate(Vec2D(x - 1, y + 1))
+            val adjacentTile120 = accumulator.getTileByCoordinate(Vec2D(x, y - 1))
             val adjacentTile180 = accumulator.getTileByCoordinate(Vec2D(x + 1, y))
             val adjacentTile240 = accumulator.getTileByCoordinate(Vec2D(x + 1, y + 1))
-            val adjacentTile300 = accumulator.getTileByCoordinate(Vec2D(x - 1, y + 1))
+            val adjacentTile300 = accumulator.getTileByCoordinate(Vec2D(x, y + 1))
             val adjacentTiles = listOf(
                 adjacentTile0,
                 adjacentTile60,

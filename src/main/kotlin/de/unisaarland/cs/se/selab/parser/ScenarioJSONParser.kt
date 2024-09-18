@@ -106,11 +106,10 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
             }
 
             "OIL_SPILL" -> {
-                val eventRadius: Int = event.getInt("radius")
                 val eventAmount: Int = event.getInt("amount")
                 if (accumulator.map != null) {
                     val oilSpill =
-                        OilSpill(eventId, eventTick, accumulator.map!!, eventTile!!, eventRadius, eventAmount)
+                        OilSpill(eventId, eventTick, accumulator.map!!, eventTile!!, eventRadius!!, eventAmount)
                     accumulator.addEvent(eventId, oilSpill)
                 }
             }
