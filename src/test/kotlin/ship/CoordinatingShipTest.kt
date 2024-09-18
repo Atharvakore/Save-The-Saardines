@@ -16,9 +16,9 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CoordinatingShipTest {
 
-    lateinit var coordinatingCapability: CoordinatingShip
-    lateinit var coordinatingShip: Ship
-    val sea: Sea = Sea
+    private lateinit var coordinatingCapability: CoordinatingShip
+    private lateinit var coordinatingShip: Ship
+    private val sea: Sea = Sea
 
     @BeforeEach
     fun setUp() {

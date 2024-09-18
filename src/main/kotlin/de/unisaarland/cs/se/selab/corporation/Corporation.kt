@@ -115,6 +115,29 @@ class Corporation(
                 }
             }
         }
+        // 2. Iterate over available ships in increasing ID order
+        val usedShips: MutableList<Int> = mutableListOf()
+        for (ship in availableShips.sortedBy { it.id }) {
+            with(ship.capabilities.first()) {
+                if (this is ScoutingShip) {
+                    // 1. Update our knowledge about the garbage in the sea
+                    this.getTilesWithGarbageInFoV(Sea, ship.position).forEach {
+                        it.garbage
+                            .asSequence()
+                            .filter { acceptedGarbageType.contains(it.type) }
+                            .forEach { garbage -> partnerGarbage[garbage.id] = it }
+                    }
+                    // 2. Navigate to the closest garbage patch.
+                    // TODO
+                } else if (this is CollectingShip) {
+                    // TODO
+                } else if (this is CoordinatingShip) {
+                    // TODO
+                }
+            }
+        }
+        availableShips.removeAll { usedShips.contains(it.id) }
+        // 3. Unused ships are jobless. Something might happen to them here.
     }
 
     /**
