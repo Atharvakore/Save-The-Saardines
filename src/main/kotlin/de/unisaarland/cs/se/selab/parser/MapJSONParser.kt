@@ -37,17 +37,17 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
     private fun createTileObjects(filePath: String): JSONArray {
         val file: File
         val jsonTiles: JSONArray
-        try {
+        /* try {
             file = File(filePath)
         } catch (error: FileNotFoundException) {
             logger.error { "file '$filePath' does not exist." }
             return JSONArray()
-        }
+        } */
         try {
-            jsonTiles = JSONObject(file.readText()).getJSONArray("tiles")
+            jsonTiles = JSONObject(filePath).getJSONArray("tiles")
             return jsonTiles
         } catch (error: IOException) {
-            logger.error { "Error while parsing {$filePath}" }
+            logger.error { "Error while parsing {$filePath}, {$error}" }
         }
         return JSONArray()
     }
