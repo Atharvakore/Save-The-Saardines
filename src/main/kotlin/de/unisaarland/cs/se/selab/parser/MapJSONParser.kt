@@ -42,10 +42,12 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
     /** validating all tiles **/
     private fun validateTiles(objects: JSONArray): Boolean {
         for (elem in objects) {
-            if (validateTile(elem as JSONObject) && elem.getString(CATEGORY) != LAND) {
-                val tile = this.createTile(elem)
-                accumulator.addTile(tile.id, tile)
-                accumulator.addTileByCoordinates(tile.pos, tile)
+            if (validateTile(elem as JSONObject)) {
+                if (elem.getString(CATEGORY) != LAND) {
+                    val tile = this.createTile(elem)
+                    accumulator.addTile(tile.id, tile)
+                    accumulator.addTileByCoordinates(tile.pos, tile)
+                }
             } else {
                 return false
             }
