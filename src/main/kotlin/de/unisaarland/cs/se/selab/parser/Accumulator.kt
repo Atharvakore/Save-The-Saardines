@@ -13,16 +13,16 @@ import de.unisaarland.cs.se.selab.tiles.Vec2D
 /** The dataclass which will collect all the data from Parsing */
 class Accumulator {
     var map: Sea? = null
-    var corporations: MutableMap<Int, Corporation> = mutableMapOf()
-    var ships: MutableMap<Int, Ship> = mutableMapOf()
-    var events: MutableMap<Int, Event> = mutableMapOf()
-    var garbage: MutableMap<Int, Garbage> = mutableMapOf()
-    var tasks: MutableMap<Int, Task> = mutableMapOf()
-    var rewards: MutableMap<Int, Reward> = mutableMapOf()
-    var mapCorporationToHarbor: Map<Int, MutableList<Tile>> = mutableMapOf()
-    var mapCorporationToShips: Map<Int, MutableList<Int>> = mutableMapOf()
-    var tiles: MutableMap<Int, Tile> = mutableMapOf()
-    var tilesByCoordinate: MutableMap<Vec2D, Tile> = mutableMapOf()
+    val corporations: MutableMap<Int, Corporation> = mutableMapOf()
+    val ships: MutableMap<Int, Ship> = mutableMapOf()
+    val events: MutableMap<Int, Event> = mutableMapOf()
+    val garbage: MutableMap<Int, Garbage> = mutableMapOf()
+    val tasks: MutableMap<Int, Task> = mutableMapOf()
+    val rewards: MutableMap<Int, Reward> = mutableMapOf()
+    val mapCorporationToHarbor: Map<Int, MutableList<Tile>> = mutableMapOf()
+    val mapCorporationToShips: Map<Int, MutableList<Int>> = mutableMapOf()
+    val tiles: MutableMap<Int, Tile> = mutableMapOf()
+    val tilesByCoordinate: MutableMap<Vec2D, Tile> = mutableMapOf()
 
     /** Getter for tile based on its ID */
     public fun getTileById(tileId: Int): Tile? {

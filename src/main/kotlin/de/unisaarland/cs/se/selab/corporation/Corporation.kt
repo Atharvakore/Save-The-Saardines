@@ -23,8 +23,8 @@ class Corporation(
     val acceptedGarbageType: List<GarbageType>,
     val tasks: List<Task>
 ) {
-    var trackedGarbage: MutableList<Garbage> = mutableListOf()
-    var partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
+    val trackedGarbage: MutableList<Garbage> = mutableListOf()
+    val partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
 
     /**
