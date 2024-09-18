@@ -17,7 +17,6 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 
@@ -73,13 +72,13 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
             eventLocation = event.getInt(location)
             eventTile = accumulator.getTileById(eventLocation) ?: return false
         }
-        var condition: Boolean = true
+        var condition = true
         when (eventType) {
             "STORM" -> {
                 val eventRadius: Int = event.getInt("radius")
                 val eventSpeed: Int = event.getInt("speed")
                 val eventDirection: Direction = Direction.getDirection(event.getInt("direction"))!!
-                val storm: Storm = Storm(eventId, eventTick,
+                val storm = Storm(eventId, eventTick,
                     accumulator.map, eventTile, eventRadius, eventSpeed, eventDirection)
                 accumulator.addEvent(eventId, storm)
             }
@@ -101,7 +100,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
                 val eventShip: Int = event.getInt("shipID")
                 val ship: Ship? = accumulator.ships[eventShip]
                 if (ship != null) {
-                    val shipCorp: Corporation = ship.getOwnerCorporation()
+                    val shipCorp: Corporation = ship.owner
                     accumulator.addEvent(eventId, PirateAttack(eventId, eventTick, ship, shipCorp))
                 } else {
                     condition = false

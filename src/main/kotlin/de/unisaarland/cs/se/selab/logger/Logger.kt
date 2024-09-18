@@ -71,7 +71,7 @@ object Logger {
     fun logGarbageCollectionByShip(shipId: Int, garbageType: GarbageType, garbageId: Int, amount: Int) {
         fun logGarbageCollectionByShip(ship: Ship, garbageType: GarbageType, garbageId: Int, amount: Int) {
             val shipId: Int = ship.id
-            val corporationId: Int = ship.getOwnerCorporation().id
+            val corporationId: Int = ship.owner.id
             when (garbageType) {
                 GarbageType.OIL -> totalOilCollected += amount
                 GarbageType.PLASTIC -> totalPlasticCollected += amount
