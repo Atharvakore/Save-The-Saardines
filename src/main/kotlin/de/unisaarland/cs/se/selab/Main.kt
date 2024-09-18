@@ -42,6 +42,8 @@ fun main(args: Array<String>) {
         sim.start()
     }
 }
+
+/** The main function for parsing */
 fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
     val contents = validate(files)
     val accumulator = Accumulator()
@@ -52,6 +54,7 @@ fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulato
     }
     return accumulator
 }
+
 private fun parseMap(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
     var condition: Boolean = true
     val mapParser = MapJSONParser(accumulator)
@@ -66,12 +69,13 @@ private fun parseMap(files: List<String?>, contents: List<String>, accumulator: 
     } else {
         condition = false
     }
-    return if(condition){
+    return if (condition) {
         accumulator
     } else {
         null
     }
 }
+
 private fun parseScenario(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
     val scenarioParser = ScenarioJSONParser(accumulator)
     val taskPars = TasksRewardsParser(accumulator)
@@ -84,6 +88,7 @@ private fun parseScenario(files: List<String?>, contents: List<String>, accumula
     }
     return accumulator
 }
+
 private fun validate(files: List<String?>): List<String>? {
     val contents: MutableList<String> = mutableListOf()
     val validatingSchemas: MutableList<String> = mutableListOf("resources/schema/map.schema")
@@ -100,6 +105,7 @@ private fun validate(files: List<String?>): List<String>? {
     }
     return contents
 }
+
 private fun readFile(validatingSchema: String, file: String): String? {
     val schema: Schema = SchemaLoader.forURL(validatingSchema).load()
     val validator: Validator = Validator.forSchema(schema)
@@ -129,4 +135,3 @@ private fun readFile(validatingSchema: String, file: String): String? {
     }
     return null
 }
-

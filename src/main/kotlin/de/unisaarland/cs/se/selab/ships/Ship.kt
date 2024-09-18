@@ -44,6 +44,7 @@ class Ship(
             }
         }
     }
+
     lateinit var position: Tile
     lateinit var name: String
     lateinit var owner: Corporation
@@ -104,7 +105,6 @@ class Ship(
         this.position = desTile
     }
 
-
     /**
      * Call: when corp checks if the ship can be sent
      * Logic: gets length of the path the ship has to traverse
@@ -127,6 +127,7 @@ class Ship(
     fun addCapability(capability: ShipCapability) {
         capabilities.add(capability)
     }
+
     /**
      * complete the movement of the ship along the destination path
      * if it has an assigned task
