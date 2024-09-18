@@ -42,15 +42,13 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
             return createEvents(events)
         } catch (e: IOException) {
             logger.error { e }
-        } catch (error: FileNotFoundException) {
-            logger.error { error }
         }
         return false
     }
 
     private fun createEvents(events: JSONArray): Boolean {
         for (event in events) {
-            if (!validateEvent(event as JSONObject)) {
+            if (event != null && !validateEvent(event as JSONObject)) {
                 return false
             }
         }
@@ -76,17 +74,21 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
         var eventTile: Tile? = null
         if (eventType != "PIRATE_ATTACK") {
             eventLocation = event.getInt(location)
-            eventTile = accumulator.getTileById(eventLocation) ?: return false
+            eventTile = accumulator.tiles[eventLocation] ?: return false
             eventRadius = event.getInt("radius")
         }
         var condition = true
         when (eventType) {
             "STORM" -> {
                 val eventSpeed: Int = event.getInt("speed")
-                val eventDirection: Direction = Direction.getDirection(event.getInt("direction"))!!
+                val eventDirection: Direction? = Direction.getDirection(event.getInt("direction"))
                 val storm =
                     Storm(eventId, eventTick, accumulator.map, eventTile, eventRadius!!, eventSpeed)
-                storm.direction = eventDirection
+                eventDirection.let {
+                    if (it != null) {
+                        storm.direction = it
+                    }
+                }
                 accumulator.addEvent(eventId, storm)
             }
 
@@ -138,15 +140,13 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
             return createGarbage(garbage)
         } catch (e: IOException) {
             logger.error { e }
-        } catch (error: FileNotFoundException) {
-            logger.error { error }
         }
         return false
     }
 
     private fun createGarbage(garbage: JSONArray): Boolean {
         for (gar in garbage) {
-            if (!validateGarbage(gar as JSONObject)) {
+            if (gar != null && !validateGarbage(gar as JSONObject)) {
                 return false
             }
         }
@@ -158,7 +158,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
         val garbageType: String = garbage.getString("type")
         val typeExists: Boolean = garbageTypes.contains(garbageType)
         val uniqueId: Boolean = garbageId >= 0 && accumulator.garbage[garbageId] == null
-        val location: Tile? = accumulator.getTileById(garbage.getInt(location))
+        val location: Tile? = accumulator.tiles[garbage.getInt(location)]
         val exists: Boolean = location != null && typeExists
         var locationIsNotLand: Boolean = location is Shore || location is ShallowOcean
         if (garbageType != "CHEMICALS") {
@@ -173,7 +173,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
     private fun createGarbageObj(garbage: JSONObject): Boolean {
         val garbageId: Int = garbage.getInt(id)
         val garbageType: GarbageType = GarbageType.valueOf(garbage.getString(type))
-        val garbageLocation: Tile = accumulator.getTileById(garbage.getInt(location)) ?: return false
+        val garbageLocation: Tile = accumulator.tiles[garbage.getInt(location)] ?: return false
         val amount: Int = garbage.getInt("amount")
         val g = Garbage(garbageId, amount, garbageType, mutableSetOf())
         accumulator.addGarbage(garbageId, g)

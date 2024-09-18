@@ -18,7 +18,7 @@ class EndRestriction(
     override fun actUponTick(currentTick: Int): Boolean {
         if (currentTick == fireTick) {
             location.pos.tilesInRadius(radius).forEach {
-                val tile = map!!.getTileByPos(it)
+                val tile = map?.getTileByPos(it)
                 tile?.restrictions?.dec()
             }
             return true

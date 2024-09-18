@@ -24,11 +24,6 @@ class Accumulator {
     val tiles: MutableMap<Int, Tile> = mutableMapOf()
     val tilesByCoordinate: MutableMap<Vec2D, Tile> = mutableMapOf()
 
-    /** Getter for tile based on its ID */
-    public fun getTileById(tileId: Int): Tile? {
-        return tiles[tileId]
-    }
-
     /** Setter for a reward into accumulator*/
     public fun addReward(rewardId: Int, reward: Reward) {
         rewards[rewardId] = reward

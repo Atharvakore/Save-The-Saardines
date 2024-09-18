@@ -21,7 +21,6 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.FileNotFoundException
 import java.io.IOException
 
 private val logger = KotlinLogging.logger {}
@@ -39,15 +38,13 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
             return createTasks(tasks)
         } catch (e: IOException) {
             logger.error { e }
-        } catch (error: FileNotFoundException) {
-            logger.error { error }
         }
         return false
     }
 
     private fun createTasks(tasks: JSONArray): Boolean {
         for (task in tasks) {
-            if (!validateTask(task as JSONObject)) {
+            if (task != null && !validateTask(task as JSONObject)) {
                 return false
             }
         }
@@ -65,7 +62,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
         val sameCorpRewardAndTask: Boolean = taskShip?.owner == rewardShip?.owner
         var condition: Boolean = uniqueId && rewardExists && rewardShipExists
         condition = condition && taskShipExists && sameCorpRewardAndTask
-        val targetTile: Tile? = accumulator.getTileById(task.getInt("targetTile"))
+        val targetTile: Tile? = accumulator.tiles[task.getInt("targetTile")]
         if (targetTile == null) {
             condition = false
         }
@@ -83,29 +80,45 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
         val taskShip = accumulator.ships[task.getInt("shipID")]
         val rewardShip = accumulator.ships[task.getInt("rewardShipID")]!!
         val reward: Reward? = accumulator.rewards[task.getInt("rewardID")]
-        val targetTile: Tile = accumulator.getTileById(task.getInt("targetTile"))!!
+        val targetTile: Tile = accumulator.tiles[task.getInt("targetTile")]!!
         var returnCond = false
         when (taskType) {
             "COLLECT" -> {
                 if (reward is ContainerReward) {
-                    val taskObj = CollectGarbageTask(taskTick, taskId, taskShip!!, reward, rewardShip, targetTile)
-                    accumulator.addTask(taskId, taskObj)
+                    val taskObj =
+                        taskShip?.let { CollectGarbageTask(taskTick, taskId, it, reward, rewardShip, targetTile) }
+                    if (taskObj != null) {
+                        accumulator.addTask(taskId, taskObj)
+                    }
                     returnCond = true
                 }
             }
 
             "EXPLORE" -> {
                 if (reward is TelescopeReward) {
-                    val taskObj = ExploreMapTask(taskTick, taskId, taskShip!!, reward, rewardShip, targetTile)
-                    accumulator.addTask(taskId, taskObj)
+                    val taskObj = taskShip?.let { ExploreMapTask(taskTick, taskId, it, reward, rewardShip, targetTile) }
+                    if (taskObj != null) {
+                        accumulator.addTask(taskId, taskObj)
+                    }
                     returnCond = true
                 }
             }
 
             "FIND" -> {
                 if (reward is TrackerReward) {
-                    val taskObj = FindGarbageTask(taskTick, taskId, taskShip!!, reward, rewardShip, targetTile)
-                    accumulator.addTask(taskId, taskObj)
+                    val taskObj = taskShip?.let {
+                        FindGarbageTask(
+                            taskTick,
+                            taskId,
+                            it,
+                            reward,
+                            rewardShip,
+                            targetTile
+                        )
+                    }
+                    if (taskObj != null) {
+                        accumulator.addTask(taskId, taskObj)
+                    }
                     returnCond = true
                 }
             }
@@ -115,16 +128,20 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
                 if (targetTile is Shore) {
                     condition = targetTile.harbor
                 }
-                if (reward is RadioReward && condition) {
-                    val taskObj = CooperateTask(
-                        taskTick,
-                        taskId,
-                        taskShip!!,
-                        reward,
-                        rewardShip,
-                        targetTile
-                    )
-                    accumulator.addTask(taskId, taskObj)
+                if (condition && reward is RadioReward) {
+                    val taskObj = taskShip?.let {
+                        CooperateTask(
+                            taskTick,
+                            taskId,
+                            it,
+                            reward,
+                            rewardShip,
+                            targetTile
+                        )
+                    }
+                    if (taskObj != null) {
+                        accumulator.addTask(taskId, taskObj)
+                    }
                     returnCond = true
                 }
             }
@@ -139,15 +156,13 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
             return createRewards(rewards)
         } catch (e: IOException) {
             logger.error { e }
-        } catch (error: FileNotFoundException) {
-            logger.error { error }
         }
         return false
     }
 
     private fun createRewards(rewards: JSONArray): Boolean {
         for (reward in rewards) {
-            if (!validateReward(reward as JSONObject)) {
+            if (reward != null && !validateReward(reward as JSONObject)) {
                 return false
             }
         }

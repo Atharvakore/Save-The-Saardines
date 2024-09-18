@@ -37,8 +37,8 @@ fun main(args: Array<String>) {
         }
     }
     val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks, outputFile)
-    if (acc != null) {
-        val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks!!, acc.map!!)
+    if (maxTicks != null && acc != null && acc.map != null) {
+        val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, acc.map!!)
         sim.start()
     }
 }
@@ -47,26 +47,32 @@ fun main(args: Array<String>) {
 fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
     val contents = validate(files)
     val accumulator = Accumulator()
-    var cond: Boolean = maxTicks == null || outputFile == null || contents == null
-    cond = cond || parseMap(files, contents!!, accumulator) == null
-    if (cond || parseScenario(files, contents!!, accumulator) == null) {
-        return null
+    if (contents != null) {
+        var cond: Boolean = maxTicks == null || outputFile == null
+        cond = cond || parseMap(files, contents, accumulator) == null
+        if (cond || parseScenario(files, contents, accumulator) == null) {
+            return null
+        }
     }
-    return accumulator
+    return if (contents != null) {
+        accumulator
+    } else {
+        null
+    }
 }
 
 /** Parsing the Map */
 fun parseMap(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
-    var condition: Boolean = true
+    var condition = true
     val mapParser = MapJSONParser(accumulator)
-    if (mapParser.parseMap(contents[0])) {
-        Logger.logInitializationInfoSuccess(files[0]!!)
+    if (files[0] != null && mapParser.parseMap(contents[0])) {
+        files[0]?.let { Logger.logInitializationInfoSuccess(it) }
     } else {
         condition = false
     }
     val corpParser = CorporationJSONParser(accumulator)
     if (corpParser.parseCorporationsFile(contents[1])) {
-        Logger.logInitializationInfoSuccess(files[1]!!)
+        files[1]?.let { Logger.logInitializationInfoSuccess(it) }
     } else {
         condition = false
     }
@@ -83,7 +89,7 @@ private fun parseScenario(files: List<String?>, contents: List<String>, accumula
     var validScenario = scenarioParser.parseGarbage(contents[2]) && scenarioParser.parseEvents(contents[2])
     validScenario = validScenario && taskPars.parseRewards(contents[2]) && taskPars.parseTasks(contents[2])
     if (validScenario) {
-        Logger.logInitializationInfoSuccess(files[2]!!)
+        files[2]?.let { Logger.logInitializationInfoSuccess(it) }
     } else {
         return null
     }
@@ -115,9 +121,9 @@ private fun getSchemaPath(file: String): String {
 private fun readFile(validatingSchema: String, file: String): String? {
     val schema: Schema = SchemaLoader.forURL(validatingSchema).load()
     val validator: Validator = Validator.forSchema(schema)
-    var objects: String
+    val objects: String
     var objectFile: File? = null
-    var condition: Boolean = true
+    var condition = true
     try {
         objectFile = File(file)
     } catch (notFound: FileNotFoundException) {
@@ -127,12 +133,15 @@ private fun readFile(validatingSchema: String, file: String): String? {
     }
     if (condition) {
         try {
-            objects = objectFile!!.readText()
-            val fail: ValidationFailure? = validator.validate(objects)
+            var fail: ValidationFailure? = null
+            if (objectFile != null) {
+                objects = objectFile.readText()
+                fail = validator.validate(objects)
+            }
             if (fail != null) {
                 Logger.logInitializationInfoFail(file)
             } else {
-                return objects
+                return null
             }
         } catch (notFound: IOException) {
             logger.error(notFound) { "error" }

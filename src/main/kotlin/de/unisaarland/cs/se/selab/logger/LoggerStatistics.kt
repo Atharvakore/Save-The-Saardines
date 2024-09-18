@@ -14,7 +14,7 @@ object LoggerStatistics {
         logSimulationStatisticsCalculated()
         for (corporation in corporations) {
             if (Logger.map.containsKey(corporation.id)) {
-                statsForCorporation(corporation.id, Logger.map[corporation.id]!!)
+                Logger.map[corporation.id]?.let { statsForCorporation(corporation.id, it) }
             } else {
                 statsForCorporation(corporation.id, 0)
             }

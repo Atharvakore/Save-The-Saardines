@@ -3,7 +3,7 @@ package de.unisaarland.cs.se.selab.tiles
 /**
  *class tile includes all basic functionality related tiles
  */
-abstract class Tile(
+open class Tile(
     val id: Int,
     val pos: Vec2D,
     var adjacentTiles: List<Tile?>,
@@ -88,7 +88,7 @@ abstract class Tile(
             }
             if (toBeRemoved < filteredList[0].amount) {
                 filteredList[0].amount -= toBeRemoved
-                toBeRemoved = 0
+                // toBeRemoved = 0
                 break
             }
         }

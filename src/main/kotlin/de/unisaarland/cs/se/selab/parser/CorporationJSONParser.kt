@@ -74,9 +74,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             fuelConsumption,
             mutableListOf(),
         )
-        println(location)
-        println(accumulator.tiles[location])
-        shipInstance.position = accumulator.getTileById(location)!!
+        shipInstance.position = accumulator.tiles[location]!!
 
         when (type) {
             COLLECTER -> {
@@ -113,7 +111,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         val harbors = corporation.getJSONArray(HOMEHARBORS)
         val ownedHarbors: MutableList<Shore> = mutableListOf()
         harbors.forEach {
-            ownedHarbors.add(accumulator.getTileById(it as Int) as Shore)
+            ownedHarbors.add(accumulator.tiles[it as Int] as Shore)
         }
         val garbageTypes: List<GarbageType> = listOf(GarbageType.OIL, GarbageType.PLASTIC, GarbageType.CHEMICALS)
         val corporationInstance = Corporation(id, name, ownnedShips, ownedHarbors, garbageTypes, mutableListOf())
@@ -128,7 +126,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
     private fun validateShips(shipObjects: JSONArray): Boolean {
         shipObjects.forEach {
             if (validateShip(it as JSONObject)) {
-                val ship = this.createShip(it)
+                this.createShip(it)
             } else {
                 return false
             }

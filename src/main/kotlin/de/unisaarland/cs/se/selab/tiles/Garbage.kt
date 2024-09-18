@@ -74,7 +74,8 @@ class Garbage(
         val localCurrent: Current? = currentTile.getCurrent()
         if (localCurrent != null) {
             var amountToBeDrifted = localCurrent.intensity * FIFTY
-            var targetForDriftingTile = currentTile.getTileInDirection(localCurrent.speed / TEN, localCurrent.direction)
+            val targetForDriftingTile =
+                currentTile.getTileInDirection(localCurrent.speed / TEN, localCurrent.direction) ?: return
             for (g in currentTile.garbage.sortedBy { it.id }) {
                 if (g.amount >= amountToBeDrifted) {
                     driftBigGarbages(amountToBeDrifted, g, currentTile, targetForDriftingTile)
@@ -83,7 +84,7 @@ class Garbage(
             }
         }
     }
-    private fun driftSmallGarbages(amountToBeDrifted: Int, g: Garbage, source: DeepOcean, targetTile: Tile?): Int {
+    private fun driftSmallGarbages(amountToBeDrifted: Int, g: Garbage, source: DeepOcean, targetTile: Tile): Int {
         var amountToBeDriftedTemp = amountToBeDrifted
         if (g.amount + source.amountOfGarbageDriftedThisTick < amountToBeDrifted) {
             if (g.type == GarbageType.OIL) {
@@ -100,15 +101,15 @@ class Garbage(
      * drifts big garbage which have more amount than Intensity * 50
      */
 
-    private fun driftBigGarbages(amountToBeDrifted: Int, g: Garbage, source: DeepOcean, target: Tile?) {
+    private fun driftBigGarbages(amountToBeDrifted: Int, g: Garbage, source: DeepOcean, target: Tile) {
         if (g.type == GarbageType.OIL) {
-            if (target!!.currentOilLevel() + g.amount <= THOUSAND) {
+            if (target.currentOilLevel() + g.amount <= THOUSAND) {
                 target.addGarbage(createGarbage(amountToBeDrifted, GarbageType.OIL))
                 source.garbage[source.garbage.indexOf(g)].amount -= amountToBeDrifted
                 return
             }
         }
-        target!!.addGarbage(createGarbage(amountToBeDrifted, g.type))
+        target.addGarbage(createGarbage(amountToBeDrifted, g.type))
         source.garbage[source.garbage.indexOf(g)].amount -= amountToBeDrifted
         source.amountOfGarbageDriftedThisTick = amountToBeDrifted
         return
@@ -131,11 +132,9 @@ class Garbage(
     /**
      * drifts plastic and chemicals
      */
-    private fun driftPlasticandChemicals(g: Garbage, source: DeepOcean, target: Tile?) {
-        if (target != null) {
-            target.addGarbage(g)
-            source.garbage.filter { it == g }
-            source.amountOfGarbageDriftedThisTick += g.amount
-        }
+    private fun driftPlasticandChemicals(g: Garbage, source: DeepOcean, target: Tile) {
+        target.addGarbage(g)
+        source.garbage.filter { it == g }
+        source.amountOfGarbageDriftedThisTick += g.amount
     }
 }

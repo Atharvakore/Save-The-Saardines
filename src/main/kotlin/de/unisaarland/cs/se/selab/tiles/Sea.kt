@@ -5,7 +5,7 @@ package de.unisaarland.cs.se.selab.tiles
  */
 object Sea {
     var tiles: MutableList<Tile> = mutableListOf()
-    var tileIndex: Map<Vec2D, Tile> = mapOf()
+    var tileIndex: Map<Vec2D, Tile> = emptyMap()
 
     /**
      * gives tile with the ID given as argument
