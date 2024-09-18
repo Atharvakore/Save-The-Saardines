@@ -19,7 +19,6 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
 
     /** Parsing function **/
     public fun parseCorporationsFile(filePath: String): Boolean {
-        // There's nothing we can do with file:File
         val corporations: JSONArray
         val ships: JSONArray
         val objects: JSONObject
@@ -31,17 +30,17 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         } */
         try {
             objects = JSONObject(filePath)
-            if (!objects.has(CORPORATIONS) || !objects.has(SHIPS)) {
-                return false
+            return if (objects.has(CORPORATIONS) && objects.has(SHIPS)) {
+                corporations = objects.getJSONArray(CORPORATIONS)
+                ships = objects.getJSONArray(SHIPS)
+                validateShips(ships) && validateCorporations(corporations)
+            } else {
+                false
             }
-            corporations = objects.getJSONArray(CORPORATIONS)
-            ships = objects.getJSONArray(SHIPS)
         } catch (err: IOException) {
             logger.error(err) { "Failed to parse file '$filePath'" }
             return false
         }
-        val result = validateShips(ships) && validateCorporations(corporations)
-        return result
     }
 
     private fun validateCorporations(corpObjects: JSONArray): Boolean {
@@ -62,7 +61,6 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
     private fun createShip(ship: JSONObject): Ship {
         val id = ship.getInt(ID)
         val type = ship.getString(TYPE)
-        val corporation = ship.getInt(CORPORATION)
         val location = ship.getInt(LOCATION)
         val maxVelocity = ship.getInt(MAXVELOCITY)
         val acceleration = ship.getInt(ACCELERATION)
@@ -101,8 +99,6 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
                 shipInstance.addCapability(coordinatingShip)
             }
         }
-        accumulator.addShip(shipInstance.id, shipInstance)
-        accumulator.addShipToCorp(corporation, shipInstance.id)
         return shipInstance
     }
 

@@ -173,18 +173,18 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                     val speed = tile.getInt(SPEED)
                     val intensity = tile.getInt(INTENSITY)
                     val currentObject = Current(speed, getDirection(direction), intensity)
-                    return DeepOcean(id, coordinates, listOf(), listOf(), currentObject)
+                    return DeepOcean(id, coordinates, emptyList(), emptyList(), currentObject)
                 }
-                return DeepOcean(id, coordinates, listOf(), listOf(), null)
+                return DeepOcean(id, coordinates, emptyList(), emptyList(), null)
             }
 
             SHALLOW_OCEAN -> {
-                return ShallowOcean(id, coordinates, listOf(), listOf())
+                return ShallowOcean(id, coordinates, emptyList(), emptyList())
             }
 
             SHORE -> {
                 val harbor = tile.getBoolean(HARBOR)
-                return Shore(id, coordinates, listOf(), listOf(), harbor)
+                return Shore(id, coordinates, emptyList(), emptyList(), harbor)
             }
 
             else -> {
@@ -224,18 +224,18 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             when (tile) {
                 is Shore -> {
                     correct =
-                        correct && adjacentTiles.all { it == null || it is Shore || it is ShallowOcean }
+                        correct && adjacentTiles.all { t -> t == null || t is Shore || t is ShallowOcean }
                 }
 
                 is DeepOcean -> {
                     correct =
-                        correct && adjacentTiles.all { it == null || it is DeepOcean || it is ShallowOcean }
+                        correct && adjacentTiles.all { t -> t == null || t is DeepOcean || t is ShallowOcean }
                 }
 
                 is ShallowOcean -> {
                     correct =
-                        correct && adjacentTiles.all {
-                            it == null || it is Shore || it is ShallowOcean || it is DeepOcean
+                        correct && adjacentTiles.all { t ->
+                            t == null || t is Shore || t is ShallowOcean || t is DeepOcean
                         }
                 }
 

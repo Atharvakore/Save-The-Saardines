@@ -12,8 +12,8 @@ class Storm(
     override val location: Tile?,
     override val radius: Int,
     val speed: Int,
-    val direction: Direction
 ) : LocalEvent(id, fireTick, map, location, radius) {
+    lateinit var direction: Direction
     override fun toString(): String {
         return "Storm"
     }

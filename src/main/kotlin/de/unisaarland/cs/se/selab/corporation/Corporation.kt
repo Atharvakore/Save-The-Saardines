@@ -23,8 +23,8 @@ class Corporation(
     val acceptedGarbageType: List<GarbageType>,
     val tasks: List<Task>
 ) {
-    var trackedGarbage: MutableList<Garbage> = mutableListOf()
-    var partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
+    val trackedGarbage: MutableList<Garbage> = mutableListOf()
+    val partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
 
     /**
@@ -42,8 +42,7 @@ class Corporation(
         myCoordinatingShips.forEach { coordinatingShip ->
             val otherShipsOnTile: List<Ship> = otherShips
                 .filter {
-                    coordinatingShip.position == it.position &&
-                        it.owner != lastCoordinatingCorporation
+                    coordinatingShip.position == it.position && it.owner != lastCoordinatingCorporation
                 }
 
             val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.owner }.distinct()
@@ -103,19 +102,19 @@ class Corporation(
         val capability = ship.capabilities.first()
         if (capability is ScoutingShip) {
             // 1. Update our knowledge about the garbage in the sea
-            capability.getTilesWithGarbageInFoV(Sea, ship.position).forEach {
-                it.garbage
+            capability.getTilesWithGarbageInFoV(Sea, ship.position).forEach { tile ->
+                tile.garbage
                     .asSequence()
                     .filter { acceptedGarbageType.contains(it.type) }
-                    .forEach { garbage -> partnerGarbage[garbage.id] = it }
+                    .forEach { garbage -> partnerGarbage[garbage.id] = tile }
             }
             // 2. Navigate to the closest garbage patch.
             val paths = Dijkstra(ship.position).allPaths()
             val sorted = paths.toList().sortedBy { it.second.size }
             val closestGarbagePatch = sorted
                 .map { it.first }
-                .intersect(partnerGarbage.values.toSet()).firstOrNull {
-                    it.garbage
+                .intersect(partnerGarbage.values.toSet()).firstOrNull { tile ->
+                    tile.garbage
                         .asSequence()
                         .filter { acceptedGarbageType.contains(it.type) }
                         .any { garbage -> !trackedGarbage.contains(garbage) }
@@ -141,7 +140,8 @@ class Corporation(
         error("Unknown ship capability")
     }
 
-    /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
+    /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature
+     *  todo Handle restrictions **/
     private fun moveShips() {
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
         // 0. For each ship that has an assigned destination, tick the
@@ -242,7 +242,7 @@ class Corporation(
         val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
 
         var shortestPathLen: Int = Int.MAX_VALUE
-        var shortestPath: List<Tile> = listOf()
+        var shortestPath: List<Tile> = emptyList()
 
         for (ship in ships) {
             val path: List<Tile>? = shortestPaths[ship.position]
@@ -270,7 +270,7 @@ class Corporation(
         val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
 
         var shortestPathLen: Int = Int.MAX_VALUE
-        var shortestPath: List<Tile> = listOf()
+        var shortestPath: List<Tile> = emptyList()
 
         for (harbor in harbors) {
             val path: List<Tile>? = shortestPaths[harbor]
