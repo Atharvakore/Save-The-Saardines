@@ -1,5 +1,5 @@
 package tasks
 
 class CollectGarbageTaskTest {
-   // TODO
+    // TODO
 }
