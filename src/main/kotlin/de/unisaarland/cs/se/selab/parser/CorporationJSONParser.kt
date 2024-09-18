@@ -25,14 +25,14 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         val corporations: JSONArray
         val ships: JSONArray
         val objects: JSONObject
-        try {
+        /* try {
             file = File(filePath)
         } catch (err: FileNotFoundException) {
             logger.error(err) { "file '$filePath' does not exist." }
             return false
-        }
+        } */
         try {
-            objects = JSONObject(file.readText())
+            objects = JSONObject(filePath)
             if (!objects.has(CORPORATIONS) || !objects.has(SHIPS)) {
                 return false
             }
@@ -78,6 +78,8 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             fuelConsumption,
             mutableListOf(),
         )
+        println(location)
+        println(accumulator.tiles[location])
         shipInstance.position = accumulator.getTileById(location)!!
 
         when (type) {
@@ -153,7 +155,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         const val FUELCAPACITY = "fuelCapacity"
         const val FUELCONSUMPTION = "fuelConsumption"
         const val CAPACITY = "capacity"
-        const val VISIBILITY = "visibility"
+        const val VISIBILITY = "visibilityRange"
         const val GARBAGETYPE = "garbageType"
         const val SCOUTING = "SCOUTING"
         const val COLLECTER = "COLLECTING"
