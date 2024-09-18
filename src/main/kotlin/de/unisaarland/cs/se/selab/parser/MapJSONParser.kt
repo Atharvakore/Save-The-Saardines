@@ -274,6 +274,6 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         const val MAX_SPEED = 30
         const val MAX_INTENSITY = 10
         val category: Array<String> = arrayOf(LAND, SHORE, SHALLOW_OCEAN, DEEP_OCEAN)
-        val requiredForCurrent: Array<String> = arrayOf(CURRENT, DIRECTION, INTENSITY, SPEED)
+        val requiredForCurrent: Array<String> = arrayOf(DIRECTION, INTENSITY, SPEED)
     }
 }
