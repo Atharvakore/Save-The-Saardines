@@ -42,24 +42,16 @@ fun main(args: Array<String>) {
         sim.start()
     }
 }
-
-private fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
+fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
     val contents = validate(files)
     val accumulator = Accumulator()
     var cond: Boolean = maxTicks == null || outputFile == null || contents == null
     cond = cond || parseMap(files, contents!!, accumulator) == null
     if (cond || parseScenario(files, contents!!, accumulator) == null) {
-        var cond: Boolean = maxTicks == null || outputFile == null
-        cond = cond || parseMap(files, contents!!, accumulator) == null
-        if (cond || parseScenario(files, contents!!, accumulator) == null) {
-            return null
-        }
-        return accumulator
+        return null
     }
     return accumulator
-
 }
-
 private fun parseMap(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
     var condition: Boolean = true
     val mapParser = MapJSONParser(accumulator)
@@ -74,14 +66,12 @@ private fun parseMap(files: List<String?>, contents: List<String>, accumulator: 
     } else {
         condition = false
     }
-    return if (condition) {
+    return if(condition){
         accumulator
     } else {
         null
     }
-    return accumulator
 }
-
 private fun parseScenario(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
     val scenarioParser = ScenarioJSONParser(accumulator)
     val taskPars = TasksRewardsParser(accumulator)
@@ -94,8 +84,7 @@ private fun parseScenario(files: List<String?>, contents: List<String>, accumula
     }
     return accumulator
 }
-
-fun validate(files: List<String?>): List<String>? {
+private fun validate(files: List<String?>): List<String>? {
     val contents: MutableList<String> = mutableListOf()
     val validatingSchemas: MutableList<String> = mutableListOf("resources/schema/map.schema")
     validatingSchemas.add("resources/schema/corporations.schema")
@@ -111,8 +100,7 @@ fun validate(files: List<String?>): List<String>? {
     }
     return contents
 }
-
-fun readFile(validatingSchema: String, file: String): String? {
+private fun readFile(validatingSchema: String, file: String): String? {
     val schema: Schema = SchemaLoader.forURL(validatingSchema).load()
     val validator: Validator = Validator.forSchema(schema)
     var objects: String
@@ -138,22 +126,7 @@ fun readFile(validatingSchema: String, file: String): String? {
             logger.error(notFound) { "error" }
             Logger.logInitializationInfoFail(file)
         }
-        return null
-    }
-    try {
-        objects = objectFile!!.readText()
-        val fail: ValidationFailure? = validator.validate(objects)
-        if (fail != null) {
-            Logger.logInitializationInfoFail(file)
-            return null
-        } else {
-            return objects
-        }
-    } catch (notFound: IOException) {
-        logger.error(notFound) { "error" }
-        Logger.logInitializationInfoFail(file)
     }
     return null
 }
-
 
