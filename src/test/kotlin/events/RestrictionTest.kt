@@ -117,4 +117,3 @@ class RestrictionTest {
         assertTrue((sea.getTileByPos(Vec2D(2, 7))?.restrictions ?: true) == 1)
     }
 }
-
