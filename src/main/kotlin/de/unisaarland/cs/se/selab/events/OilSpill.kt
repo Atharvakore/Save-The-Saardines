@@ -30,7 +30,7 @@ class OilSpill(
             location.pos.tilesInRadius(radius).forEach {
                 val tile = map.getTileByPos(it) ?: return@forEach
                 val garbageTiles = tile.garbage.filter { garbage -> garbage.type == GarbageType.OIL }
-                val oilGarbageAmount = OIL_TILE_MAX - garbageTiles.sumOf { it.amount }
+                val oilGarbageAmount = OIL_TILE_MAX - garbageTiles.sumOf { garbage -> garbage.amount }
                 val newGarbageAmount = min(amount, oilGarbageAmount)
                 tile.garbage = tile.garbage.plus(Garbage.createGarbage(newGarbageAmount, GarbageType.OIL))
             }

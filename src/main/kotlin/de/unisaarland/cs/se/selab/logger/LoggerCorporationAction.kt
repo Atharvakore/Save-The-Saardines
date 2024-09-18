@@ -3,7 +3,9 @@ package de.unisaarland.cs.se.selab.logger
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 
+/** Logger for Corporation process*/
 object LoggerCorporationAction {
+    /** Logger Function*/
     fun log(message: String) {
         Logger.output.write(message)
     }
@@ -24,18 +26,16 @@ object LoggerCorporationAction {
     }
 
     /** Logged to signify that a ship has collected garbage. */
-    fun logGarbageCollectionByShip(shipId: Int, garbageType: GarbageType, garbageId: Int, amount: Int) {
-        fun logGarbageCollectionByShip(ship: Ship, garbageType: GarbageType, garbageId: Int, amount: Int) {
-            val shipId: Int = ship.id
-            val corporationId: Int = ship.owner.id
-            when (garbageType) {
-                GarbageType.OIL -> Logger.totalOilCollected += amount
-                GarbageType.PLASTIC -> Logger.totalPlasticCollected += amount
-                GarbageType.CHEMICALS -> Logger.totalChemicalsCollected += amount
-            }
-            Logger.map[corporationId] = Logger.map.getOrDefault(corporationId, 0) + amount
-            log("Garbage Collection: Ship $shipId collected $amount of garbage $garbageType with $garbageId.")
+    fun logGarbageCollectionByShip(ship: Ship, garbageType: GarbageType, garbageId: Int, amount: Int) {
+        val shipId: Int = ship.id
+        val corporationId: Int = ship.owner.id
+        when (garbageType) {
+            GarbageType.OIL -> Logger.totalOilCollected += amount
+            GarbageType.PLASTIC -> Logger.totalPlasticCollected += amount
+            GarbageType.CHEMICALS -> Logger.totalChemicalsCollected += amount
         }
+        Logger.map[corporationId] = Logger.map.getOrDefault(corporationId, 0) + amount
+        log("Garbage Collection: Ship $shipId collected $amount of garbage $garbageType with $garbageId.")
     }
 
     /** Log the start of cooperation between corporations. */
@@ -52,9 +52,9 @@ object LoggerCorporationAction {
     ) {
         log(
             "Cooperation: Corporation $corporationId" +
-                    " cooperated with corporation" +
-                    " $otherCorporationId with ship" +
-                    " $shipId to ship $cooperatedShipId."
+                " cooperated with corporation" +
+                " $otherCorporationId with ship" +
+                " $shipId to ship $cooperatedShipId."
         )
     }
 

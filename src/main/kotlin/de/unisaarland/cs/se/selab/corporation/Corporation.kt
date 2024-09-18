@@ -113,8 +113,8 @@ class Corporation(
             val sorted = paths.toList().sortedBy { it.second.size }
             val closestGarbagePatch = sorted
                 .map { it.first }
-                .intersect(partnerGarbage.values.toSet()).firstOrNull {
-                    it.garbage
+                .intersect(partnerGarbage.values.toSet()).firstOrNull { tile ->
+                    tile.garbage
                         .asSequence()
                         .filter { acceptedGarbageType.contains(it.type) }
                         .any { garbage -> !trackedGarbage.contains(garbage) }

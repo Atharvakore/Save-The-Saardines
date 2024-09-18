@@ -1,10 +1,5 @@
 package de.unisaarland.cs.se.selab.logger
 
-import de.unisaarland.cs.se.selab.corporation.Corporation
-import de.unisaarland.cs.se.selab.events.Event
-import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.tasks.Reward
-import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import java.io.PrintWriter
 
@@ -18,6 +13,8 @@ object Logger {
     var totalChemicalsCollected = 0
     lateinit var map: MutableMap<Int, Int>
     var output: LogOutputStream = BackedLogOutputStream(PrintWriter(System.out))
+
+    /** Logging function*/
     fun log(message: String) {
         output.write(message)
     }
@@ -51,6 +48,7 @@ object Logger {
     fun logCorporationStartMoveShips(corporationId: Int) {
         Logger.log("Corporation Action: Corporation $corporationId is starting to move its ships.")
     }
+
     /** Logged whenever a corporation finishes its actions. */
     fun logCorporationFinishedActions(corporationId: Int) {
         LoggerCorporationAction.log("Corporation Action: Corporation $corporationId finished its actions.")
@@ -76,8 +74,4 @@ object Logger {
     fun logCurrentDriftShip(shipId: Int, startTileId: Int, endTileId: Int) {
         log("Current Drift: Ship $shipId drifted from tile $startTileId to tile $endTileId.")
     }
-
-
-
-
 }

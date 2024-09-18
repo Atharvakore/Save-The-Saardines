@@ -3,7 +3,7 @@ package de.unisaarland.cs.se.selab.logger
 import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.tasks.Reward
 import de.unisaarland.cs.se.selab.tasks.Task
-
+/** Log Events and Tasks*/
 object LoggerEventsAndTasks {
     /** Log the start of an event. */
     fun logEventStart(eventId: Int, eventType: Event) {

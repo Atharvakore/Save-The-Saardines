@@ -1,7 +1,7 @@
 package de.unisaarland.cs.se.selab.logger
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
-
+/** Logger Statistics class*/
 object LoggerStatistics {
     /** Logged whenever statistics are calculated. */
     fun logSimulationStatisticsCalculated() {
