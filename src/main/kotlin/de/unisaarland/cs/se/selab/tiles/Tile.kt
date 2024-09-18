@@ -24,7 +24,7 @@ abstract class Tile(
     var restrictions: Int = 0
 
     init {
-        require(id > 0) { "Id Should be greater than 0" }
+        require(id >= 0) { "Id Should be greater than or equal 0" }
     }
 
     /**
