@@ -3,6 +3,7 @@ package tiles
 import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Direction
+import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -15,7 +16,15 @@ class DeepOceanTest {
 
     @BeforeEach
     fun setup() {
-        deepOcean = DeepOcean(1, Vec2D(0, 0), listOf(), listOf(), Current(1, Direction.D60, 1))
+        val adjacentTiles: List<Tile?> = listOf(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        )
+        deepOcean = DeepOcean(1, Vec2D(3, 3), adjacentTiles, listOf(), Current(1, Direction.D60, 1))
     }
 
     /** Testing basic functionalities **/

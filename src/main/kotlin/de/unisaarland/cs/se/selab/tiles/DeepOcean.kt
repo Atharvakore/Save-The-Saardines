@@ -6,7 +6,7 @@ package de.unisaarland.cs.se.selab.tiles
 class DeepOcean(
     id: Int,
     pos: Vec2D,
-    adjacentTiles: List<Tile>,
+    adjacentTiles: List<Tile?>,
     garbage: List<Garbage>,
     private var current: Current?
 ) : Tile(
