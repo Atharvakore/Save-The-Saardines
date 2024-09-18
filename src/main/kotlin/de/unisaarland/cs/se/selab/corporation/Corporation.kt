@@ -73,8 +73,8 @@ class Corporation(
      *
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
-    fun run(otherShips: List<Ship>) {
-        moveShips()
+    fun run(otherShips: List<Ship>, tick: Int) {
+        moveShips(tick)
         collectGarbage()
         cooperate(otherShips)
         refuelAndUnloadShips()
@@ -87,12 +87,12 @@ class Corporation(
      *
      * @return List of active tasks
      */
-    fun getActiveTasks(): List<Task> {
-        return tasks.filter { it.checkCondition() }
+    fun getActiveTasks(tick: Int): List<Task> {
+        return tasks.filter { it.tick >= tick }
     }
 
     /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
-    private fun moveShips() {
+    private fun moveShips(tick: Int) {
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
         // 0. For each ship that has an assigned destination, tick the
         // ship and remove the ship from the available ships
@@ -100,7 +100,7 @@ class Corporation(
         availableShips.removeAll { it.hasTaskAssigned }
         // 1. Process tasks. For each active task, assign the ship from the task to
         // go to the target tile.
-        val activeTasks: List<Task> = getActiveTasks()
+        val activeTasks: List<Task> = getActiveTasks(tick)
         for (task in activeTasks) {
             val ship: Ship = task.taskShip
             val targetTile: Tile = task.getGoal()
@@ -115,6 +115,29 @@ class Corporation(
                 }
             }
         }
+        // 2. Iterate over available ships in increasing ID order
+        val usedShips: MutableList<Int> = mutableListOf()
+        for (ship in availableShips.sortedBy { it.id }) {
+            with(ship.capabilities.first()) {
+                if (this is ScoutingShip) {
+                    // 1. Update our knowledge about the garbage in the sea
+                    this.getTilesWithGarbageInFoV(Sea, ship.position).forEach {
+                        it.garbage
+                            .asSequence()
+                            .filter { acceptedGarbageType.contains(it.type) }
+                            .forEach { garbage -> partnerGarbage[garbage.id] = it }
+                    }
+                    // 2. Navigate to the closest garbage patch.
+                    // TODO
+                } else if (this is CollectingShip) {
+                    // TODO
+                } else if (this is CoordinatingShip) {
+                    // TODO
+                }
+            }
+        }
+        availableShips.removeAll { usedShips.contains(it.id) }
+        // 3. Unused ships are jobless. Something might happen to them here.
     }
 
     /**

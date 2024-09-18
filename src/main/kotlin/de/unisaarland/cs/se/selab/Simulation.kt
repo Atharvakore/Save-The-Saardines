@@ -51,7 +51,7 @@ class Simulation(
 
         for (corporation in corporations) {
             val otherShips = allShips.filter { it.owner != corporation }
-            corporation.run(otherShips)
+            corporation.run(otherShips, tick)
         }
     }
 
@@ -110,7 +110,7 @@ class Simulation(
     private fun collectActiveTasks(): List<Task> {
         val allTasks = mutableListOf<Task>()
         for (corporation in corporations) {
-            allTasks.addAll(corporation.getActiveTasks())
+            allTasks.addAll(corporation.getActiveTasks(tick))
         }
         return allTasks
     }

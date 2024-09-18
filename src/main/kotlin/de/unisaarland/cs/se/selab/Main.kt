@@ -45,15 +45,24 @@ fun main(args: Array<String>) {
 private fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
     val contents = validate(files)
     val accumulator = Accumulator()
+<<<<<<< Updated upstream
     var cond: Boolean = maxTicks == null || outputFile == null || contents == null
     cond = cond || parseMap(files, contents!!, accumulator) == null
     if (cond || parseScenario(files, contents!!, accumulator) == null) {
+=======
+    var cond: Boolean = maxTicks == null || outputFile == null
+    cond = cond || parseMap(files, contents, accumulator) == null
+    if (cond || parseScenario(files, contents, accumulator) == null) {
+>>>>>>> Stashed changes
         return null
     }
     return accumulator
 }
 private fun parseMap(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
+<<<<<<< Updated upstream
     var condition: Boolean = true
+=======
+>>>>>>> Stashed changes
     val mapParser = MapJSONParser(accumulator)
     if (mapParser.parseMap(contents[0])) {
         Logger.logInitializationInfoSuccess(files[0]!!)
@@ -66,11 +75,15 @@ private fun parseMap(files: List<String?>, contents: List<String>, accumulator: 
     } else {
         condition = false
     }
+<<<<<<< Updated upstream
     return if(condition){
         accumulator
     } else {
         null
     }
+=======
+    return accumulator
+>>>>>>> Stashed changes
 }
 private fun parseScenario(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
     val scenarioParser = ScenarioJSONParser(accumulator)
@@ -104,13 +117,18 @@ private fun readFile(validatingSchema: String, file: String): String? {
     val schema: Schema = SchemaLoader.forURL(validatingSchema).load()
     val validator: Validator = Validator.forSchema(schema)
     var objects: String
+<<<<<<< Updated upstream
     var objectFile: File? = null
     var condition: Boolean = true
+=======
+    var objectFile: File
+>>>>>>> Stashed changes
     try {
         objectFile = File(file)
     } catch (notFound: FileNotFoundException) {
         Logger.logInitializationInfoFail(file)
         logger.error(notFound) { "error" }
+<<<<<<< Updated upstream
         condition = false
     }
     if (condition) {
@@ -126,6 +144,22 @@ private fun readFile(validatingSchema: String, file: String): String? {
             logger.error(notFound) { "error" }
             Logger.logInitializationInfoFail(file)
         }
+=======
+        return null
+    }
+    try {
+        objects = objectFile.readText()
+        val fail: ValidationFailure? = validator.validate(objects)
+        if (fail != null) {
+            Logger.logInitializationInfoFail(file)
+            return null
+        } else {
+            return objects
+        }
+    } catch (notFound: IOException) {
+        logger.error(notFound) { "error" }
+        Logger.logInitializationInfoFail(file)
+>>>>>>> Stashed changes
     }
     return null
 }
