@@ -42,8 +42,7 @@ class Corporation(
         myCoordinatingShips.forEach { coordinatingShip ->
             val otherShipsOnTile: List<Ship> = otherShips
                 .filter {
-                    coordinatingShip.position == it.position &&
-                        it.owner != lastCoordinatingCorporation
+                    coordinatingShip.position == it.position && it.owner != lastCoordinatingCorporation
                 }
 
             val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.owner }.distinct()
@@ -141,9 +140,9 @@ class Corporation(
         error("Unknown ship capability")
     }
 
-    /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
+    /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature
+     *  todo Handle restrictions **/
     private fun moveShips() {
-        // Remaining to-do: Handle restrictions.
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
         // 0. For each ship that has an assigned destination, tick the
         // ship and remove the ship from the available ships
