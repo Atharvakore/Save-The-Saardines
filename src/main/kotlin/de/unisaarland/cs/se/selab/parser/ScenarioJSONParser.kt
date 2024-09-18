@@ -85,7 +85,8 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
                 val eventSpeed: Int = event.getInt("speed")
                 val eventDirection: Direction = Direction.getDirection(event.getInt("direction"))!!
                 val storm =
-                    Storm(eventId, eventTick, accumulator.map, eventTile, eventRadius!!, eventSpeed, eventDirection)
+                    Storm(eventId, eventTick, accumulator.map, eventTile, eventRadius!!, eventSpeed)
+                    storm.direction = eventDirection
                 accumulator.addEvent(eventId, storm)
             }
 
