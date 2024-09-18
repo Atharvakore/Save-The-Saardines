@@ -15,10 +15,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
 
-
-
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class OillSpillTest {
+class OilSpillTest {
+    private val seaInstance: Sea = Sea
+    fun setUp() {
 
+    }
 }
