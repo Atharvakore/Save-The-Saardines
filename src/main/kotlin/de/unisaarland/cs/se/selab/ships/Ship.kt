@@ -15,7 +15,6 @@ class Ship(
     private var fuelCapacity: Int,
     private var fuelConsumption: Int,
     var capabilities: MutableList<ShipCapability>,
-    var pos: Tile,
 ) {
 
     init {
@@ -45,39 +44,12 @@ class Ship(
             }
         }
     }
-
-    private var name: String = ""
+    lateinit var position: Tile
+    lateinit var name: String
+    lateinit var owner: Corporation
     private var consumedFuel: Int = 0
     var hasTaskAssigned: Boolean = false
     private var destinationPath = emptyList<Tile>()
-    lateinit var owner: Corporation
-
-    constructor(
-        id: Int,
-        maxVelocity: Int,
-        acceleration: Int,
-        fuelCapacity: Int,
-        fuelConsumption: Int,
-        capabilities: MutableList<ShipCapability>,
-        name: String,
-        pos: Tile
-    ) : this(id, maxVelocity, acceleration, fuelCapacity, fuelConsumption, capabilities, pos) {
-        this.name = name
-    }
-
-    /**
-     * return owner corporation
-     */
-    fun getOwnerCorporation(): Corporation {
-        return this.owner
-    }
-
-    /**
-     * return ship current tile
-     */
-    fun getPosition(): Tile {
-        return this.pos
-    }
 
     /**
      * Call: when the ship is on the harbor
@@ -93,7 +65,7 @@ class Ship(
      *  if so do the logic of drifting
      */
     fun drift() {
-        val deepOcean = this.pos as? DeepOcean
+        val deepOcean = this.position as? DeepOcean
         val current = deepOcean?.getCurrent()
         if (current != null) {
             handleCurrentDrift(current)
@@ -104,21 +76,34 @@ class Ship(
         val speed = current.speed
         val direction = current.direction
 
-        if (speed != null && direction != null) {
-            val desTile = this.pos?.getTileInDirection(speed / TEN, direction)
-            if (desTile != null) {
-                this.pos = desTile
-            }
+        val desTile = this.position.getTileInDirection(speed / TEN, direction)
+        if (desTile != null) {
+            this.position = desTile
         }
     }
+
     /**
      * Call: when a ship is the closest one to the garbage or when the ship has to return to the harbor
      * Logic: the ship gets a path (a list of tiles from destination to ship), has to reverse path and move along it
      * the ship moves along the path as long as it can
+     *
+     * distance = (velocity^2 / 2 * acceleration)
      */
     fun move(path: List<Tile>) {
-        TODO("")
+        val pathShipToTile = path.reversed()
+        // the distance the ship can traverse
+        val distanceLength = (maxVelocity * maxVelocity / (2 * acceleration)) / TEN
+        var desTile = this.position
+        if (pathShipToTile.size >= distanceLength) {
+            desTile = pathShipToTile[distanceLength]
+            consumedFuel += distanceLength * TEN * fuelConsumption
+        } else {
+            desTile = pathShipToTile.last()
+            consumedFuel += pathShipToTile.size * TEN * fuelConsumption
+        }
+        this.position = desTile
     }
+
 
     /**
      * Call: when corp checks if the ship can be sent
@@ -142,22 +127,16 @@ class Ship(
     fun addCapability(capability: ShipCapability) {
         capabilities.add(capability)
     }
-
-    /** Set the current position of the Ship */
-    fun setTile(tile: Tile) {
-        this.pos = tile
-    }
-
     /**
      * complete the movement of the ship along the destination path
      * if it has an assigned task
      * */
     fun tickTask() {
         val lastTileIndex = destinationPath.size - 1
-        val reachedTileIndex = destinationPath.indexOf(getPosition()) + 1
+        val reachedTileIndex = destinationPath.indexOf(this.position) + 1
         destinationPath = destinationPath.subList(reachedTileIndex, lastTileIndex)
         move(destinationPath)
-        if (getPosition() == destinationPath.last()) {
+        if (this.position == destinationPath.last()) {
             hasTaskAssigned = false
             destinationPath = emptyList()
         }
@@ -170,7 +149,7 @@ class Ship(
     fun moveUninterrupted(pathToHarbor: List<Tile>) {
         hasTaskAssigned = true
         move(pathToHarbor)
-        if (getPosition() == pathToHarbor.last()) {
+        if (this.position == pathToHarbor.last()) {
             hasTaskAssigned = false
             destinationPath = emptyList()
         }

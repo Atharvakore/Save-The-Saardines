@@ -42,21 +42,21 @@ class Corporation(
         myCoordinatingShips.forEach { coordinatingShip ->
             val otherShipsOnTile: List<Ship> = otherShips
                 .filter {
-                    coordinatingShip.getPosition() == it.getPosition() &&
-                        it.getOwnerCorporation() != lastCoordinatingCorporation
+                    coordinatingShip.position == it.position &&
+                        it.owner != lastCoordinatingCorporation
                 }
 
-            val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.getOwnerCorporation() }.distinct()
+            val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.owner }.distinct()
             val otherShipsToCooperate: List<Ship> =
-                otherShips.filter { otherCorporations.contains(it.getOwnerCorporation()) }
+                otherShips.filter { otherCorporations.contains(it.owner) }
 
             otherShipsToCooperate.forEach { otherShipToCooperate ->
                 val telescopes: List<ScoutingShip> = otherShipToCooperate.capabilities
                     .filterIsInstance<ScoutingShip>()
                 telescopes.forEach {
                     val tilesWithGarbage: List<Tile> =
-                        it.getTilesWithGarbageInFoV(Sea, otherShipToCooperate.getPosition())
-                    partnerGarbage.getOrPut(otherShipToCooperate.getOwnerCorporation().id) {
+                        it.getTilesWithGarbageInFoV(Sea, otherShipToCooperate.position)
+                    partnerGarbage.getOrPut(otherShipToCooperate.owner.id) {
                         mutableListOf()
                     } += tilesWithGarbage
                 }
@@ -104,12 +104,12 @@ class Corporation(
         for (task in activeTasks) {
             val ship: Ship = task.taskShip
             val targetTile: Tile = task.getGoal()
-            Dijkstra(targetTile).allPaths()[ship.getPosition()]?.let { path ->
+            Dijkstra(targetTile).allPaths()[ship.position]?.let { path ->
                 if (ship.isFuelSufficient(path.size)) {
                     ship.move(path)
                     availableShips.remove(ship)
                 } else {
-                    val closestHarborPath: List<Tile> = findClosestHarbor(ship.getPosition(), ownedHarbors)
+                    val closestHarborPath: List<Tile> = findClosestHarbor(ship.position, ownedHarbors)
                     ship.moveUninterrupted(closestHarborPath)
                     availableShips.remove(ship)
                 }
@@ -128,7 +128,7 @@ class Corporation(
         val collectingShips: List<Ship> = filterCollectingShip()
         for (ship in collectingShips) {
             for (collectingCapability in ship.capabilities) {
-                (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship.getPosition())
+                (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship.position)
             }
         }
     }
@@ -163,7 +163,7 @@ class Corporation(
     private fun getShipsOnHarbor(): List<Ship> {
         val seaInstance: Sea = Sea
         val harborTiles: List<Tile> = seaInstance.tiles.filter { (it as Shore).harbor }
-        return ownedShips.filter { harborTiles.contains(it.getPosition()) }
+        return ownedShips.filter { harborTiles.contains(it.position) }
     }
 
     /**
@@ -185,7 +185,7 @@ class Corporation(
         var shortestPath: List<Tile> = listOf()
 
         for (ship in ships) {
-            val path: List<Tile>? = shortestPaths[ship.getPosition()]
+            val path: List<Tile>? = shortestPaths[ship.position]
             if (path != null && path.size < shortestPathLen) {
                 shortestPathLen = path.size
                 shortestPath = path

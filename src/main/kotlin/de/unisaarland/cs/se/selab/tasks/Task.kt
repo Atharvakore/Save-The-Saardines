@@ -1,6 +1,5 @@
 package de.unisaarland.cs.se.selab.tasks
 
-import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -11,7 +10,6 @@ abstract class Task(
     open val taskShip: Ship,
     open val reward: Reward,
     open val rewardShip: Ship,
-    open val corporation: Corporation
 ) {
     /** Determine if the reward condition for a task is fulfilled. */
     abstract fun checkCondition(): Boolean

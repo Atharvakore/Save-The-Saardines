@@ -1,6 +1,5 @@
 package de.unisaarland.cs.se.selab.tasks
 
-import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -11,15 +10,14 @@ class FindGarbageTask(
     taskShip: Ship,
     reward: Reward,
     rewardShip: Ship,
-    corporation: Corporation,
     private val targetTile: Tile
-) : Task(tick, id, taskShip, reward, rewardShip, corporation) {
+) : Task(tick, id, taskShip, reward, rewardShip) {
     override fun toString(): String {
         return "Find Garbage"
     }
 
     override fun checkCondition(): Boolean {
-        return taskShip.getPosition().pos == targetTile.pos && targetTile.garbage.isNotEmpty()
+        return taskShip.position.pos == targetTile.pos && targetTile.garbage.isNotEmpty()
     }
 
     override fun actUponTick(currentTick: Int): Boolean {
