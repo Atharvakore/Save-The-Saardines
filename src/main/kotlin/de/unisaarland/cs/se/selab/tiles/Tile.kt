@@ -37,11 +37,13 @@ abstract class Tile(
         dir: Direction,
     ): Tile? {
         var tile: Tile? = this
-        for (i in 0..distance) {
+        var i = 0
+        while (i <= distance) {
             if (tile?.adjacentTiles?.get(dir.ordinal) == null) {
                 return tile
             }
             tile = tile.adjacentTiles[dir.ordinal]!!
+            i++
         }
         return tile
     }
