@@ -91,9 +91,9 @@ private fun parseScenario(files: List<String?>, contents: List<String>, accumula
 
 private fun validate(files: List<String?>): List<String>? {
     val contents: MutableList<String> = mutableListOf()
-    val validatingSchemas: MutableList<String> = mutableListOf("resources/schema/map.schema")
-    validatingSchemas.add("resources/schema/corporations.schema")
-    validatingSchemas.add("resources/schema/scenario.schema")
+    val validatingSchemas: MutableList<String> = mutableListOf("file:///home/badr/Documents/4.SEMESTER/SELab/Project/repo/src/main/resources/schema/map.schema")
+    validatingSchemas.add("file:///home/badr/Documents/4.SEMESTER/SELab/Project/repo/src/main/resources/schema/corporations.schema")
+    validatingSchemas.add("file:///home/badr/Documents/4.SEMESTER/SELab/Project/repo/src/main/resources/schema/scenario.schema")
     for (i in 0..2) {
         val file: String? = files[i]
         if (file != null) {
