@@ -16,35 +16,6 @@ class Ship(
     private var fuelConsumption: Int,
     var capabilities: MutableList<ShipCapability>,
 ) {
-
-    init {
-        // require(capabilities.isNotEmpty())
-
-        /* val defaultCapability = capabilities.first()
-        when (defaultCapability) {
-            is ScoutingShip -> {
-                require(maxVelocity in MIN_VELOCITY_SCOUTING..MAX_VELOCITY_SCOUTING)
-                require(acceleration in MIN_ACCELERATION_SCOUTING..MAX_ACCELERATION_SCOUTING)
-                require(fuelCapacity in MIN_FUEL_CAPACITY_SCOUTING..MAX_FUEL_CAPACITY_SCOUTING)
-                require(fuelConsumption in MIN_FUEL_CONSUMPTION_SCOUTING..MAX_FUEL_CONSUMPTION_SCOUTING)
-            }
-
-            is CoordinatingShip -> {
-                require(maxVelocity in MIN_VELOCITY_COORDINATING..MAX_VELOCITY_COORDINATING)
-                require(acceleration in MIN_ACCELERATION_COORDINATING..MAX_ACCELERATION_COORDINATING)
-                require(fuelCapacity in MIN_FUEL_CAPACITY_COORDINATING..MAX_FUEL_CAPACITY_COORDINATING)
-                require(fuelConsumption in MIN_FUEL_CONSUMPTION_COORDINATING..MAX_FUEL_CONSUMPTION_COORDINATING)
-            }
-
-            is CollectingShip -> {
-                require(maxVelocity in MIN_VELOCITY_COLLECTING..MAX_VELOCITY_COLLECTING)
-                require(acceleration in MIN_ACCELERATION_COLLECTING..MAX_ACCELERATION_COLLECTING)
-                require(fuelCapacity in MIN_FUEL_CAPACITY_COLLECTING..MAX_FUEL_CAPACITY_COLLECTING)
-                require(fuelConsumption in MIN_FUEL_CONSUMPTION_COLLECTING..MAX_FUEL_CONSUMPTION_COLLECTING)
-            }
-        } */
-    }
-
     lateinit var position: Tile
     lateinit var name: String
     lateinit var owner: Corporation
