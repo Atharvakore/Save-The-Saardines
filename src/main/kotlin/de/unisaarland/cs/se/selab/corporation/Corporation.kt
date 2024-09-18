@@ -37,7 +37,7 @@ class Corporation(
      * @param otherShips List of all ships in the simulation
      */
     fun cooperate(otherShips: List<Ship>) {
-        val myCoordinatingShips: List<Ship> = filterCoordinatingShips()
+        val myCoordinatingShips: List<Ship> = Helper().filterCoordinatingShips(this)
 
         myCoordinatingShips.forEach { coordinatingShip ->
             val otherShipsOnTile: List<Ship> = otherShips
@@ -185,7 +185,7 @@ class Corporation(
      *
      */
     private fun collectGarbage() {
-        val collectingShips: List<Ship> = filterCollectingShip()
+        val collectingShips: List<Ship> = Helper().filterCollectingShip(this)
         for (ship in collectingShips) {
             for (collectingCapability in ship.capabilities) {
                 (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship.position)
@@ -201,7 +201,7 @@ class Corporation(
      *
      */
     private fun refuelAndUnloadShips() {
-        val shipsOnHarbor: List<Ship> = getShipsOnHarbor()
+        val shipsOnHarbor: List<Ship> = Helper().getShipsOnHarbor(this)
         if (shipsOnHarbor.isNotEmpty()) {
             for (ship in shipsOnHarbor) {
                 val collectingCapability = ship.capabilities.find { it is CollectingShip }
@@ -211,19 +211,6 @@ class Corporation(
                 ship.refuel()
             }
         }
-    }
-
-    /**
-     * Gets all the ships on the harbor
-     *
-     * Filters the owned ships to get only the ships that are on a harbor tile
-     *
-     * @return List of ships on the harbor
-     */
-    private fun getShipsOnHarbor(): List<Ship> {
-        val seaInstance: Sea = Sea
-        val harborTiles: List<Tile> = seaInstance.tiles.filter { (it as Shore).harbor }
-        return ownedShips.filter { harborTiles.contains(it.position) }
     }
 
     /**
@@ -281,39 +268,5 @@ class Corporation(
         }
 
         return shortestPath
-    }
-
-    /**
-     * Filter collecting ships
-     *
-     * Filters the owned ships to get only the ships that have the CollectingShip capability
-     *
-     * @return List of collecting ships
-     */
-    private fun filterCollectingShip(): List<Ship> {
-        return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is CollectingShip } }
-    }
-
-    /**
-     * Filter scouting ships
-     *
-     * Filters the owned ships to get only the ships that have the ScoutingShip capability
-     * make it private later
-     *
-     * @return List of scouting ships
-     */
-    fun filterScoutingShips(): List<Ship> {
-        return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is ScoutingShip } }
-    }
-
-    /**
-     * Filter coordinating ships
-     *
-     * Filters the owned ships to get only the ships that have the CoordinatingShip capability
-     *
-     * @return List of coordinating ships
-     */
-    private fun filterCoordinatingShips(): List<Ship> {
-        return ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is CoordinatingShip } }
     }
 }
