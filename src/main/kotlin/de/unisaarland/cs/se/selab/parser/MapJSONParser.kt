@@ -116,7 +116,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         val current = tile.getBoolean(CURRENT)
         if (current) {
             if (requiredForCurrent.all { tile.has(it) }) {
-                this.validateCurrent(tile)
+                return validateCurrent(tile)
             } else {
                 return false
             }
