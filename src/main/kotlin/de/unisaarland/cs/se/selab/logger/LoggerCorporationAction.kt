@@ -72,5 +72,4 @@ object LoggerCorporationAction {
     fun logUnloadShip(shipId: Int, amount: Int, garbageType: GarbageType, tileId: Int) {
         log("Unload: Ship $shipId unloaded $amount of garbage $garbageType at harbor $tileId.")
     }
-
 }
