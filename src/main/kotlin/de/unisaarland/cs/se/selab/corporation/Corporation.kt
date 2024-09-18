@@ -143,6 +143,7 @@ class Corporation(
 
     /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
     private fun moveShips() {
+        // TODO: Handle restrictions.
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
         // 0. For each ship that has an assigned destination, tick the
         // ship and remove the ship from the available ships
