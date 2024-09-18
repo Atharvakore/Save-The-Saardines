@@ -24,7 +24,7 @@ class Corporation(
     val tasks: List<Task>
 ) {
     var trackedGarbage: MutableList<Garbage> = mutableListOf()
-    var partnerGarbage: MutableMap<Int,Tile> = mutableMapOf()
+    var partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
 
     /**
@@ -53,11 +53,15 @@ class Corporation(
             otherShipsToCooperate.forEach { otherShipToCooperate ->
                 val telescopes: List<ScoutingShip> = otherShipToCooperate.capabilities
                     .filterIsInstance<ScoutingShip>()
-                telescopes.forEach {
+                telescopes.forEach { telescope ->
                     val tilesWithGarbage: List<Tile> =
-                        it.getTilesWithGarbageInFoV(Sea, otherShipToCooperate.position)
+                        telescope.getTilesWithGarbageInFoV(Sea, otherShipToCooperate.position)
+                    // partnerGarbage is a map of garbage id to tile
                     tilesWithGarbage.forEach { tile ->
-                        partnerGarbage[otherShipToCooperate.owner.id] = tile
+                        tile.garbage
+                            .asSequence()
+                            .filter { acceptedGarbageType.contains(it.type) }
+                            .forEach { garbage -> partnerGarbage[garbage.id] = tile }
                     }
                 }
             }
