@@ -59,9 +59,9 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
 
     private fun validateEvent(event: JSONObject): Boolean {
         val eventId: Int = event.getInt(id)
-        val uniqueId: Boolean = eventId >=0 && accumulator.events[eventId] == null
+        val uniqueId: Boolean = eventId >= 0 && accumulator.events[eventId] == null
         val eventTick: Int = event.getInt("tick")
-        if (uniqueId && eventTick >=0) {
+        if (uniqueId && eventTick >= 0) {
             return createEvent(event)
         }
         return false
@@ -84,25 +84,23 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
             "STORM" -> {
                 val eventSpeed: Int = event.getInt("speed")
                 val eventDirection: Direction = Direction.getDirection(event.getInt("direction"))!!
-                val storm = Storm(eventId, eventTick, accumulator.map, eventTile, eventRadius!!, eventSpeed,
-                    eventDirection
-                )
+                val storm =
+                    Storm(eventId, eventTick, accumulator.map, eventTile, eventRadius!!, eventSpeed, eventDirection)
                 accumulator.addEvent(eventId, storm)
             }
 
             "RESTRICTION" -> {
                 val eventDuration: Int = event.getInt("duration")
-                if (eventDuration > 0){
-                    val restriction: Event = Restriction(eventId, eventTick, accumulator.map,
-                        eventTile!!, eventRadius!!)
-                    val endRestriction: Event = EndRestriction(dummyId, eventTick+eventDuration, accumulator.map,
-                        eventTile, eventDuration)
+                if (eventDuration > 0) {
+                    val restriction: Event =
+                        Restriction(eventId, eventTick, accumulator.map, eventTile!!, eventRadius!!)
+                    val endRestriction: Event =
+                        EndRestriction(dummyId, eventTick + eventDuration, accumulator.map, eventTile, eventDuration)
                     accumulator.addEvent(eventId, restriction)
                     accumulator.addEvent(dummyId--, endRestriction)
                 } else {
                     condition = false
                 }
-
             }
 
             "OIL_SPILL" -> {
@@ -123,7 +121,9 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
                 } else {
                     condition = false
                 }
-            } else -> {
+            }
+
+            else -> {
                 condition = false
             }
         }
