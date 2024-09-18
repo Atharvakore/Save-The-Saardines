@@ -12,7 +12,6 @@ class ValidatorTest {
         val scenarioFile: String = "src/systemtest/resources/scenarioJsons/scenario.json"
         val files: List<String> = mutableListOf(mapFile, corporationsFile, scenarioFile)
         val acc: Accumulator? = parse(files, 0, "stdout")
-        //println(acc!!.tiles)
         if (acc != null) {
             assert(acc.tiles.size == 36)
             print(acc.corporations.size)
@@ -22,7 +21,6 @@ class ValidatorTest {
             assert(acc.events.size == 1)
             assert(acc.tasks.isEmpty())
             assert(acc.rewards.isEmpty())
-
         }
     }
     @Test

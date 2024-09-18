@@ -24,7 +24,7 @@ class Corporation(
     val tasks: List<Task>
 ) {
     var trackedGarbage: MutableList<Garbage> = mutableListOf()
-    var partnerGarbage: MutableMap<Int, MutableList<Tile>> = mutableMapOf()
+    var partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
 
     /**
@@ -51,18 +51,26 @@ class Corporation(
                 otherShips.filter { otherCorporations.contains(it.owner) }
 
             otherShipsToCooperate.forEach { otherShipToCooperate ->
-                val telescopes: List<ScoutingShip> = otherShipToCooperate.capabilities
-                    .filterIsInstance<ScoutingShip>()
-                telescopes.forEach {
-                    val tilesWithGarbage: List<Tile> =
-                        it.getTilesWithGarbageInFoV(Sea, otherShipToCooperate.position)
-                    partnerGarbage.getOrPut(otherShipToCooperate.owner.id) {
-                        mutableListOf()
-                    } += tilesWithGarbage
-                }
+                getInfoFromShip(otherShipToCooperate)
             }
             val lastCorporation: Corporation? = otherCorporations.maxByOrNull { it.id }
             lastCoordinatingCorporation = lastCorporation
+        }
+    }
+
+    private fun getInfoFromShip(otherShip: Ship) {
+        val telescopes: List<ScoutingShip> = otherShip.capabilities
+            .filterIsInstance<ScoutingShip>()
+        telescopes.forEach { telescope ->
+            val tilesWithGarbage: List<Tile> =
+                telescope.getTilesWithGarbageInFoV(Sea, otherShip.position)
+            // partnerGarbage is a map of garbage id to tile
+            tilesWithGarbage.forEach { tile ->
+                tile.garbage
+                    .asSequence()
+                    .filter { acceptedGarbageType.contains(it.type) }
+                    .forEach { garbage -> partnerGarbage[garbage.id] = tile }
+            }
         }
     }
 
@@ -89,6 +97,48 @@ class Corporation(
      */
     fun getActiveTasks(): List<Task> {
         return tasks.filter { it.checkCondition() }
+    }
+
+    private fun tryMove(ship: Ship): Boolean {
+        val capability = ship.capabilities.first()
+        if (capability is ScoutingShip) {
+            // 1. Update our knowledge about the garbage in the sea
+            capability.getTilesWithGarbageInFoV(Sea, ship.position).forEach {
+                it.garbage
+                    .asSequence()
+                    .filter { acceptedGarbageType.contains(it.type) }
+                    .forEach { garbage -> partnerGarbage[garbage.id] = it }
+            }
+            // 2. Navigate to the closest garbage patch.
+            val paths = Dijkstra(ship.position).allPaths()
+            val sorted = paths.toList().sortedBy { it.second.size }
+            val closestGarbagePatch = sorted
+                .map { it.first }
+                .intersect(partnerGarbage.values.toSet()).firstOrNull {
+                    it.garbage
+                        .asSequence()
+                        .filter { acceptedGarbageType.contains(it.type) }
+                        .any { garbage -> !trackedGarbage.contains(garbage) }
+                }
+            if (closestGarbagePatch != null) {
+                val path = paths[closestGarbagePatch] ?: return false
+                if (ship.isFuelSufficient(path.size)) {
+                    ship.move(path)
+                } else {
+                    val closestHarborPath = findClosestHarbor(ship.position, ownedHarbors)
+                    ship.moveUninterrupted(closestHarborPath)
+                }
+                return true
+            }
+            return false
+        } else if (capability is CollectingShip) {
+            // TODO
+            return false
+        } else if (capability is CoordinatingShip) {
+            // TODO
+            return false
+        }
+        error("Unknown ship capability")
     }
 
     /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
@@ -118,22 +168,9 @@ class Corporation(
         // 2. Iterate over available ships in increasing ID order
         val usedShips: MutableList<Int> = mutableListOf()
         for (ship in availableShips.sortedBy { it.id }) {
-            with(ship.capabilities.first()) {
-                if (this is ScoutingShip) {
-                    // 1. Update our knowledge about the garbage in the sea
-                    this.getTilesWithGarbageInFoV(Sea, ship.position).forEach {
-                        it.garbage
-                            .asSequence()
-                            .filter { acceptedGarbageType.contains(it.type) }
-                            .forEach { garbage -> partnerGarbage[garbage.id] = it }
-                    }
-                    // 2. Navigate to the closest garbage patch.
-                    // TODO
-                } else if (this is CollectingShip) {
-                    // TODO
-                } else if (this is CoordinatingShip) {
-                    // TODO
-                }
+            val status = tryMove(ship)
+            if (status) {
+                usedShips.add(ship.id)
             }
         }
         availableShips.removeAll { usedShips.contains(it.id) }
