@@ -21,7 +21,6 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
 
     /** Parsing function **/
     public fun parseCorporationsFile(filePath: String): Boolean {
-        val file: File
         val corporations: JSONArray
         val ships: JSONArray
         val objects: JSONObject
@@ -33,17 +32,17 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         } */
         try {
             objects = JSONObject(filePath)
-            if (!objects.has(CORPORATIONS) || !objects.has(SHIPS)) {
-                return false
+            return if (objects.has(CORPORATIONS) && objects.has(SHIPS)){
+                corporations = objects.getJSONArray(CORPORATIONS)
+                ships = objects.getJSONArray(SHIPS)
+                validateShips(ships) && validateCorporations(corporations)
+            } else {
+                false
             }
-            corporations = objects.getJSONArray(CORPORATIONS)
-            ships = objects.getJSONArray(SHIPS)
         } catch (err: IOException) {
             logger.error(err) { "Failed to parse file '$filePath'" }
             return false
         }
-        val result = validateShips(ships) && validateCorporations(corporations)
-        return result
     }
 
     private fun validateCorporations(corpObjects: JSONArray): Boolean {
