@@ -26,7 +26,7 @@ class Accumulator {
 
     /** Getter for tile based on its ID */
     public fun getTileById(tileId: Int): Tile? {
-        return map?.getTileById(tileId)
+        return tiles[tileId]
     }
 
     /** Setter for a reward into accumulator*/
