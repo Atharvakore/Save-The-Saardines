@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.systemtest
 import de.unisaarland.cs.se.selab.systemtest.basictests.ExampleSystemTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
 
+/** The class which will register the tests for Testing on Course Implementation */
 object SystemTestRegistration {
     /**
      * Register your tests to run against the reference implementation!

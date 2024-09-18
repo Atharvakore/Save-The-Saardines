@@ -11,7 +11,6 @@ import de.unisaarland.cs.se.selab.tiles.Shore
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
 import java.io.IOException
 
 /** Parser and Validator for extracting data from Map File **/
@@ -20,7 +19,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
 
     /** Parsing function **/
     public fun parseCorporationsFile(filePath: String): Boolean {
-        // val file: File <-- find an use for this
+        // There's nothing we can do with file:File
         val corporations: JSONArray
         val ships: JSONArray
         val objects: JSONObject
