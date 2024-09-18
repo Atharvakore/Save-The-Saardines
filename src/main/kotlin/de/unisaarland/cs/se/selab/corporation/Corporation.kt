@@ -43,7 +43,7 @@ class Corporation(
             val otherShipsOnTile: List<Ship> = otherShips
                 .filter {
                     coordinatingShip.position == it.position &&
-                            it.owner != lastCoordinatingCorporation
+                        it.owner != lastCoordinatingCorporation
                 }
 
             val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.owner }.distinct()

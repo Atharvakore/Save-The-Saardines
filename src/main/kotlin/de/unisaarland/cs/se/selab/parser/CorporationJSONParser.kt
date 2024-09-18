@@ -30,7 +30,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         } */
         try {
             objects = JSONObject(filePath)
-            return if (objects.has(CORPORATIONS) && objects.has(SHIPS)){
+            return if (objects.has(CORPORATIONS) && objects.has(SHIPS)) {
                 corporations = objects.getJSONArray(CORPORATIONS)
                 ships = objects.getJSONArray(SHIPS)
                 validateShips(ships) && validateCorporations(corporations)
