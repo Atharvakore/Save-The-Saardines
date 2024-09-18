@@ -26,7 +26,6 @@ abstract class Tile(
     init {
 
         require(id > 0) { "Id Should be greater than 0" }
-        require(adjacentTiles.size == SIX) { "A tile has 6 neighbours" }
     }
 
     /**
