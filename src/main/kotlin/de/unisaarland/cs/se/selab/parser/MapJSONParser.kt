@@ -11,8 +11,6 @@ import de.unisaarland.cs.se.selab.tiles.Vec2D
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
 
 /** Parser and Validator for extracting data from Map File  **/
@@ -21,35 +19,24 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
     private val logger = KotlinLogging.logger {}
 
     /** main function which will execute the parsing stuff **/
-    public fun parseMap(pathFile: String): Boolean {
-        val tiles = createTileObjects(pathFile)
+    fun parseMap(map: String): Boolean {
+        val tiles: JSONArray
+        try {
+            tiles = JSONObject(map).getJSONArray("tiles")
+        } catch (error: IOException) {
+            logger.error(error) { "Failed to parse map" }
+            return false
+        }
+
         if (tiles.isEmpty) {
             return false
         }
-        if (validateTiles(tiles)) {
+        if (validateTiles(tiles) && checkAdjacentTiles()) {
             createMap()
             return true
+        } else {
+            return false
         }
-        return false
-    }
-
-    /** extracting the JSONObjects from file **/
-    private fun createTileObjects(filePath: String): JSONArray {
-        val file: File
-        val jsonTiles: JSONArray
-        /* try {
-            file = File(filePath)
-        } catch (error: FileNotFoundException) {
-            logger.error { "file '$filePath' does not exist." }
-            return JSONArray()
-        } */
-        try {
-            jsonTiles = JSONObject(filePath).getJSONArray("tiles")
-            return jsonTiles
-        } catch (error: IOException) {
-            logger.error { "Error while parsing {$filePath}, {$error}" }
-        }
-        return JSONArray()
     }
 
     /** validating all tiles **/
@@ -127,11 +114,16 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
     private fun validateDeepOcean(tile: JSONObject): Boolean {
         if (tile.has(HARBOR)) return false
         val current = tile.getBoolean(CURRENT)
-        return if (current && requiredForCurrent.all { tile.has(it) }) {
-            this.validateCurrent(tile)
-        } else {
-            false
+        if (current) {
+            if (requiredForCurrent.all { tile.has(it) }) {
+                this.validateCurrent(tile)
+            } else {
+                return false
+            }
+        } else if (requiredForCurrent.none { tile.has(it) }) {
+            return true
         }
+        return false
     }
 
     /** Validate the id and coordinates of a tile **/
@@ -206,6 +198,55 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         for (element in accumulator.tiles.values) {
             Sea.tiles.add(element)
         }
+    }
+
+    /** Check if the tiles has correct neighbours; For now Land is Empty tile*/
+    private fun checkAdjacentTiles(): Boolean {
+        accumulator.tiles.forEach {
+            val tile = it.value
+            val x = tile.pos.posX
+            val y = tile.pos.posY
+            var correct = true
+            val adjacentTile0 = accumulator.getTileByCoordinate(Vec2D(x - 1, y))
+            val adjacentTile60 = accumulator.getTileByCoordinate(Vec2D(x - 1, y - 1))
+            val adjacentTile120 = accumulator.getTileByCoordinate(Vec2D(x - 1, y + 1))
+            val adjacentTile180 = accumulator.getTileByCoordinate(Vec2D(x + 1, y))
+            val adjacentTile240 = accumulator.getTileByCoordinate(Vec2D(x + 1, y + 1))
+            val adjacentTile300 = accumulator.getTileByCoordinate(Vec2D(x - 1, y + 1))
+            val adjacentTiles = listOf(
+                adjacentTile0,
+                adjacentTile60,
+                adjacentTile120,
+                adjacentTile180,
+                adjacentTile240,
+                adjacentTile300
+            )
+            when (tile) {
+                is Shore -> {
+                    correct =
+                        correct && adjacentTiles.all { it == null || it is Shore || it is ShallowOcean }
+                }
+
+                is DeepOcean -> {
+                    correct =
+                        correct && adjacentTiles.all { it == null || it is DeepOcean || it is ShallowOcean }
+                }
+
+                is ShallowOcean -> {
+                    correct =
+                        correct && adjacentTiles.all {
+                            it == null || it is Shore || it is ShallowOcean || it is DeepOcean
+                        }
+                }
+
+                else -> {
+                    correct = true
+                }
+            }
+            if (!correct) return false
+        }
+
+        return true
     }
 
     /** String/integer constants for the map parser. */
