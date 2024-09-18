@@ -24,13 +24,8 @@ abstract class Tile(
     var restrictions: Int = 0
 
     init {
-<<<<<<< Updated upstream
         require(id >= 0) { "Id Should be greater than or equal 0" }
-=======
-
         require(id > 0) { "Id Should be greater than 0" }
-
->>>>>>> Stashed changes
     }
 
     /**

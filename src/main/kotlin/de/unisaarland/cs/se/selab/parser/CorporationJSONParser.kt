@@ -11,8 +11,6 @@ import de.unisaarland.cs.se.selab.tiles.Shore
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
 
 /** Parser and Validator for extracting data from Map File **/
@@ -20,7 +18,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
     private val logger = KotlinLogging.logger {}
 
     /** Parsing function **/
-    public fun parseCorporationsFile(filePath: String): Boolean {
+    fun parseCorporationsFile(filePath: String): Boolean {
         val corporations: JSONArray
         val ships: JSONArray
         val objects: JSONObject
