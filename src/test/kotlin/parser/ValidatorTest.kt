@@ -23,8 +23,9 @@ class ValidatorTest {
             assert(acc.rewards.isEmpty())
         }
     }
+
     @Test
-    fun testBigMap(){
+    fun testBigMap() {
         val bigMap = "src/systemtest/resources/mapFiles/bigMap1.json"
         val corporationsFile: String = "src/systemtest/resources/corporationJsons/corporations.json"
         val scenarioFile: String = "src/systemtest/resources/scenarioJsons/scenario.json"
@@ -34,6 +35,5 @@ class ValidatorTest {
         if (acc != null) {
             assert(acc.tiles.size == 574)
         }
-
     }
 }
