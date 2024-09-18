@@ -25,7 +25,6 @@ abstract class Tile(
 
     init {
         require(id >= 0) { "Id Should be greater than or equal 0" }
-        require(id > 0) { "Id Should be greater than 0" }
     }
 
     /**
