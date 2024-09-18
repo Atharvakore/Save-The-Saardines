@@ -106,14 +106,35 @@ class Corporation(
                     .forEach { garbage -> partnerGarbage[garbage.id] = it }
             }
             // 2. Navigate to the closest garbage patch.
-            // TODO
+            val paths = Dijkstra(ship.position).allPaths()
+            val sorted = paths.toList().sortedBy { it.second.size }
+            val closestGarbagePatch = sorted
+                .map { it.first }
+                .intersect(partnerGarbage.values.toSet()).firstOrNull {
+                    it.garbage
+                        .asSequence()
+                        .filter { acceptedGarbageType.contains(it.type) }
+                        .any { garbage -> !trackedGarbage.contains(garbage) }
+                }
+            if (closestGarbagePatch != null) {
+                val path = paths[closestGarbagePatch] ?: return false
+                if (ship.isFuelSufficient(path.size)) {
+                    ship.move(path)
+                } else {
+                    val closestHarborPath = findClosestHarbor(ship.position, ownedHarbors)
+                    ship.moveUninterrupted(closestHarborPath)
+                }
+                return true
+            }
+            return false
         } else if (capability is CollectingShip) {
             // TODO
+            return false
         } else if (capability is CoordinatingShip) {
             // TODO
+            return false
         }
-        // TODO
-        return false
+        error("Unknown ship capability")
     }
 
     /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
