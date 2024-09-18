@@ -13,7 +13,7 @@ import kotlin.test.Test
 class SeaTest {
 
     init {
-        val listOfTiles: List<Tile> = listOf(
+        val listOfTiles: MutableList<Tile> = mutableListOf(
             Shore(1, Vec2D(0, 0), listOf(), listOf(), false),
             Shore(2, Vec2D(0, 1), listOf(), listOf(), false),
             DeepOcean(3, Vec2D(1, 0), listOf(), listOf(), Current(1, Direction.D60, 1)),
