@@ -18,9 +18,12 @@ class CoordinatingShip(private val visibilityRange: Int) : ShipCapability {
      */
     fun getTilesInFoV(sea: Sea, shipTile: Tile): List<Tile> {
         val visibleTiles = shipTile.pos.tilesInRadius(visibilityRange)
-        val tilesInFov = emptyList<Tile>()
-        for (tiles in visibleTiles) {
-            tilesInFov.addLast(sea.getTileByPos(tiles))
+        val tilesInFov = mutableListOf<Tile>()
+        for (pos in visibleTiles) {
+            val tile = sea.getTileByPos(pos)
+            if (tile != null) {
+                tilesInFov.add(tile)
+            }
         }
         return tilesInFov
     }
