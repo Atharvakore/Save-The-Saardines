@@ -30,7 +30,7 @@ private val logger = KotlinLogging.logger {}
  * Task & Rewards Parser
  */
 class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
-    private var id: String = "id"
+    private val id: String = "id"
 
     /** Parse function for Tasks*/
     fun parseTasks(taskJSON: String): Boolean {

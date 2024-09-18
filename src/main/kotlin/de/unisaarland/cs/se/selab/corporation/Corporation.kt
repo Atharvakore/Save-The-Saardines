@@ -243,7 +243,7 @@ class Corporation(
         val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
 
         var shortestPathLen: Int = Int.MAX_VALUE
-        var shortestPath: List<Tile> = listOf()
+        var shortestPath: List<Tile> = emptyList()
 
         for (ship in ships) {
             val path: List<Tile>? = shortestPaths[ship.position]
@@ -271,7 +271,7 @@ class Corporation(
         val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
 
         var shortestPathLen: Int = Int.MAX_VALUE
-        var shortestPath: List<Tile> = listOf()
+        var shortestPath: List<Tile> = emptyList()
 
         for (harbor in harbors) {
             val path: List<Tile>? = shortestPaths[harbor]
