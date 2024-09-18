@@ -123,6 +123,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         }
         val garbageTypes: List<GarbageType> = listOf(GarbageType.OIL, GarbageType.PLASTIC, GarbageType.CHEMICALS)
         val corporationInstance = Corporation(id, name, ownnedShips, ownedHarbors, garbageTypes, mutableListOf())
+        accumulator.addCorporation(id, corporationInstance)
         return corporationInstance
     }
 
