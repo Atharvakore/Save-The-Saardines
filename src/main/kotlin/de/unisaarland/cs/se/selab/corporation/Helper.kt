@@ -8,6 +8,7 @@ import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 
+/** Helper class*/
 class Helper {
     /**
      * Filter collecting ships
