@@ -55,7 +55,7 @@ fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulato
     return accumulator
 }
 
-private fun parseMap(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
+fun parseMap(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
     var condition: Boolean = true
     val mapParser = MapJSONParser(accumulator)
     if (mapParser.parseMap(contents[0])) {
