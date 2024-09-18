@@ -8,7 +8,7 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ContainerTest {
 
-    val container: Container = Container(GarbageType.CHEMICALS, 1000)
+    private val container: Container = Container(GarbageType.CHEMICALS, 1000)
 
     /** Testing basic functionalities **/
 

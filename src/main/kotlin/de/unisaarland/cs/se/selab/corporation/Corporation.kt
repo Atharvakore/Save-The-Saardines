@@ -51,22 +51,26 @@ class Corporation(
                 otherShips.filter { otherCorporations.contains(it.owner) }
 
             otherShipsToCooperate.forEach { otherShipToCooperate ->
-                val telescopes: List<ScoutingShip> = otherShipToCooperate.capabilities
-                    .filterIsInstance<ScoutingShip>()
-                telescopes.forEach { telescope ->
-                    val tilesWithGarbage: List<Tile> =
-                        telescope.getTilesWithGarbageInFoV(Sea, otherShipToCooperate.position)
-                    // partnerGarbage is a map of garbage id to tile
-                    tilesWithGarbage.forEach { tile ->
-                        tile.garbage
-                            .asSequence()
-                            .filter { acceptedGarbageType.contains(it.type) }
-                            .forEach { garbage -> partnerGarbage[garbage.id] = tile }
-                    }
-                }
+                getInfoFromShip(otherShipToCooperate)
             }
             val lastCorporation: Corporation? = otherCorporations.maxByOrNull { it.id }
             lastCoordinatingCorporation = lastCorporation
+        }
+    }
+
+    private fun getInfoFromShip(otherShip: Ship) {
+        val telescopes: List<ScoutingShip> = otherShip.capabilities
+            .filterIsInstance<ScoutingShip>()
+        telescopes.forEach { telescope ->
+            val tilesWithGarbage: List<Tile> =
+                telescope.getTilesWithGarbageInFoV(Sea, otherShip.position)
+            // partnerGarbage is a map of garbage id to tile
+            tilesWithGarbage.forEach { tile ->
+                tile.garbage
+                    .asSequence()
+                    .filter { acceptedGarbageType.contains(it.type) }
+                    .forEach { garbage -> partnerGarbage[garbage.id] = tile }
+            }
         }
     }
 
