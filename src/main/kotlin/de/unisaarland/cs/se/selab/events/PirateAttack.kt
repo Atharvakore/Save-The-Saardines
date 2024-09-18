@@ -5,8 +5,8 @@ import de.unisaarland.cs.se.selab.ships.Ship
 
 /** The pirate attack event. */
 class PirateAttack(
-    private val id: Int,
-    private val fireTick: Int,
+    override val id: Int,
+    override val fireTick: Int,
     private val ship: Ship,
     private val owningCorporation: Corporation
 ) : Event(id, fireTick) {

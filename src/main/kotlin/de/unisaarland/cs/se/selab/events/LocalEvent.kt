@@ -5,8 +5,8 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 
 /** An abstract class for an event that is local to some area on the map */
 abstract class LocalEvent(
-    protected open val id: Int,
-    protected open val fireTick: Int,
+    override val id: Int,
+    override val fireTick: Int,
     open val map: Sea?,
     open val location: Tile?,
     open val radius: Int
