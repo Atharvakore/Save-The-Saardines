@@ -18,7 +18,6 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.FileNotFoundException
 import java.io.IOException
 
 private val logger = KotlinLogging.logger {}
@@ -48,7 +47,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
 
     private fun createEvents(events: JSONArray): Boolean {
         for (event in events) {
-            if (event != null && !validateEvent(event as JSONObject)) {
+            if (!validateEvent((event ?: error("event Should be...")) as JSONObject)) {
                 return false
             }
         }
@@ -66,40 +65,36 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
     }
 
     private fun createEvent(event: JSONObject): Boolean {
-        val eventId = event.getInt(id)
-        val eventType: String = event.getString(type)
-        val eventTick: Int = event.getInt("tick")
-        val eventLocation: Int
-        var eventRadius: Int? = null
-        var eventTile: Tile? = null
-        if (eventType != "PIRATE_ATTACK") {
-            eventLocation = event.getInt(location)
-            eventTile = accumulator.tiles[eventLocation] ?: return false
-            eventRadius = event.getInt("radius")
+        val id = event.getInt(id)
+        val type: String = event.getString(type)
+        val tick: Int = event.getInt("tick")
+        val location: Int
+        var radius: Int = 0
+        var tile: Tile? = null
+        if (type != "PIRATE_ATTACK") {
+            location = event.getInt(this.location)
+            tile = accumulator.tiles[location]
+            radius = requireNotNull(event.getInt("radius"))
         }
         var condition = true
-        when (eventType) {
+        when (type) {
             "STORM" -> {
                 val eventSpeed: Int = event.getInt("speed")
-                val eventDirection: Direction? = Direction.getDirection(event.getInt("direction"))
+                val eventDirection: Direction = requireNotNull(Direction.getDirection(event.getInt("direction")))
                 val storm =
-                    Storm(eventId, eventTick, accumulator.map, eventTile, eventRadius!!, eventSpeed)
-                eventDirection.let {
-                    if (it != null) {
-                        storm.direction = it
-                    }
-                }
-                accumulator.addEvent(eventId, storm)
+                    Storm(id, tick, accumulator.map, requireNotNull(tile), radius, eventSpeed)
+                storm.direction = eventDirection
+                accumulator.addEvent(id, storm)
             }
 
             "RESTRICTION" -> {
                 val eventDuration: Int = event.getInt("duration")
                 if (eventDuration > 0) {
                     val restriction: Event =
-                        Restriction(eventId, eventTick, accumulator.map, eventTile!!, eventRadius!!)
+                        Restriction(id, tick, accumulator.map, requireNotNull(tile), radius)
                     val endRestriction: Event =
-                        EndRestriction(dummyId, eventTick + eventDuration, accumulator.map, eventTile, eventDuration)
-                    accumulator.addEvent(eventId, restriction)
+                        EndRestriction(dummyId, tick + eventDuration, accumulator.map, tile, eventDuration)
+                    accumulator.addEvent(id, restriction)
                     accumulator.addEvent(dummyId--, endRestriction)
                 } else {
                     condition = false
@@ -110,8 +105,8 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
                 val eventAmount: Int = event.getInt("amount")
                 if (accumulator.map != null) {
                     val oilSpill =
-                        OilSpill(eventId, eventTick, accumulator.map!!, eventTile!!, eventRadius!!, eventAmount)
-                    accumulator.addEvent(eventId, oilSpill)
+                        OilSpill(id, tick, requireNotNull(accumulator.map), requireNotNull(tile), radius, eventAmount)
+                    accumulator.addEvent(id, oilSpill)
                 }
             }
 
@@ -120,7 +115,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
                 val ship: Ship? = accumulator.ships[eventShip]
                 if (ship != null) {
                     val shipCorp: Corporation = ship.owner
-                    accumulator.addEvent(eventId, PirateAttack(eventId, eventTick, ship, shipCorp))
+                    accumulator.addEvent(id, PirateAttack(id, tick, ship, shipCorp))
                 } else {
                     condition = false
                 }
@@ -146,7 +141,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
 
     private fun createGarbage(garbage: JSONArray): Boolean {
         for (gar in garbage) {
-            if (gar != null && !validateGarbage(gar as JSONObject)) {
+            if (!validateGarbage((gar ?: error("Garbage should be...")) as JSONObject)) {
                 return false
             }
         }

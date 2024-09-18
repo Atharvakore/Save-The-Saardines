@@ -26,9 +26,9 @@ class UTFactory {
     ): List<Corporation> {
         return (1 until numOfCorp).map { id ->
             val ships = ownedShips[id] ?: mutableListOf()
-            val harbors = ownedHarbors[id] ?: emptyList()
-            val acceptedGarbage = acceptedGarbageType[id] ?: emptyList()
-            val corpTasks = tasks[id] ?: emptyList()
+            val harbors = ownedHarbors[id].orEmpty()
+            val acceptedGarbage = acceptedGarbageType[id].orEmpty()
+            val corpTasks = tasks[id].orEmpty()
             Corporation(id, "unknown$id", ships, harbors, acceptedGarbage, corpTasks)
         }
     }
@@ -53,8 +53,8 @@ class UTFactory {
                 fuelConsumption = fuelConsume,
                 capabilities = capability
             )
-            ship.position = position[id] ?: Shore(0, Vec2D(-1, -1), listOf(), listOf(), false)
-            ship.owner = owner[id] ?: Corporation(-1, "Unknown", mutableListOf(), listOf(), listOf(), listOf())
+            ship.position = position[id] ?: Shore(0, Vec2D(-1, -1), emptyList(), emptyList(), false)
+            ship.owner = owner[id] ?: Corporation(-1, "Unknown", mutableListOf(), emptyList(), emptyList(), emptyList())
             ship.name = "Ship$id" // Assign a name to the ship
 
             ship // Return the ship
@@ -69,8 +69,8 @@ class UTFactory {
     ): List<ShallowOcean> {
         return (1 until numOfTiles).map { id ->
             val position = pos[id] ?: Vec2D(0, 0)
-            val adjacent = adjacentTiles[id] ?: emptyList()
-            val tileGarbage = garbage[id] ?: emptyList()
+            val adjacent = adjacentTiles[id].orEmpty()
+            val tileGarbage = garbage[id].orEmpty()
             ShallowOcean(
                 id,
                 position,
@@ -89,8 +89,8 @@ class UTFactory {
     ): List<Shore> {
         return (1 until numOfTiles).map { id ->
             val position = pos[id] ?: Vec2D(0, 0)
-            val adjacent = adjacentTiles[id] ?: emptyList()
-            val tileGarbage = garbage[id] ?: emptyList()
+            val adjacent = adjacentTiles[id].orEmpty()
+            val tileGarbage = garbage[id].orEmpty()
             val tileCurrent = harbor[id] ?: false
             Shore(
                 id,
@@ -111,8 +111,8 @@ class UTFactory {
     ): List<DeepOcean> {
         return (1 until numOfTiles).map { id ->
             val position = pos[id] ?: Vec2D(0, 0)
-            val adjacent = adjacentTiles[id] ?: emptyList()
-            val tileGarbage = garbage[id] ?: emptyList()
+            val adjacent = adjacentTiles[id].orEmpty()
+            val tileGarbage = garbage[id].orEmpty()
             val tileCurrent = current[id]
             DeepOcean(
                 id,

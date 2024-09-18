@@ -109,7 +109,7 @@ class Garbage(
                 return
             }
         }
-        target.addGarbage(createGarbage(amountToBeDrifted, g.type))
+        requireNotNull(target).addGarbage(createGarbage(amountToBeDrifted, g.type))
         source.garbage[source.garbage.indexOf(g)].amount -= amountToBeDrifted
         source.amountOfGarbageDriftedThisTick = amountToBeDrifted
         return

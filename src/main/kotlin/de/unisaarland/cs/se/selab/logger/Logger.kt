@@ -11,7 +11,7 @@ object Logger {
     var totalOilCollected = 0
     var totalPlasticCollected = 0
     var totalChemicalsCollected = 0
-    lateinit var map: MutableMap<Int, Int>
+    val map: MutableMap<Int, Int> = mutableMapOf()
     var output: LogOutputStream = BackedLogOutputStream(PrintWriter(System.out))
 
     /** Logging function*/

@@ -74,74 +74,54 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
     }
 
     private fun createTask(task: JSONObject): Boolean {
-        val taskId = task.getInt(id)
-        val taskType = task.getString("type")
-        val taskTick = task.getInt("tick")
-        val taskShip = accumulator.ships[task.getInt("shipID")]
-        val rewardShip = accumulator.ships[task.getInt("rewardShipID")]!!
+        val id = task.getInt(id)
+        val type = task.getString("type")
+        val tick = task.getInt("tick")
+        val ship = accumulator.ships[task.getInt("shipID")]
+        val rShip = requireNotNull(accumulator.ships[task.getInt("rewardShipID")])
         val reward: Reward? = accumulator.rewards[task.getInt("rewardID")]
-        val targetTile: Tile = accumulator.tiles[task.getInt("targetTile")]!!
+        val tile: Tile = requireNotNull(accumulator.tiles[task.getInt("targetTile")])
         var returnCond = false
-        when (taskType) {
+        when (type) {
             "COLLECT" -> {
                 if (reward is ContainerReward) {
-                    val taskObj =
-                        taskShip?.let { CollectGarbageTask(taskTick, taskId, it, reward, rewardShip, targetTile) }
-                    if (taskObj != null) {
-                        accumulator.addTask(taskId, taskObj)
-                    }
+                    val taskObj = CollectGarbageTask(tick, id, requireNotNull(ship), reward, rShip, tile)
+                    accumulator.addTask(id, taskObj)
                     returnCond = true
                 }
             }
 
             "EXPLORE" -> {
                 if (reward is TelescopeReward) {
-                    val taskObj = taskShip?.let { ExploreMapTask(taskTick, taskId, it, reward, rewardShip, targetTile) }
-                    if (taskObj != null) {
-                        accumulator.addTask(taskId, taskObj)
-                    }
+                    val taskObj = ExploreMapTask(tick, id, requireNotNull(ship), reward, rShip, tile)
+                    accumulator.addTask(id, taskObj)
                     returnCond = true
                 }
             }
 
             "FIND" -> {
                 if (reward is TrackerReward) {
-                    val taskObj = taskShip?.let {
-                        FindGarbageTask(
-                            taskTick,
-                            taskId,
-                            it,
-                            reward,
-                            rewardShip,
-                            targetTile
-                        )
-                    }
-                    if (taskObj != null) {
-                        accumulator.addTask(taskId, taskObj)
-                    }
+                    val taskObj = FindGarbageTask(tick, id, requireNotNull(ship), reward, rShip, tile)
+                    accumulator.addTask(id, taskObj)
                     returnCond = true
                 }
             }
 
             "COOPERATE" -> {
                 var condition = false
-                if (targetTile is Shore) {
-                    condition = targetTile.harbor
+                if (tile is Shore) {
+                    condition = tile.harbor
                 }
-                if (condition && reward is RadioReward) {
-                    val taskObj = taskShip?.let {
-                        CooperateTask(
-                            taskTick,
-                            taskId,
-                            it,
-                            reward,
-                            rewardShip,
-                            targetTile
-                        )
-                    }
-                    if (taskObj != null) {
-                        accumulator.addTask(taskId, taskObj)
-                    }
+                if (reward is RadioReward && condition) {
+                    val taskObj = CooperateTask(
+                        tick,
+                        id,
+                        requireNotNull(ship),
+                        reward,
+                        rShip,
+                        tile
+                    )
+                    accumulator.addTask(id, taskObj)
                     returnCond = true
                 }
             }
@@ -162,7 +142,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
 
     private fun createRewards(rewards: JSONArray): Boolean {
         for (reward in rewards) {
-            if (reward != null && !validateReward(reward as JSONObject)) {
+            if (!validateReward((reward ?: error("Reward should exist...")) as JSONObject)) {
                 return false
             }
         }

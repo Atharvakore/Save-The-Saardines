@@ -40,7 +40,7 @@ open class Tile(
             if (tile?.adjacentTiles?.get(dir.ordinal) == null) {
                 return tile
             }
-            tile = tile.adjacentTiles[dir.ordinal]!!
+            tile = requireNotNull(tile.adjacentTiles[dir.ordinal])
             i++
         }
         return tile

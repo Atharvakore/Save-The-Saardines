@@ -6,8 +6,8 @@ import java.util.PriorityQueue
  * An implementation of the Dijkstra algorithm which operates on the graph implicitly defined by the Tiles class.
  */
 class Dijkstra(start: Tile) {
-    private var predecessor: MutableMap<Tile, Tile> = mutableMapOf()
-    private var distances: MutableMap<Tile, Int> = mutableMapOf()
+    private val predecessor: MutableMap<Tile, Tile> = mutableMapOf()
+    private val distances: MutableMap<Tile, Int> = mutableMapOf()
     private val accountForRestrictions = start.restrictions == 0
 
     init {

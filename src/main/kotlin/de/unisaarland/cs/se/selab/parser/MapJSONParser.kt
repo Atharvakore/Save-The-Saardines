@@ -38,9 +38,10 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
     /** validating all tiles **/
     private fun validateTiles(objects: JSONArray): Boolean {
         for (elem in objects) {
-            if (validateTile(elem as JSONObject)) {
-                if (elem.getString(CATEGORY) != LAND) {
-                    val tile = this.createTile(elem)
+            if (validateTile((elem ?: error("There should be a tile in ValidateTiles")) as JSONObject)) {
+                val element = elem as JSONObject
+                if (element.getString(CATEGORY) != LAND) {
+                    val tile = this.createTile(element)
                     accumulator.addTile(tile.id, tile)
                     accumulator.addTileByCoordinates(tile.pos, tile)
                 }
@@ -98,6 +99,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             DEEP_OCEAN -> {
                 validated = validated && validateDeepOcean(tile)
             }
+
             else -> {
                 if (tile.has(HARBOR) || requiredForCurrent.any { tile.has(it) }) {
                     validated = false
@@ -154,7 +156,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                 val intensity = tile.getInt(INTENSITY)
                 var currentObject: Current? = null
                 if (current) {
-                    currentObject = Current(speed, Direction.getDirection(direction)!!, intensity)
+                    currentObject = Current(speed, requireNotNull(Direction.getDirection(direction)), intensity)
                 }
                 return DeepOcean(id, coordinates, emptyList(), emptyList(), currentObject)
             }

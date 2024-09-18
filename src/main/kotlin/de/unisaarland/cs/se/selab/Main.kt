@@ -37,22 +37,22 @@ fun main(args: Array<String>) {
         }
     }
     val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks, outputFile)
-    if (maxTicks != null && acc != null && acc.map != null) {
-        val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, acc.map!!)
-        sim.start()
+    if (acc != null && maxTicks != null) {
+        val sim = acc.map?.let {
+            Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, it)
+        }
+        sim?.start()
     }
 }
 
 /** The main function for parsing */
 fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
-    val contents = validate(files)
+    val contents = requireNotNull(validate(files))
     val accumulator = Accumulator()
-    if (contents != null) {
-        var cond: Boolean = maxTicks == null || outputFile == null
-        cond = cond || parseMap(files, contents, accumulator) == null
-        if (cond || parseScenario(files, contents, accumulator) == null) {
-            return null
-        }
+    var cond: Boolean = maxTicks == null || outputFile == null
+    cond = cond || parseMap(files, contents, accumulator) == null
+    if (cond || parseScenario(files, contents, accumulator) == null) {
+        return null
     }
     return if (contents != null) {
         accumulator
@@ -65,14 +65,14 @@ fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulato
 fun parseMap(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
     var condition = true
     val mapParser = MapJSONParser(accumulator)
-    if (files[0] != null && mapParser.parseMap(contents[0])) {
-        files[0]?.let { Logger.logInitializationInfoSuccess(it) }
+    if (mapParser.parseMap(contents[0])) {
+        Logger.logInitializationInfoSuccess(requireNotNull(files[0]))
     } else {
         condition = false
     }
     val corpParser = CorporationJSONParser(accumulator)
     if (corpParser.parseCorporationsFile(contents[1])) {
-        files[1]?.let { Logger.logInitializationInfoSuccess(it) }
+        Logger.logInitializationInfoSuccess(requireNotNull(files[1]))
     } else {
         condition = false
     }
@@ -89,7 +89,7 @@ private fun parseScenario(files: List<String?>, contents: List<String>, accumula
     var validScenario = scenarioParser.parseGarbage(contents[2]) && scenarioParser.parseEvents(contents[2])
     validScenario = validScenario && taskPars.parseRewards(contents[2]) && taskPars.parseTasks(contents[2])
     if (validScenario) {
-        files[2]?.let { Logger.logInitializationInfoSuccess(it) }
+        Logger.logInitializationInfoSuccess(requireNotNull(files[2]))
     } else {
         return null
     }
@@ -133,11 +133,8 @@ private fun readFile(validatingSchema: String, file: String): String? {
     }
     if (condition) {
         try {
-            var fail: ValidationFailure? = null
-            if (objectFile != null) {
-                objects = objectFile.readText()
-                fail = validator.validate(objects)
-            }
+            objects = requireNotNull(objectFile?.readText())
+            val fail: ValidationFailure? = validator.validate(objects)
             if (fail != null) {
                 Logger.logInitializationInfoFail(file)
             } else {

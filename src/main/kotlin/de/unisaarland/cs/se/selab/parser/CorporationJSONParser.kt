@@ -45,8 +45,8 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
 
     private fun validateCorporations(corpObjects: JSONArray): Boolean {
         corpObjects.forEach {
-            if (validateCorporation(it as JSONObject)) {
-                this.createCorporation(it)
+            if (validateCorporation((it ?: "corporation is Null") as JSONObject)) {
+                this.createCorporation((it ?: "corporation shouldn't be null") as JSONObject)
             } else {
                 return false
             }
@@ -74,13 +74,13 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             fuelConsumption,
             mutableListOf(),
         )
-        shipInstance.position = accumulator.tiles[location]!!
+        shipInstance.position = requireNotNull(accumulator.tiles[location])
 
         when (type) {
             COLLECTER -> {
                 val capacity = ship.getInt(CAPACITY)
                 val garbageType = ship.getString(GARBAGETYPE)
-                val container = Container(mapGarbageStringToType[garbageType]!!, capacity)
+                val container = Container(requireNotNull(mapGarbageStringToType[garbageType]), capacity)
                 val collectorCapability = CollectingShip(mutableListOf(container))
                 shipInstance.addCapability(collectorCapability)
             }
@@ -106,12 +106,19 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         val ships = corporation.getJSONArray("ships")
         val ownnedShips: MutableList<Ship> = mutableListOf()
         ships.forEach {
-            ownnedShips.add(accumulator.ships[it as Int]!!)
+            ownnedShips.add(
+                requireNotNull(accumulator.ships[(it ?: error("ship shouldn't be null in parser case")) as Int])
+            )
         }
         val harbors = corporation.getJSONArray(HOMEHARBORS)
         val ownedHarbors: MutableList<Shore> = mutableListOf()
         harbors.forEach {
-            ownedHarbors.add(accumulator.tiles[it as Int] as Shore)
+            ownedHarbors.add(
+                (
+                    accumulator.tiles[(it ?: error("This is not a number")) as Int]
+                        ?: error("There should exists this tile")
+                    ) as Shore
+            )
         }
         val garbageTypes: List<GarbageType> = listOf(GarbageType.OIL, GarbageType.PLASTIC, GarbageType.CHEMICALS)
         val corporationInstance = Corporation(id, name, ownnedShips, ownedHarbors, garbageTypes, mutableListOf())
@@ -125,8 +132,8 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
 
     private fun validateShips(shipObjects: JSONArray): Boolean {
         shipObjects.forEach {
-            if (validateShip(it as JSONObject)) {
-                this.createShip(it)
+            if (validateShip((it ?: error("There should be a ship")) as JSONObject)) {
+                val ship = this.createShip(it as JSONObject)
             } else {
                 return false
             }
