@@ -118,7 +118,7 @@ class Corporation(
             .filter { cap.garbageTypes().contains(it.type) }
             .filter {
                 if (target.contains(it.id)) {
-                    return@filter target[it.id]!! < it.amount
+                    return@filter (target[it.id] ?: error("there should be a target")) < it.amount
                 } else {
                     return@filter true
                 }
@@ -194,7 +194,8 @@ class Corporation(
                 val path = paths[closestGarbagePatch] ?: return false
                 if (ship.isFuelSufficient(path.size)) {
                     ship.move(path)
-                    val pile = findUncollectedGarbage(closestGarbagePatch, cap, collectorTarget)!!
+                    val pile = findUncollectedGarbage(closestGarbagePatch, cap, collectorTarget)
+                        ?: error("There should be a pile")
                     // Dodgy logic?
                     val amount = collectorTarget.getOrDefault(pile.id, 0) +
                         min(cap.capacityForType(pile.type), pile.amount)
@@ -241,7 +242,7 @@ class Corporation(
             val path = Dijkstra(it.position).allPaths()
             val destination = path.keys.firstOrNull { x -> x.restrictions == 0 }
             if (destination != null) {
-                it.move(path[destination]!!)
+                it.move(path[destination] ?: error("There should be a path"))
                 availableShips.remove(it)
             }
         }
