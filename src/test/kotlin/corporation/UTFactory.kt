@@ -186,7 +186,8 @@ class UTFactory {
             DeepOcean(56, Vec2D(6, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
             DeepOcean(56, Vec2D(6, 4), emptyList(), emptyList(), current = Current(10, Direction.D240, 1)),
             DeepOcean(56, Vec2D(6, 5), emptyList(), emptyList(), current = Current(10, Direction.D300, 1)),
-            DeepOcean(56, Vec2D(6, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1))
+            DeepOcean(56, Vec2D(6, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
+            DeepOcean(66, Vec2D(5, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1))
         )
 
         for (deepOcean in deepOceanTiles) {
@@ -266,31 +267,31 @@ class UTFactory {
         for (i in 1..5) {
             val scoutingShip = Ship(i, 100, 25, 10000, 10, mutableListOf(scouting))
             scoutingShip.name = "ShipId$i"
-            listOfShips.add(i, scoutingShip)
+            listOfShips.add(scoutingShip)
         }
 
         for (i in 6..10) {
             val coordinatingShip = Ship(i, 50, 15, 5000, 7, mutableListOf(coordinating))
             coordinatingShip.name = "ShipId$i"
-            listOfShips.add(i, coordinatingShip)
+            listOfShips.add(coordinatingShip)
         }
 
         for (i in 11..12) {
             val collectingShip = Ship(i, 50, 10, 5000, 9, mutableListOf(collectingOil))
             collectingShip.name = "ShipId$i"
-            listOfShips.add(i, collectingShip)
+            listOfShips.add(collectingShip)
         }
 
         for (i in 14..15) {
             val collectingShip = Ship(i, 50, 10, 5000, 9, mutableListOf(collectingPlastic))
             collectingShip.name = "ShipId$i"
-            listOfShips.add(i, collectingShip)
+            listOfShips.add(collectingShip)
         }
 
         for (i in 15..16) {
             val collectingShip = Ship(i, 50, 10, 5000, 9, mutableListOf(collectingChemicals))
             collectingShip.name = "ShipId$i"
-            listOfShips.add(i, collectingShip)
+            listOfShips.add(collectingShip)
         }
 
         return listOfShips
