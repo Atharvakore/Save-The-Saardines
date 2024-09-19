@@ -28,7 +28,7 @@ class CorporationMoveShipsTest {
         val gType = GarbageType.OIL
         val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList<Task>())
         val capability = ScoutingShip(5)
-        val  scoutingShip = Ship(1, 100,25, 3000, 10, mutableListOf(capability))
+        val scoutingShip = Ship(1, 100,25, 3000, 10, mutableListOf(capability))
         scoutingShip.owner = c1
         scoutingShip.position = initialTile
         scoutingShip.name = "unknown"
