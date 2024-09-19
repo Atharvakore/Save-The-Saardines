@@ -1,7 +1,6 @@
 package de.unisaarland.cs.se.selab.logger
 
 import de.unisaarland.cs.se.selab.tiles.GarbageType
-import java.io.File
 import java.io.PrintWriter
 
 /**
@@ -16,8 +15,8 @@ object Logger {
     var output: LogOutputStream = BackedLogOutputStream(PrintWriter(System.out))
 
     /** sets the output file in case given, default is stdout */
-    fun setOutBuffer(file: File) {
-        output = BackedLogOutputStream(PrintWriter(file))
+    fun setOutBuffer(file: PrintWriter) {
+        output = BackedLogOutputStream(file)
     }
 
     /** Logging function*/
