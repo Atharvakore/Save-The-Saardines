@@ -26,7 +26,7 @@ object Logger {
 
     /** Log the initialization of the simulation. */
     fun logInitializationInfoSuccess(filename: String) {
-        log(" Initialization Info: $filename successfully parsed and validated.")
+        log("Initialization Info: $filename successfully parsed and validated.")
     }
 
     /** Log the failure of the initialization of the simulation. */
