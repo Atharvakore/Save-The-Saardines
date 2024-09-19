@@ -137,4 +137,44 @@ class Garbage(
         source.garbage.filter { it == g }
         source.amountOfGarbageDriftedThisTick += g.amount
     }
+
+    /**
+     * Drift function for storm. A drift that sweeps away all the garbage
+     * */
+    fun stormDrift(speed: Int, direction: Direction, currentTile: Tile) {
+        val targetTile = currentTile.getTileInDirection(speed / TEN, direction) ?: return
+
+        when (this.type) {
+            GarbageType.OIL -> {
+                val totalOilAmount = targetTile.garbage
+                    .filter { it.type == GarbageType.OIL }
+                    .sumOf { it.amount }
+
+                if (totalOilAmount < THOUSAND) {
+                    val driftableAmount = THOUSAND - totalOilAmount
+                    if (this.amount <= driftableAmount) {
+                        targetTile.addGarbage(createGarbage(amount, GarbageType.OIL))
+                        this.amount = 0
+                    } else {
+                        targetTile.addGarbage(createGarbage(driftableAmount, GarbageType.OIL))
+                        this.amount -= driftableAmount
+                    }
+                }
+            }
+
+            GarbageType.PLASTIC -> {
+                targetTile.addGarbage(createGarbage(this.amount, GarbageType.PLASTIC))
+                this.amount = 0
+            }
+
+            else -> {
+                if (targetTile is DeepOcean) {
+                    this.amount = 0
+                } else {
+                    targetTile.addGarbage(createGarbage(this.amount, GarbageType.CHEMICALS))
+                    this.amount = 0
+                }
+            }
+        }
+    }
 }

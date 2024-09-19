@@ -19,10 +19,25 @@ class Storm(
     }
 
     override fun actUponTick(currentTick: Int): Boolean {
+        val result: Boolean
         if (currentTick == fireTick) {
-            // TODO.
-            return true
+            val radiusVec2D = location?.pos?.tilesInRadius(radius)
+            val tiles: MutableList<Tile> = mutableListOf()
+
+            if (radiusVec2D == null) {
+                return false
+            }
+            for (pos in radiusVec2D) {
+                Sea.getTileByPos(pos)?.let { tiles.add(it) }
+            }
+            val tilesWithGarbage = tiles.filter { it.garbage.isNotEmpty() }
+            for (tile in tilesWithGarbage) {
+                tile.garbage.forEach { gar -> gar.stormDrift(speed, direction, tile) }
+            }
+            result = true
+        } else {
+            result = false
         }
-        return false
+        return result
     }
 }
