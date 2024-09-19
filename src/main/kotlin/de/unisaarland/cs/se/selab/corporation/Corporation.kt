@@ -53,14 +53,14 @@ class Corporation(
                 otherShips.filter { otherCorporations.contains(it.owner) }
 
             otherShipsToCooperate.forEach { otherShipToCooperate ->
-                getInfoFromShip(otherShipToCooperate)
+                getInfoFromShip(otherShipToCooperate, coordinatingShip)
             }
             val lastCorporation: Corporation? = otherCorporations.maxByOrNull { it.id }
             lastCoordinatingCorporation = lastCorporation
         }
     }
 
-    private fun getInfoFromShip(otherShip: Ship) {
+    private fun getInfoFromShip(otherShip: Ship, coordinatingShip: Ship) {
         val telescopes: List<ScoutingShip> = otherShip.capabilities
             .filterIsInstance<ScoutingShip>()
         telescopes.forEach { telescope ->
@@ -74,6 +74,12 @@ class Corporation(
                     .forEach { garbage -> partnerGarbage[garbage.id] = tile }
             }
         }
+        LoggerCorporationAction.logCooperationBetweenCorporations(
+            id,
+            otherShip.owner.id,
+            coordinatingShip.id,
+            otherShip.id
+        )
     }
 
     /**
@@ -217,6 +223,17 @@ class Corporation(
      *  todo Handle restrictions **/
     private fun moveShips(otherShips: List<Ship>) {
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
+        // -1. Move ships that are inside a restriction out of a restriction
+        availableShips.filter {
+            it.position.restrictions > 0
+        }.forEach {
+            val path = Dijkstra(it.position).allPaths()
+            val destination = path.keys.firstOrNull { it.restrictions == 0 }
+            if (destination != null) {
+                it.move(path[destination]!!)
+                availableShips.remove(it)
+            }
+        }
         // 0. For each ship that has an assigned destination, tick the
         // ship and remove the ship from the available ships
         availableShips.forEach { if (it.hasTaskAssigned) it.tickTask() }
