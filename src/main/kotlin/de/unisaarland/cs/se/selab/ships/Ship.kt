@@ -58,7 +58,6 @@ class Ship(
             }
             Logger.logCurrentDriftShip(id, tile.id, position.id)
         }
-
     }
 
     /**

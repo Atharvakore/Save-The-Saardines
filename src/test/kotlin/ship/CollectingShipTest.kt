@@ -78,7 +78,7 @@ class CollectingShipTest {
 
     @Test
     fun testUnload() {
-        collectingCapability.unload()
+        collectingCapability.unload(collectingShip)
         for (container in collectingCapability.auxiliaryContainers) {
             assert(container.garbageLoad == 0)
         }
@@ -102,7 +102,7 @@ class CollectingShipTest {
     @Test
     fun testCollectGarbageFromCurrentTile() {
         val tile: Tile = sea.getTileById(63)!!
-        collectingCapability.collectGarbageFromCurrentTile(tile)
+        collectingCapability.collectGarbageFromCurrentTile(collectingShip)
         val garbageOnTileAfterCollection: List<Garbage> = tile.garbage
         assert(garbageOnTileAfterCollection.isEmpty())
     }
