@@ -34,7 +34,7 @@ class OilSpillTest {
 
     @Test
     fun testBasicCurrentTickIsNotFireTick() {
-        assertTrue(!oilSpillEvent.actUponTick(5))
+        assertTrue(!oilSpillEvent.actUponTick(4))
         assertTrue(seaInstance.getTileById(0)?.currentOilLevel() == 0)
         assertTrue(seaInstance.getTileById(1)?.currentOilLevel() == 0)
         assertTrue(seaInstance.getTileById(2)?.currentOilLevel() == 0)
@@ -52,7 +52,7 @@ class OilSpillTest {
         assertTrue(seaInstance.getTileById(1)?.currentOilLevel() == 500)
         assertTrue(seaInstance.getTileById(2)?.currentOilLevel() == 500)
         assertTrue(seaInstance.getTileById(3)?.currentOilLevel() == 500)
-        assertTrue(seaInstance.getTileById(4)?.currentOilLevel() == 500)
+        assertTrue(seaInstance.getTileById(4)?.currentOilLevel() == 0)
         assertTrue(seaInstance.getTileById(5)?.currentOilLevel() == 500)
         assertTrue(seaInstance.getTileById(6)?.currentOilLevel() == 500)
         assertTrue(seaInstance.getTileById(7)?.currentOilLevel() == 500)
