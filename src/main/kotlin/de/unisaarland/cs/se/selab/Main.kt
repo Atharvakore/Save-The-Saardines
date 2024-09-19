@@ -40,7 +40,6 @@ fun main(args: Array<String>) {
         val file = File(outputFile)
         Logger.setOutBuffer(file)
     }
-
     val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks, outputFile)
     if (acc != null && maxTicks != null) {
         val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, acc.map)

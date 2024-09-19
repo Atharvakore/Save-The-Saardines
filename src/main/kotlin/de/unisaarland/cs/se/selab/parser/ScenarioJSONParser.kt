@@ -35,7 +35,7 @@ private const val DURATION: String = "duration"
  */
 class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
     private val id: String = "id"
-    private val type: String = TYPE
+    private val type: String = "type"
     private val location: String = "location"
 
     /**
@@ -72,7 +72,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
 
     private fun onlyNecessaryProperties(event: JSONObject): Boolean {
         val eventType = event.getString(TYPE)
-        var result = true
+        var result: Boolean = true
         if (eventType != PIRATEATTACK) {
             result = !event.has("shipID")
         }
