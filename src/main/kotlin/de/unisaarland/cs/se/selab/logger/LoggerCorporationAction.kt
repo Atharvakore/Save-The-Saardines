@@ -10,6 +10,16 @@ object LoggerCorporationAction {
         Logger.output.write(message)
     }
 
+    /** Log a call of Corporation.moveShips(). */
+    fun logCorporationStartMoveShips(corporationId: Int) {
+        Logger.log("Corporation Action: Corporation $corporationId is starting to move its ships.")
+    }
+
+    /** Logged whenever a corporation finishes its actions. */
+    fun logCorporationFinishedActions(corporationId: Int) {
+        LoggerCorporationAction.log("Corporation Action: Corporation $corporationId finished its actions.")
+    }
+
     /** Log a call of Ship.move(). */
     fun logShipMovement(shipId: Int, speed: Int, tileId: Int) {
         log("Ship Movement: Ship $shipId moved with speed $speed to tile $tileId.")

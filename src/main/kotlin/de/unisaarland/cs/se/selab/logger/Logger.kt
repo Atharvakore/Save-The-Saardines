@@ -44,16 +44,6 @@ object Logger {
         log("Simulation Info: Tick $tick started.")
     }
 
-    /** Log a call of Corporation.moveShips(). */
-    fun logCorporationStartMoveShips(corporationId: Int) {
-        Logger.log("Corporation Action: Corporation $corporationId is starting to move its ships.")
-    }
-
-    /** Logged whenever a corporation finishes its actions. */
-    fun logCorporationFinishedActions(corporationId: Int) {
-        LoggerCorporationAction.log("Corporation Action: Corporation $corporationId finished its actions.")
-    }
-
     /** Log drifting of garbage. */
     fun logCurrentDriftGarbage(
         garbageType: GarbageType,
