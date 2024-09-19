@@ -303,7 +303,7 @@ class Corporation(
             for (ship in shipsOnHarbor) {
                 val collectingCapability = ship.capabilities.find { it is CollectingShip }
                 if (collectingCapability != null) {
-                    (collectingCapability as CollectingShip).unload()
+                    (collectingCapability as CollectingShip).unload(ship.id)
                 }
                 ship.refuel()
             }

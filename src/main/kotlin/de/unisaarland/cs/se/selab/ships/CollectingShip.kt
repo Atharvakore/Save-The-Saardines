@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.ships
 
+import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -12,7 +13,8 @@ class CollectingShip(
     /**
      * unloads all the containers of the ship
      */
-    fun unload() {
+    fun unload(shipId: Int) {
+        val amountOfGarbage: Int = auxiliaryContainers.sumOf { it.garbageLoad }
         for (container in auxiliaryContainers) {
             container.giveGarbage()
         }
