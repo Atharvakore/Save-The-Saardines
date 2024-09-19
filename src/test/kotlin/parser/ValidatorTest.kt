@@ -16,8 +16,8 @@ class ValidatorTest {
             assert(acc.tiles.size == 36)
             assert(acc.corporations.size == 2)
             assert(acc.ships.size == 2)
-            assert(acc.garbage.size == 2)
-            assert(acc.events.size == 1)
+            assert(acc.garbage.size == 1)
+            assert(acc.events.size == 2)
             assert(acc.tasks.isEmpty())
             assert(acc.rewards.isEmpty())
         }
