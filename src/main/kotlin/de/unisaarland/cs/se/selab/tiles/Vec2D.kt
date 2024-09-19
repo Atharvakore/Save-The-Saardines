@@ -28,11 +28,10 @@ class Vec2D(var posX: Int, var posY: Int) {
      * Returns an iterator over *all* the Vec2D instances in a given radius around this Vec2D.
      */
     fun tilesInRadius(radius: Int) = iterator {
-        for (dx in -radius..radius) {
-            for (dy in -radius..radius) {
-                if (dx + dy in -radius..radius) {
-                    yield(Vec2D(posX + dx, posY + dy))
-                }
+        // axial coordinate magic i found online.
+        for (dq in -radius..radius) {
+            for (dr in (-radius).coerceAtLeast(-dq - radius)..radius.coerceAtMost(-dq + radius)) {
+                yield(Vec2D(posX + dq, posY + dr))
             }
         }
     }
