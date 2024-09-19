@@ -81,7 +81,7 @@ class Corporation(
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
     fun run(otherShips: List<Ship>) {
-        moveShips(otherShips)
+        moveShips()
         collectGarbage()
         cooperate(otherShips)
         refuelAndUnloadShips()
@@ -98,7 +98,7 @@ class Corporation(
         return tasks.filter { it.checkCondition() }
     }
 
-    private fun tryMove(ship: Ship, otherShips: List<Ship>): Boolean {
+    private fun tryMove(ship: Ship): Boolean {
         var result: Boolean
         val capability = ship.capabilities.first()
         if (capability is ScoutingShip) {
@@ -136,7 +136,8 @@ class Corporation(
             // TODO
             result = false
         } else if (capability is CoordinatingShip) {
-            result = handleMoveCoordinating(ship, capability, otherShips)
+            // TODO
+            result = false
         } else {
             error("Unknown ship capability")
         }
@@ -145,7 +146,7 @@ class Corporation(
 
     /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature
      *  todo Handle restrictions **/
-    private fun moveShips(otherShips: List<Ship>) {
+    private fun moveShips() {
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
         // 0. For each ship that has an assigned destination, tick the
         // ship and remove the ship from the available ships
@@ -171,41 +172,13 @@ class Corporation(
         // 2. Iterate over available ships in increasing ID order
         val usedShips: MutableList<Int> = mutableListOf()
         for (ship in availableShips.sortedBy { it.id }) {
-            val status = tryMove(ship, otherShips)
+            val status = tryMove(ship)
             if (status) {
                 usedShips.add(ship.id)
             }
         }
         availableShips.removeAll { usedShips.contains(it.id) }
         // 3. Unused ships are jobless. Something might happen to them here.
-    }
-
-    private fun handleMoveCoordinating(ship: Ship, capability: CoordinatingShip, otherShips: List<Ship>): Boolean {
-        val result: Boolean
-        // 1. Get information about which ships are in field of view
-        val tilesInFov = capability.getTilesInFoV(Sea, ship.position)
-        val shipFov = otherShips.filter { tilesInFov.contains(it.position) && it.owner != lastCoordinatingCorporation }
-
-        // 2. Check for ships on the current tile of the coordinating ship
-        val onPos = shipFov.firstOrNull { it.position == ship.position && it.owner != lastCoordinatingCorporation }
-        if (onPos != null) {
-            result = true
-        } else {
-            // 3. Navigate to the closest ship
-            val closestShipPath = Helper().findClosestShip(ship.position, otherShips)
-            if (closestShipPath.isNotEmpty()) {
-                if (ship.isFuelSufficient(closestShipPath.size)) {
-                    ship.move(closestShipPath)
-                } else {
-                    val closestHarborPath = findClosestHarbor(ship.position, ownedHarbors)
-                    ship.moveUninterrupted(closestHarborPath)
-                }
-                result = true
-            } else {
-                result = false
-            }
-        }
-        return result
     }
 
     /**
@@ -242,6 +215,35 @@ class Corporation(
                 ship.refuel()
             }
         }
+    }
+
+    /**
+     * Find the closest ship to a tile
+     *
+     * Takes destination tile and list of ships as input, then uses Dijkstra's algorithm to find the
+     * shortest path to the closest ship
+     *
+     * make it private later
+     * @param tile Destination tile
+     * @param ships List of ships
+     * @return List of tiles representing the shortest path to the closest ship
+     */
+    fun findClosestShip(tile: Tile, ships: List<Ship>): List<Tile> {
+        val dijkstra: Dijkstra = Dijkstra(tile)
+        val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
+
+        var shortestPathLen: Int = Int.MAX_VALUE
+        var shortestPath: List<Tile> = emptyList()
+
+        for (ship in ships) {
+            val path: List<Tile>? = shortestPaths[ship.position]
+            if (path != null && path.size < shortestPathLen) {
+                shortestPathLen = path.size
+                shortestPath = path
+            }
+        }
+
+        return shortestPath
     }
 
     /**
