@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.corporation
 
+import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
@@ -11,6 +12,7 @@ import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
+import kotlin.math.min
 
 const val TODO: String = "Yet to implement"
 
@@ -26,6 +28,7 @@ class Corporation(
     val trackedGarbage: MutableList<Garbage> = mutableListOf()
     val partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
+    val logger: LoggerCorporationAction = LoggerCorporationAction
 
     /**
      * Cooperation between ships
@@ -87,10 +90,15 @@ class Corporation(
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
     fun run(otherShips: List<Ship>) {
-        moveShips()
+        logger.logCorporationStartMoveShips(id)
+        moveShips(otherShips)
+        logger.logCorporationStartCollectGarbage(id)
         collectGarbage()
+        logger.logCorporationCooperationStart(id)
         cooperate(otherShips)
+        logger.logCorporationRefueling(id)
         refuelAndUnloadShips()
+        logger.logCorporationFinishedActions(id)
     }
 
     /**
@@ -252,7 +260,7 @@ class Corporation(
                     ship.move(path)
                     availableShips.remove(ship)
                 } else {
-                    val closestHarborPath: List<Tile> = findClosestHarbor(ship.position, ownedHarbors)
+                    val closestHarborPath: List<Tile> = Helper().findClosestHarbor(ship.position, ownedHarbors)
                     ship.moveUninterrupted(closestHarborPath)
                     availableShips.remove(ship)
                 }
@@ -260,14 +268,44 @@ class Corporation(
         }
         // 2. Iterate over available ships in increasing ID order
         val usedShips: MutableList<Int> = mutableListOf()
+        val scoutTarget: MutableSet<Int> = mutableSetOf()
+        val collectorTarget: MutableMap<Int, Int> = mutableMapOf()
         for (ship in availableShips.sortedBy { it.id }) {
-            val status = tryMove(ship)
+            val status = tryMove(ship, scoutTarget, collectorTarget, otherShips)
             if (status) {
                 usedShips.add(ship.id)
             }
         }
         availableShips.removeAll { usedShips.contains(it.id) }
         // 3. Unused ships are jobless. Something might happen to them here.
+    }
+
+    private fun handleMoveCoordinating(ship: Ship, capability: CoordinatingShip, otherShips: List<Ship>): Boolean {
+        val result: Boolean
+        // 1. Get information about which ships are in field of view
+        val tilesInFov = capability.getTilesInFoV(Sea, ship.position)
+        val shipFov = otherShips.filter { tilesInFov.contains(it.position) && it.owner != lastCoordinatingCorporation }
+
+        // 2. Check for ships on the current tile of the coordinating ship
+        val onPos = shipFov.firstOrNull { it.position == ship.position && it.owner != lastCoordinatingCorporation }
+        if (onPos != null) {
+            result = true
+        } else {
+            // 3. Navigate to the closest ship
+            val closestShipPath = Helper().findClosestShip(ship.position, otherShips)
+            if (closestShipPath.isNotEmpty()) {
+                if (ship.isFuelSufficient(closestShipPath.size)) {
+                    ship.move(closestShipPath)
+                } else {
+                    val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                    ship.moveUninterrupted(closestHarborPath)
+                }
+                result = true
+            } else {
+                result = false
+            }
+        }
+        return result
     }
 
     /**
@@ -299,67 +337,10 @@ class Corporation(
             for (ship in shipsOnHarbor) {
                 val collectingCapability = ship.capabilities.find { it is CollectingShip }
                 if (collectingCapability != null) {
-                    (collectingCapability as CollectingShip).unload()
+                    (collectingCapability as CollectingShip).unload(ship)
                 }
                 ship.refuel()
             }
         }
-    }
-
-    /**
-     * Find the closest ship to a tile
-     *
-     * Takes destination tile and list of ships as input, then uses Dijkstra's algorithm to find the
-     * shortest path to the closest ship
-     *
-     * make it private later
-     * @param tile Destination tile
-     * @param ships List of ships
-     * @return List of tiles representing the shortest path to the closest ship
-     */
-    fun findClosestShip(tile: Tile, ships: List<Ship>): List<Tile> {
-        val dijkstra: Dijkstra = Dijkstra(tile)
-        val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
-
-        var shortestPathLen: Int = Int.MAX_VALUE
-        var shortestPath: List<Tile> = emptyList()
-
-        for (ship in ships) {
-            val path: List<Tile>? = shortestPaths[ship.position]
-            if (path != null && path.size < shortestPathLen) {
-                shortestPathLen = path.size
-                shortestPath = path
-            }
-        }
-
-        return shortestPath
-    }
-
-    /**
-     * Find the closest harbor to a tile
-     *
-     * Takes destination tile and list of harbors as input, then uses Dijkstra's algorithm to find the
-     * shortest path to the closest harbor
-     *
-     * @param tile Destination tile
-     * @param harbors List of harbors
-     * @return List of tiles representing the shortest path to the closest harbor
-     */
-    private fun findClosestHarbor(tile: Tile, harbors: List<Shore>): List<Tile> {
-        val dijkstra: Dijkstra = Dijkstra(tile)
-        val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
-
-        var shortestPathLen: Int = Int.MAX_VALUE
-        var shortestPath: List<Tile> = emptyList()
-
-        for (harbor in harbors) {
-            val path: List<Tile>? = shortestPaths[harbor]
-            if (path != null && path.size < shortestPathLen) {
-                shortestPathLen = path.size
-                shortestPath = path
-            }
-        }
-
-        return shortestPath
     }
 }
