@@ -37,9 +37,9 @@ class ShipTest {
 
     @Test
     fun testDrift() {
-//        ship.position = tile37
-//        ship.drift()
-//        assertTrue(ship.position == tile38)
+        ship.position = tile37
+        ship.drift()
+        assertTrue(ship.position == tile38)
         assert(true)
     }
 
