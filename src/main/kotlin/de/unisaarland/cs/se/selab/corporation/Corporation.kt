@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.corporation
 
+import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
@@ -27,6 +28,7 @@ class Corporation(
     val trackedGarbage: MutableList<Garbage> = mutableListOf()
     val partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
+    val logger: LoggerCorporationAction = LoggerCorporationAction
 
     /**
      * Cooperation between ships
@@ -82,10 +84,14 @@ class Corporation(
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
     fun run(otherShips: List<Ship>) {
+        logger.logCorporationStartMoveShips(id)
         moveShips()
+        logger.logCorporationStartCollectGarbage(id)
         collectGarbage()
+        logger.logCorporationCooperationStart(id)
         cooperate(otherShips)
         refuelAndUnloadShips()
+        logger.logCorporationFinishedActions(id)
     }
 
     /**
