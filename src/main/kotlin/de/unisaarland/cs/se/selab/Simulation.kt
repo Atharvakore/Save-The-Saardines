@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.logger.Logger
+import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
@@ -30,6 +31,7 @@ class Simulation(
             tick++
         }
         Logger.logSimulationEnded()
+        LoggerStatistics.logSimulationStatistics(corporations)
     }
 
     /**
