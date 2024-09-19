@@ -5,7 +5,7 @@ import java.io.PrintWriter
 /** Backend log for Logger */
 class BackedLogOutputStream(private val output: PrintWriter) : LogOutputStream {
     override fun write(s: String) {
-        output.println(s)
+        output.use { out -> out.println(s) }
     }
 
     override fun format(format: String, vararg args: Any) {
