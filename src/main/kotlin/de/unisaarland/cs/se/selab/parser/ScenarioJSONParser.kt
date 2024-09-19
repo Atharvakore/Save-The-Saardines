@@ -72,7 +72,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
 
     private fun onlyNecessaryProperties(event: JSONObject): Boolean {
         val eventType = event.getString(TYPE)
-        var result: Boolean = true
+        var result = true
         if (eventType != PIRATEATTACK) {
             result = !event.has("shipID")
         }

@@ -40,6 +40,7 @@ fun main(args: Array<String>) {
         val file = File(outputFile)
         Logger.setOutBuffer(file)
     }
+
     val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks, outputFile)
     if (acc != null && maxTicks != null) {
         val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, acc.map)
@@ -49,14 +50,16 @@ fun main(args: Array<String>) {
 
 /** The main function for parsing */
 fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
-    val contents = requireNotNull(validate(files))
-    val accumulator = Accumulator()
-    var cond: Boolean = maxTicks == null || outputFile == null
-    cond = cond || parseMap(files, contents, accumulator) == null
-    if (cond || parseScenario(files, contents, accumulator) == null) {
-        return null
+    val contents = validate(files)
+    if (contents != null) {
+        val accumulator = Accumulator()
+        var cond: Boolean = maxTicks == null || outputFile == null
+        cond = cond || parseMap(files, contents, accumulator) == null
+        if (!(cond || parseScenario(files, contents, accumulator) == null)) {
+            return accumulator
+        }
     }
-    return accumulator
+    return null
 }
 
 /** Parsing the Map */

@@ -1,6 +1,5 @@
 package de.unisaarland.cs.se.selab.ships
 
-import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -13,24 +12,10 @@ class CollectingShip(
     /**
      * unloads all the containers of the ship
      */
-    fun unload(ship: Ship) {
-        val amountOfPlastic: Int = auxiliaryContainers
-            .filter { it.garbageType == GarbageType.PLASTIC }
-            .sumOf { it.garbageLoad }
-        val amountOfOil: Int = auxiliaryContainers
-            .filter { it.garbageType == GarbageType.OIL }
-            .sumOf { it.garbageLoad }
-        val amountOfChemicals: Int = auxiliaryContainers
-            .filter { it.garbageType == GarbageType.CHEMICALS }
-            .sumOf { it.garbageLoad }
-
+    fun unload() {
         for (container in auxiliaryContainers) {
             container.giveGarbage()
         }
-
-        LoggerCorporationAction.logUnloadShip(ship.id, amountOfPlastic, GarbageType.PLASTIC, ship.position.id)
-        LoggerCorporationAction.logUnloadShip(ship.id, amountOfOil, GarbageType.OIL, ship.position.id)
-        LoggerCorporationAction.logUnloadShip(ship.id, amountOfChemicals, GarbageType.CHEMICALS, ship.position.id)
     }
 
     /**

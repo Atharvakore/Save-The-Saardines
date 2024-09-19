@@ -1,7 +1,6 @@
 package de.unisaarland.cs.se.selab.ships
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
-import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -30,7 +29,6 @@ class Ship(
      */
     fun refuel() {
         this.consumedFuel = 0
-        LoggerCorporationAction.logRefuelingShip(id, position.id)
     }
 
     /**
