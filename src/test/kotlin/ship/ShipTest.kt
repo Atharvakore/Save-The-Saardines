@@ -30,9 +30,9 @@ class ShipTest {
 
     @Test
     fun testRefuel() {
-        assert(true)
-//        ship.refuel()
-//        assertTrue(ship.isFuelSufficient(10))
+        ship.position = tile37
+        ship.refuel()
+        assertTrue(ship.isFuelSufficient(10))
     }
 
     @Test

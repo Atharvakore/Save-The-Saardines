@@ -175,7 +175,7 @@ class Corporation(
             .sortedBy { it.id }
             .firstOrNull()
         if (garbage != null) {
-            cap.collectGarbageFromCurrentTile(ship.position)
+            cap.collectGarbageFromCurrentTile(ship)
             result = true
         } else {
             // Navigate to the closest garbage patch that it can collect.
@@ -242,7 +242,7 @@ class Corporation(
             val path = Dijkstra(it.position).allPaths()
             val destination = path.keys.firstOrNull { x -> x.restrictions == 0 }
             if (destination != null) {
-                it.move(path[destination] ?: error("There should be a path"))
+                it.move(path[destination] ?: error("There should be a path..."))
                 availableShips.remove(it)
             }
         }
@@ -320,7 +320,7 @@ class Corporation(
         val collectingShips: List<Ship> = Helper().filterCollectingShip(this)
         for (ship in collectingShips) {
             for (collectingCapability in ship.capabilities) {
-                (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship.position)
+                (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship)
             }
         }
     }
