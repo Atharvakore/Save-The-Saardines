@@ -151,11 +151,11 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         val result = when (category) {
             DEEP_OCEAN -> {
                 val current = tile.getBoolean(CURRENT)
-                val direction = tile.getInt(DIRECTION)
-                val speed = tile.getInt(SPEED)
-                val intensity = tile.getInt(INTENSITY)
                 var currentObject: Current? = null
                 if (current) {
+                    val direction = tile.getInt(DIRECTION)
+                    val speed = tile.getInt(SPEED)
+                    val intensity = tile.getInt(INTENSITY)
                     currentObject = Current(speed, requireNotNull(Direction.getDirection(direction)), intensity)
                 }
                 DeepOcean(id, coordinates, emptyList(), emptyList(), currentObject)

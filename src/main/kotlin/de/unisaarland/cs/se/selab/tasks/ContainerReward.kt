@@ -11,6 +11,9 @@ class ContainerReward(id: Int, private val capability: CollectingShip, private v
     }
 
     override fun applyReward(ship: Ship) {
+        if (!ship.owner.acceptedGarbageType.contains(container.garbageType)) {
+            return
+        }
         if (!ship.capabilities.any { it is CollectingShip }) {
             ship.capabilities.add(capability)
         }

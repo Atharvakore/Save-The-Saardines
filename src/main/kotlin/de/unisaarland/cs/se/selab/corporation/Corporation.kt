@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.corporation
 
+import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
@@ -11,6 +12,7 @@ import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
+import kotlin.math.min
 
 const val TODO: String = "Yet to implement"
 
@@ -26,6 +28,7 @@ class Corporation(
     val trackedGarbage: MutableList<Garbage> = mutableListOf()
     val partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
+    val logger: LoggerCorporationAction = LoggerCorporationAction
 
     /**
      * Cooperation between ships
@@ -50,14 +53,14 @@ class Corporation(
                 otherShips.filter { otherCorporations.contains(it.owner) }
 
             otherShipsToCooperate.forEach { otherShipToCooperate ->
-                getInfoFromShip(otherShipToCooperate)
+                getInfoFromShip(otherShipToCooperate, coordinatingShip)
             }
             val lastCorporation: Corporation? = otherCorporations.maxByOrNull { it.id }
             lastCoordinatingCorporation = lastCorporation
         }
     }
 
-    private fun getInfoFromShip(otherShip: Ship) {
+    private fun getInfoFromShip(otherShip: Ship, coordinatingShip: Ship) {
         val telescopes: List<ScoutingShip> = otherShip.capabilities
             .filterIsInstance<ScoutingShip>()
         telescopes.forEach { telescope ->
@@ -71,6 +74,12 @@ class Corporation(
                     .forEach { garbage -> partnerGarbage[garbage.id] = tile }
             }
         }
+        LoggerCorporationAction.logCooperationBetweenCorporations(
+            id,
+            otherShip.owner.id,
+            coordinatingShip.id,
+            otherShip.id
+        )
     }
 
     /**
@@ -81,10 +90,15 @@ class Corporation(
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
     fun run(otherShips: List<Ship>) {
-        moveShips()
+        logger.logCorporationStartMoveShips(id)
+        moveShips(otherShips)
+        logger.logCorporationStartCollectGarbage(id)
         collectGarbage()
+        logger.logCorporationCooperationStart(id)
         cooperate(otherShips)
+        logger.logCorporationRefueling(id)
         refuelAndUnloadShips()
+        logger.logCorporationFinishedActions(id)
     }
 
     /**
@@ -98,56 +112,139 @@ class Corporation(
         return tasks.filter { it.checkCondition() }
     }
 
-    private fun tryMove(ship: Ship): Boolean {
-        var result: Boolean
-        val capability = ship.capabilities.first()
-        if (capability is ScoutingShip) {
-            // 1. Update our knowledge about the garbage in the sea
-            capability.getTilesWithGarbageInFoV(Sea, ship.position).forEach { tile ->
+    private fun findUncollectedGarbage(tile: Tile, cap: CollectingShip, target: MutableMap<Int, Int>): Garbage? {
+        return tile.garbage
+            .asSequence()
+            .filter { cap.garbageTypes().contains(it.type) }
+            .filter {
+                if (target.contains(it.id)) {
+                    return@filter target[it.id]!! < it.amount
+                } else {
+                    return@filter true
+                }
+            }
+            .sortedBy { it.id }
+            .firstOrNull()
+    }
+
+    private fun moveScoutingShip(capability: ScoutingShip, ship: Ship, scoutTarget: MutableSet<Int>): Boolean {
+        val result: Boolean
+        // 1. Update our knowledge about the garbage in the sea
+        capability.getTilesWithGarbageInFoV(Sea, ship.position).forEach { tile ->
+            tile.garbage
+                .asSequence()
+                .filter { acceptedGarbageType.contains(it.type) }
+                .forEach { garbage -> partnerGarbage[garbage.id] = tile }
+        }
+        // 2. Navigate to the closest garbage patch.
+        val paths = Dijkstra(ship.position).allPaths()
+        val sorted = paths.toList().sortedBy { it.second.size }
+        val closestGarbagePatch = sorted
+            .map { it.first }
+            .intersect(partnerGarbage.values.toSet())
+            .filter { !scoutTarget.contains(it.id) }
+            .firstOrNull { tile ->
                 tile.garbage
                     .asSequence()
                     .filter { acceptedGarbageType.contains(it.type) }
-                    .forEach { garbage -> partnerGarbage[garbage.id] = tile }
+                    .any()
             }
-            // 2. Navigate to the closest garbage patch.
+        if (closestGarbagePatch != null) {
+            val path = paths[closestGarbagePatch] ?: return false
+            if (ship.isFuelSufficient(path.size)) {
+                ship.move(path)
+                scoutTarget.add(closestGarbagePatch.id)
+            } else {
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath)
+            }
+            result = true
+        } else {
+            result = false
+        }
+        return result
+    }
+
+    private fun moveCollectingShip(ship: Ship, cap: CollectingShip, collectorTarget: MutableMap<Int, Int>): Boolean {
+        val result: Boolean
+        // May not handle the fact that plastic needs collected all at once
+        // 1. Determine if we're on a garbage tile that we can collect
+        val garbage = ship.position.garbage
+            .asSequence()
+            .filter { acceptedGarbageType.contains(it.type) && cap.garbageTypes().contains(it.type) }
+            .sortedBy { it.id }
+            .firstOrNull()
+        if (garbage != null) {
+            cap.collectGarbageFromCurrentTile(ship.position)
+            result = true
+        } else {
+            // Navigate to the closest garbage patch that it can collect.
             val paths = Dijkstra(ship.position).allPaths()
             val sorted = paths.toList().sortedBy { it.second.size }
-            val closestGarbagePatch = sorted
+            val attainableGarbage = sorted
                 .map { it.first }
-                .intersect(partnerGarbage.values.toSet()).firstOrNull { tile ->
-                    tile.garbage
-                        .asSequence()
-                        .filter { acceptedGarbageType.contains(it.type) }
-                        .any { garbage -> !trackedGarbage.contains(garbage) }
+                .intersect(partnerGarbage.values.toSet())
+                .filter { tile ->
+                    findUncollectedGarbage(tile, cap, collectorTarget) != null
                 }
+            // attainableGarbage is a set of tiles that have garbage that the ship can collect
+            // and requires extra ships to be dispatched. Just take the first one:
+            val closestGarbagePatch = attainableGarbage.firstOrNull()
             if (closestGarbagePatch != null) {
                 val path = paths[closestGarbagePatch] ?: return false
                 if (ship.isFuelSufficient(path.size)) {
                     ship.move(path)
+                    val pile = findUncollectedGarbage(closestGarbagePatch, cap, collectorTarget)!!
+                    // Dodgy logic?
+                    val amount = collectorTarget.getOrDefault(pile.id, 0) +
+                        min(cap.capacityForType(pile.type), pile.amount)
+                    collectorTarget[pile.id] = min(amount, pile.amount)
                 } else {
-                    val closestHarborPath = findClosestHarbor(ship.position, ownedHarbors)
+                    val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                     ship.moveUninterrupted(closestHarborPath)
                 }
                 result = true
             } else {
                 result = false
             }
+        }
+        return result
+    }
+
+    private fun tryMove(
+        ship: Ship,
+        scoutTarget: MutableSet<Int>,
+        collectorTarget: MutableMap<Int, Int>,
+        otherShips: List<Ship>
+    ): Boolean {
+        val result: Boolean
+        val capability = ship.capabilities.first()
+        result = if (capability is ScoutingShip) {
+            moveScoutingShip(capability, ship, scoutTarget)
         } else if (capability is CollectingShip) {
-            // TODO
-            result = false
+            moveCollectingShip(ship, capability, collectorTarget)
         } else if (capability is CoordinatingShip) {
-            // TODO
-            result = false
+            handleMoveCoordinating(ship, capability, otherShips)
         } else {
             error("Unknown ship capability")
         }
         return result
     }
 
-    /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature
-     *  todo Handle restrictions **/
-    private fun moveShips() {
+    /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
+    private fun moveShips(otherShips: List<Ship>) {
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
+        // -1. Move ships that are inside a restriction out of a restriction
+        availableShips.filter {
+            it.position.restrictions > 0
+        }.forEach {
+            val path = Dijkstra(it.position).allPaths()
+            val destination = path.keys.firstOrNull { x -> x.restrictions == 0 }
+            if (destination != null) {
+                it.move(path[destination]!!)
+                availableShips.remove(it)
+            }
+        }
         // 0. For each ship that has an assigned destination, tick the
         // ship and remove the ship from the available ships
         availableShips.forEach { if (it.hasTaskAssigned) it.tickTask() }
@@ -163,7 +260,7 @@ class Corporation(
                     ship.move(path)
                     availableShips.remove(ship)
                 } else {
-                    val closestHarborPath: List<Tile> = findClosestHarbor(ship.position, ownedHarbors)
+                    val closestHarborPath: List<Tile> = Helper().findClosestHarbor(ship.position, ownedHarbors)
                     ship.moveUninterrupted(closestHarborPath)
                     availableShips.remove(ship)
                 }
@@ -171,14 +268,44 @@ class Corporation(
         }
         // 2. Iterate over available ships in increasing ID order
         val usedShips: MutableList<Int> = mutableListOf()
+        val scoutTarget: MutableSet<Int> = mutableSetOf()
+        val collectorTarget: MutableMap<Int, Int> = mutableMapOf()
         for (ship in availableShips.sortedBy { it.id }) {
-            val status = tryMove(ship)
+            val status = tryMove(ship, scoutTarget, collectorTarget, otherShips)
             if (status) {
                 usedShips.add(ship.id)
             }
         }
         availableShips.removeAll { usedShips.contains(it.id) }
         // 3. Unused ships are jobless. Something might happen to them here.
+    }
+
+    private fun handleMoveCoordinating(ship: Ship, capability: CoordinatingShip, otherShips: List<Ship>): Boolean {
+        val result: Boolean
+        // 1. Get information about which ships are in field of view
+        val tilesInFov = capability.getTilesInFoV(Sea, ship.position)
+        val shipFov = otherShips.filter { tilesInFov.contains(it.position) && it.owner != lastCoordinatingCorporation }
+
+        // 2. Check for ships on the current tile of the coordinating ship
+        val onPos = shipFov.firstOrNull { it.position == ship.position && it.owner != lastCoordinatingCorporation }
+        if (onPos != null) {
+            result = true
+        } else {
+            // 3. Navigate to the closest ship
+            val closestShipPath = Helper().findClosestShip(ship.position, otherShips)
+            if (closestShipPath.isNotEmpty()) {
+                if (ship.isFuelSufficient(closestShipPath.size)) {
+                    ship.move(closestShipPath)
+                } else {
+                    val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                    ship.moveUninterrupted(closestHarborPath)
+                }
+                result = true
+            } else {
+                result = false
+            }
+        }
+        return result
     }
 
     /**
@@ -210,67 +337,10 @@ class Corporation(
             for (ship in shipsOnHarbor) {
                 val collectingCapability = ship.capabilities.find { it is CollectingShip }
                 if (collectingCapability != null) {
-                    (collectingCapability as CollectingShip).unload()
+                    (collectingCapability as CollectingShip).unload(ship)
                 }
                 ship.refuel()
             }
         }
-    }
-
-    /**
-     * Find the closest ship to a tile
-     *
-     * Takes destination tile and list of ships as input, then uses Dijkstra's algorithm to find the
-     * shortest path to the closest ship
-     *
-     * make it private later
-     * @param tile Destination tile
-     * @param ships List of ships
-     * @return List of tiles representing the shortest path to the closest ship
-     */
-    fun findClosestShip(tile: Tile, ships: List<Ship>): List<Tile> {
-        val dijkstra: Dijkstra = Dijkstra(tile)
-        val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
-
-        var shortestPathLen: Int = Int.MAX_VALUE
-        var shortestPath: List<Tile> = emptyList()
-
-        for (ship in ships) {
-            val path: List<Tile>? = shortestPaths[ship.position]
-            if (path != null && path.size < shortestPathLen) {
-                shortestPathLen = path.size
-                shortestPath = path
-            }
-        }
-
-        return shortestPath
-    }
-
-    /**
-     * Find the closest harbor to a tile
-     *
-     * Takes destination tile and list of harbors as input, then uses Dijkstra's algorithm to find the
-     * shortest path to the closest harbor
-     *
-     * @param tile Destination tile
-     * @param harbors List of harbors
-     * @return List of tiles representing the shortest path to the closest harbor
-     */
-    private fun findClosestHarbor(tile: Tile, harbors: List<Shore>): List<Tile> {
-        val dijkstra: Dijkstra = Dijkstra(tile)
-        val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
-
-        var shortestPathLen: Int = Int.MAX_VALUE
-        var shortestPath: List<Tile> = emptyList()
-
-        for (harbor in harbors) {
-            val path: List<Tile>? = shortestPaths[harbor]
-            if (path != null && path.size < shortestPathLen) {
-                shortestPathLen = path.size
-                shortestPath = path
-            }
-        }
-
-        return shortestPath
     }
 }
