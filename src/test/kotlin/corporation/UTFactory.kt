@@ -1,8 +1,7 @@
 package corporation
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
-import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.ships.ShipCapability
+import de.unisaarland.cs.se.selab.ships.*
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
@@ -244,5 +243,51 @@ class UTFactory {
             Sea.getTileByPos(Vec2D(pos.posX + 1, pos.posY - 1)),  // Northeast
             Sea.getTileByPos(Vec2D(pos.posX - 1, pos.posY + 1))   // Southwest
         )
+    }
+
+    /**
+     * will return 5 scouting, 5 coordinating and 6 collecting ships in order from 1 to 16 with maximum possible values
+     * collecting ships are: 2 oil with indexes 11,12 / 2 plastic with indexes 13,14 and 2 chemicals with indexes 15,16
+     * after getting them need to assign tiles and owner
+     * */
+    fun createShips() : MutableList<Ship> {
+        val scouting = ScoutingShip(5)
+        val collectingOil = CollectingShip(mutableListOf(Container(GarbageType.OIL, 100000)))
+        val collectingPlastic = CollectingShip(mutableListOf(Container(GarbageType.PLASTIC, 5000)))
+        val collectingChemicals = CollectingShip(mutableListOf(Container(GarbageType.PLASTIC, 10000)))
+        val coordinating = CoordinatingShip(1)
+
+        val listOfShips: MutableList<Ship> = mutableListOf()
+        for (i in 1 .. 5){
+            val scoutingShip = Ship(i,100,25,10000, 10, mutableListOf(scouting))
+            scoutingShip.name = "ShipId$i"
+            listOfShips.add(i,scoutingShip)
+        }
+
+        for (i in 6 .. 10 ){
+            val coordinatingShip = Ship(i,50,15,5000, 7, mutableListOf(coordinating))
+            coordinatingShip.name = "ShipId$i"
+            listOfShips.add(i,coordinatingShip)
+        }
+
+        for (i in 11 .. 12){
+            val collectingShip = Ship(i,50,10,5000, 9, mutableListOf(collectingOil))
+            collectingShip.name = "ShipId$i"
+            listOfShips.add(i,collectingShip)
+        }
+
+        for (i in 14 .. 15){
+            val collectingShip = Ship(i,50,10,5000, 9, mutableListOf(collectingPlastic))
+            collectingShip.name = "ShipId$i"
+            listOfShips.add(i,collectingShip)
+        }
+
+        for (i in 15 .. 16){
+            val collectingShip = Ship(i,50,10,5000, 9, mutableListOf(collectingChemicals))
+            collectingShip.name = "ShipId$i"
+            listOfShips.add(i,collectingShip)
+        }
+
+        return listOfShips
     }
 }
