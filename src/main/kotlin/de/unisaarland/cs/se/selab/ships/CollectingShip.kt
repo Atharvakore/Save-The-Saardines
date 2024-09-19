@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.ships
 
 import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
+import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -87,12 +88,35 @@ class CollectingShip(
      * Call: when the corporation is calling on its ships to collect the garbage
      * Logic: checks the garbage of its tile, collects it if it can
      */
-    fun collectGarbageFromCurrentTile(currentTile: Tile) {
-        val acceptableGarbageType = garbageTypes()
-        for (garbageType in acceptableGarbageType) {
-            val amount = currentTile.getAmountOfType(garbageType)
-            val collected = collectGarbage(amount, garbageType)
-            currentTile.removeGarbageOfType(garbageType, collected)
+    fun collectGarbageFromCurrentTile(currentTile: Tile, ship: Ship) {
+        /** val acceptableGarbageType = garbageTypes() **/
+
+        val plasticGarbage: List<Garbage> = currentTile.garbage.filter { it.type == GarbageType.PLASTIC }
+        val oilGarbage: List<Garbage> = currentTile.garbage.filter { it.type == GarbageType.OIL }
+        val chemicalsGarbage: List<Garbage> = currentTile.garbage.filter { it.type == GarbageType.CHEMICALS }
+
+        /** for (garbageType in acceptableGarbageType) {
+         val amount = currentTile.getAmountOfType(garbageType)
+         val collected = collectGarbage(amount, garbageType)
+         currentTile.removeGarbageOfType(garbageType, collected)
+         } **/
+
+        for (plastic in plasticGarbage) {
+            val collected = collectGarbage(plastic.amount, GarbageType.PLASTIC)
+            currentTile.removeGarbageOfType(GarbageType.PLASTIC, collected)
+            LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.PLASTIC, plastic.id, collected)
+        }
+
+        for (oil in oilGarbage) {
+            val collected = collectGarbage(oil.amount, GarbageType.OIL)
+            currentTile.removeGarbageOfType(GarbageType.OIL, collected)
+            LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.OIL, oil.id, collected)
+        }
+
+        for (chemicals in chemicalsGarbage) {
+            val collected = collectGarbage(chemicals.amount, GarbageType.CHEMICALS)
+            currentTile.removeGarbageOfType(GarbageType.CHEMICALS, collected)
+            LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.CHEMICALS, chemicals.id, collected)
         }
     }
 
