@@ -78,8 +78,9 @@ class Garbage(
             for (g in currentTile.garbage.sortedBy { it.id }) {
                 if (g.amount >= amountToBeDrifted) {
                     driftBigGarbages(amountToBeDrifted, g, currentTile, targetForDriftingTile)
+                } else {
+                    amountToBeDrifted = driftSmallGarbages(amountToBeDrifted, g, currentTile, targetForDriftingTile)
                 }
-                amountToBeDrifted = driftSmallGarbages(amountToBeDrifted, g, currentTile, targetForDriftingTile)
             }
         }
     }
@@ -131,7 +132,7 @@ class Garbage(
     /**
      * drifts plastic and chemicals
      */
-    private fun driftPlasticandChemicals(g: Garbage, source: DeepOcean, target: Tile?) {
+    private fun driftPlasticAndChemicals(g: Garbage, source: DeepOcean, target: Tile?) {
         if (target != null) {
             target.addGarbage(g)
             source.garbage.filter { it == g }
