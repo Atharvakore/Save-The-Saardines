@@ -213,6 +213,17 @@ class Corporation(
      *  todo Handle restrictions **/
     private fun moveShips() {
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
+        // -1. Move ships that are inside a restriction out of a restriction
+        availableShips.filter {
+            it.position.restrictions > 0
+        }.forEach {
+            val path = Dijkstra(it.position).allPaths()
+            val destination = path.keys.firstOrNull { it.restrictions == 0 }
+            if (destination != null) {
+                it.move(path[destination]!!)
+                availableShips.remove(it)
+            }
+        }
         // 0. For each ship that has an assigned destination, tick the
         // ship and remove the ship from the available ships
         availableShips.forEach { if (it.hasTaskAssigned) it.tickTask() }
