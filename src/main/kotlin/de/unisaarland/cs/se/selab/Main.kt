@@ -14,6 +14,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.io.PrintWriter
 
 private val logger = KotlinLogging.logger {}
 
@@ -26,6 +27,7 @@ fun main(args: Array<String>) {
     var scenarioFile: String? = null
     var maxTicks: Int? = null
     var outputFile: String? = "stdout"
+    val file: PrintWriter
     for (i in args.indices) {
         when (args[i]) {
             "--map" -> mapFile = args[i + 1]
@@ -37,15 +39,17 @@ fun main(args: Array<String>) {
         }
     }
     if (outputFile != null) {
-        val file = File(outputFile)
+        file = PrintWriter(File(outputFile))
         Logger.setOutBuffer(file)
+    } else {
+        file = PrintWriter(System.out)
     }
-
     val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks, outputFile)
     if (acc != null && maxTicks != null) {
         val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, acc.map)
         sim.start()
     }
+    file.close()
 }
 
 /** The main function for parsing */
