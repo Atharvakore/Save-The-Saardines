@@ -97,6 +97,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
                 shipInstance.addCapability(coordinatingShip)
             }
         }
+        accumulator.addShip(id, shipInstance)
         return shipInstance
     }
 
@@ -133,7 +134,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
     private fun validateShips(shipObjects: JSONArray): Boolean {
         shipObjects.forEach {
             if (validateShip((it ?: error("There should be a ship")) as JSONObject)) {
-                val ship = this.createShip(it as JSONObject)
+                this.createShip(it as JSONObject)
             } else {
                 return false
             }

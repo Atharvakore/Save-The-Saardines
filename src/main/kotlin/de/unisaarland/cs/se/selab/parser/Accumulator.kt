@@ -12,7 +12,7 @@ import de.unisaarland.cs.se.selab.tiles.Vec2D
 
 /** The dataclass which will collect all the data from Parsing */
 class Accumulator {
-    var map: Sea? = null
+    var map: Sea = Sea
     val corporations: MutableMap<Int, Corporation> = mutableMapOf()
     val ships: MutableMap<Int, Ship> = mutableMapOf()
     val events: MutableMap<Int, Event> = mutableMapOf()
