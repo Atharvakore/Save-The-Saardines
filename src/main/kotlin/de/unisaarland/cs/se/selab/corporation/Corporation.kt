@@ -11,6 +11,7 @@ import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
+import kotlin.math.min
 
 const val TODO: String = "Yet to implement"
 
@@ -98,6 +99,21 @@ class Corporation(
         return tasks.filter { it.checkCondition() }
     }
 
+    private fun findUncollectedGarbage(tile: Tile, cap: CollectingShip, target: MutableMap<Int, Int>): Garbage? {
+        return tile.garbage
+            .asSequence()
+            .filter { cap.garbageTypes().contains(it.type) }
+            .filter {
+                if (target.contains(it.id)) {
+                    return@filter target[it.id]!! < it.amount
+                } else {
+                    return@filter true
+                }
+            }
+            .sortedBy { it.id }
+            .firstOrNull()
+    }
+
     private fun tryMove(ship: Ship, scoutTarget: MutableSet<Int>, collectorTarget: MutableMap<Int, Int>): Boolean {
         var result: Boolean
         val capability = ship.capabilities.first()
@@ -154,17 +170,7 @@ class Corporation(
                     .map { it.first }
                     .intersect(partnerGarbage.values.toSet())
                     .filter { tile ->
-                        tile.garbage
-                            .asSequence()
-                            .filter { capability.garbageTypes().contains(it.type) }
-                            .filter {
-                                if (collectorTarget.contains(it.id)) {
-                                    return@filter collectorTarget[it.id]!! < it.amount
-                                } else {
-                                    return@filter true
-                                }
-                            }
-                            .any()
+                        findUncollectedGarbage(tile, capability, collectorTarget) != null
                     }
                 // attainableGarbage is a set of tiles that have garbage that the ship can collect
                 // and requires extra ships to be dispatched. Just take the first one:
@@ -173,7 +179,10 @@ class Corporation(
                     val path = paths[closestGarbagePatch] ?: return false
                     if (ship.isFuelSufficient(path.size)) {
                         ship.move(path)
-                        // TODO: update the collectorTarget to signify that we've dispatched a ship to collect this garbage
+                        val pile = findUncollectedGarbage(closestGarbagePatch, capability, collectorTarget)!!
+                        // Dodgy logic?
+                        val amount = collectorTarget.getOrDefault(pile.id, 0) + min(capability.capacityForType(pile.type), pile.amount)
+                        collectorTarget[pile.id] = min(amount, pile.amount)
                     } else {
                         val closestHarborPath = findClosestHarbor(ship.position, ownedHarbors)
                         ship.moveUninterrupted(closestHarborPath)
