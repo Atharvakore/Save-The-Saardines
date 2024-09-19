@@ -28,7 +28,7 @@ class Tick25Tests {
         val collectingShip = Ship(2, 100, 25, 3000, 10, mutableListOf(capabilityC))
         scoutingShip.position = Sea.getTileById(75)!!
         collectingShip.position = Sea.getTileById(23)!!
-        val g = Garbage(1,800,GarbageType.OIL, null)
+        val g = Garbage(1, 800, GarbageType.OIL, null)
         Sea.getTileById(66)?.addGarbage(g)
         val c1 = Corporation(
             1,
