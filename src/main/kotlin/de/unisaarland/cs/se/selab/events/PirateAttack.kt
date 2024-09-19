@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.events
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.ships.Ship
 
 /** The pirate attack event. */
@@ -16,8 +17,10 @@ class PirateAttack(
     override fun actUponTick(currentTick: Int): Boolean {
         if (currentTick == fireTick) {
             owningCorporation.ownedShips.remove(ship)
+            LoggerEventsAndTasks.logEventStart(id, this)
             return true
         }
+        LoggerEventsAndTasks.logEventStart(id, this)
         return false
     }
 }
