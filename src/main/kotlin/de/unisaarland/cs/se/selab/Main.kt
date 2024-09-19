@@ -54,11 +54,7 @@ fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulato
     if (cond || parseScenario(files, contents, accumulator) == null) {
         return null
     }
-    return if (contents != null) {
-        accumulator
-    } else {
-        null
-    }
+    return accumulator
 }
 
 /** Parsing the Map */
@@ -134,11 +130,12 @@ private fun readFile(validatingSchema: String, file: String): String? {
     if (condition) {
         try {
             objects = requireNotNull(objectFile?.readText())
+            // objects = objectFile?.readText()
             val fail: ValidationFailure? = validator.validate(objects)
             if (fail != null) {
                 Logger.logInitializationInfoFail(file)
             } else {
-                return null
+                return objects
             }
         } catch (notFound: IOException) {
             logger.error(notFound) { "error" }
