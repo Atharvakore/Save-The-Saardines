@@ -119,6 +119,44 @@ class Corporation(
             .firstOrNull()
     }
 
+    private fun moveScoutingShip(capability: ScoutingShip, ship: Ship, scoutTarget: MutableSet<Int>): Boolean {
+        val result: Boolean
+        // 1. Update our knowledge about the garbage in the sea
+        capability.getTilesWithGarbageInFoV(Sea, ship.position).forEach { tile ->
+            tile.garbage
+                .asSequence()
+                .filter { acceptedGarbageType.contains(it.type) }
+                .forEach { garbage -> partnerGarbage[garbage.id] = tile }
+        }
+        // 2. Navigate to the closest garbage patch.
+        val paths = Dijkstra(ship.position).allPaths()
+        val sorted = paths.toList().sortedBy { it.second.size }
+        val closestGarbagePatch = sorted
+            .map { it.first }
+            .intersect(partnerGarbage.values.toSet())
+            .filter { !scoutTarget.contains(it.id) }
+            .firstOrNull { tile ->
+                tile.garbage
+                    .asSequence()
+                    .filter { acceptedGarbageType.contains(it.type) }
+                    .any()
+            }
+        if (closestGarbagePatch != null) {
+            val path = paths[closestGarbagePatch] ?: return false
+            if (ship.isFuelSufficient(path.size)) {
+                ship.move(path)
+                scoutTarget.add(closestGarbagePatch.id)
+            } else {
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath)
+            }
+            result = true
+        } else {
+            result = false
+        }
+        return result
+    }
+
     private fun tryMove(
         ship: Ship,
         scoutTarget: MutableSet<Int>,
@@ -128,36 +166,7 @@ class Corporation(
         var result: Boolean
         val capability = ship.capabilities.first()
         if (capability is ScoutingShip) {
-            // 1. Update our knowledge about the garbage in the sea
-            capability.getTilesWithGarbageInFoV(Sea, ship.position).forEach { tile ->
-                tile.garbage
-                    .asSequence()
-                    .filter { acceptedGarbageType.contains(it.type) }
-                    .forEach { garbage -> partnerGarbage[garbage.id] = tile }
-            }
-            // 2. Navigate to the closest garbage patch.
-            val paths = Dijkstra(ship.position).allPaths()
-            val sorted = paths.toList().sortedBy { it.second.size }
-            val closestGarbagePatch = sorted
-                .map { it.first }
-                .intersect(partnerGarbage.values.toSet()).firstOrNull { tile ->
-                    tile.garbage
-                        .asSequence()
-                        .filter { acceptedGarbageType.contains(it.type) }
-                        .any { garbage -> !trackedGarbage.contains(garbage) }
-                }
-            if (closestGarbagePatch != null) {
-                val path = paths[closestGarbagePatch] ?: return false
-                if (ship.isFuelSufficient(path.size)) {
-                    ship.move(path)
-                } else {
-                    val closestHarborPath = findClosestHarbor(ship.position, ownedHarbors)
-                    ship.moveUninterrupted(closestHarborPath)
-                }
-                result = true
-            } else {
-                result = false
-            }
+            result = moveScoutingShip(capability, ship, scoutTarget)
         } else if (capability is CollectingShip) {
             //  may not handle the fact that plastic needs collected all at once
             // 1. Determine if we're on a garbage tile that we can collect
@@ -209,9 +218,8 @@ class Corporation(
         return result
     }
 
-    /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature
-     *  todo Handle restrictions **/
-    private fun moveShips() {
+    /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
+    private fun moveShips(otherShips: List<Ship>) {
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
         // -1. Move ships that are inside a restriction out of a restriction
         availableShips.filter {
