@@ -3,7 +3,6 @@ package parser
 import de.unisaarland.cs.se.selab.parse
 import de.unisaarland.cs.se.selab.parser.Accumulator
 import kotlin.test.Test
-import kotlin.test.assertFails
 
 class ValidatorTest {
     @Test
@@ -15,7 +14,6 @@ class ValidatorTest {
         val acc: Accumulator? = parse(files, 0, "stdout")
         if (acc != null) {
             assert(acc.tiles.size == 36)
-            print(acc.corporations.size)
             assert(acc.corporations.size == 2)
             assert(acc.ships.size == 2)
             assert(acc.garbage.size == 1)
@@ -31,7 +29,8 @@ class ValidatorTest {
         val corporationsFile: String = "src/systemtest/resources/corporationJsons/corporations.json"
         val scenarioFile: String = "src/systemtest/resources/scenarioJsons/scenario.json"
         val files: List<String> = mutableListOf(mapFile, corporationsFile, scenarioFile)
-        assertFails { parse(files, 0, "stdout") }
+        val accumulator: Accumulator? = parse(files, 0, "stdout")
+        assert(accumulator == null)
     }
 
     @Test
