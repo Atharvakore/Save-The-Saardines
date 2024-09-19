@@ -88,9 +88,10 @@ class CollectingShip(
      * Call: when the corporation is calling on its ships to collect the garbage
      * Logic: checks the garbage of its tile, collects it if it can
      */
-    fun collectGarbageFromCurrentTile(currentTile: Tile, ship: Ship) {
+    fun collectGarbageFromCurrentTile(ship: Ship) {
         /** val acceptableGarbageType = garbageTypes() **/
 
+        val currentTile: Tile = ship.position
         val plasticGarbage: List<Garbage> = currentTile.garbage.filter { it.type == GarbageType.PLASTIC }
         val oilGarbage: List<Garbage> = currentTile.garbage.filter { it.type == GarbageType.OIL }
         val chemicalsGarbage: List<Garbage> = currentTile.garbage.filter { it.type == GarbageType.CHEMICALS }
