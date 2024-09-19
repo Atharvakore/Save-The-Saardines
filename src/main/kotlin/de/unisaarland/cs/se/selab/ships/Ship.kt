@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.ships
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
@@ -42,18 +43,22 @@ class Ship(
         val deepOcean = this.position as? DeepOcean
         val current = deepOcean?.getCurrent()
         if (current != null) {
-            handleCurrentDrift(current)
+            handleCurrentDrift(deepOcean)
         }
     }
 
-    private fun handleCurrentDrift(current: Current) {
-        val speed = current.speed
-        val direction = current.direction
-
-        val desTile = this.position.getTileInDirection(speed / TEN + 1, direction)
-        if (desTile != null) {
-            this.position = desTile
+    private fun handleCurrentDrift(tile: DeepOcean) {
+        val current: Current? = tile.getCurrent()
+        if (current != null) {
+            val speed = current.speed
+            val direction = current.direction
+            val desTile = this.position.getTileInDirection(speed / TEN, direction)
+            if (desTile != null) {
+                this.position = desTile
+            }
+            Logger.logCurrentDriftShip(id, tile.id, position.id)
         }
+
     }
 
     /**
