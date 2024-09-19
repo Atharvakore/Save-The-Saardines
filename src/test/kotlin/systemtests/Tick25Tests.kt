@@ -10,6 +10,7 @@ import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
+import test.kotlin.Witchcraft
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Tick25Tests {
@@ -38,5 +39,6 @@ class Tick25Tests {
             mutableListOf(GarbageType.OIL),
             mutableListOf(),
         )
+        Witchcraft.swallowObject(c1)
     }
 }

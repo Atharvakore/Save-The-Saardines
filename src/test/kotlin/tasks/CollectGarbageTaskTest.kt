@@ -11,8 +11,7 @@ import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Vec2D
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
-import kotlin.test.Test
-import kotlin.test.assertTrue
+import test.kotlin.Witchcraft
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CollectGarbageTaskTest {
@@ -38,13 +37,6 @@ class CollectGarbageTaskTest {
             ship2,
             targetTile
         )
+        Witchcraft.swallowObject(task)
     }
-
-    @Test
-    fun checkConditionTest(){
-        assertTrue{ship1.}
-    }
-
-    //Testing cannot be done further as move ships is yet not complete
 }
-

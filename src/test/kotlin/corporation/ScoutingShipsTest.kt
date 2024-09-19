@@ -1,16 +1,17 @@
 package corporation
 
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
-import de.unisaarland.cs.se.selab.tiles.Vec2D
+import de.unisaarland.cs.se.selab.tiles.Garbage
+import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
-import de.unisaarland.cs.se.selab.tiles.GarbageType
-import de.unisaarland.cs.se.selab.tiles.Garbage
+import de.unisaarland.cs.se.selab.tiles.Vec2D
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
 class ScoutingShipsTest {
     private val factory = UTFactory()
 
@@ -182,7 +183,6 @@ class ScoutingShipsTest {
         val garbageTile6 = Sea.getTileByPos(Vec2D(7, 3))
         val garbageTile7 = Sea.getTileByPos(Vec2D(2, 4))
 
-
         garbageTile1?.garbage = listOf(garbage)
         garbageTile2?.garbage = listOf(garbage)
         garbageTile3?.garbage = listOf(garbage)
@@ -205,4 +205,3 @@ class ScoutingShipsTest {
         assert(scoutingShip1.position == garbageTile1)
     }
 }
-
