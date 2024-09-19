@@ -115,9 +115,9 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         harbors.forEach {
             ownedHarbors.add(
                 (
-                    accumulator.tiles[(it ?: error("This is not a number")) as Int]
-                        ?: error("There should exists this tile")
-                    ) as Shore
+                        accumulator.tiles[(it ?: error("This is not a number")) as Int]
+                            ?: error("There should exists this tile")
+                        ) as Shore
             )
         }
         val garbageTypes: List<GarbageType> = listOf(GarbageType.OIL, GarbageType.PLASTIC, GarbageType.CHEMICALS)
@@ -134,6 +134,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         shipObjects.forEach {
             if (validateShip((it ?: error("There should be a ship")) as JSONObject)) {
                 val ship = this.createShip(it as JSONObject)
+                accumulator.addShip(ship.id, ship)
             } else {
                 return false
             }
