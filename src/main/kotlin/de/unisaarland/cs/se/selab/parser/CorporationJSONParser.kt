@@ -140,9 +140,9 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         val id = corporation.getInt(ID)
         val name = corporation.getString(NAME)
         val ships = corporation.getJSONArray("ships")
-        val ownnedShips: MutableList<Ship> = mutableListOf()
+        val ownedShips: MutableList<Ship> = mutableListOf()
         ships.forEach {
-            ownnedShips.add(
+            ownedShips.add(
                 requireNotNull(accumulator.ships[(it ?: error("ship shouldn't be null in parser case")) as Int])
             )
         }
@@ -157,7 +157,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             )
         }
         val garbageTypes: List<GarbageType> = listOf(GarbageType.OIL, GarbageType.PLASTIC, GarbageType.CHEMICALS)
-        val corporationInstance = Corporation(id, name, ownnedShips, ownedHarbors, garbageTypes, mutableListOf())
+        val corporationInstance = Corporation(id, name, ownedShips, ownedHarbors, garbageTypes, mutableListOf())
         accumulator.addCorporation(id, corporationInstance)
         return corporationInstance
     }
