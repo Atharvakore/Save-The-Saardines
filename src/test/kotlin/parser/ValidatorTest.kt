@@ -3,6 +3,7 @@ package parser
 import de.unisaarland.cs.se.selab.parse
 import de.unisaarland.cs.se.selab.parser.Accumulator
 import kotlin.test.Test
+import kotlin.test.assertFails
 
 class ValidatorTest {
     @Test
@@ -22,6 +23,15 @@ class ValidatorTest {
             assert(acc.tasks.isEmpty())
             assert(acc.rewards.isEmpty())
         }
+    }
+
+    @Test
+    fun testInvalidMap() {
+        val mapFile: String = "src/systemtest/resources/mapFiles/invalidMap.json"
+        val corporationsFile: String = "src/systemtest/resources/corporationJsons/corporations.json"
+        val scenarioFile: String = "src/systemtest/resources/scenarioJsons/scenario.json"
+        val files: List<String> = mutableListOf(mapFile, corporationsFile, scenarioFile)
+        assertFails { parse(files, 0, "stdout") }
     }
 
     @Test

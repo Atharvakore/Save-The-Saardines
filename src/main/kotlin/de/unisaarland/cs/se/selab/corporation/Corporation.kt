@@ -121,7 +121,12 @@ class Corporation(
             .firstOrNull()
     }
 
-    private fun tryMove(ship: Ship, scoutTarget: MutableSet<Int>, collectorTarget: MutableMap<Int, Int>, otherShips: List<Ship>): Boolean {
+    private fun tryMove(
+        ship: Ship,
+        scoutTarget: MutableSet<Int>,
+        collectorTarget: MutableMap<Int, Int>,
+        otherShips: List<Ship>
+    ): Boolean {
         var result: Boolean
         val capability = ship.capabilities.first()
         if (capability is ScoutingShip) {
@@ -159,7 +164,7 @@ class Corporation(
                 result = false
             }
         } else if (capability is CollectingShip) {
-            // TODO: may not handle the fact that plastic needs collected all at once
+            //  may not handle the fact that plastic needs collected all at once
             // 1. Determine if we're on a garbage tile that we can collect
             val garbage = ship.position.garbage
                 .asSequence()
@@ -188,7 +193,8 @@ class Corporation(
                         ship.move(path)
                         val pile = findUncollectedGarbage(closestGarbagePatch, capability, collectorTarget)!!
                         // Dodgy logic?
-                        val amount = collectorTarget.getOrDefault(pile.id, 0) + min(capability.capacityForType(pile.type), pile.amount)
+                        val amount = collectorTarget.getOrDefault(pile.id, 0) +
+                            min(capability.capacityForType(pile.type), pile.amount)
                         collectorTarget[pile.id] = min(amount, pile.amount)
                     } else {
                         val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
