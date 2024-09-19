@@ -21,7 +21,7 @@ class SeaTest {
             ShallowOcean(5, Vec2D(2, 0), listOf(), listOf()),
             ShallowOcean(6, Vec2D(2, 1), listOf(), listOf())
         )
-        Sea.tiles = listOfTiles
+        Sea.tiles.addAll(listOfTiles)
     }
 
     @Test

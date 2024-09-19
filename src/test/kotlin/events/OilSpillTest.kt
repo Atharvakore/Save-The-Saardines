@@ -14,7 +14,7 @@ import kotlin.test.Test
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OilSpillTest {
-    private lateinit var seaInstance: Sea
+    private val seaInstance: Sea = Sea
     val oilSpillEvent = OilSpill(1, 5, Sea, DeepOcean(0, Vec2D(4, 5), listOf(), listOf(), null), 1, 500)
 
     @BeforeAll
@@ -29,7 +29,7 @@ class OilSpillTest {
             DeepOcean(6, Vec2D(3, 6), listOf(), listOf(), null),
             DeepOcean(7, Vec2D(4, 6), listOf(), listOf(), null),
         )
-        Sea.tiles = listOfTiles
+        Sea.tiles.addAll(listOfTiles)
     }
 
     @Test

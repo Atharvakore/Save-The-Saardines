@@ -72,7 +72,7 @@ class RestrictionTest {
             DeepOcean(7, Vec2D(4, 6), listOf(), listOf(), null),
         )
 
-        sea.tiles = tiles
+        sea.tiles.addAll(tiles)
     }
 
     @Test

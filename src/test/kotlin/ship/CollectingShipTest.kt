@@ -71,14 +71,14 @@ class CollectingShipTest {
 
         val tiles: MutableList<Tile> = mutableListOf(tile62, tile72, tile82, tile83, tile74, tile63, tile73)
 
-        sea.tiles = tiles
+        sea.tiles.addAll(tiles)
     }
 
     /** Testing basic functionalities **/
 
     @Test
     fun testUnload() {
-        collectingCapability.unload()
+        collectingCapability.unload(collectingShip)
         for (container in collectingCapability.auxiliaryContainers) {
             assert(container.garbageLoad == 0)
         }
@@ -102,7 +102,7 @@ class CollectingShipTest {
     @Test
     fun testCollectGarbageFromCurrentTile() {
         val tile: Tile = sea.getTileById(63)!!
-        collectingCapability.collectGarbageFromCurrentTile(tile)
+        collectingCapability.collectGarbageFromCurrentTile(collectingShip)
         val garbageOnTileAfterCollection: List<Garbage> = tile.garbage
         assert(garbageOnTileAfterCollection.isEmpty())
     }

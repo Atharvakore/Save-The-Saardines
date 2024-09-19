@@ -60,7 +60,7 @@ class ScoutingShipTest {
 
         val tiles: MutableList<Tile> = mutableListOf(tile62, tile72, tile82, tile83, tile74, tile63, tile73)
 
-        sea.tiles = tiles
+        sea.tiles.addAll(tiles)
     }
 
     /** Testing basic functionalities **/
