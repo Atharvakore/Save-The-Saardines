@@ -73,12 +73,14 @@ fun parseMap(files: List<String?>, contents: List<String>, accumulator: Accumula
     if (mapParser.parseMap(contents[0])) {
         Logger.logInitializationInfoSuccess(requireNotNull(files[0]))
     } else {
+        Logger.logInitializationInfoFail(requireNotNull(files[2]))
         condition = false
     }
     val corpParser = CorporationJSONParser(accumulator)
     if (corpParser.parseCorporationsFile(contents[1])) {
         Logger.logInitializationInfoSuccess(requireNotNull(files[1]))
     } else {
+        Logger.logInitializationInfoFail(requireNotNull(files[1]))
         condition = false
     }
     return if (condition) {
@@ -96,6 +98,7 @@ private fun parseScenario(files: List<String?>, contents: List<String>, accumula
     if (validScenario) {
         Logger.logInitializationInfoSuccess(requireNotNull(files[2]))
     } else {
+        Logger.logInitializationInfoFail(requireNotNull(files[2]))
         return null
     }
     return accumulator
