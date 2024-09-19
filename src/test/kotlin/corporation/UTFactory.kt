@@ -247,7 +247,7 @@ class UTFactory {
 
     /**
      * will return 5 scouting, 5 coordinating and 6 collecting ships in order from 1 to 16 with maximum possible values
-     * collecting ships are: 2 oil with indexes 11,12 / 2 plastic with indexes 13,14 and 2 chemicals with indexes 15,16
+     * collecting ships are: 2 oil with indexes 11, 12 / 2 plastic with indexes 13, 14 and 2 chemicals with indexes 15, 16
      * after getting them need to assign tiles and owner
      * */
     fun createShips() : MutableList<Ship> {
@@ -259,31 +259,31 @@ class UTFactory {
 
         val listOfShips: MutableList<Ship> = mutableListOf()
         for (i in 1..5){
-            val scoutingShip = Ship(i,100,25,10000, 10, mutableListOf(scouting))
+            val scoutingShip = Ship(i, 100, 25, 10000, 10, mutableListOf(scouting))
             scoutingShip.name = "ShipId$i"
             listOfShips.add(i,scoutingShip)
         }
 
         for (i in 6..10 ){
-            val coordinatingShip = Ship(i,50,15,5000, 7, mutableListOf(coordinating))
+            val coordinatingShip = Ship(i, 50, 15, 5000, 7, mutableListOf(coordinating))
             coordinatingShip.name = "ShipId$i"
             listOfShips.add(i,coordinatingShip)
         }
 
         for (i in 11..12){
-            val collectingShip = Ship(i,50,10,5000, 9, mutableListOf(collectingOil))
+            val collectingShip = Ship(i, 50, 10, 5000, 9, mutableListOf(collectingOil))
             collectingShip.name = "ShipId$i"
             listOfShips.add(i,collectingShip)
         }
 
         for (i in 14..15){
-            val collectingShip = Ship(i,50,10,5000, 9, mutableListOf(collectingPlastic))
+            val collectingShip = Ship(i, 50, 10, 5000, 9, mutableListOf(collectingPlastic))
             collectingShip.name = "ShipId$i"
             listOfShips.add(i,collectingShip)
         }
 
         for (i in 15..16){
-            val collectingShip = Ship(i,50,10,5000, 9, mutableListOf(collectingChemicals))
+            val collectingShip = Ship(i, 50, 10, 5000, 9, mutableListOf(collectingChemicals))
             collectingShip.name = "ShipId$i"
             listOfShips.add(i,collectingShip)
         }
