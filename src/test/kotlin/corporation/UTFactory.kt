@@ -258,31 +258,31 @@ class UTFactory {
         val coordinating = CoordinatingShip(1)
 
         val listOfShips: MutableList<Ship> = mutableListOf()
-        for (i in 1 .. 5){
+        for (i in 1..5){
             val scoutingShip = Ship(i,100,25,10000, 10, mutableListOf(scouting))
             scoutingShip.name = "ShipId$i"
             listOfShips.add(i,scoutingShip)
         }
 
-        for (i in 6 .. 10 ){
+        for (i in 6..10 ){
             val coordinatingShip = Ship(i,50,15,5000, 7, mutableListOf(coordinating))
             coordinatingShip.name = "ShipId$i"
             listOfShips.add(i,coordinatingShip)
         }
 
-        for (i in 11 .. 12){
+        for (i in 11..12){
             val collectingShip = Ship(i,50,10,5000, 9, mutableListOf(collectingOil))
             collectingShip.name = "ShipId$i"
             listOfShips.add(i,collectingShip)
         }
 
-        for (i in 14 .. 15){
+        for (i in 14..15){
             val collectingShip = Ship(i,50,10,5000, 9, mutableListOf(collectingPlastic))
             collectingShip.name = "ShipId$i"
             listOfShips.add(i,collectingShip)
         }
 
-        for (i in 15 .. 16){
+        for (i in 15..16){
             val collectingShip = Ship(i,50,10,5000, 9, mutableListOf(collectingChemicals))
             collectingShip.name = "ShipId$i"
             listOfShips.add(i,collectingShip)
