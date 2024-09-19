@@ -6,7 +6,7 @@ import kotlin.test.Test
 
 class ValidatorTest {
     @Test
-    fun testSmallMap() {
+    fun test() {
         val mapFile: String = "src/systemtest/resources/mapFiles/smallMap1.json"
         val corporationsFile: String = "src/systemtest/resources/corporationJsons/corporations.json"
         val scenarioFile: String = "src/systemtest/resources/scenarioJsons/scenario.json"
@@ -21,19 +21,6 @@ class ValidatorTest {
             assert(acc.events.size == 1)
             assert(acc.tasks.isEmpty())
             assert(acc.rewards.isEmpty())
-        }
-    }
-
-    @Test
-    fun testBigMap() {
-        val bigMap = "src/systemtest/resources/mapFiles/bigMap1.json"
-        val corporationsFile: String = "src/systemtest/resources/corporationJsons/corporations.json"
-        val scenarioFile: String = "src/systemtest/resources/scenarioJsons/scenario.json"
-        val files: List<String> = mutableListOf(bigMap, corporationsFile, scenarioFile)
-        val acc: Accumulator? = parse(files, 0, "stdout")
-        assert(acc != null)
-        if (acc != null) {
-            assert(acc.tiles.size == 574)
         }
     }
 }

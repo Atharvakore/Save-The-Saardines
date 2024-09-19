@@ -1,16 +1,13 @@
 package corporation
 
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
-import de.unisaarland.cs.se.selab.tiles.Garbage
-import de.unisaarland.cs.se.selab.tiles.GarbageType
-import de.unisaarland.cs.se.selab.tiles.Sea
-import de.unisaarland.cs.se.selab.tiles.Shore
-import de.unisaarland.cs.se.selab.tiles.Vec2D
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import de.unisaarland.cs.se.selab.tiles.*
 
 class CorporationMoveShipsTest {
 
@@ -31,7 +28,7 @@ class CorporationMoveShipsTest {
         val gType = GarbageType.OIL
         val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList<Task>())
         val capability = ScoutingShip(5)
-        val scoutingShip = Ship(1, 100, 25, 3000, 10, mutableListOf(capability))
+        val  scoutingShip = Ship(1, 100,25, 3000, 10, mutableListOf(capability))
         scoutingShip.owner = c1
         scoutingShip.position = initialTile
         scoutingShip.name = "unknown"
@@ -40,7 +37,7 @@ class CorporationMoveShipsTest {
         // test
         // add garbage to tile
         val garbage = Garbage(1, 200, GarbageType.OIL, emptySet())
-        val garbageTile = Sea.getTileByPos(Vec2D(6, 6))
+        val garbageTile = Sea.getTileByPos(Vec2D(6,6))
         garbageTile?.garbage = listOf(garbage)
 
         c1.run(emptyList())
