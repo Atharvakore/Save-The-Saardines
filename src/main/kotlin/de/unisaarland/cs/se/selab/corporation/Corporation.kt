@@ -98,7 +98,7 @@ class Corporation(
         return tasks.filter { it.checkCondition() }
     }
 
-    private fun tryMove(ship: Ship): Boolean {
+    private fun tryMove(ship: Ship, scoutTarget: MutableSet<Int>, collectorTarget: MutableMap<Int, Int>): Boolean {
         var result: Boolean
         val capability = ship.capabilities.first()
         if (capability is ScoutingShip) {
@@ -114,7 +114,9 @@ class Corporation(
             val sorted = paths.toList().sortedBy { it.second.size }
             val closestGarbagePatch = sorted
                 .map { it.first }
-                .intersect(partnerGarbage.values.toSet()).firstOrNull { tile ->
+                .intersect(partnerGarbage.values.toSet())
+                .filter { !scoutTarget.contains(it.id) }
+                .firstOrNull { tile ->
                     tile.garbage
                         .asSequence()
                         .filter { acceptedGarbageType.contains(it.type) }
@@ -124,6 +126,7 @@ class Corporation(
                 val path = paths[closestGarbagePatch] ?: return false
                 if (ship.isFuelSufficient(path.size)) {
                     ship.move(path)
+                    scoutTarget.add(closestGarbagePatch.id)
                 } else {
                     val closestHarborPath = findClosestHarbor(ship.position, ownedHarbors)
                     ship.moveUninterrupted(closestHarborPath)
@@ -133,7 +136,7 @@ class Corporation(
                 result = false
             }
         } else if (capability is CollectingShip) {
-            // TODO: does not handle the fact that plastic needs collected all at once
+            // TODO: may not handle the fact that plastic needs collected all at once
             // 1. Determine if we're on a garbage tile that we can collect
             val garbage = ship.position.garbage
                 .asSequence()
@@ -144,10 +147,41 @@ class Corporation(
                 capability.collectGarbageFromCurrentTile(ship.position)
                 result = true
             } else {
-                // Navigate to the closest garbage patch that it can collect. TODO
+                // Navigate to the closest garbage patch that it can collect.
                 val paths = Dijkstra(ship.position).allPaths()
                 val sorted = paths.toList().sortedBy { it.second.size }
-                result = false
+                val attainableGarbage = sorted
+                    .map { it.first }
+                    .intersect(partnerGarbage.values.toSet())
+                    .filter { tile ->
+                        tile.garbage
+                            .asSequence()
+                            .filter { capability.garbageTypes().contains(it.type) }
+                            .filter {
+                                if (collectorTarget.contains(it.id)) {
+                                    return@filter collectorTarget[it.id]!! < it.amount
+                                } else {
+                                    return@filter true
+                                }
+                            }
+                            .any()
+                    }
+                // attainableGarbage is a set of tiles that have garbage that the ship can collect
+                // and requires extra ships to be dispatched. Just take the first one:
+                val closestGarbagePatch = attainableGarbage.firstOrNull()
+                if (closestGarbagePatch != null) {
+                    val path = paths[closestGarbagePatch] ?: return false
+                    if (ship.isFuelSufficient(path.size)) {
+                        ship.move(path)
+                        // TODO: update the collectorTarget to signify that we've dispatched a ship to collect this garbage
+                    } else {
+                        val closestHarborPath = findClosestHarbor(ship.position, ownedHarbors)
+                        ship.moveUninterrupted(closestHarborPath)
+                    }
+                    result = true
+                } else {
+                    result = false
+                }
             }
         } else if (capability is CoordinatingShip) {
             // TODO
@@ -185,8 +219,10 @@ class Corporation(
         }
         // 2. Iterate over available ships in increasing ID order
         val usedShips: MutableList<Int> = mutableListOf()
+        val scoutTarget: MutableSet<Int> = mutableSetOf()
+        val collectorTarget: MutableMap<Int, Int> = mutableMapOf()
         for (ship in availableShips.sortedBy { it.id }) {
-            val status = tryMove(ship)
+            val status = tryMove(ship, scoutTarget, collectorTarget)
             if (status) {
                 usedShips.add(ship.id)
             }

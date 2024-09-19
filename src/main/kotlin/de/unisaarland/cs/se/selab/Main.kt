@@ -100,7 +100,7 @@ private fun validate(files: List<String?>): List<String>? {
     for (i in 0..2) {
         val file: String? = files[i]
         if (file != null) {
-            val validatedFile: String = readFile(validatingSchemas[i], file) ?: return null
+            val validatedFile: String = readFile(validatingSchemas[i], file) ?: error("The readFile Shouldn't be null")
             contents.add(validatedFile)
         } else {
             break
