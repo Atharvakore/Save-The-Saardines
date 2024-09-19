@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.tiles
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.logger.Logger
 
 /**
  * Garbage class implementing all minor stuff related to Garbage
@@ -78,20 +79,35 @@ class Garbage(
                 currentTile.getTileInDirection(localCurrent.speed / TEN, localCurrent.direction) ?: return
             for (g in currentTile.garbage.sortedBy { it.id }) {
                 if (g.amount >= amountToBeDrifted) {
-                    driftBigGarbages(amountToBeDrifted, g, currentTile, targetForDriftingTile)
+                    driftBigGarbage(amountToBeDrifted, g, currentTile, targetForDriftingTile)
+                    Logger.logCurrentDriftGarbage(
+                        g.type,
+                        g.id,
+                        amountToBeDrifted,
+                        currentTile.id,
+                        targetForDriftingTile.id
+                    )
+                } else {
+                    amountToBeDrifted = driftSmallGarbage(amountToBeDrifted, g, currentTile, targetForDriftingTile)
+                    Logger.logCurrentDriftGarbage(
+                        g.type,
+                        g.id,
+                        amountToBeDrifted,
+                        currentTile.id,
+                        targetForDriftingTile.id
+                    )
                 }
-                amountToBeDrifted = driftSmallGarbages(amountToBeDrifted, g, currentTile, targetForDriftingTile)
             }
         }
     }
-    private fun driftSmallGarbages(amountToBeDrifted: Int, g: Garbage, source: DeepOcean, targetTile: Tile): Int {
+    private fun driftSmallGarbage(amountToBeDrifted: Int, g: Garbage, source: DeepOcean, targetTile: Tile): Int {
         var amountToBeDriftedTemp = amountToBeDrifted
         if (g.amount + source.amountOfGarbageDriftedThisTick < amountToBeDrifted) {
             if (g.type == GarbageType.OIL) {
                 driftOil(g, source, targetTile)
                 amountToBeDriftedTemp -= g.amount
             }
-            driftPlasticandChemicals(g, source, targetTile)
+            driftPlasticAndChemicals(g, source, targetTile)
             amountToBeDriftedTemp -= g.amount
         }
         return amountToBeDriftedTemp
@@ -101,7 +117,7 @@ class Garbage(
      * drifts big garbage which have more amount than Intensity * 50
      */
 
-    private fun driftBigGarbages(amountToBeDrifted: Int, g: Garbage, source: DeepOcean, target: Tile) {
+    private fun driftBigGarbage(amountToBeDrifted: Int, g: Garbage, source: DeepOcean, target: Tile) {
         if (g.type == GarbageType.OIL) {
             if (target.currentOilLevel() + g.amount <= THOUSAND) {
                 target.addGarbage(createGarbage(amountToBeDrifted, GarbageType.OIL))
@@ -132,7 +148,7 @@ class Garbage(
     /**
      * drifts plastic and chemicals
      */
-    private fun driftPlasticandChemicals(g: Garbage, source: DeepOcean, target: Tile) {
+    private fun driftPlasticAndChemicals(g: Garbage, source: DeepOcean, target: Tile) {
         target.addGarbage(g)
         source.garbage.filter { it == g }
         source.amountOfGarbageDriftedThisTick += g.amount

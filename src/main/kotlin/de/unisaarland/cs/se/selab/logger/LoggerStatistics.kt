@@ -10,7 +10,7 @@ object LoggerStatistics {
 
     /** Log the statistics of the simulation.
      * will have corporations: List<Corporation> */
-    fun logSimulationStatistics(corporations: MutableList<Corporation>) {
+    fun logSimulationStatistics(corporations: List<Corporation>) {
         logSimulationStatisticsCalculated()
         for (corporation in corporations) {
             if (Logger.map.containsKey(corporation.id)) {

@@ -5,7 +5,6 @@ import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Dijkstra
-import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -53,9 +52,7 @@ class Helper {
      * @return List of ships on the harbor
      */
     fun getShipsOnHarbor(corporation: Corporation): List<Ship> {
-        val seaInstance: Sea = Sea
-        val harborTiles: List<Tile> = seaInstance.tiles.filter { (it as Shore).harbor }
-        return corporation.ownedShips.filter { harborTiles.contains(it.position) }
+        return corporation.ownedShips.filter { corporation.ownedHarbors.contains(it.position) }
     }
 
     /**
