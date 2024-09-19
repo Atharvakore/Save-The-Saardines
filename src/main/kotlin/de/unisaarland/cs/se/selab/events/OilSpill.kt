@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.events
 
+import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
@@ -34,8 +35,10 @@ class OilSpill(
                 val newGarbageAmount = min(amount, oilGarbageAmount)
                 tile.garbage = tile.garbage.plus(Garbage.createGarbage(newGarbageAmount, GarbageType.OIL))
             }
+            LoggerEventsAndTasks.logEventStart(id, this)
             return true
         }
+        LoggerEventsAndTasks.logEventStart(id, this)
         return false
     }
 }

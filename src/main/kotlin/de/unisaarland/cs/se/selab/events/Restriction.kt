@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.events
 
+import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -20,8 +21,10 @@ class Restriction(
                 val tile = map?.getTileByPos(it)
                 tile?.restrictions?.inc()
             }
+            LoggerEventsAndTasks.logEventStart(id, this)
             return true
         }
+        LoggerEventsAndTasks.logEventStart(id, this)
         return false
     }
 }
