@@ -133,8 +133,20 @@ class Corporation(
                 result = false
             }
         } else if (capability is CollectingShip) {
-            // TODO
-            result = false
+            // TODO: does not handle the fact that plastic needs collected all at once
+            // 1. Determine if we're on a garbage tile that we can collect
+            val garbage = ship.position.garbage
+                .asSequence()
+                .filter { acceptedGarbageType.contains(it.type) && capability.garbageTypes().contains(it.type) }
+                .sortedBy { it.id }
+                .firstOrNull()
+            if (garbage != null) {
+                capability.collectGarbageFromCurrentTile(ship.position)
+                result = true
+            } else {
+                // Navigate to the closest garbage patch. TODO
+                result = false
+            }
         } else if (capability is CoordinatingShip) {
             // TODO
             result = false
