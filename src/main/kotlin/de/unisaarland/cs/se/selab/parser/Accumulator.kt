@@ -36,7 +36,7 @@ class Accumulator {
 
     /** Getter for tile based on its Coordinates */
     public fun getTileByCoordinate(tileCoordinates: Vec2D): Tile? {
-        return map?.getTileByPos(tileCoordinates)
+        return map.getTileByPos(tileCoordinates)
     }
 
     /** Setter for a tile into accumulator*/

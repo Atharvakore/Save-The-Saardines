@@ -239,7 +239,7 @@ class Corporation(
             it.position.restrictions > 0
         }.forEach {
             val path = Dijkstra(it.position).allPaths()
-            val destination = path.keys.firstOrNull { it.restrictions == 0 }
+            val destination = path.keys.firstOrNull { x -> x.restrictions == 0 }
             if (destination != null) {
                 it.move(path[destination]!!)
                 availableShips.remove(it)
