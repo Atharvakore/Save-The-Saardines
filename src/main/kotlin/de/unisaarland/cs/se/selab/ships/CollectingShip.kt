@@ -81,7 +81,11 @@ class CollectingShip(
         }
     }
 
-    private fun garbageTypes(): Set<GarbageType> {
+    /**
+     * Takes garbage Types from containers
+     * This is wrong
+     */
+    fun garbageTypes(): Set<GarbageType> {
         return auxiliaryContainers.map { it.garbageType }.toSet()
     }
 
@@ -91,5 +95,10 @@ class CollectingShip(
             collected += container.collect(amount, garbageType)
         }
         return collected
+    }
+
+    /** Check capacity for specific type*/
+    fun capacityForType(type: GarbageType): Int {
+        return auxiliaryContainers.filter { it.garbageType == type }.sumBy { it.getGarbageCapacity() - it.garbageLoad }
     }
 }
