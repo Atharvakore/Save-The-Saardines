@@ -4,7 +4,6 @@ import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.tiles.Dijkstra
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -56,62 +55,5 @@ class Helper {
         val seaInstance: Sea = Sea
         val harborTiles: List<Tile> = seaInstance.tiles.filter { (it as Shore).harbor }
         return corporation.ownedShips.filter { harborTiles.contains(it.position) }
-    }
-
-    /**
-     * Find the closest ship to a tile
-     *
-     * Takes destination tile and list of ships as input, then uses Dijkstra's algorithm to find the
-     * shortest path to the closest ship
-     *
-     * make it private later
-     * @param tile Destination tile
-     * @param ships List of ships
-     * @return List of tiles representing the shortest path to the closest ship
-     */
-    fun findClosestShip(tile: Tile, ships: List<Ship>): List<Tile> {
-        val dijkstra: Dijkstra = Dijkstra(tile)
-        val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
-
-        var shortestPathLen: Int = Int.MAX_VALUE
-        var shortestPath: List<Tile> = emptyList()
-
-        for (ship in ships) {
-            val path: List<Tile>? = shortestPaths[ship.position]
-            if (path != null && path.size < shortestPathLen) {
-                shortestPathLen = path.size
-                shortestPath = path
-            }
-        }
-
-        return shortestPath
-    }
-
-    /**
-     * Find the closest harbor to a tile
-     *
-     * Takes destination tile and list of harbors as input, then uses Dijkstra's algorithm to find the
-     * shortest path to the closest harbor
-     *
-     * @param tile Destination tile
-     * @param harbors List of harbors
-     * @return List of tiles representing the shortest path to the closest harbor
-     */
-    fun findClosestHarbor(tile: Tile, harbors: List<Shore>): List<Tile> {
-        val dijkstra: Dijkstra = Dijkstra(tile)
-        val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
-
-        var shortestPathLen: Int = Int.MAX_VALUE
-        var shortestPath: List<Tile> = emptyList()
-
-        for (harbor in harbors) {
-            val path: List<Tile>? = shortestPaths[harbor]
-            if (path != null && path.size < shortestPathLen) {
-                shortestPathLen = path.size
-                shortestPath = path
-            }
-        }
-
-        return shortestPath
     }
 }
