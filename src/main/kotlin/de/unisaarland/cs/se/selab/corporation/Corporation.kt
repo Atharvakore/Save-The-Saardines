@@ -118,7 +118,7 @@ class Corporation(
                     tile.garbage
                         .asSequence()
                         .filter { acceptedGarbageType.contains(it.type) }
-                        .any { garbage -> !trackedGarbage.contains(garbage) }
+                        .any()
                 }
             if (closestGarbagePatch != null) {
                 val path = paths[closestGarbagePatch] ?: return false
@@ -144,7 +144,9 @@ class Corporation(
                 capability.collectGarbageFromCurrentTile(ship.position)
                 result = true
             } else {
-                // Navigate to the closest garbage patch. TODO
+                // Navigate to the closest garbage patch that it can collect. TODO
+                val paths = Dijkstra(ship.position).allPaths()
+                val sorted = paths.toList().sortedBy { it.second.size }
                 result = false
             }
         } else if (capability is CoordinatingShip) {
