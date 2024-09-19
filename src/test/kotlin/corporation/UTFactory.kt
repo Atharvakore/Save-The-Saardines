@@ -4,16 +4,16 @@ import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.ships.ShipCapability
 import de.unisaarland.cs.se.selab.tasks.Task
-import de.unisaarland.cs.se.selab.tiles.Tile
-import de.unisaarland.cs.se.selab.tiles.Sea
-import de.unisaarland.cs.se.selab.tiles.Vec2D
 import de.unisaarland.cs.se.selab.tiles.Current
-import de.unisaarland.cs.se.selab.tiles.Direction
-import de.unisaarland.cs.se.selab.tiles.Shore
-import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
-import de.unisaarland.cs.se.selab.tiles.GarbageType
+import de.unisaarland.cs.se.selab.tiles.Direction
 import de.unisaarland.cs.se.selab.tiles.Garbage
+import de.unisaarland.cs.se.selab.tiles.GarbageType
+import de.unisaarland.cs.se.selab.tiles.Sea
+import de.unisaarland.cs.se.selab.tiles.ShallowOcean
+import de.unisaarland.cs.se.selab.tiles.Shore
+import de.unisaarland.cs.se.selab.tiles.Tile
+import de.unisaarland.cs.se.selab.tiles.Vec2D
 
 class UTFactory {
 
@@ -142,7 +142,6 @@ class UTFactory {
         return (1 until num).associateWith { emptyList() }
     }
 
-
     /**
      * creation of the map provided in the spec
      * not considering adjacentTiles
@@ -150,12 +149,12 @@ class UTFactory {
     fun createTestingMap() {
         val shoreTiles = createShoreForSea()
         val shallowOceanTiles = listOf(
-            ShallowOcean(23, Vec2D(2,2), emptyList(), emptyList()),
-            ShallowOcean(24, Vec2D(3,2), emptyList(), emptyList()),
-            ShallowOcean(25, Vec2D(4,2), emptyList(), emptyList()),
-            ShallowOcean(26, Vec2D(5,2), emptyList(), emptyList()),
-            ShallowOcean(27, Vec2D(6,2), emptyList(), emptyList()),
-            ShallowOcean(28, Vec2D(7,2), emptyList(), emptyList()),
+            ShallowOcean(23, Vec2D(2, 2), emptyList(), emptyList()),
+            ShallowOcean(24, Vec2D(3, 2), emptyList(), emptyList()),
+            ShallowOcean(25, Vec2D(4, 2), emptyList(), emptyList()),
+            ShallowOcean(26, Vec2D(5, 2), emptyList(), emptyList()),
+            ShallowOcean(27, Vec2D(6, 2), emptyList(), emptyList()),
+            ShallowOcean(28, Vec2D(7, 2), emptyList(), emptyList()),
             ShallowOcean(33, Vec2D(2, 3), emptyList(), emptyList()),
             ShallowOcean(38, Vec2D(7, 3), emptyList(), emptyList()),
             ShallowOcean(43, Vec2D(2, 4), emptyList(), emptyList()),
@@ -191,7 +190,7 @@ class UTFactory {
         Sea.tiles.addAll(deepOceanTiles)
     }
 
-    private fun createShoreForSea() : List<Shore>{
+    private fun createShoreForSea(): List<Shore> {
         val shoreTiles = listOf(
             Shore(12, Vec2D(1, 1), emptyList(), emptyList(), harbor = false),
             Shore(13, Vec2D(2, 1), emptyList(), emptyList(), harbor = false),

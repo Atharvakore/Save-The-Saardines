@@ -18,14 +18,14 @@ import kotlin.test.assertTrue
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RestrictionTest {
-    lateinit var coordinatingShip: Ship
+    lateinit var ship: Ship
     val sea: Sea = Sea
     var restrictionEvent = Restriction(1, 1, sea, DeepOcean(6, Vec2D(3, 6), listOf(), listOf(), null), 2)
     var endRestriction = EndRestriction(2, 5, sea, DeepOcean(6, Vec2D(3, 6), listOf(), listOf(), null), 1)
 
     @BeforeAll
     fun setUp() {
-        coordinatingShip = Ship(1, 50, 15, 5000, 7, mutableListOf())
+        ship = Ship(1, 50, 15, 5000, 7, mutableListOf())
 
         val tile62: Tile = Shore(62, Vec2D(1, 6), listOf(), listOf(), false)
         val tile72: Tile = Shore(72, Vec2D(1, 7), listOf(), listOf(), false)
