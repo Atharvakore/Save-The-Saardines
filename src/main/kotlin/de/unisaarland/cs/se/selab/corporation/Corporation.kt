@@ -165,60 +165,66 @@ class Corporation(
         return result
     }
 
+    private fun moveCollectingShip(ship: Ship, cap: CollectingShip, collectorTarget: MutableMap<Int, Int>): Boolean {
+        val result: Boolean
+        // May not handle the fact that plastic needs collected all at once
+        // 1. Determine if we're on a garbage tile that we can collect
+        val garbage = ship.position.garbage
+            .asSequence()
+            .filter { acceptedGarbageType.contains(it.type) && cap.garbageTypes().contains(it.type) }
+            .sortedBy { it.id }
+            .firstOrNull()
+        if (garbage != null) {
+            cap.collectGarbageFromCurrentTile(ship.position)
+            result = true
+        } else {
+            // Navigate to the closest garbage patch that it can collect.
+            val paths = Dijkstra(ship.position).allPaths()
+            val sorted = paths.toList().sortedBy { it.second.size }
+            val attainableGarbage = sorted
+                .map { it.first }
+                .intersect(partnerGarbage.values.toSet())
+                .filter { tile ->
+                    findUncollectedGarbage(tile, cap, collectorTarget) != null
+                }
+            // attainableGarbage is a set of tiles that have garbage that the ship can collect
+            // and requires extra ships to be dispatched. Just take the first one:
+            val closestGarbagePatch = attainableGarbage.firstOrNull()
+            if (closestGarbagePatch != null) {
+                val path = paths[closestGarbagePatch] ?: return false
+                if (ship.isFuelSufficient(path.size)) {
+                    ship.move(path)
+                    val pile = findUncollectedGarbage(closestGarbagePatch, cap, collectorTarget)!!
+                    // Dodgy logic?
+                    val amount = collectorTarget.getOrDefault(pile.id, 0) +
+                        min(cap.capacityForType(pile.type), pile.amount)
+                    collectorTarget[pile.id] = min(amount, pile.amount)
+                } else {
+                    val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                    ship.moveUninterrupted(closestHarborPath)
+                }
+                result = true
+            } else {
+                result = false
+            }
+        }
+        return result
+    }
+
     private fun tryMove(
         ship: Ship,
         scoutTarget: MutableSet<Int>,
         collectorTarget: MutableMap<Int, Int>,
         otherShips: List<Ship>
     ): Boolean {
-        var result: Boolean
+        val result: Boolean
         val capability = ship.capabilities.first()
-        if (capability is ScoutingShip) {
-            result = moveScoutingShip(capability, ship, scoutTarget)
+        result = if (capability is ScoutingShip) {
+            moveScoutingShip(capability, ship, scoutTarget)
         } else if (capability is CollectingShip) {
-            //  may not handle the fact that plastic needs collected all at once
-            // 1. Determine if we're on a garbage tile that we can collect
-            val garbage = ship.position.garbage
-                .asSequence()
-                .filter { acceptedGarbageType.contains(it.type) && capability.garbageTypes().contains(it.type) }
-                .sortedBy { it.id }
-                .firstOrNull()
-            if (garbage != null) {
-                capability.collectGarbageFromCurrentTile(ship.position)
-                result = true
-            } else {
-                // Navigate to the closest garbage patch that it can collect.
-                val paths = Dijkstra(ship.position).allPaths()
-                val sorted = paths.toList().sortedBy { it.second.size }
-                val attainableGarbage = sorted
-                    .map { it.first }
-                    .intersect(partnerGarbage.values.toSet())
-                    .filter { tile ->
-                        findUncollectedGarbage(tile, capability, collectorTarget) != null
-                    }
-                // attainableGarbage is a set of tiles that have garbage that the ship can collect
-                // and requires extra ships to be dispatched. Just take the first one:
-                val closestGarbagePatch = attainableGarbage.firstOrNull()
-                if (closestGarbagePatch != null) {
-                    val path = paths[closestGarbagePatch] ?: return false
-                    if (ship.isFuelSufficient(path.size)) {
-                        ship.move(path)
-                        val pile = findUncollectedGarbage(closestGarbagePatch, capability, collectorTarget)!!
-                        // Dodgy logic?
-                        val amount = collectorTarget.getOrDefault(pile.id, 0) +
-                            min(capability.capacityForType(pile.type), pile.amount)
-                        collectorTarget[pile.id] = min(amount, pile.amount)
-                    } else {
-                        val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                        ship.moveUninterrupted(closestHarborPath)
-                    }
-                    result = true
-                } else {
-                    result = false
-                }
-            }
+            moveCollectingShip(ship, capability, collectorTarget)
         } else if (capability is CoordinatingShip) {
-            result = handleMoveCoordinating(ship, capability, otherShips)
+            handleMoveCoordinating(ship, capability, otherShips)
         } else {
             error("Unknown ship capability")
         }
