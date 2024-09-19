@@ -50,14 +50,14 @@ class Corporation(
                 otherShips.filter { otherCorporations.contains(it.owner) }
 
             otherShipsToCooperate.forEach { otherShipToCooperate ->
-                getInfoFromShip(otherShipToCooperate)
+                getInfoFromShip(otherShipToCooperate, coordinatingShip)
             }
             val lastCorporation: Corporation? = otherCorporations.maxByOrNull { it.id }
             lastCoordinatingCorporation = lastCorporation
         }
     }
 
-    private fun getInfoFromShip(otherShip: Ship) {
+    private fun getInfoFromShip(otherShip: Ship, coordinatingShip: Ship) {
         val telescopes: List<ScoutingShip> = otherShip.capabilities
             .filterIsInstance<ScoutingShip>()
         telescopes.forEach { telescope ->
@@ -71,6 +71,12 @@ class Corporation(
                     .forEach { garbage -> partnerGarbage[garbage.id] = tile }
             }
         }
+        LoggerCorporationAction.logCooperationBetweenCorporations(
+            id,
+            otherShip.owner.id,
+            coordinatingShip.id,
+            otherShip.id
+        )
     }
 
     /**
