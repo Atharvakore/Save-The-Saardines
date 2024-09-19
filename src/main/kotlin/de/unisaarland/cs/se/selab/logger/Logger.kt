@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.logger
 
 import de.unisaarland.cs.se.selab.tiles.GarbageType
+import java.io.File
 import java.io.PrintWriter
 
 /**
@@ -13,6 +14,11 @@ object Logger {
     var totalChemicalsCollected = 0
     val map: MutableMap<Int, Int> = mutableMapOf()
     var output: LogOutputStream = BackedLogOutputStream(PrintWriter(System.out))
+
+    /** sets the output file in case given, default is stdout */
+    fun setOutBuffer(file: File) {
+        output = BackedLogOutputStream(PrintWriter(file))
+    }
 
     /** Logging function*/
     fun log(message: String) {
