@@ -93,7 +93,6 @@ class CollectingShip(
         }
         return collected
     }
-
     fun capacityForType(type: GarbageType): Int {
         return auxiliaryContainers.filter { it.garbageType == type }.sumBy { it.getGarbageCapacity() - it.garbageLoad }
     }
