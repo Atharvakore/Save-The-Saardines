@@ -36,12 +36,14 @@ fun main(args: Array<String>) {
             "--help" -> continue
         }
     }
+    if (outputFile != null) {
+        val file = File(outputFile)
+        Logger.setOutBuffer(file)
+    }
     val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks, outputFile)
     if (acc != null && maxTicks != null) {
-        val sim = acc.map?.let {
-            Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, it)
-        }
-        sim?.start()
+        val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, acc.map)
+        sim.start()
     }
 }
 
