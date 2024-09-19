@@ -66,6 +66,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         val acceleration = ship.getInt(ACCELERATION)
         val fuelCapacity = ship.getInt(FUELCAPACITY)
         val fuelConsumption = ship.getInt(FUELCONSUMPTION)
+        val name = ship.getString(NAME)
         val shipInstance = Ship(
             id,
             maxVelocity,
@@ -75,7 +76,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             mutableListOf(),
         )
         shipInstance.position = requireNotNull(accumulator.tiles[location])
-
+        shipInstance.name = name
         when (type) {
             COLLECTER -> {
                 val capacity = ship.getInt(CAPACITY)
@@ -102,7 +103,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
 
     private fun checkShipUnique(id: Int, name: String): Boolean {
         var result = true
-        result = result && id < 0
+        result = result && id >= 0
         result = result && !accumulator.ships.containsKey(id)
         result = result && accumulator.ships.none { it.value.name == name }
 
