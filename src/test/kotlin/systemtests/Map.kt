@@ -1,12 +1,6 @@
-package corporation
+package systemtests
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
-import de.unisaarland.cs.se.selab.ships.CollectingShip
-import de.unisaarland.cs.se.selab.ships.Container
-import de.unisaarland.cs.se.selab.ships.CoordinatingShip
-import de.unisaarland.cs.se.selab.ships.ScoutingShip
-import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.ships.ShipCapability
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
@@ -18,53 +12,9 @@ import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
+import kotlin.collections.Map
 
-class UTFactory {
-
-    fun createListOfCorporations(
-        numOfCorp: Int,
-        ownedShips: Map<Int, MutableList<Ship>>,
-        ownedHarbors: Map<Int, List<Shore>>,
-        acceptedGarbageType: Map<Int, List<GarbageType>>,
-        tasks: Map<Int, List<Task>>
-    ): List<Corporation> {
-        return (1 until numOfCorp).map { id ->
-            val ships = ownedShips[id] ?: mutableListOf()
-            val harbors = ownedHarbors[id].orEmpty()
-            val acceptedGarbage = acceptedGarbageType[id].orEmpty()
-            val corpTasks = tasks[id].orEmpty()
-            Corporation(id, "unknown$id", ships, harbors, acceptedGarbage, corpTasks)
-        }
-    }
-
-    fun createListOfShip(
-        numOfShips: Int,
-        capabilities: Map<Int, MutableList<ShipCapability>>,
-        position: Map<Int, Tile>,
-        owner: Map<Int, Corporation>
-    ): List<Ship> {
-        return (1 until numOfShips).map { id ->
-            val velocity = 50
-            val accel = 10
-            val fuelCap = 5000
-            val fuelConsume = 7
-            val capability = capabilities[id] ?: mutableListOf()
-            val ship = Ship(
-                id = id,
-                maxVelocity = velocity,
-                acceleration = accel,
-                fuelCapacity = fuelCap,
-                fuelConsumption = fuelConsume,
-                capabilities = capability
-            )
-            ship.position = position[id] ?: Shore(0, Vec2D(-1, -1), emptyList(), emptyList(), false)
-            ship.owner = owner[id] ?: Corporation(-1, "Unknown", mutableListOf(), emptyList(), emptyList(), emptyList())
-            ship.name = "Ship$id" // Assign a name to the ship
-
-            ship // Return the ship
-        }
-    }
-
+class Map {
     fun createShallowOceanTiles(
         numOfTiles: Int,
         pos: Map<Int, Vec2D>,
@@ -73,8 +23,8 @@ class UTFactory {
     ): List<ShallowOcean> {
         return (1 until numOfTiles).map { id ->
             val position = pos[id] ?: Vec2D(0, 0)
-            val adjacent = adjacentTiles[id].orEmpty()
-            val tileGarbage = garbage[id].orEmpty()
+            val adjacent = adjacentTiles[id] ?: emptyList()
+            val tileGarbage = garbage[id] ?: emptyList()
             ShallowOcean(
                 id,
                 position,
@@ -93,8 +43,8 @@ class UTFactory {
     ): List<Shore> {
         return (1 until numOfTiles).map { id ->
             val position = pos[id] ?: Vec2D(0, 0)
-            val adjacent = adjacentTiles[id].orEmpty()
-            val tileGarbage = garbage[id].orEmpty()
+            val adjacent = adjacentTiles[id] ?: emptyList()
+            val tileGarbage = garbage[id] ?: emptyList()
             val tileCurrent = harbor[id] ?: false
             Shore(
                 id,
@@ -115,8 +65,8 @@ class UTFactory {
     ): List<DeepOcean> {
         return (1 until numOfTiles).map { id ->
             val position = pos[id] ?: Vec2D(0, 0)
-            val adjacent = adjacentTiles[id].orEmpty()
-            val tileGarbage = garbage[id].orEmpty()
+            val adjacent = adjacentTiles[id] ?: emptyList()
+            val tileGarbage = garbage[id] ?: emptyList()
             val tileCurrent = current[id]
             DeepOcean(
                 id,
@@ -248,51 +198,5 @@ class UTFactory {
             Sea.getTileByPos(Vec2D(pos.posX + 1, pos.posY - 1)), // Northeast
             Sea.getTileByPos(Vec2D(pos.posX - 1, pos.posY + 1)) // Southwest
         )
-    }
-
-    /**
-     * will return 5 scouting, 5 coordinating and 6 collecting ships in order from 1 to 16 with maximum possible values
-     * collecting ships are: 2 oil with indexes 11, 12 / 2 plastic with indexes 13, 14 and 2 chemicals with indexes 15,
-     * 16 after getting them need to assign tiles and owner
-     * */
-    fun createShips(): MutableList<Ship> {
-        val scouting = ScoutingShip(5)
-        val collectingOil = CollectingShip(mutableListOf(Container(GarbageType.OIL, 100000)))
-        val collectingPlastic = CollectingShip(mutableListOf(Container(GarbageType.PLASTIC, 5000)))
-        val collectingChemicals = CollectingShip(mutableListOf(Container(GarbageType.PLASTIC, 10000)))
-        val coordinating = CoordinatingShip(1)
-
-        val listOfShips: MutableList<Ship> = mutableListOf()
-        for (i in 1..5) {
-            val scoutingShip = Ship(i, 100, 25, 10000, 10, mutableListOf(scouting))
-            scoutingShip.name = "ShipId$i"
-            listOfShips.add(i, scoutingShip)
-        }
-
-        for (i in 6..10) {
-            val coordinatingShip = Ship(i, 50, 15, 5000, 7, mutableListOf(coordinating))
-            coordinatingShip.name = "ShipId$i"
-            listOfShips.add(i, coordinatingShip)
-        }
-
-        for (i in 11..12) {
-            val collectingShip = Ship(i, 50, 10, 5000, 9, mutableListOf(collectingOil))
-            collectingShip.name = "ShipId$i"
-            listOfShips.add(i, collectingShip)
-        }
-
-        for (i in 14..15) {
-            val collectingShip = Ship(i, 50, 10, 5000, 9, mutableListOf(collectingPlastic))
-            collectingShip.name = "ShipId$i"
-            listOfShips.add(i, collectingShip)
-        }
-
-        for (i in 15..16) {
-            val collectingShip = Ship(i, 50, 10, 5000, 9, mutableListOf(collectingChemicals))
-            collectingShip.name = "ShipId$i"
-            listOfShips.add(i, collectingShip)
-        }
-
-        return listOfShips
     }
 }

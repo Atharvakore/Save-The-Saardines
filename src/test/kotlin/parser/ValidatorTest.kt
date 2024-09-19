@@ -6,7 +6,7 @@ import kotlin.test.Test
 
 class ValidatorTest {
     @Test
-    fun testSmallMap() {
+    fun test() {
         val mapFile: String = "src/systemtest/resources/mapFiles/smallMap1.json"
         val corporationsFile: String = "src/systemtest/resources/corporationJsons/corporations.json"
         val scenarioFile: String = "src/systemtest/resources/scenarioJsons/scenario.json"
