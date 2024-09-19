@@ -90,6 +90,7 @@ class Corporation(
         collectGarbage()
         logger.logCorporationCooperationStart(id)
         cooperate(otherShips)
+        logger.logCorporationRefueling(id)
         refuelAndUnloadShips()
         logger.logCorporationFinishedActions(id)
     }
