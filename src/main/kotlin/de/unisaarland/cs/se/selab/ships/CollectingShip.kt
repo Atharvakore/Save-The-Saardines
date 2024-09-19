@@ -81,7 +81,8 @@ class CollectingShip(
         }
     }
 
-    private fun garbageTypes(): Set<GarbageType> {
+    // This is wrong.
+    fun garbageTypes(): Set<GarbageType> {
         return auxiliaryContainers.map { it.garbageType }.toSet()
     }
 
