@@ -57,8 +57,8 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
     private fun validateCorporation(corporation: JSONObject): Boolean {
         var condition = corporation.has(ID)
         condition = condition && accumulator.corporations[corporation.getInt(ID)] == null
-        val harbors = corporation.getJSONArray(HOMEHARBORS).toSet()
-        condition = condition && harbors == (
+        val ships = corporation.getJSONArray(SHIPS).toSet()
+        condition = condition && ships == (
             accumulator.mapCorporationToShips[corporation.getInt(ID)]?.toSet()
                 ?: return false
             )
