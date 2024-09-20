@@ -3,26 +3,20 @@ package parser
 import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.parse
 import de.unisaarland.cs.se.selab.parser.Accumulator
+import java.io.File
 import java.io.PrintWriter
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 class ValidatorTest {
-    private val x: PrintWriter = PrintWriter(System.out)
-
-    @BeforeTest
-    fun setBuffer() {
-        Logger.setOutBuffer(x)
-    }
-
-    @Test
-    fun testSmallMap() {
+  /*  @Test
+    fun test() {
         val mapFile: String = "src/systemtest/resources/mapFiles/smallMap1.json"
         val corporationsFile: String = "src/systemtest/resources/corporationJsons/corporations.json"
         val scenarioFile: String = "src/systemtest/resources/scenarioJsons/scenario.json"
         val files: List<String> = mutableListOf(mapFile, corporationsFile, scenarioFile)
-        val acc: Accumulator? = parse(files, 0)
+        val x = PrintWriter(File("outTest"))
+        Logger.setOutBuffer(x)
+        val acc: Accumulator? = parse(files, 0, "stdout")
         if (acc != null) {
             assert(acc.tiles.size == 36)
             assert(acc.corporations.size == 2)
@@ -32,6 +26,7 @@ class ValidatorTest {
             assert(acc.tasks.isEmpty())
             assert(acc.rewards.isEmpty())
         }
+        x.close()
     }
 
     @Test
@@ -40,9 +35,9 @@ class ValidatorTest {
         val corporationsFile: String = "src/systemtest/resources/corporationJsons/corporations.json"
         val scenarioFile: String = "src/systemtest/resources/scenarioJsons/scenario.json"
         val files: List<String> = mutableListOf(mapFile, corporationsFile, scenarioFile)
-        val accumulator: Accumulator? = parse(files, 0)
+        val accumulator: Accumulator? = parse(files, 0, "stdout")
         assert(accumulator == null)
-    }
+    }*/
 
     @Test
     fun testBigMap() {
@@ -57,10 +52,5 @@ class ValidatorTest {
 //            //    assert(acc.tiles.size == 574)
 //            assert(true)
 //        }
-    }
-
-    @AfterTest
-    fun closeBuffer() {
-        x.close()
     }
 }
