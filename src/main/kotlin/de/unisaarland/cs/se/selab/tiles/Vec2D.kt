@@ -1,7 +1,5 @@
 package de.unisaarland.cs.se.selab.tiles
 
-import kotlin.math.abs
-
 /**
  * A simple 2D vector class. It is used to represent positions on the sea.
  * @property posX the x-coordinate of the vector
@@ -32,14 +30,12 @@ class Vec2D(var posX: Int, var posY: Int) {
     fun tilesInRadius(radius: Int) = iterator {
         val centerX = posX - (posY + (posY and 1)) / 2
         val centerZ = posY
-        val centerY = -centerX - centerZ
         for (dx in -radius..radius) {
             for (dy in -radius..radius) {
                 for (dz in -radius..radius) {
                     if (dx + dy + dz == 0) {
                         val x = centerX + dx
                         val z = centerZ + dz
-                        val y = centerY + dy
                         val col = x + (z + (z and 1)) / 2
                         val row = z
                         yield(Vec2D(col, row))
