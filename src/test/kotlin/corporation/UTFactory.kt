@@ -234,7 +234,7 @@ class UTFactory {
         return shoreTiles
     }
 
-    fun findAdjacentTiles(pos: Vec2D): List<Tile?> {
+    private fun findAdjacentTiles(pos: Vec2D): List<Tile?> {
         val nextValue = if (pos.posX % 2 == 0 && pos.posY % 2 == 0) {
             1
         } else {
