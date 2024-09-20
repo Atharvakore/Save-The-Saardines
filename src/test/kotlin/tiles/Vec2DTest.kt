@@ -33,7 +33,6 @@ class Vec2DTest {
         )
     }
 
-
     @Test
     fun testGetTilesInRadius2() {
         val currPosition: Vec2D = Vec2D(2, 7)
