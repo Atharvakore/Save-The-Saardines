@@ -45,8 +45,10 @@ class TileTest {
         tile63.adjacentTiles = adjTile63
         tile73.adjacentTiles = adjTile73
 
-        val garbage: Garbage = Garbage(1, 100, GarbageType.CHEMICALS, null)
-        tile63.addGarbage(garbage)
+        val chemical: Garbage = Garbage(1, 100, GarbageType.CHEMICALS, null)
+        val oil: Garbage = Garbage(2, 600, GarbageType.OIL, null)
+        tile82.addGarbage(oil)
+        tile63.addGarbage(chemical)
 
         val tiles: MutableList<Tile> = mutableListOf(tile62, tile72, tile82, tile83, tile74, tile63, tile73)
 
@@ -87,7 +89,7 @@ class TileTest {
 
     @Test
     fun testCurrentOilLevel() {
-        val currTile: Tile? = sea.getTileById(6)
+        val currTile: Tile? = sea.getTileById(82)
         val oilLevel: Int = currTile?.currentOilLevel()!!
         assert(oilLevel == 600)
     }
