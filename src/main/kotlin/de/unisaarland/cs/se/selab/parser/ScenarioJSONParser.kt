@@ -8,6 +8,7 @@ import de.unisaarland.cs.se.selab.events.PirateAttack
 import de.unisaarland.cs.se.selab.events.Restriction
 import de.unisaarland.cs.se.selab.events.Storm
 import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.ships.THOUSAND
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Direction
 import de.unisaarland.cs.se.selab.tiles.Garbage
@@ -180,10 +181,13 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
         val locationId: Int = garbage.getInt(location)
         val location: Tile? = accumulator.tiles[locationId]
         val exists: Boolean = location != null && locationId >= 0 && typeExists
-        val condition: Boolean = uniqueId && garbage.getInt("amount") > 0 && locationId >= 0
+        var condition: Boolean = uniqueId && garbage.getInt(AMOUNT) > 0 && locationId >= 0
         var locationIsNotLand: Boolean = location is Shore || location is ShallowOcean
         if (garbageType != "CHEMICALS") {
             locationIsNotLand = locationIsNotLand || location is DeepOcean
+        }
+        if (garbageType == "OIL") {
+            condition = condition && garbage.getInt(AMOUNT) <= THOUSAND
         }
         if (condition && exists && locationIsNotLand) {
             return createGarbageObj(garbage)
