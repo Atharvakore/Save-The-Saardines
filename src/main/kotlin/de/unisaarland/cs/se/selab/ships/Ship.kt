@@ -74,12 +74,13 @@ class Ship(
         if (path.size >= distanceLength) {
             desTile = path[distanceLength - 1]
             consumedFuel += distanceLength * TEN * fuelConsumption
+            LoggerCorporationAction.logShipMovement(id, acceleration, desTile.id)
         } else {
             desTile = path.last()
             consumedFuel += path.size * TEN * fuelConsumption
+            LoggerCorporationAction.logShipMovement(id, acceleration, desTile.id)
         }
         this.position = desTile
-        LoggerCorporationAction.logShipMovement(id, acceleration, position.id)
     }
 
     /**
