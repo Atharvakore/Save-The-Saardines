@@ -85,7 +85,6 @@ open class Tile(
             if (toBeRemoved >= filteredList[0].amount) {
                 toBeRemoved -= filteredList[0].amount
                 filteredList = filteredList.filterIndexed { index, _ -> index != 0 } // removes element at 0th Index
-                println(filteredList.size)
             } else {
                 filteredList[0].amount -= toBeRemoved
                 // toBeRemoved = 0
