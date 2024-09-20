@@ -73,11 +73,33 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             validated = false
         }
         if (x == null || y == null) return false
-
+        validated = validated && checkAdditionalProperties(tile)
         validated = validated && checkTileIdAndCoordinates(id, x, y)
         validated = validated && validateTileCategory(tile)
 
         return validated
+    }
+
+    private fun checkAdditionalProperties(tile: JSONObject): Boolean {
+        val category: String = tile.getString(CATEGORY)
+        var valid: Boolean
+        if (category == LAND || category == SHALLOW_OCEAN) {
+            valid = !tile.has(CURRENT) && !tile.has(SPEED) && !tile.has(DIRECTION) && !tile.has(INTENSITY) &&
+                !tile.has(HARBOR)
+        } else if (category == SHORE) {
+            valid = !tile.has(CURRENT) && !tile.has(SPEED) && !tile.has(DIRECTION) && !tile.has(INTENSITY)
+        } else {
+            valid = checkDeepOceanAdditional(tile)
+        }
+        return valid
+    }
+    private fun checkDeepOceanAdditional(tile: JSONObject): Boolean {
+        val current: Boolean = tile.getBoolean(CURRENT)
+        var valid: Boolean = !tile.has(HARBOR)
+        if (!current) {
+            valid = valid && !tile.has(SPEED) && !tile.has(DIRECTION) && !tile.has(INTENSITY)
+        }
+        return valid
     }
 
     /** Validate the category of tile **/
