@@ -44,7 +44,7 @@ fun main(args: Array<String>) {
     } else {
         file = PrintWriter(System.out)
     }
-    val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks, outputFile)
+    val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks)
     if (acc != null && maxTicks != null) {
         val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, acc.map)
         sim.start()
@@ -53,11 +53,11 @@ fun main(args: Array<String>) {
 }
 
 /** The main function for parsing */
-fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
+fun parse(files: List<String?>, maxTicks: Int?): Accumulator? {
     val contents = validate(files)
     if (contents != null) {
         val accumulator = Accumulator()
-        var cond: Boolean = maxTicks == null || outputFile == null
+        var cond: Boolean = maxTicks == null
         cond = cond || parseMap(files, contents, accumulator) == null
         if (!(cond || parseScenario(files, contents, accumulator) == null)) {
             return accumulator
