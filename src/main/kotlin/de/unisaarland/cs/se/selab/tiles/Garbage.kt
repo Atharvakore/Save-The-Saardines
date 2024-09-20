@@ -71,7 +71,17 @@ class Garbage(
         }
 
     }*/
-    public fun drift(currentTile: DeepOcean) {
+    public fun drift(tile: Tile) {
+        if (tile is DeepOcean) {
+            drifthelper(tile)
+        }
+        return
+    }
+
+    /**
+     * helps drifting
+     */
+    private fun drifthelper(currentTile: DeepOcean) {
         val localCurrent: Current? = currentTile.getCurrent()
         if (localCurrent != null) {
             var amountToBeDrifted = localCurrent.intensity * FIFTY
@@ -100,6 +110,7 @@ class Garbage(
             }
         }
     }
+
     private fun driftSmallGarbage(amountToBeDrifted: Int, g: Garbage, source: DeepOcean, targetTile: Tile): Int {
         var amountToBeDriftedTemp = amountToBeDrifted
         if (g.amount + source.amountOfGarbageDriftedThisTick < amountToBeDrifted) {
