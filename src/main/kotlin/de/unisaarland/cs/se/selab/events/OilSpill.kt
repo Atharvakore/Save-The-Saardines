@@ -38,7 +38,6 @@ class OilSpill(
             LoggerEventsAndTasks.logEventStart(id, this)
             return true
         }
-        LoggerEventsAndTasks.logEventStart(id, this)
         return false
     }
 }

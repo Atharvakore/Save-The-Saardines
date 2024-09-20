@@ -138,7 +138,7 @@ class Corporation(
         }
         // 2. Navigate to the closest garbage patch.
         val paths = Dijkstra(ship.position).allPaths()
-        val sorted = paths.toList().sortedBy { it.second.size }
+        val sorted = paths.toList().sortedWith(compareBy({ it.second.size }, { it.first.id }))
         val closestGarbagePatch = sorted
             .map { it.first }
             .intersect(partnerGarbage.values.toSet())

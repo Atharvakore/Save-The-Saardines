@@ -190,17 +190,14 @@ class UTFactory {
             DeepOcean(66, Vec2D(5, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1))
         )
 
-        for (deepOcean in deepOceanTiles) {
-            deepOcean.adjacentTiles = findAdjacentTiles(deepOcean.pos)
-        }
-
-        for (shallowOcean in shallowOceanTiles) {
-            shallowOcean.adjacentTiles = findAdjacentTiles(shallowOcean.pos)
-        }
-
         Sea.tiles.addAll(shoreTiles)
         Sea.tiles.addAll(shallowOceanTiles)
         Sea.tiles.addAll(deepOceanTiles)
+
+        for (tile in Sea.tiles) {
+            tile.adjacentTiles = findAdjacentTiles(tile.pos)
+        }
+        Sea.tileIndex = Sea.tiles.associateBy { it.pos }
     }
 
     private fun createShoreForSea(): List<Shore> {
@@ -234,21 +231,25 @@ class UTFactory {
             Shore(87, Vec2D(6, 8), emptyList(), emptyList(), harbor = false),
             Shore(88, Vec2D(7, 8), emptyList(), emptyList(), harbor = false),
         )
-        for (shore in shoreTiles) {
-            shore.adjacentTiles = findAdjacentTiles(shore.pos)
-        }
         return shoreTiles
     }
 
-    private fun findAdjacentTiles(pos: Vec2D): List<Tile> {
-        return listOfNotNull(
+    fun findAdjacentTiles(pos: Vec2D): List<Tile?> {
+        val nextValue = if (pos.posX % 2 == 0 && pos.posY % 2 == 0) {
+            1
+        } else {
+            0
+        }
+
+        val list = listOf(
             Sea.getTileByPos(Vec2D(pos.posX + 1, pos.posY)), // East
             Sea.getTileByPos(Vec2D(pos.posX - 1, pos.posY)), // West
-            Sea.getTileByPos(Vec2D(pos.posX, pos.posY + 1)), // Southeast
-            Sea.getTileByPos(Vec2D(pos.posX, pos.posY - 1)), // Northwest
-            Sea.getTileByPos(Vec2D(pos.posX + 1, pos.posY - 1)), // Northeast
-            Sea.getTileByPos(Vec2D(pos.posX - 1, pos.posY + 1)) // Southwest
+            Sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY + 1)), // Southeast
+            Sea.getTileByPos(Vec2D(pos.posX + nextValue - 1, pos.posY - 1)), // Northwest
+            Sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY - 1)), // Northeast
+            Sea.getTileByPos(Vec2D(pos.posX + nextValue - 1, pos.posY + 1)) // Southwest
         )
+        return list
     }
 
     /**

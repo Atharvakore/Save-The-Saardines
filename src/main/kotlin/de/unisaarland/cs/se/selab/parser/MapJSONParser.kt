@@ -93,6 +93,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         }
         return valid
     }
+
     private fun checkDeepOceanAdditional(tile: JSONObject): Boolean {
         val current: Boolean = tile.getBoolean(CURRENT)
         var valid: Boolean = !tile.has(HARBOR)
@@ -204,12 +205,17 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         for (element in accumulator.tiles.values) {
             val x = element.pos.posX
             val y = element.pos.posY
-            val adjacentTile0 = accumulator.getTileByCoordinate(Vec2D(x - 1, y))
-            val adjacentTile60 = accumulator.getTileByCoordinate(Vec2D(x - 1, y - 1))
-            val adjacentTile120 = accumulator.getTileByCoordinate(Vec2D(x, y - 1))
-            val adjacentTile180 = accumulator.getTileByCoordinate(Vec2D(x + 1, y))
-            val adjacentTile240 = accumulator.getTileByCoordinate(Vec2D(x + 1, y + 1))
-            val adjacentTile300 = accumulator.getTileByCoordinate(Vec2D(x, y + 1))
+            val nextValue = if (x % 2 == 0 && y % 2 == 0) {
+                1
+            } else {
+                0
+            }
+            val adjacentTile0 = accumulator.getTileByPos(Vec2D(x - 1, y)) // west
+            val adjacentTile60 = accumulator.getTileByPos(Vec2D(x - 1 + nextValue, y - 1))
+            val adjacentTile120 = accumulator.getTileByPos(Vec2D(x + nextValue, y - 1))
+            val adjacentTile180 = accumulator.getTileByPos(Vec2D(x + 1, y)) // east
+            val adjacentTile240 = accumulator.getTileByPos(Vec2D(x + 1 + nextValue, y + 1))
+            val adjacentTile300 = accumulator.getTileByPos(Vec2D(x + nextValue, y + 1))
             val adjacentTiles = listOf(
                 adjacentTile0,
                 adjacentTile60,
@@ -230,12 +236,17 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             val x = tile.pos.posX
             val y = tile.pos.posY
             val correct: Boolean
-            val adjacentTile0 = accumulator.getTileByCoordinate(Vec2D(x - 1, y))
-            val adjacentTile60 = accumulator.getTileByCoordinate(Vec2D(x - 1, y - 1))
-            val adjacentTile120 = accumulator.getTileByCoordinate(Vec2D(x, y - 1))
-            val adjacentTile180 = accumulator.getTileByCoordinate(Vec2D(x + 1, y))
-            val adjacentTile240 = accumulator.getTileByCoordinate(Vec2D(x + 1, y + 1))
-            val adjacentTile300 = accumulator.getTileByCoordinate(Vec2D(x, y + 1))
+            val nextValue = if (x % 2 == 0 && y % 2 == 0) {
+                1
+            } else {
+                0
+            }
+            val adjacentTile0 = accumulator.getTileByCoordinate(Vec2D(x - 1, y)) // west
+            val adjacentTile60 = accumulator.getTileByCoordinate(Vec2D(x - 1 + nextValue, y - 1))
+            val adjacentTile120 = accumulator.getTileByCoordinate(Vec2D(x + nextValue, y - 1))
+            val adjacentTile180 = accumulator.getTileByCoordinate(Vec2D(x + 1, y)) // east
+            val adjacentTile240 = accumulator.getTileByCoordinate(Vec2D(x + 1 + nextValue, y + 1))
+            val adjacentTile300 = accumulator.getTileByCoordinate(Vec2D(x + nextValue, y + 1))
             val adjacentTiles = listOf(
                 adjacentTile0,
                 adjacentTile60,
