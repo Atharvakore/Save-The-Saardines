@@ -74,7 +74,7 @@ fun parseMap(files: List<String?>, contents: List<String>, accumulator: Accumula
         Logger.logInitializationInfoSuccess(requireNotNull(files[0]))
     } else {
         Logger.logInitializationInfoFail(requireNotNull(files[0]))
-        condition = false
+        return null
     }
     val corpParser = CorporationJSONParser(accumulator)
     if (corpParser.parseCorporationsFile(contents[1])) {
