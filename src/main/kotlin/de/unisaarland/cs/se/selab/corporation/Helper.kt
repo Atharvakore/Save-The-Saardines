@@ -97,6 +97,6 @@ class Helper {
     fun findClosestHarbor(tile: Tile, harbors: List<Shore>): List<Tile> {
         return Dijkstra(tile).allPaths().toList() // (KS: Simplify)
             .sortedWith(compareBy({ it.second.size }, { it.first.id }))
-            .first { harbors.contains(it.first) }.second;
+            .first { harbors.contains(it.first) }.second
     }
 }
