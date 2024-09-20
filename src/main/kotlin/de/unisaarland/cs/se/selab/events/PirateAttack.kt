@@ -20,7 +20,6 @@ class PirateAttack(
             LoggerEventsAndTasks.logEventStart(id, this)
             return true
         }
-        LoggerEventsAndTasks.logEventStart(id, this)
         return false
     }
 }
