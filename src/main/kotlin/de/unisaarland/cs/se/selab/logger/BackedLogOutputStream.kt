@@ -1,9 +1,9 @@
 package de.unisaarland.cs.se.selab.logger
 
-import java.io.PrintWriter
+import java.io.PrintStream
 
 /** Backend log for Logger */
-class BackedLogOutputStream(private val output: PrintWriter) : LogOutputStream {
+class BackedLogOutputStream(private val output: PrintStream) : LogOutputStream {
     override fun write(s: String) {
         output.println(s)
     }

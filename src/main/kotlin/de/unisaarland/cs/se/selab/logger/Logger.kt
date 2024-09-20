@@ -2,7 +2,7 @@ package de.unisaarland.cs.se.selab.logger
 
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import java.io.File
-import java.io.PrintWriter
+import java.io.PrintStream
 
 /**
  * The logger class, responsible for logging the simulation events.
@@ -13,10 +13,10 @@ object Logger {
     var totalPlasticCollected = 0
     var totalChemicalsCollected = 0
     val map: MutableMap<Int, Int> = mutableMapOf()
-    var output: LogOutputStream = BackedLogOutputStream(PrintWriter(System.out))
+    var output: LogOutputStream = BackedLogOutputStream(System.out)
 
     /** sets the output file in case given, default is stdout */
-    fun setOutBuffer(file: PrintWriter) {
+    fun setOutBuffer(file: PrintStream) {
         output = BackedLogOutputStream(file)
     }
 
