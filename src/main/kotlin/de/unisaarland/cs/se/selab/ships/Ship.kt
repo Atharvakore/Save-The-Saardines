@@ -52,7 +52,7 @@ class Ship(
         if (current != null) {
             val speed = current.speed
             val direction = current.direction
-            val desTile = this.position.getTileInDirection(speed / TEN + 1, direction)
+            val desTile = this.position.getTileInDirection(speed / TEN, direction)
             if (desTile != null) {
                 this.position = desTile
             }

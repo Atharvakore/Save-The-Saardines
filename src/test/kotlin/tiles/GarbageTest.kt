@@ -24,8 +24,8 @@ class GarbageTest {
     fun setUp() {
         val tile1: Shore = Shore(1, Vec2D(0, 0), listOf(), listOf(), false)
         val tile2: Shore = Shore(2, Vec2D(0, 1), listOf(), listOf(), false)
-        val tile3: DeepOcean = DeepOcean(3, Vec2D(1, 0), listOf(), listOf(), Current(1, Direction.D0, 1))
-        val tile4: DeepOcean = DeepOcean(4, Vec2D(1, 1), listOf(), listOf(), Current(1, Direction.D60, 1))
+        val tile3: DeepOcean = DeepOcean(3, Vec2D(1, 0), listOf(), listOf(), Current(10, Direction.D0, 1))
+        val tile4: DeepOcean = DeepOcean(4, Vec2D(1, 1), listOf(), listOf(), Current(10, Direction.D60, 1))
         val tile5: ShallowOcean = ShallowOcean(5, Vec2D(2, 0), listOf(), listOf())
         val tile6: ShallowOcean = ShallowOcean(6, Vec2D(2, 1), listOf(), listOf())
 
