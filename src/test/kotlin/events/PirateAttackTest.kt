@@ -10,12 +10,12 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PirateAttackTest {
 
-    var ship1 = Ship(1, 50, 10, 1000, 5, mutableListOf())
-    var ship2 = Ship(2, 50, 10, 1000, 5, mutableListOf())
-    var ship3 = Ship(3, 50, 10, 1000, 5, mutableListOf())
-    private var corp: Corporation =
+    val ship1 = Ship(1, 50, 10, 1000, 5, mutableListOf())
+    val ship2 = Ship(2, 50, 10, 1000, 5, mutableListOf())
+    val ship3 = Ship(3, 50, 10, 1000, 5, mutableListOf())
+    private val corp: Corporation =
         Corporation(1, "HiHA", mutableListOf(ship1, ship2, ship3), mutableListOf(), mutableListOf(), mutableListOf())
-    private var eventPirateAttack = PirateAttack(1, 5, ship1, corp)
+    private val eventPirateAttack = PirateAttack(1, 5, ship1, corp)
 
     @Test
     fun testBasicCurrentTickIsNotFireTick() {

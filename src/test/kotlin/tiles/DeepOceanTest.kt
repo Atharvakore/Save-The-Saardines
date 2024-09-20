@@ -24,7 +24,7 @@ class DeepOceanTest {
             null,
             null,
         )
-        deepOcean = DeepOcean(1, Vec2D(3, 3), adjacentTiles, listOf(), Current(1, Direction.D60, 1))
+        deepOcean = DeepOcean(1, Vec2D(3, 3), adjacentTiles, emptyList(), Current(1, Direction.D60, 1))
     }
 
     /** Testing basic functionalities **/

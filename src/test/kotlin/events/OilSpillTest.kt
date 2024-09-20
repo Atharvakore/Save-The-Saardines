@@ -15,7 +15,7 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OilSpillTest {
 
-    private var factory = UTFactory()
+    private val factory = UTFactory()
 
     @BeforeEach
     fun setUp() {

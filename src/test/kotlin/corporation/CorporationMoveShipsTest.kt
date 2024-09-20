@@ -28,7 +28,7 @@ class CorporationMoveShipsTest {
         val harborTile = Sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
         val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
-        val c2 = Corporation(2, "c2", mutableListOf(), emptyList(), listOf(), emptyList())
+        val c2 = Corporation(2, "c2", mutableListOf(), emptyList(), emptyList(), emptyList())
 
         val c2ShipTile = Sea.getTileByPos(Vec2D(6, 2)) ?: error("Tile not found at position (6,2)")
 

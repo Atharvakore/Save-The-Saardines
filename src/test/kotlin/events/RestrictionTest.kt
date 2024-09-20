@@ -14,7 +14,7 @@ import kotlin.test.assertTrue
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class RestrictionTest {
     lateinit var ship: Ship
-    private var factory = UTFactory()
+    private val factory = UTFactory()
 
     @BeforeEach
     fun setUp() {
@@ -26,8 +26,8 @@ class RestrictionTest {
 
     @Test
     fun startRestrictionTest() {
-        var restrictionEvent = Restriction(1, 1, Sea, Sea.getTileByPos(Vec2D(3, 6))!!, 2)
-        var endRestriction = EndRestriction(2, 5, Sea, Sea.getTileByPos(Vec2D(3, 6))!!, 1)
+        val restrictionEvent = Restriction(1, 1, Sea, Sea.getTileByPos(Vec2D(3, 6))!!, 2)
+        val endRestriction = EndRestriction(2, 5, Sea, Sea.getTileByPos(Vec2D(3, 6))!!, 1)
         assertTrue(!restrictionEvent.actUponTick(0) && !endRestriction.actUponTick(0))
         assertTrue(restrictionEvent.actUponTick(1))
         assertTrue((Sea.getTileByPos(Vec2D(3, 5))?.restrictions ?: true) == 1)
@@ -52,8 +52,8 @@ class RestrictionTest {
      */
     @Test
     fun endRestrictionTest() {
-        var restrictionEvent = Restriction(1, 1, Sea, Sea.getTileByPos(Vec2D(3, 6))!!, 2)
-        var endRestriction = EndRestriction(2, 5, Sea, Sea.getTileByPos(Vec2D(3, 6))!!, 2)
+        val restrictionEvent = Restriction(1, 1, Sea, Sea.getTileByPos(Vec2D(3, 6))!!, 2)
+        val endRestriction = EndRestriction(2, 5, Sea, Sea.getTileByPos(Vec2D(3, 6))!!, 2)
         assertTrue(!restrictionEvent.actUponTick(0) && !endRestriction.actUponTick(0))
         assert(restrictionEvent.actUponTick(1))
         assert(endRestriction.actUponTick(5))

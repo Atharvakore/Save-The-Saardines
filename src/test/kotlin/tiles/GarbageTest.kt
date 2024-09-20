@@ -46,7 +46,7 @@ class GarbageTest {
         val currentTile: Tile? = seaInstance.getTileById(3)
         val garbage: Garbage = Garbage.createGarbage(10, GarbageType.OIL)
         currentTile?.addGarbage(garbage)
-        garbage.drift(currentTile as DeepOcean)
+        garbage.drift((currentTile ?: error("Shouldn't be null")) as DeepOcean)
         val garbageInAdjacentTile: List<Garbage>? = seaInstance.getTileById(5)?.garbage
         assertTrue(garbageInAdjacentTile?.contains(garbage)!!)
     }
