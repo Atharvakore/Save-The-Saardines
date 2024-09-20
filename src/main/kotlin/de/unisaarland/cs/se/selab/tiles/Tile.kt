@@ -36,7 +36,7 @@ open class Tile(
     ): Tile? {
         var tile: Tile? = this
         var i = 0
-        while (i <= distance) {
+        while (i < distance) {
             if (tile?.adjacentTiles?.get(dir.ordinal) == null) {
                 return tile
             }
@@ -85,12 +85,12 @@ open class Tile(
             if (toBeRemoved >= filteredList[0].amount) {
                 toBeRemoved -= filteredList[0].amount
                 filteredList = filteredList.filterIndexed { index, _ -> index != 0 } // removes element at 0th Index
-            }
-            if (toBeRemoved < filteredList[0].amount) {
+            } else {
                 filteredList[0].amount -= toBeRemoved
                 // toBeRemoved = 0
                 break
             }
+            this.garbage = filteredList
         }
     }
 

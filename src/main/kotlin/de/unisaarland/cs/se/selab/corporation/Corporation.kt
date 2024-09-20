@@ -12,7 +12,6 @@ import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
-import kotlin.math.min
 
 const val TODO: String = "Yet to implement"
 
@@ -138,7 +137,7 @@ class Corporation(
         }
         // 2. Navigate to the closest garbage patch.
         val paths = Dijkstra(ship.position).allPaths()
-        val sorted = paths.toList().sortedBy { it.second.size }
+        val sorted = paths.toList().sortedWith(compareBy({ it.second.size }, { it.first.id }))
         val closestGarbagePatch = sorted
             .map { it.first }
             .intersect(partnerGarbage.values.toSet())
@@ -175,7 +174,7 @@ class Corporation(
             .sortedBy { it.id }
             .firstOrNull()
         if (garbage != null) {
-            cap.collectGarbageFromCurrentTile(ship)
+            // Don't move.
             result = true
         } else {
             // Navigate to the closest garbage patch that it can collect.
@@ -192,14 +191,8 @@ class Corporation(
             val closestGarbagePatch = attainableGarbage.firstOrNull()
             if (closestGarbagePatch != null) {
                 val path = paths[closestGarbagePatch] ?: return false
-                if (ship.isFuelSufficient(path.size)) {
+                if (ship.isFuelSufficient(path.size) && ship.isCapacitySufficient(closestGarbagePatch.garbage)) {
                     ship.move(path)
-                    val pile = findUncollectedGarbage(closestGarbagePatch, cap, collectorTarget)
-                        ?: error("There should be a pile")
-                    // Dodgy logic?
-                    val amount = collectorTarget.getOrDefault(pile.id, 0) +
-                        min(cap.capacityForType(pile.type), pile.amount)
-                    collectorTarget[pile.id] = min(amount, pile.amount)
                 } else {
                     val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                     ship.moveUninterrupted(closestHarborPath)

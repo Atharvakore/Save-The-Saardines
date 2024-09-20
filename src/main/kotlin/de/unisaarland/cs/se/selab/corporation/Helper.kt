@@ -5,7 +5,6 @@ import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Dijkstra
-import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -53,9 +52,7 @@ class Helper {
      * @return List of ships on the harbor
      */
     fun getShipsOnHarbor(corporation: Corporation): List<Ship> {
-        val seaInstance: Sea = Sea
-        val harborTiles: List<Tile> = seaInstance.tiles.filter { (it as Shore).harbor }
-        return corporation.ownedShips.filter { harborTiles.contains(it.position) }
+        return corporation.ownedShips.filter { corporation.ownedHarbors.contains(it.position) }
     }
 
     /**
@@ -98,20 +95,8 @@ class Helper {
      * @return List of tiles representing the shortest path to the closest harbor
      */
     fun findClosestHarbor(tile: Tile, harbors: List<Shore>): List<Tile> {
-        val dijkstra: Dijkstra = Dijkstra(tile)
-        val shortestPaths: Map<Tile, List<Tile>> = dijkstra.allPaths()
-
-        var shortestPathLen: Int = Int.MAX_VALUE
-        var shortestPath: List<Tile> = emptyList()
-
-        for (harbor in harbors) {
-            val path: List<Tile>? = shortestPaths[harbor]
-            if (path != null && path.size < shortestPathLen) {
-                shortestPathLen = path.size
-                shortestPath = path
-            }
-        }
-
-        return shortestPath
+        return Dijkstra(tile).allPaths().toList() // (KS: Simplify)
+            .sortedWith(compareBy({ it.second.size }, { it.first.id }))
+            .first { harbors.contains(it.first) }.second
     }
 }

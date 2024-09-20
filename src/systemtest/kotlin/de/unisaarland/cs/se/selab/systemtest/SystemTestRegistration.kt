@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.systemtest
 
 import de.unisaarland.cs.se.selab.systemtest.basictests.ExampleSystemTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.SampleSimulationTest
 
 /** The class which will register the tests for Testing on Course Implementation */
 object SystemTestRegistration {
@@ -13,6 +14,7 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
+        manager.registerTest(SampleSimulationTest())
     }
 
     /**
@@ -23,6 +25,7 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsMutantValidation(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
+        manager.registerTest(SampleSimulationTest())
     }
 
     /**
@@ -31,5 +34,6 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsMutantSimulation(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
+        manager.registerTest(SampleSimulationTest())
     }
 }

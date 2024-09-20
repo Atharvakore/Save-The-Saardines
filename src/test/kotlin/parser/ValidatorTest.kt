@@ -46,17 +46,12 @@ class ValidatorTest {
 
     @Test
     fun testBigMap() {
-        assert(true)
-//        val bigMap = "src/systemtest/resources/mapFiles/bigMap1.json"
-//        val corporationsFile: String = "src/systemtest/resources/corporationJsons/corporations.json"
-//        val scenarioFile: String = "src/systemtest/resources/scenarioJsons/scenario.json"
-//        val files: List<String> = mutableListOf(bigMap, corporationsFile, scenarioFile)
-//        val acc: Accumulator? = parse(files, 0, "stdout")
-//        assert(acc != null)
-//        if (acc != null) {
-//            //    assert(acc.tiles.size == 574)
-//            assert(true)
-//        }
+        val bigMap = "src/systemtest/resources/mapFiles/bigMap1.json"
+        val corporationsFile: String = "src/systemtest/resources/corporationJsons/corporations.json"
+        val scenarioFile: String = "src/systemtest/resources/scenarioJsons/scenario.json"
+        val files: List<String> = mutableListOf(bigMap, corporationsFile, scenarioFile)
+        val accumulator = parse(files, 100)
+        assert(accumulator == null)
     }
 
     @AfterTest

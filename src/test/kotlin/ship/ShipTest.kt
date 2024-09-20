@@ -17,11 +17,13 @@ import org.junit.jupiter.api.TestInstance
 class ShipTest {
 
     private val ship: Ship = Ship(1, 10, 5, 3000, 7, mutableListOf())
-    private val tile37: Tile = DeepOcean(37, Vec2D(6, 3), emptyList(), emptyList(), Current(10, Direction.D0, 1))
-    private val tile38: Tile = ShallowOcean(38, Vec2D(7, 3), emptyList(), emptyList())
+    private lateinit var tile37: Tile
+    private lateinit var tile38: Tile
 
     @BeforeEach
     fun setUp() {
+        tile37 = DeepOcean(37, Vec2D(6, 3), emptyList(), emptyList(), Current(10, Direction.D0, 1))
+        tile38 = ShallowOcean(38, Vec2D(7, 3), emptyList(), emptyList())
         tile37.adjacentTiles = listOf(tile38)
         tile38.adjacentTiles = listOf(tile37)
     }
@@ -37,17 +39,17 @@ class ShipTest {
 
     @Test
     fun testDrift() {
-//        ship.position = tile37
-//        ship.drift()
-//        assertTrue(ship.position == tile38)
+        ship.position = tile37
+        ship.drift()
+        assertTrue(ship.position == tile38)
         assert(true)
     }
 
     @Test
     fun testMove() {
-//        ship.position = tile37
-//        ship.move(listOf(tile38))
-//        assertTrue(ship.position == tile38)
+        ship.position = tile37
+        ship.move(listOf(tile38))
+        assertTrue(ship.position == tile38)
         assert(true)
     }
 
