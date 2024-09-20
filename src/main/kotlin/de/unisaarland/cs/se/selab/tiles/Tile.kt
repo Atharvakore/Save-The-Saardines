@@ -92,6 +92,7 @@ open class Tile(
                 break
             }
         }
+        this.garbage = filteredList
     }
 
     /**
