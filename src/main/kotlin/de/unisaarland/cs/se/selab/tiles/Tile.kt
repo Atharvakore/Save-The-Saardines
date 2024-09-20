@@ -103,6 +103,7 @@ open class Tile(
         for (oil in this.garbage.filter { it.type == GarbageType.OIL }) {
             accumulator += oil.amount
         }
+        println(accumulator)
         return accumulator
     }
 }
