@@ -36,7 +36,7 @@ open class Tile(
     ): Tile? {
         var tile: Tile? = this
         var i = 0
-        while (i <= distance) {
+        while (i < distance) {
             if (tile?.adjacentTiles?.get(dir.ordinal) == null) {
                 return tile
             }
