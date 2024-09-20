@@ -190,7 +190,6 @@ class UTFactory {
             DeepOcean(66, Vec2D(5, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1))
         )
 
-
         Sea.tiles.addAll(shoreTiles)
         Sea.tiles.addAll(shallowOceanTiles)
         Sea.tiles.addAll(deepOceanTiles)

@@ -21,7 +21,6 @@ class TileTest {
 
     @BeforeEach
     fun setUp() {
-
         val tile62: Tile = Shore(62, Vec2D(1, 6), listOf(), listOf(), false)
         val tile72: Tile = Shore(72, Vec2D(1, 7), listOf(), listOf(), false)
         val tile82: Tile = Shore(82, Vec2D(1, 8), listOf(), listOf(), false)

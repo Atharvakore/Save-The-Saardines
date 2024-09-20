@@ -12,8 +12,8 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class GarbageTest {
