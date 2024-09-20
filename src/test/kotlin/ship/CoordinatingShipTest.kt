@@ -25,13 +25,13 @@ class CoordinatingShipTest {
         coordinatingCapability = CoordinatingShip(1)
         coordinatingShip = Ship(1, 50, 15, 5000, 7, mutableListOf(coordinatingCapability))
 
-        val tile62: Tile = Shore(62, Vec2D(1, 6), listOf(), listOf(), false)
-        val tile72: Tile = Shore(72, Vec2D(1, 7), listOf(), listOf(), false)
-        val tile82: Tile = Shore(82, Vec2D(1, 8), listOf(), listOf(), false)
-        val tile83: Tile = Shore(83, Vec2D(2, 8), listOf(), listOf(), false)
-        val tile74: Tile = ShallowOcean(74, Vec2D(3, 7), listOf(), listOf())
-        val tile63: Tile = ShallowOcean(63, Vec2D(2, 6), listOf(), listOf())
-        val tile73: Tile = ShallowOcean(73, Vec2D(2, 7), listOf(), listOf())
+        val tile62: Tile = Shore(62, Vec2D(1, 6), emptyList(), emptyList(), false)
+        val tile72: Tile = Shore(72, Vec2D(1, 7), emptyList(), emptyList(), false)
+        val tile82: Tile = Shore(82, Vec2D(1, 8), emptyList(), emptyList(), false)
+        val tile83: Tile = Shore(83, Vec2D(2, 8), emptyList(), emptyList(), false)
+        val tile74: Tile = ShallowOcean(74, Vec2D(3, 7), emptyList(), emptyList())
+        val tile63: Tile = ShallowOcean(63, Vec2D(2, 6), emptyList(), emptyList())
+        val tile73: Tile = ShallowOcean(73, Vec2D(2, 7), emptyList(), emptyList())
 
         val adjTile62: List<Tile?> = listOf(tile72, tile63, tile73, null, null, null)
 

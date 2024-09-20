@@ -23,8 +23,8 @@ class Map {
     ): List<ShallowOcean> {
         return (1 until numOfTiles).map { id ->
             val position = pos[id] ?: Vec2D(0, 0)
-            val adjacent = adjacentTiles[id] ?: emptyList()
-            val tileGarbage = garbage[id] ?: emptyList()
+            val adjacent = adjacentTiles[id].orEmpty()
+            val tileGarbage = garbage[id].orEmpty()
             ShallowOcean(
                 id,
                 position,
@@ -43,8 +43,8 @@ class Map {
     ): List<Shore> {
         return (1 until numOfTiles).map { id ->
             val position = pos[id] ?: Vec2D(0, 0)
-            val adjacent = adjacentTiles[id] ?: emptyList()
-            val tileGarbage = garbage[id] ?: emptyList()
+            val adjacent = adjacentTiles[id].orEmpty()
+            val tileGarbage = garbage[id].orEmpty()
             val tileCurrent = harbor[id] ?: false
             Shore(
                 id,
@@ -65,8 +65,8 @@ class Map {
     ): List<DeepOcean> {
         return (1 until numOfTiles).map { id ->
             val position = pos[id] ?: Vec2D(0, 0)
-            val adjacent = adjacentTiles[id] ?: emptyList()
-            val tileGarbage = garbage[id] ?: emptyList()
+            val adjacent = adjacentTiles[id].orEmpty()
+            val tileGarbage = garbage[id].orEmpty()
             val tileCurrent = current[id]
             DeepOcean(
                 id,

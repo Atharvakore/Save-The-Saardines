@@ -22,12 +22,12 @@ class GarbageTest {
 
     @BeforeEach
     fun setUp() {
-        val tile1: Shore = Shore(1, Vec2D(0, 0), listOf(), listOf(), false)
-        val tile2: Shore = Shore(2, Vec2D(0, 1), listOf(), listOf(), false)
-        val tile3: DeepOcean = DeepOcean(3, Vec2D(1, 0), listOf(), listOf(), Current(10, Direction.D0, 1))
-        val tile4: DeepOcean = DeepOcean(4, Vec2D(1, 1), listOf(), listOf(), Current(10, Direction.D60, 1))
-        val tile5: ShallowOcean = ShallowOcean(5, Vec2D(2, 0), listOf(), listOf())
-        val tile6: ShallowOcean = ShallowOcean(6, Vec2D(2, 1), listOf(), listOf())
+        val tile1: Shore = Shore(1, Vec2D(0, 0), emptyList(), emptyList(), false)
+        val tile2: Shore = Shore(2, Vec2D(0, 1), emptyList(), emptyList(), false)
+        val tile3: DeepOcean = DeepOcean(3, Vec2D(1, 0), emptyList(), emptyList(), Current(10, Direction.D0, 1))
+        val tile4: DeepOcean = DeepOcean(4, Vec2D(1, 1), emptyList(), emptyList(), Current(10, Direction.D60, 1))
+        val tile5: ShallowOcean = ShallowOcean(5, Vec2D(2, 0), emptyList(), emptyList())
+        val tile6: ShallowOcean = ShallowOcean(6, Vec2D(2, 1), emptyList(), emptyList())
 
         tile3.adjacentTiles = listOf(tile5)
         val listOfTiles: MutableList<Tile> = mutableListOf(tile1, tile2, tile3, tile4, tile5, tile6)

@@ -26,7 +26,7 @@ class OilSpillTest {
 
     @Test
     public fun testBasicCurrentTickIsNotFireTick() {
-        val oilSpillEvent = OilSpill(1, 5, Sea, DeepOcean(0, Vec2D(3, 5), listOf(), listOf(), null), 1, 500)
+        val oilSpillEvent = OilSpill(1, 5, Sea, DeepOcean(0, Vec2D(3, 5), emptyList(), emptyList(), null), 1, 500)
         assertTrue(!oilSpillEvent.actUponTick(4))
         assertTrue(Sea.getTileByPos(Vec2D(3, 5))?.currentOilLevel() == 0)
         assertTrue(Sea.getTileByPos(Vec2D(3, 4))?.currentOilLevel() == 0)
@@ -38,7 +38,7 @@ class OilSpillTest {
 
     @Test
     fun testBasicCurrentTickIsFireTick() {
-        val oilSpillEvent = OilSpill(1, 5, Sea, DeepOcean(0, Vec2D(3, 5), listOf(), listOf(), null), 1, 500)
+        val oilSpillEvent = OilSpill(1, 5, Sea, DeepOcean(0, Vec2D(3, 5), emptyList(), emptyList(), null), 1, 500)
         assertTrue(oilSpillEvent.actUponTick(5))
         assertTrue(Sea.getTileByPos(Vec2D(3, 5))?.currentOilLevel() == 500)
         assertTrue(Sea.getTileByPos(Vec2D(3, 4))?.currentOilLevel() == 500)
@@ -50,7 +50,7 @@ class OilSpillTest {
 
     @Test
     fun aTileWith800Oil() {
-        val oilSpillEvent = OilSpill(1, 5, Sea, DeepOcean(0, Vec2D(3, 5), listOf(), listOf(), null), 1, 500)
+        val oilSpillEvent = OilSpill(1, 5, Sea, DeepOcean(0, Vec2D(3, 5), emptyList(), emptyList(), null), 1, 500)
         Sea.getTileByPos(Vec2D(2, 4))?.addGarbage(Garbage(0, 800, GarbageType.OIL, null))
         assertTrue(oilSpillEvent.actUponTick(5))
         assertTrue(Sea.getTileByPos(Vec2D(3, 5))?.currentOilLevel() == 500)

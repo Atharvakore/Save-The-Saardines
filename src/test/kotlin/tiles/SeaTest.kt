@@ -18,12 +18,12 @@ class SeaTest {
     @BeforeEach
     fun setUp() {
         val listOfTiles: MutableList<Tile> = mutableListOf(
-            Shore(1, Vec2D(0, 0), listOf(), listOf(), false),
-            Shore(2, Vec2D(0, 1), listOf(), listOf(), false),
-            DeepOcean(3, Vec2D(1, 0), listOf(), listOf(), Current(1, Direction.D60, 1)),
-            DeepOcean(4, Vec2D(1, 1), listOf(), listOf(), Current(1, Direction.D60, 1)),
-            ShallowOcean(5, Vec2D(2, 0), listOf(), listOf()),
-            ShallowOcean(6, Vec2D(2, 1), listOf(), listOf())
+            Shore(1, Vec2D(0, 0), emptyList(), emptyList(), false),
+            Shore(2, Vec2D(0, 1), emptyList(), emptyList(), false),
+            DeepOcean(3, Vec2D(1, 0), emptyList(), emptyList(), Current(1, Direction.D60, 1)),
+            DeepOcean(4, Vec2D(1, 1), emptyList(), emptyList(), Current(1, Direction.D60, 1)),
+            ShallowOcean(5, Vec2D(2, 0), emptyList(), emptyList()),
+            ShallowOcean(6, Vec2D(2, 1), emptyList(), emptyList())
         )
         Sea.tiles.addAll(listOfTiles)
     }
