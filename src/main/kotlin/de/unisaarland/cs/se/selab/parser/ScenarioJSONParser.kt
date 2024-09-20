@@ -176,13 +176,15 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
         val garbageType: String = garbage.getString(TYPE)
         val typeExists: Boolean = garbageTypes.contains(garbageType)
         val uniqueId: Boolean = garbageId >= 0 && accumulator.garbage[garbageId] == null
-        val location: Tile? = accumulator.tiles[garbage.getInt(location)]
-        val exists: Boolean = location != null && typeExists
+        val locationId: Int = garbage.getInt(location)
+        val location: Tile? = accumulator.tiles[locationId]
+        val exists: Boolean = location != null && locationId >= 0 && typeExists
+        val condition: Boolean = uniqueId && garbage.getInt("amount") > 0 && locationId >= 0
         var locationIsNotLand: Boolean = location is Shore || location is ShallowOcean
         if (garbageType != "CHEMICALS") {
             locationIsNotLand = locationIsNotLand || location is DeepOcean
         }
-        if (uniqueId && exists && locationIsNotLand) {
+        if (condition && exists && locationIsNotLand) {
             return createGarbageObj(garbage)
         }
         return false
