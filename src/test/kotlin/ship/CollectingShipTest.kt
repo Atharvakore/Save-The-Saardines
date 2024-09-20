@@ -11,13 +11,14 @@ import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class CollectingShipTest {
 
     private lateinit var collectingCapability: CollectingShip
@@ -76,6 +77,11 @@ class CollectingShipTest {
         collectingShip.position = tile63
 
         sea.tiles.addAll(tiles)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        sea.tiles.clear()
     }
 
     /** Testing basic functionalities **/
