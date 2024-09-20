@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.logger
 
 import de.unisaarland.cs.se.selab.tiles.GarbageType
+import java.io.File
 import java.io.PrintWriter
 
 /**
@@ -26,12 +27,16 @@ object Logger {
 
     /** Log the initialization of the simulation. */
     fun logInitializationInfoSuccess(filename: String) {
-        log("Initialization Info: $filename successfully parsed and validated.")
+        val nameIndex: Int = filename.lastIndexOf(File.separator)
+        val file: String = filename.substring(nameIndex + 1)
+        log("Initialization Info: $file successfully parsed and validated.")
     }
 
     /** Log the failure of the initialization of the simulation. */
     fun logInitializationInfoFail(filename: String) {
-        log("Initialization Info: $filename is invalid.")
+        val nameIndex: Int = filename.lastIndexOf(File.separator)
+        val file: String = filename.substring(nameIndex + 1)
+        log("Initialization Info: $file is invalid.")
     }
 
     /** Log the start of the simulation. */
