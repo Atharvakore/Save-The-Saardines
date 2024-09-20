@@ -20,21 +20,27 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class RewardsTest {
-    lateinit var ship1: Ship
-    lateinit var ship2: Ship
+
+    var ship2: Ship = Ship(2, 50, 10, 100, 20, mutableListOf())
     lateinit var targetTile: Tile
     lateinit var initialTile: Tile
     lateinit var task: Task
     lateinit var collectingReward: Reward
-    lateinit var container: Container
-    lateinit var collectingCapability: CollectingShip
+    var container: Container = Container(
+        GarbageType.CHEMICALS,
+        1000
+    )
+    var collectingCapability: CollectingShip = CollectingShip(
+        mutableListOf(container),
+    )
+    var ship1 = Ship(1, 50, 10, 1000, 15, mutableListOf(collectingCapability))
     val corporation = Corporation(
-        id = TODO(),
-        name = TODO(),
-        ownedShips = TODO(),
-        ownedHarbors = TODO(),
-        acceptedGarbageType = TODO(),
-        tasks = TODO()
+        5,
+        "sa",
+        mutableListOf(ship1, ship2),
+        mutableListOf(),
+        mutableListOf(GarbageType.CHEMICALS),
+        mutableListOf()
     )
     private val factory = UTFactory()
 
