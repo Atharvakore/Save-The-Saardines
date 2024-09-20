@@ -1,10 +1,21 @@
 package parser
 
+import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.parse
 import de.unisaarland.cs.se.selab.parser.Accumulator
+import java.io.PrintWriter
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 class ValidatorTest {
+    private val x: PrintWriter = PrintWriter(System.out)
+
+    @BeforeTest
+    fun setBuffer() {
+        Logger.setOutBuffer(x)
+    }
+
     @Test
     fun testSmallMap() {
         val mapFile: String = "src/systemtest/resources/mapFiles/smallMap1.json"
@@ -46,5 +57,10 @@ class ValidatorTest {
 //            //    assert(acc.tiles.size == 574)
 //            assert(true)
 //        }
+    }
+
+    @AfterTest
+    fun closeBuffer() {
+        x.close()
     }
 }
