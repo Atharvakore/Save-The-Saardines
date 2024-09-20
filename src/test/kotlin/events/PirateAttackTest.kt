@@ -30,7 +30,7 @@ class PirateAttackTest {
     }
 
     @AfterEach
-    fun reset () {
+    fun reset() {
         corp.ownedShips.add(ship1)
     }
 }
