@@ -19,6 +19,8 @@ class Restriction(
         if (currentTick == fireTick) {
             location.pos.tilesInRadius(radius).forEach {
                 val tile = map?.getTileByPos(it)
+                println(tile)
+                println(Sea)
                 tile?.restrictions?.inc()
             }
             LoggerEventsAndTasks.logEventStart(id, this)
