@@ -22,14 +22,15 @@ class GarbageTest {
 
     @BeforeEach
     fun setUp() {
-        val listOfTiles: MutableList<Tile> = mutableListOf(
-            Shore(1, Vec2D(0, 0), listOf(), listOf(), false),
-            Shore(2, Vec2D(0, 1), listOf(), listOf(), false),
-            DeepOcean(3, Vec2D(1, 0), listOf(), listOf(), Current(1, Direction.D0, 1)),
-            DeepOcean(4, Vec2D(1, 1), listOf(), listOf(), Current(1, Direction.D60, 1)),
-            ShallowOcean(5, Vec2D(2, 0), listOf(), listOf()),
-            ShallowOcean(6, Vec2D(2, 1), listOf(), listOf())
-        )
+        val tile1: Shore = Shore(1, Vec2D(0, 0), listOf(), listOf(), false)
+        val tile2: Shore = Shore(2, Vec2D(0, 1), listOf(), listOf(), false)
+        val tile3: DeepOcean = DeepOcean(3, Vec2D(1, 0), listOf(), listOf(), Current(1, Direction.D0, 1))
+        val tile4: DeepOcean = DeepOcean(4, Vec2D(1, 1), listOf(), listOf(), Current(1, Direction.D60, 1))
+        val tile5: ShallowOcean = ShallowOcean(5, Vec2D(2, 0), listOf(), listOf())
+        val tile6: ShallowOcean = ShallowOcean(6, Vec2D(2, 1), listOf(), listOf())
+
+        tile3.adjacentTiles = listOf(tile5)
+        val listOfTiles: MutableList<Tile> = mutableListOf(tile1, tile2, tile3, tile4, tile5, tile6)
         Sea.tiles.addAll(listOfTiles)
     }
 
@@ -43,7 +44,7 @@ class GarbageTest {
     @Test
     fun testDrift() {
         val currentTile: Tile? = seaInstance.getTileById(3)
-        val garbage = Garbage.createGarbage(10, GarbageType.OIL)
+        val garbage: Garbage = Garbage.createGarbage(10, GarbageType.OIL)
         currentTile?.addGarbage(garbage)
         garbage.drift(currentTile as DeepOcean)
         val garbageInAdjacentTile: List<Garbage>? = seaInstance.getTileById(5)?.garbage

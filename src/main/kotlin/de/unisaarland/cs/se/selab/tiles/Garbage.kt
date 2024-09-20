@@ -125,11 +125,9 @@ class Garbage(
                 return
             }
         }
-        requireNotNull(target).addGarbage(createGarbage(amountToBeDrifted, g.type))
-        if (source.garbage[source.garbage.indexOf(g)] != null) {
-            source.garbage[source.garbage.indexOf(g)].amount -= amountToBeDrifted
-            source.amountOfGarbageDriftedThisTick = amountToBeDrifted
-        }
+        target.addGarbage(createGarbage(amountToBeDrifted, g.type))
+        source.garbage[source.garbage.indexOf(g)].amount -= amountToBeDrifted
+        source.amountOfGarbageDriftedThisTick = amountToBeDrifted
 
         return
     }
