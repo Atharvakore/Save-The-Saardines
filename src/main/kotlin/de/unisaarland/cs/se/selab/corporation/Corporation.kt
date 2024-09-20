@@ -175,7 +175,7 @@ class Corporation(
             .sortedBy { it.id }
             .firstOrNull()
         if (garbage != null) {
-            cap.collectGarbageFromCurrentTile(ship)
+            // Don't move.
             result = true
         } else {
             // Navigate to the closest garbage patch that it can collect.
