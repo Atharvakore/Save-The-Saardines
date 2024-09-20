@@ -84,6 +84,10 @@ class Garbage(
             }
         }
     }
+
+    /**
+     * drifts small garbage
+     */
     private fun driftSmallGarbages(amountToBeDrifted: Int, g: Garbage, source: DeepOcean, targetTile: Tile?): Int {
         var amountToBeDriftedTemp = amountToBeDrifted
         if (g.amount + source.amountOfGarbageDriftedThisTick < amountToBeDrifted) {
@@ -91,7 +95,7 @@ class Garbage(
                 driftOil(g, source, targetTile)
                 amountToBeDriftedTemp -= g.amount
             }
-            driftPlasticandChemicals(g, source, targetTile)
+            driftPlasticAndChemicals(g, source, targetTile)
             amountToBeDriftedTemp -= g.amount
         }
         return amountToBeDriftedTemp
@@ -132,7 +136,7 @@ class Garbage(
     /**
      * drifts plastic and chemicals
      */
-    private fun driftPlasticAndChemicals(g: Garbage, source: DeepOcean, target: Tile?) {
+    fun driftPlasticAndChemicals(g: Garbage, source: DeepOcean, target: Tile?) {
         if (target != null) {
             target.addGarbage(g)
             source.garbage.filter { it == g }
