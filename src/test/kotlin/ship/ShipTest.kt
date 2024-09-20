@@ -45,9 +45,9 @@ class ShipTest {
 
     @Test
     fun testMove() {
-//        ship.position = tile37
-//        ship.move(listOf(tile38))
-//        assertTrue(ship.position == tile38)
+        ship.position = tile37
+        ship.move(listOf(tile38))
+        assertTrue(ship.position == tile38)
         assert(true)
     }
 

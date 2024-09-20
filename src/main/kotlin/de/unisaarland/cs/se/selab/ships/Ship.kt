@@ -73,7 +73,7 @@ class Ship(
         val distanceLength = maxVelocity * maxVelocity / (2 * acceleration) / TEN
         var desTile = this.position
         if (pathShipToTile.size >= distanceLength) {
-            desTile = pathShipToTile[distanceLength]
+            desTile = pathShipToTile[distanceLength - 1]
             consumedFuel += distanceLength * TEN * fuelConsumption
         } else {
             desTile = pathShipToTile.last()
