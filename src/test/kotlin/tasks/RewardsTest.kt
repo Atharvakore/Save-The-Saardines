@@ -46,14 +46,15 @@ class RewardsTest {
 
     @BeforeEach
     fun setUp() {
+        ship1.owner = corporation
         factory.createTestingMap()
         val initialTile = Sea.getTileByPos(Vec2D(5, 7)) ?: error("Tile not found at position (5,7)")
         targetTile = Sea.getTileByPos(Vec2D(6, 6)) ?: error("Tile not found at position (6,6)")
         container = Container(GarbageType.CHEMICALS, 5000)
         collectingCapability = CollectingShip(mutableListOf(container))
         collectingReward = ContainerReward(1, collectingCapability, container)
-        ship1 = Ship(1, 50, 15, 5000, 7, mutableListOf())
         ship2 = Ship(2, 50, 15, 5000, 7, mutableListOf(collectingCapability))
+        ship2.owner = corporation
         ship1.position = initialTile
         task = CollectGarbageTask(
             5,
