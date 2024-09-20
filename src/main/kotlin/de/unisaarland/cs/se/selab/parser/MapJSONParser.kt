@@ -202,6 +202,23 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
     /** Create Map based on the information from Accumulator **/
     private fun createMap() {
         for (element in accumulator.tiles.values) {
+            val x = element.pos.posX
+            val y = element.pos.posY
+            val adjacentTile0 = accumulator.getTileByCoordinate(Vec2D(x - 1, y))
+            val adjacentTile60 = accumulator.getTileByCoordinate(Vec2D(x - 1, y - 1))
+            val adjacentTile120 = accumulator.getTileByCoordinate(Vec2D(x, y - 1))
+            val adjacentTile180 = accumulator.getTileByCoordinate(Vec2D(x + 1, y))
+            val adjacentTile240 = accumulator.getTileByCoordinate(Vec2D(x + 1, y + 1))
+            val adjacentTile300 = accumulator.getTileByCoordinate(Vec2D(x, y + 1))
+            val adjacentTiles = listOf(
+                adjacentTile0,
+                adjacentTile60,
+                adjacentTile120,
+                adjacentTile180,
+                adjacentTile240,
+                adjacentTile300
+            )
+            element.adjacentTiles = adjacentTiles
             Sea.tiles.add(element)
         }
     }
