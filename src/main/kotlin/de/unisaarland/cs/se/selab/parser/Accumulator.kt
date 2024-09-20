@@ -39,6 +39,12 @@ class Accumulator {
         return map.getTileByPos(tileCoordinates)
     }
 
+    public fun getTileByPos(coordinate:Vec2D):Tile?{
+        for ((pos,tile) in tilesByCoordinate) {
+            if (pos == coordinate) return tile
+        }
+        return null
+    }
     /** Setter for a tile into accumulator*/
     public fun addTile(id: Int, t: Tile) {
         tiles[id] = t
