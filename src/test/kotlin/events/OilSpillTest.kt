@@ -7,6 +7,7 @@ import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
+
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OilSpillTest {
     private val seaInstance: Sea = Sea
-    val oilSpillEvent = OilSpill(1, 5, Sea, DeepOcean(0, Vec2D(4, 5), listOf(), listOf(), null), 1, 500)
+    private val oilSpillEvent = OilSpill(1, 5, Sea, DeepOcean(0, Vec2D(4, 5), listOf(), listOf(), null), 1, 500)
 
     @BeforeEach
     fun setUp() {
