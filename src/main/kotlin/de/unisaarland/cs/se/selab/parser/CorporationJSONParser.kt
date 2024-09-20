@@ -97,7 +97,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         val shipsInAcc = accumulator.mapCorporationToShips[id]
         result = result && shipsInAcc != null && shipsInAcc.size == ships.length()
         ships.forEach { ship ->
-            val shipId = ship as Int
+            val shipId = (ship ?: error("It should be a shipID")) as Int
             result = result && shipsInAcc?.contains(shipId) == true
         }
         // check if ships are collecting correct garbage
