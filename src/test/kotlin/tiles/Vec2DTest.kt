@@ -18,15 +18,13 @@ class Vec2DTest {
             Vec2D(1, 7),
             Vec2D(1, 8),
             Vec2D(2, 8),
-            Vec2D(3, 7)
+            Vec2D(3, 7),
+            Vec2D(2, 7),
         )
 
         val actualTilesInRadius: MutableList<Vec2D> = mutableListOf()
         tilesInRadius.forEach {
             actualTilesInRadius.add(it)
-            val x: Int = it.posX
-            val y: Int = it.posY
-            println("($x, $y)")
         }
 
         assert(
