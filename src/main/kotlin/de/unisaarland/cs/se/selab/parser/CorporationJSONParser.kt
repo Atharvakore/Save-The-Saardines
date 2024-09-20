@@ -23,18 +23,14 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         val corporations: JSONArray
         val ships: JSONArray
         val objects: JSONObject
-        /* try {
-            file = File(filePath)
-        } catch (err: FileNotFoundException) {
-            logger.error(err) { "file '$filePath' does not exist." }
-            return false
-        } */
         try {
             objects = JSONObject(filePath)
             return if (objects.has(CORPORATIONS) && objects.has(SHIPS)) {
                 corporations = objects.getJSONArray(CORPORATIONS)
                 ships = objects.getJSONArray(SHIPS)
-                validateShips(ships) && validateCorporations(corporations)
+                validateShips(ships) &&
+                    validateCorporations(corporations) &&
+                    accumulator.mapCorporationToShips.isEmpty()
             } else {
                 false
             }
@@ -228,6 +224,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             it.owner = corporationInstance
         }
         accumulator.addCorporation(id, corporationInstance)
+        accumulator.mapCorporationToShips.remove(id)
         return corporationInstance
     }
 
