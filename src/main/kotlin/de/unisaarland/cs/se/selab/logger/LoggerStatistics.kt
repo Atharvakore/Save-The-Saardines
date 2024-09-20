@@ -1,6 +1,8 @@
 package de.unisaarland.cs.se.selab.logger
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.tiles.Sea
+
 /** Logger Statistics class*/
 object LoggerStatistics {
     /** Logged whenever statistics are calculated. */
@@ -22,7 +24,8 @@ object LoggerStatistics {
         totalPlastic(Logger.totalPlasticCollected)
         totalChemicals(Logger.totalChemicalsCollected)
         totalOil(Logger.totalOilCollected)
-        totalGarbageInOcean(Logger.totalOilCollected + Logger.totalChemicalsCollected + Logger.totalOilCollected)
+        val amountCollected = Logger.totalOilCollected + Logger.totalChemicalsCollected + Logger.totalOilCollected
+        totalGarbageInOcean(Sea.garbageOnMap - amountCollected)
     }
 
     /** Statistics for corporation */
@@ -32,7 +35,7 @@ object LoggerStatistics {
 
     /** Statistics for Plastic*/
     private fun totalPlastic(amount: Int) {
-        Logger.log("Simulation Statistics: Total amount of plastic collected: $amount")
+        Logger.log("Simulation Statistics: Total amount of plastic collected: $amount.")
     }
 
     /** Statistics for Oil*/
