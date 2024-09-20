@@ -76,10 +76,4 @@ class RewardsTest {
         collectingReward.applyReward(ship2)
         assertTrue(ship2.capabilities.contains(collectingCapability))
     }
-
-    @Test
-    fun checkApplyRewardForShipWithCapabilitiesTrue() {
-        collectingReward.applyReward(ship2)
-        assertTrue(ship2.capabilities.contains(collectingCapability))
-    }
 }
