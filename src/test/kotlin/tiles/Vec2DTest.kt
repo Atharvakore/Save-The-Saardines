@@ -24,6 +24,9 @@ class Vec2DTest {
         val actualTilesInRadius: MutableList<Vec2D> = mutableListOf()
         tilesInRadius.forEach {
             actualTilesInRadius.add(it)
+            val x: Int = it.posX
+            val y: Int = it.posY
+            println("($x, $y)")
         }
 
         assert(

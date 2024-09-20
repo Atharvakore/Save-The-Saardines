@@ -8,6 +8,7 @@ import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Shore
+import de.unisaarland.cs.se.selab.tiles.Tile
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.json.JSONArray
 import org.json.JSONObject
@@ -54,21 +55,72 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         return true
     }
 
+    private fun checkHarborTile(harbor: Any): Boolean {
+        val id = harbor as Int
+        var result = true
+        result = result && accumulator.tiles.containsKey(id)
+        val tile: Tile? = accumulator.tiles[id]
+        result = result && tile != null
+        result = result && tile is Shore && tile.harbor
+        return result
+    }
+
+    private fun manageGarbage(corporation: JSONObject): List<GarbageType> {
+        val garbageTypes = corporation.getJSONArray(GARBAGETYPES)
+        if (garbageTypes.length() == 0) return listOf(GarbageType.OIL, GarbageType.PLASTIC, GarbageType.CHEMICALS)
+        val list: List<GarbageType> = garbageTypes.map { type ->
+            mapGarbageStringToType[type]
+                ?: error("Impossible... We have this type")
+        }
+
+        return list
+    }
+
     private fun validateCorporation(corporation: JSONObject): Boolean {
-        var condition = corporation.has(ID)
-        condition = condition && accumulator.corporations[corporation.getInt(ID)] == null
-        val ships = corporation.getJSONArray(SHIPS).toSet()
-        condition = condition && ships == (
+        if (corporation.keySet() != requiredCorporationKeys) return false
+        var result = true
+        result = result && accumulator.corporations[corporation.getInt(ID)] == null
+        val shipsSet = corporation.getJSONArray(SHIPS).toSet()
+        result = result && shipsSet == (
             accumulator.mapCorporationToShips[corporation.getInt(ID)]?.toSet()
                 ?: return false
             )
-        return condition
+
+        val id = corporation.getInt(ID)
+        val name = corporation.getString(NAME)
+        val ships = corporation.getJSONArray(SHIPS)
+        val harbors = corporation.getJSONArray(HOMEHARBORS)
+        val garbage = manageGarbage(corporation)
+
+        // check for uniqueness
+        result = result && id > 0 && !accumulator.corporations.containsKey(id)
+        result = result && accumulator.corporations.values.none { corp -> corp.name == name }
+        // check if tiles for harbors exists
+        harbors.forEach { harbor -> result = result && checkHarborTile(harbor) }
+        // check if ships belongs to corporation
+        val shipsInAcc = accumulator.mapCorporationToShips[id]
+        result = result && shipsInAcc != null && shipsInAcc.size == ships.length()
+        ships.forEach { ship ->
+            val shipId = ship as Int
+            result = result && shipsInAcc?.contains(shipId) == true
+        }
+        // check if ships are collecting correct garbage
+        val shipList = accumulator.mapCorporationToShips[id] ?: error("IMPOSSIBLE... There should be this list")
+        shipList.forEach { shipId ->
+            val ship = accumulator.ships[shipId] ?: error("Impossible... there should be this ship")
+            val collectingCapability = ship.capabilities.filterIsInstance<CollectingShip>().firstOrNull()
+            if (collectingCapability != null) {
+                result = result && garbage.containsAll(collectingCapability.garbageTypes())
+            }
+        }
+        return result
     }
 
     private fun createShip(ship: JSONObject): Ship {
         val id = ship.getInt(ID)
         val type = ship.getString(TYPE)
         val location = ship.getInt(LOCATION)
+        val owner = ship.getInt(CORPORATION)
         val maxVelocity = ship.getInt(MAXVELOCITY)
         val acceleration = ship.getInt(ACCELERATION)
         val fuelCapacity = ship.getInt(FUELCAPACITY)
@@ -264,6 +316,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         const val CAPACITY = "capacity"
         const val VISIBILITY = "visibilityRange"
         const val GARBAGETYPE = "garbageType"
+        const val GARBAGETYPES = "garbageTypes"
         const val SCOUTING = "SCOUTING"
         const val COLLECTER = "COLLECTING"
         const val COORDINATING = "COORDINATING"
@@ -288,6 +341,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         const val N15 = 15
         const val NINE = 9
         val shipTypes = listOf(COLLECTER, SCOUTING, COORDINATING)
+        val requiredCorporationKeys = setOf(ID, NAME, SHIPS, HOMEHARBORS, GARBAGETYPES)
         val mapGarbageStringToType =
             mapOf(CHEMICALS to GarbageType.CHEMICALS, OIL to GarbageType.OIL, PLASTIC to GarbageType.PLASTIC)
     }
