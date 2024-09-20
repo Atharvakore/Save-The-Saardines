@@ -110,7 +110,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         if (!Companion.category.contains(category)) validated = false
         when (category) {
             SHORE -> {
-                if (requiredForCurrent.any { tile.has(it) }) {
+                if (tile.keySet() != requiredKeysShore) {
                     validated = false
                 }
                 val harbor = tile.opt(HARBOR)
@@ -124,28 +124,19 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             }
 
             else -> {
-                if (tile.has(HARBOR) || requiredForCurrent.any { tile.has(it) }) {
-                    validated = false
-                }
+                validated = tile.keySet() == requiredKeysDefault
             }
         }
         return validated
     }
 
     private fun validateDeepOcean(tile: JSONObject): Boolean {
-        var condition = true
-        if (tile.has(HARBOR)) condition = false
+        if (tile.keySet() != requiredKeysDeepOcean || tile.keySet() != requiredKeysCurrent) return false
         val current = tile.getBoolean(CURRENT)
-        if (!condition && current) {
-            return if (requiredForCurrent.all { tile.has(it) }) {
-                validateCurrent(tile)
-            } else {
-                false
-            }
-        } else if (requiredForCurrent.none { tile.has(it) }) {
-            condition = true
+        if (current) {
+            return validateCurrent(tile)
         }
-        return condition
+        return true
     }
 
     /** Validate the id and coordinates of a tile **/
@@ -196,6 +187,9 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             else -> {
                 throw IllegalArgumentException("There should be an Ocean tile")
             }
+        }
+        if (result is Shore && result.harbor) {
+            accumulator.listOfHarbors.add(result.id)
         }
         return result
     }
@@ -302,6 +296,10 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
 
         // const val DIRECTION0 = 0
         const val DIRECTION60 = 60
+        val requiredKeysDefault = setOf(ID, COORDINATES, CATEGORY)
+        val requiredKeysShore = requiredKeysDefault + HARBOR
+        val requiredKeysDeepOcean = requiredKeysDefault + CURRENT
+        val requiredKeysCurrent = requiredKeysDeepOcean + INTENSITY + SPEED + DIRECTION
 
         /* const val DIRECTION120 = 120
         const val DIRECTION180 = 180
@@ -310,6 +308,5 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         const val MAX_SPEED = 30
         const val MAX_INTENSITY = 10
         val category: Array<String> = arrayOf(LAND, SHORE, SHALLOW_OCEAN, DEEP_OCEAN)
-        val requiredForCurrent: Array<String> = arrayOf(DIRECTION, INTENSITY, SPEED)
     }
 }

@@ -23,6 +23,7 @@ class Accumulator {
     val mapCorporationToShips: MutableMap<Int, MutableList<Int>> = mutableMapOf()
     val tiles: MutableMap<Int, Tile> = mutableMapOf()
     val tilesByCoordinate: MutableMap<Vec2D, Tile> = mutableMapOf()
+    val listOfHarbors: MutableList<Int> = mutableListOf()
 
     /** Setter for a reward into accumulator*/
     public fun addReward(rewardId: Int, reward: Reward) {
