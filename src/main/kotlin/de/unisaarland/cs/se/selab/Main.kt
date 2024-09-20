@@ -14,7 +14,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.io.PrintWriter
+import java.io.PrintStream
 
 private val logger = KotlinLogging.logger {}
 
@@ -26,8 +26,8 @@ fun main(args: Array<String>) {
     var corporationsFile: String? = null
     var scenarioFile: String? = null
     var maxTicks: Int? = null
-    var outputFile: String? = "stdout"
-    val file: PrintWriter
+    var outputFile: String? = null
+    var file: PrintStream = System.out
     for (i in args.indices) {
         when (args[i]) {
             "--map" -> mapFile = args[i + 1]
@@ -39,12 +39,11 @@ fun main(args: Array<String>) {
         }
     }
     if (outputFile != null) {
-        file = PrintWriter(File(outputFile))
-        Logger.setOutBuffer(file)
-    } else {
-        file = PrintWriter(System.out)
+        val x = File(outputFile)
+        file = PrintStream(x)
     }
-    val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks, outputFile)
+    Logger.setOutBuffer(file)
+    val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks)
     if (acc != null && maxTicks != null) {
         val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, acc.map)
         sim.start()
@@ -53,11 +52,11 @@ fun main(args: Array<String>) {
 }
 
 /** The main function for parsing */
-fun parse(files: List<String?>, maxTicks: Int?, outputFile: String?): Accumulator? {
+fun parse(files: List<String?>, maxTicks: Int?): Accumulator? {
     val contents = validate(files)
     if (contents != null) {
         val accumulator = Accumulator()
-        var cond: Boolean = maxTicks == null || outputFile == null
+        var cond: Boolean = maxTicks == null
         cond = cond || parseMap(files, contents, accumulator) == null
         if (!(cond || parseScenario(files, contents, accumulator) == null)) {
             return accumulator
