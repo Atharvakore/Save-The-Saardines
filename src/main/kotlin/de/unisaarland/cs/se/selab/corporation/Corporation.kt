@@ -12,7 +12,6 @@ import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
-import kotlin.math.min
 
 const val TODO: String = "Yet to implement"
 
@@ -192,14 +191,8 @@ class Corporation(
             val closestGarbagePatch = attainableGarbage.firstOrNull()
             if (closestGarbagePatch != null) {
                 val path = paths[closestGarbagePatch] ?: return false
-                if (ship.isFuelSufficient(path.size)) {
+                if (ship.isFuelSufficient(path.size) && ship.isCapacitySufficient(closestGarbagePatch.garbage)) {
                     ship.move(path)
-                    val pile = findUncollectedGarbage(closestGarbagePatch, cap, collectorTarget)
-                        ?: error("There should be a pile")
-                    // Dodgy logic?
-                    val amount = collectorTarget.getOrDefault(pile.id, 0) +
-                        min(cap.capacityForType(pile.type), pile.amount)
-                    collectorTarget[pile.id] = min(amount, pile.amount)
                 } else {
                     val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                     ship.moveUninterrupted(closestHarborPath)
