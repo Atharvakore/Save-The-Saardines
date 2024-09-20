@@ -8,11 +8,12 @@ import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
-import kotlin.test.Test
+import org.junit.jupiter.api.Test
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TileTest {
@@ -55,6 +56,11 @@ class TileTest {
         sea.tiles.addAll(tiles)
     }
 
+    @AfterEach
+    fun tearDown() {
+        sea.tiles.clear()
+    }
+
     /** Testing basic functionalities **/
 
     @Test
@@ -82,9 +88,11 @@ class TileTest {
 
     @Test
     fun testRemoveGarbageOfType() {
-        val currTile: Tile? = sea.getTileById(63)
-        currTile?.removeGarbageOfType(GarbageType.CHEMICALS, 100)
-        assertFalse(currTile?.garbage?.any { it.id == 1 }!!)
+        val currTile: Tile? = sea.getTileById(83)
+        val garbage: Garbage = Garbage(1, 100, GarbageType.CHEMICALS, null)
+        currTile!!.garbage = mutableListOf(garbage)
+        currTile.removeGarbageOfType(GarbageType.CHEMICALS, 100)
+        assertFalse(currTile.garbage.any { it.id == 1 })
     }
 
     @Test
