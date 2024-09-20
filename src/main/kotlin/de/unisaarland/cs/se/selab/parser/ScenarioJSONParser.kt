@@ -87,7 +87,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
 
     private fun onlyNecessaryForPirateAttack(event: JSONObject): Boolean {
         return !event.has(AMOUNT) && !event.has("radius") && !event.has("location") &&
-                !event.has(DURATION) && !event.has(DIRECTION) && !event.has(SPEED)
+            !event.has(DURATION) && !event.has(DIRECTION) && !event.has(SPEED)
     }
 
     private fun createEvent(event: JSONObject): Boolean {
