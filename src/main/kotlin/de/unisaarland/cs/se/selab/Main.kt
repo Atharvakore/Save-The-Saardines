@@ -26,7 +26,7 @@ fun main(args: Array<String>) {
     var corporationsFile: String? = null
     var scenarioFile: String? = null
     var maxTicks: Int? = null
-    var outputFile: String? = "stdout"
+    var outputFile: String?
     val file: PrintWriter
     for (i in args.indices) {
         when (args[i]) {
