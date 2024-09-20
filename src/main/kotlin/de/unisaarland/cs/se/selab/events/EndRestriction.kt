@@ -19,7 +19,7 @@ class EndRestriction(
         if (currentTick == fireTick) {
             location.pos.tilesInRadius(radius).forEach {
                 val tile = map?.getTileByPos(it)
-                tile?.restrictions = tile?.restrictions?.minus(1)?:error("There should be a tile")
+                tile?.restrictions = tile?.restrictions?.minus(1) ?: error("There should be a tile")
             }
             return true
         }
