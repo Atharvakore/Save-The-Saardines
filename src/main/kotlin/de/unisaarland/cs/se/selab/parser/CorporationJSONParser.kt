@@ -16,7 +16,7 @@ import java.io.IOException
 /** Parser and Validator for extracting data from Map File **/
 class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser {
     private val logger = KotlinLogging.logger {}
-    private val ownedHarbors: MutableSet<Shore> = mutableSetOf()
+    private val ownedHarbors: MutableSet<Int> = mutableSetOf()
 
     /** Parsing function **/
     fun parseCorporationsFile(filePath: String): Boolean {
@@ -238,14 +238,15 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         ownedShips.forEach {
             it.owner = corporationInstance
         }
-        this.ownedHarbors.addAll(ownedHarbors)
+        ownedHarbors.forEach { harbor ->
+            this.ownedHarbors.add(harbor.id)
+        }
         accumulator.addCorporation(id, corporationInstance)
         accumulator.mapCorporationToShips.remove(id)
         return corporationInstance
     }
 
     private fun validateShip(shipObject: JSONObject): Boolean {
-        if (shipObject.keySet() != requiredShipsKeys) return false
         val id = shipObject.getInt(ID)
         val name = shipObject.getString(NAME)
         val type = shipObject.getString(TYPE)

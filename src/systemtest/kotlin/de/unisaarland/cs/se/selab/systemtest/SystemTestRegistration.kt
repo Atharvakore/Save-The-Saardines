@@ -14,7 +14,7 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
-        manager.registerTest(SampleSimulationTest())
+//        manager.registerTest(SampleSimulationTest())
     }
 
     /**

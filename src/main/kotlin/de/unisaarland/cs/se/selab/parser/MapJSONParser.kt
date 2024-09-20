@@ -131,7 +131,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
     }
 
     private fun validateDeepOcean(tile: JSONObject): Boolean {
-        if (tile.keySet() != requiredKeysDeepOcean || tile.keySet() != requiredKeysCurrent) return false
+        if (tile.keySet() != requiredKeysDeepOcean) return false
         val current = tile.getBoolean(CURRENT)
         if (current) {
             return validateCurrent(tile)
@@ -147,6 +147,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
     }
 
     private fun validateCurrent(tile: JSONObject): Boolean {
+        if (tile.keySet() != requiredKeysCurrent) return false
         val intensity = tile.getInt(INTENSITY)
         val speed = tile.getInt(SPEED)
         val direction = tile.getInt(DIRECTION)
