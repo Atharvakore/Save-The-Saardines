@@ -1,5 +1,6 @@
 package ship
 
+import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.Container
 import de.unisaarland.cs.se.selab.ships.Ship
@@ -41,6 +42,7 @@ class CollectingShipTest {
 
         collectingCapability = CollectingShip(auxiliaryContainers)
         collectingShip = Ship(1, 50, 15, 5000, 7, mutableListOf(collectingCapability))
+        collectingShip.owner = Corporation(1, "corp", mutableListOf(collectingShip), listOf(), listOf(), listOf())
 
         val tile62: Tile = Shore(62, Vec2D(1, 6), listOf(), listOf(), false)
         val tile72: Tile = Shore(72, Vec2D(1, 7), listOf(), listOf(), false)
@@ -70,6 +72,8 @@ class CollectingShipTest {
         tile63.addGarbage(garbage)
 
         val tiles: MutableList<Tile> = mutableListOf(tile62, tile72, tile82, tile83, tile74, tile63, tile73)
+
+        collectingShip.position = tile63
 
         sea.tiles.addAll(tiles)
     }

@@ -8,11 +8,15 @@ import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
 
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class SeaTest {
 
-    init {
+    @BeforeEach
+    fun setUp() {
         val listOfTiles: MutableList<Tile> = mutableListOf(
             Shore(1, Vec2D(0, 0), listOf(), listOf(), false),
             Shore(2, Vec2D(0, 1), listOf(), listOf(), false),
