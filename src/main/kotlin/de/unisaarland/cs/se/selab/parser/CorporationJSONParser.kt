@@ -30,7 +30,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
                 ships = objects.getJSONArray(SHIPS)
                 validateShips(ships) &&
                     validateCorporations(corporations) &&
-                    accumulator.mapCorporationToShips.isEmpty()
+                    accumulator.mapCorporationToShips.isEmpty() && harborAtLeastOneCorp()
             } else {
                 false
             }
@@ -39,7 +39,10 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             return false
         }
     }
-
+    private fun harborAtLeastOneCorp(): Boolean {
+        return accumulator.tiles.values.filterIsInstance<Shore>().filter { it.harbor }
+            .all { accumulator.corporations.values.any { corp -> corp.ownedHarbors.contains(it) } }
+    }
     private fun validateCorporations(corpObjects: JSONArray): Boolean {
         corpObjects.forEach {
             if (validateCorporation((it ?: "corporation is Null") as JSONObject)) {
