@@ -7,17 +7,18 @@ import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import kotlin.test.Test
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OilSpillTest {
     private val seaInstance: Sea = Sea
     val oilSpillEvent = OilSpill(1, 5, Sea, DeepOcean(0, Vec2D(4, 5), listOf(), listOf(), null), 1, 500)
 
-    @BeforeAll
+    @BeforeEach
     fun setUp() {
         val listOfTiles: MutableList<Tile> = mutableListOf(
             DeepOcean(0, Vec2D(4, 5), listOf(), listOf(), null),
@@ -32,8 +33,16 @@ class OilSpillTest {
         Sea.tiles.addAll(listOfTiles)
     }
 
+    @AfterEach
+    fun cleanup() {
+        for (i in 0..7) {
+            Sea.getTileById(i)?.garbage = listOf()
+        }
+    }
+
     @Test
     fun testBasicCurrentTickIsNotFireTick() {
+        this.setUp()
         assertTrue(!oilSpillEvent.actUponTick(4))
         assertTrue(seaInstance.getTileById(0)?.currentOilLevel() == 0)
         assertTrue(seaInstance.getTileById(1)?.currentOilLevel() == 0)
@@ -66,7 +75,7 @@ class OilSpillTest {
         assertTrue(seaInstance.getTileById(1)?.currentOilLevel() == 500)
         assertTrue(seaInstance.getTileById(2)?.currentOilLevel() == 500)
         assertTrue(seaInstance.getTileById(3)?.currentOilLevel() == 500)
-        assertTrue(seaInstance.getTileById(4)?.currentOilLevel() == 500)
+        assertTrue(seaInstance.getTileById(4)?.currentOilLevel() == 0)
         assertTrue(seaInstance.getTileById(5)?.currentOilLevel() == 500)
         assertTrue(seaInstance.getTileById(6)?.currentOilLevel() == 500)
         assertTrue(seaInstance.getTileById(7)?.currentOilLevel() == 500)
