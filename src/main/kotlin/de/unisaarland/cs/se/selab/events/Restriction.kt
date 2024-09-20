@@ -15,11 +15,12 @@ class Restriction(
     override fun toString(): String {
         return "Restriction"
     }
+
     override fun actUponTick(currentTick: Int): Boolean {
         if (currentTick == fireTick) {
             location.pos.tilesInRadius(radius).forEach {
                 val tile = map?.getTileByPos(it)
-                tile?.restrictions?.inc()
+                tile?.restrictions = tile?.restrictions?.plus(1)?: error("No Tile")
             }
             LoggerEventsAndTasks.logEventStart(id, this)
             return true

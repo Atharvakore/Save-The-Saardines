@@ -50,19 +50,24 @@ class RestrictionTest {
     /**
      * Behaviour of Ships is yet to be tested
      */
-  /*  @Test
+    @Test
     fun endRestrictionTest() {
+        var restrictionEvent = Restriction(1, 1, Sea, Sea.getTileByPos(Vec2D(3, 6))!!, 2)
+        var endRestriction = EndRestriction(2, 5, Sea, Sea.getTileByPos(Vec2D(3, 6))!!, 2)
+        assertTrue(!restrictionEvent.actUponTick(0) && !endRestriction.actUponTick(0))
+        assert(restrictionEvent.actUponTick(1))
+        assert(endRestriction.actUponTick(5))
         assertTrue((Sea.getTileByPos(Vec2D(3, 5))?.restrictions ?: true) == 0)
         assertTrue((Sea.getTileByPos(Vec2D(3, 6))?.restrictions ?: true) == 0)
-        assertTrue((Sea.getTileByPos(Vec2D(3, 4))?.restrictions ?: true) == 1)
-        assertTrue((Sea.getTileByPos(Vec2D(3, 5))?.restrictions ?: true) == 1)
-        assertTrue((Sea.getTileByPos(Vec2D(2, 4))?.restrictions ?: true) == 1)
-        assertTrue((Sea.getTileByPos(Vec2D(2, 5))?.restrictions ?: true) == 1)
+        assertTrue((Sea.getTileByPos(Vec2D(3, 4))?.restrictions ?: true) == 0)
+        assertTrue((Sea.getTileByPos(Vec2D(3, 5))?.restrictions ?: true) == 0)
+        assertTrue((Sea.getTileByPos(Vec2D(2, 4))?.restrictions ?: true) == 0)
+        assertTrue((Sea.getTileByPos(Vec2D(2, 5))?.restrictions ?: true) == 0)
         assertTrue((Sea.getTileByPos(Vec2D(2, 6))?.restrictions ?: true) == 0)
         assertTrue((Sea.getTileByPos(Vec2D(3, 7))?.restrictions ?: true) == 0)
         assertTrue((Sea.getTileByPos(Vec2D(4, 7))?.restrictions ?: true) == 0)
-        assertTrue((Sea.getTileByPos(Vec2D(5, 7))?.restrictions ?: true) == 1)
-        assertTrue((Sea.getTileByPos(Vec2D(4, 6))?.restrictions ?: true) == 1)
-        assertTrue((Sea.getTileByPos(Vec2D(5, 6))?.restrictions ?: true) == 1)
-    } */
+        assertTrue((Sea.getTileByPos(Vec2D(5, 7))?.restrictions ?: true) == 0)
+        assertTrue((Sea.getTileByPos(Vec2D(4, 6))?.restrictions ?: true) == 0)
+        assertTrue((Sea.getTileByPos(Vec2D(5, 6))?.restrictions ?: true) == 0)
+    }
 }
