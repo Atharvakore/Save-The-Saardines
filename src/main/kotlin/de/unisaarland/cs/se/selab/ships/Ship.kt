@@ -79,6 +79,7 @@ class Ship(
             consumedFuel += path.size * TEN * fuelConsumption
         }
         this.position = desTile
+        LoggerCorporationAction.logShipMovement(id, acceleration, position.id)
     }
 
     /**

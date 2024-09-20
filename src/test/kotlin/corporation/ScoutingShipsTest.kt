@@ -203,5 +203,9 @@ class ScoutingShipsTest {
 
         // test ships remain at tile with garbage
         assert(scoutingShip1.position == garbageTile1)
+        assert(scoutingShip2.position == garbageTile5)
+        assert(scoutingShip3.position == garbageTile1)
+        assert(scoutingShip4.position == garbageTile2)
+        assert(scoutingShip5.position == garbageTile3)
     }
 }
