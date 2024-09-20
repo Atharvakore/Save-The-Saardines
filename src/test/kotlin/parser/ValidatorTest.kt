@@ -3,13 +3,13 @@ package parser
 import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.parse
 import de.unisaarland.cs.se.selab.parser.Accumulator
-import java.io.PrintWriter
+import java.io.PrintStream
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 class ValidatorTest {
-    private val x: PrintWriter = PrintWriter(System.out)
+    private val x: PrintStream = System.out
 
     @BeforeTest
     fun setBuffer() {

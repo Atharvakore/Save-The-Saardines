@@ -60,11 +60,6 @@ class CollectGarbageTaskTest {
     }
 
     @Test
-    fun checkTargetTileFalse() {
-        assertTrue { task.getGoal() == initialTile }
-    }
-
-    @Test
     fun checkTargetTileTrue() {
         assertTrue { task.getGoal() == targetTile }
     }
