@@ -20,7 +20,7 @@ class Accumulator {
     val tasks: MutableMap<Int, Task> = mutableMapOf()
     val rewards: MutableMap<Int, Reward> = mutableMapOf()
     val mapCorporationToHarbor: Map<Int, MutableList<Tile>> = mutableMapOf()
-    val mapCorporationToShips: Map<Int, MutableList<Int>> = mutableMapOf()
+    val mapCorporationToShips: MutableMap<Int, MutableList<Int>> = mutableMapOf()
     val tiles: MutableMap<Int, Tile> = mutableMapOf()
     val tilesByCoordinate: MutableMap<Vec2D, Tile> = mutableMapOf()
 

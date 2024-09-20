@@ -55,7 +55,14 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
     }
 
     private fun validateCorporation(corporation: JSONObject): Boolean {
-        return corporation.has(ID)
+        var condition = corporation.has(ID)
+        condition = condition && accumulator.corporations[corporation.getInt(ID)] == null
+        val ships = corporation.getJSONArray(SHIPS).toSet()
+        condition = condition && ships == (
+            accumulator.mapCorporationToShips[corporation.getInt(ID)]?.toSet()
+                ?: return false
+            )
+        return condition
     }
 
     private fun createShip(ship: JSONObject): Ship {
@@ -97,6 +104,12 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
                 val coordinatingShip = CoordinatingShip(visibility)
                 shipInstance.addCapability(coordinatingShip)
             }
+        }
+        val corporationShips: MutableList<Int>? = accumulator.mapCorporationToShips[ship.getInt(CORPORATION)]
+        if (corporationShips != null) {
+            corporationShips.add(id)
+        } else {
+            accumulator.mapCorporationToShips[ship.getInt(CORPORATION)] = mutableListOf(id)
         }
         return shipInstance
     }
@@ -147,7 +160,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
                 requireNotNull(accumulator.ships[(it ?: error("ship shouldn't be null in parser case")) as Int])
             )
         }
-        val harbors = corporation.getJSONArray(HOMEHARBORS)
+        val harbors = corporation.getJSONArray(HOMEHARBORS).toSet()
         val ownedHarbors: MutableList<Shore> = mutableListOf()
         harbors.forEach {
             ownedHarbors.add(
