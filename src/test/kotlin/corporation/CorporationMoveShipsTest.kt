@@ -1,7 +1,6 @@
 package corporation
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
-import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
@@ -25,8 +24,8 @@ class CorporationMoveShipsTest {
         // setUP
         val harborTile = Sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList<Task>())
-        val c2 = Corporation(2, "c2", mutableListOf(), emptyList(), listOf(), emptyList<Task>())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
+        val c2 = Corporation(2, "c2", mutableListOf(), emptyList(), listOf(), emptyList())
 
         val c2ShipTile = Sea.getTileByPos(Vec2D(6, 2)) ?: error("Tile not found at position (6,2)")
 
@@ -71,5 +70,46 @@ class CorporationMoveShipsTest {
         c2.run(otherShips = listOf(scoutingShip, coordinatingShip, collectingShip))
 
         assert(c2Ship.position == c2ShipTile)
+    }
+
+    /**
+     * test a simple scouting ship movement to a tile with garbage in its visibility range
+     * */
+    @Test
+    fun testMoveCollectingShipToGarbageSimple() {
+        // test setup
+        val listOfShips = factory.createShips()
+        val scoutingShipTile = Sea.getTileByPos(Vec2D(5, 7)) ?: error("Tile not found at position (5,7)")
+        val collectingShipTile = Sea.getTileByPos(Vec2D(1, 1)) ?: error("Tile not found at position (5,7)")
+        val harborTile = Sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
+        val gType = GarbageType.OIL
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
+
+        val scoutingShip = listOfShips[1]
+        scoutingShip.owner = c1
+        scoutingShip.position = scoutingShipTile
+        scoutingShip.name = "unknown"
+        c1.ownedShips.add(scoutingShip)
+
+        val collectingShip = listOfShips[11]
+        collectingShip.owner = c1
+        collectingShip.position = collectingShipTile
+        collectingShip.name = "unknown"
+        c1.ownedShips.add(collectingShip)
+        // test
+        // add garbage to tile
+        val garbage = Garbage(1, 200, GarbageType.OIL, emptySet())
+        val garbageTile = Sea.getTileByPos(Vec2D(8, 8))
+        garbageTile?.garbage = listOf(garbage)
+
+        c1.run(emptyList())
+        // test ship moved to garbage tile
+        assert(scoutingShip.position == garbageTile)
+        assert(collectingShip.position != garbageTile)
+
+        c1.run(emptyList())
+        // assure scouting ship didn't leave tile in next tick and collecting ship arrived
+        assert(scoutingShip.position == garbageTile)
+        assert(collectingShip.position == garbageTile)
     }
 }
