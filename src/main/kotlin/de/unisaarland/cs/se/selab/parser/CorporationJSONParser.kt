@@ -55,7 +55,14 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
     }
 
     private fun validateCorporation(corporation: JSONObject): Boolean {
-        return corporation.has(ID)
+        var condition = corporation.has(ID)
+        condition = condition && accumulator.corporations[corporation.getInt(ID)] == null
+        val harbors = corporation.getJSONArray(HOMEHARBORS).toSet()
+        condition = condition && harbors == (
+            accumulator.mapCorporationToShips[corporation.getInt(ID)]?.toSet()
+                ?: return false
+            )
+        return condition
     }
 
     private fun createShip(ship: JSONObject): Ship {
@@ -97,6 +104,12 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
                 val coordinatingShip = CoordinatingShip(visibility)
                 shipInstance.addCapability(coordinatingShip)
             }
+        }
+        val corporationShips: MutableList<Int>? = accumulator.mapCorporationToShips[ship.getInt(CORPORATION)]
+        if (corporationShips != null) {
+            corporationShips.add(id)
+        } else {
+            accumulator.mapCorporationToShips[ship.getInt(CORPORATION)] = mutableListOf(id)
         }
         return shipInstance
     }
@@ -147,7 +160,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
                 requireNotNull(accumulator.ships[(it ?: error("ship shouldn't be null in parser case")) as Int])
             )
         }
-        val harbors = corporation.getJSONArray(HOMEHARBORS)
+        val harbors = corporation.getJSONArray(HOMEHARBORS).toSet()
         val ownedHarbors: MutableList<Shore> = mutableListOf()
         harbors.forEach {
             ownedHarbors.add(
@@ -157,10 +170,11 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
                     ) as Shore
             )
         }
-
         val garbageTypes: List<GarbageType> = listOf(GarbageType.OIL, GarbageType.PLASTIC, GarbageType.CHEMICALS)
         val corporationInstance = Corporation(id, name, ownedShips, ownedHarbors, garbageTypes, mutableListOf())
-        corporationInstance.ownedShips.forEach { ship -> ship.owner = corporationInstance }
+        ownedShips.forEach {
+            it.owner = corporationInstance
+        }
         accumulator.addCorporation(id, corporationInstance)
         return corporationInstance
     }
