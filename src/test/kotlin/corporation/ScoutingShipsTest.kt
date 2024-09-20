@@ -28,14 +28,14 @@ class ScoutingShipsTest {
     @Test
     fun testMoveToGarbageSimple() {
         // test setup
-        val initialTile = Sea.getTileByPos(Vec2D(5, 7)) ?: error("Tile not found at position (5,7)")
+        val shipTile = Sea.getTileByPos(Vec2D(5, 7)) ?: error("Tile not found at position (5,7)")
         val harborTile = Sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
         val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList<Task>())
         val capability = ScoutingShip(5)
         val scoutingShip = Ship(1, 100, 25, 3000, 10, mutableListOf(capability))
         scoutingShip.owner = c1
-        scoutingShip.position = initialTile
+        scoutingShip.position = shipTile
         scoutingShip.name = "unknown"
         c1.ownedShips.add(scoutingShip)
 
