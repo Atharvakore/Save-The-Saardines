@@ -88,6 +88,9 @@ class Ship(
             consumedFuel += path.size * TEN * fuelConsumption
             LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
         }
+        if (desTile == path.last()) {
+            currentVelocity = 0
+        }
         this.position = desTile
     }
 
@@ -152,7 +155,7 @@ class Ship(
      * if oil then true if it can collect some of the amount
      * */
     fun isCapacitySufficient(garbage: List<Garbage>): Boolean {
-        var result: Boolean
+        val result: Boolean
         val capability = this.capabilities.first() as CollectingShip
 
         val oil = garbage.filter { it.type == GarbageType.OIL }
