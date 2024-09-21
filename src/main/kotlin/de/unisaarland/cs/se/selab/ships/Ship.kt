@@ -26,6 +26,7 @@ class Ship(
     private var consumedFuel: Int = 0
     var hasTaskAssigned: Boolean = false
     private var destinationPath = emptyList<Tile>()
+    private var currentVelocity = 0
 
     /**
      * Call: when the ship is on the harbor
@@ -66,21 +67,26 @@ class Ship(
      * Call: when a ship is the closest one to the garbage or when the ship has to return to the harbor
      * Logic: the ship gets a path (a list of tiles from destination to ship), has to reverse path and move along it
      * the ship moves along the path as long as it can
-     *
-     * distance = (velocity^2 / 2 * acceleration)
      */
     fun move(path: List<Tile>) {
+        // acceleration
+        if (currentVelocity < maxVelocity) {
+            currentVelocity += acceleration
+            if (currentVelocity > maxVelocity) {
+                currentVelocity = maxVelocity
+            }
+        }
         // the distance the ship can traverse
-        val distanceLength = maxVelocity * maxVelocity / (2 * acceleration) / TEN
+        val distanceLength = currentVelocity / TEN
         val desTile: Tile
-        if (path.size >= distanceLength) {
-            desTile = path[distanceLength - 1]
+        if (path.size > distanceLength) {
+            desTile = path[distanceLength]
             consumedFuel += distanceLength * TEN * fuelConsumption
-            LoggerCorporationAction.logShipMovement(id, acceleration, desTile.id)
+            LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
         } else {
             desTile = path.last()
             consumedFuel += path.size * TEN * fuelConsumption
-            LoggerCorporationAction.logShipMovement(id, acceleration, desTile.id)
+            LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
         }
         this.position = desTile
     }
@@ -114,7 +120,7 @@ class Ship(
      * */
     fun tickTask() {
         val lastTileIndex = destinationPath.size - 1
-        val reachedTileIndex = destinationPath.indexOf(this.position) + 1
+        val reachedTileIndex = destinationPath.indexOf(this.position)
         destinationPath = destinationPath.subList(reachedTileIndex, lastTileIndex)
         move(destinationPath)
         if (this.position == destinationPath.last()) {
@@ -133,6 +139,10 @@ class Ship(
         if (this.position == pathToHarbor.last()) {
             hasTaskAssigned = false
             destinationPath = emptyList()
+        } else {
+            val startIndex = pathToHarbor.indexOf(this.position)
+            val lastIndex = pathToHarbor.size - 1
+            destinationPath = pathToHarbor.subList(startIndex, lastIndex)
         }
     }
 

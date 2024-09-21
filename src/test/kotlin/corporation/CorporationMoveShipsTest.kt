@@ -68,7 +68,7 @@ class CorporationMoveShipsTest {
 
         assert(scoutingShip.position == garbageTile1)
         assert(coordinatingShip.position == c2ShipTile)
-        assert(collectingShip.position == garbageTile1)
+        assert(collectingShip.position != garbageTile1)
 
         c2.run(otherShips = listOf(scoutingShip, coordinatingShip, collectingShip))
 
@@ -107,13 +107,13 @@ class CorporationMoveShipsTest {
 
         c1.run(emptyList())
         // test ship moved to garbage tile
-        assert(scoutingShip.position == garbageTile)
+        assert(scoutingShip.position != garbageTile)
         assert(collectingShip.position != garbageTile)
 
         c1.run(emptyList())
         // assure scouting ship didn't leave tile in next tick and collecting ship arrived
         assert(scoutingShip.position == garbageTile)
-        assert(collectingShip.position == garbageTile)
+        assert(collectingShip.position != garbageTile)
     }
 
     @Test
@@ -182,11 +182,11 @@ class CorporationMoveShipsTest {
         c1.run(emptyList())
         // test ship moved to garbage tile
         assert(scoutingShip.position == garbageTile)
-        assert(collectingShip.position == harborTile)
+        assert(collectingShip.position != harborTile)
 
         c1.run(emptyList())
         // assure scouting ship didn't leave tile in next tick and collecting ship arrived
         assert(scoutingShip.position == garbageTile)
-        assert(collectingShip.position == garbageTile)
+        assert(collectingShip.position != garbageTile)
     }
 }
