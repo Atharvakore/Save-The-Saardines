@@ -30,7 +30,7 @@ open class Tile(
     /**
      * Get tiles in specified Direction
      */
-    public fun getTileInDirection(
+    fun getTileInDirection(
         distance: Int,
         dir: Direction,
     ): Tile? {

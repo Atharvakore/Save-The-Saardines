@@ -28,152 +28,70 @@ class Garbage(
     }
 
     /**
-     * drifts possible garbage to the respected tile
-     *//* public fun drift(currentTile: DeepOcean) {
-         val localcurrent: Current? = currentTile.getCurrent()
-         var ammounttobedrifted = localcurrent?.intensity?.times(FIFTY)
-         var toBedrifted = localcurrent?.speed?.div(TEN)
-             ?.let { localcurrent.direction?.let { it1 -> currentTile.getTileInDirection(it, it1) } }
-         for (g in currentTile.garbage.sortedBy { it.id }) {
-             if(g.amount >= ammounttobedrifted!!){
-                 driftBigGarbages(ammounttobedrifted,g,currentTile,toBedrifted)
-             }
-             if (g.amount + currentTile.amountOfGarbageDriftedThisTick < ammounttobedrifted!!) {
-                 if (g.type == GarbageType.OIL) {
-                     driftOil(g, currentTile, toBedrifted)
-                     ammounttobedrifted = ammounttobedrifted?.minus(g.amount)
-                 }
-                 driftPlasticandChemicals(g, currentTile, toBedrifted)
-                 ammounttobedrifted = ammounttobedrifted?.minus(g.amount)
-             }
-         }
-
-
-     }
-    public fun drift(currentTile: DeepOcean) {
-        val localCurrent: Current? = currentTile.getCurrent()
-        if (localCurrent != null) {
-            var amountToBeDrifted = localCurrent.intensity * FIFTY
-            var targetForDriftingTile = currentTile.getTileInDirection(localCurrent.speed / TEN, localCurrent.direction)
-            for (g in currentTile.garbage.sortedBy { it.id }) {
-                if (g.amount >= amountToBeDrifted) {
-                    driftBigGarbages(amountToBeDrifted, g, currentTile, targetForDriftingTile)
-                }
-                if (g.amount + currentTile.amountOfGarbageDriftedThisTick < amountToBeDrifted) {
-                    if (g.type == GarbageType.OIL) {
-                        driftOil(g, currentTile, targetForDriftingTile)
-                        amountToBeDrifted -= g.amount
-                    }
-                    driftPlasticandChemicals(g, currentTile, targetForDriftingTile)
-                    amountToBeDrifted -= g.amount
-                }
-            }
-        }
-
-    }*/
-
-    public fun drift(tile: Tile) {
-        if (tile is DeepOcean) {
-            driftHelper(tile)
-        }
-        return
+     * drifts garbage
+     */
+    fun drift(tile: DeepOcean, targetTile: Tile, current: Current): Garbage? {
+        return driftHelper(tile, targetTile, current)
     }
 
     /**
      * helps drifting
      */
-    public fun driftHelper(currentTile: DeepOcean) {
-        val localCurrent: Current? = currentTile.getCurrent()
-
-        var amountToBeDrifted = (localCurrent?.intensity ?: return) * FIFTY
-        val targetForDriftingTile = currentTile.getTileInDirection(localCurrent.speed / TEN, localCurrent.direction)
-        if (checkTargetTile(currentTile) && currentTile.garbage.isNotEmpty()) {
-            for (g in currentTile.garbage.sortedBy { it.id }) {
-                val forLogger = amountToBeDrifted
-                if (g.type == GarbageType.OIL) {
-                    amountToBeDrifted = handleOilGarbage(
-                        g,
-                        targetForDriftingTile,
-                        currentTile,
-                        amountToBeDrifted
-                    )
-                }
-                amountToBeDrifted = driftGarbage(
-                    g,
-                    currentTile,
-                    targetForDriftingTile,
-                    amountToBeDrifted
-                )
-                Logger.logCurrentDriftGarbage(
-                    g.type,
-                    g.id,
-                    forLogger - amountToBeDrifted,
-                    currentTile.id,
-                    targetForDriftingTile?.id ?: return
-                )
+    private fun driftHelper(currentTile: DeepOcean, targetTile: Tile, localCurrent: Current): Garbage? {
+        val result: Garbage?
+        val toBeDrifted: Int
+        val driftAmount = localCurrent.intensity * FIFTY
+        if (currentTile.amountOfGarbageDriftedThisTick < driftAmount) {
+            toBeDrifted = driftAmount - currentTile.amountOfGarbageDriftedThisTick
+        } else {
+            return null
+        }
+        when (this.type) {
+            GarbageType.OIL -> {
+                result = handleOilGarbage(currentTile, targetTile, toBeDrifted)
+            }
+            GarbageType.CHEMICALS -> {
+                result = handleChemicalsGarbage(currentTile, targetTile, toBeDrifted)
+            }
+            else -> {
+                val drifted = minOf(this.amount, toBeDrifted)
+                this.amount -= drifted
+                result = createGarbage(drifted, GarbageType.PLASTIC)
+                currentTile.amountOfGarbageDriftedThisTick += drifted
+                Logger.logCurrentDriftGarbage(type, this.id, drifted, currentTile.id, targetTile.id)
             }
         }
+        return result
+    }
+
+    private fun handleChemicalsGarbage(currentTile: DeepOcean, targetTile: Tile, toBeDrifted: Int): Garbage? {
+        val drifted = minOf(this.amount, toBeDrifted)
+        this.amount -= drifted
+        if (targetTile is DeepOcean) {
+            currentTile.amountOfGarbageDriftedThisTick += drifted
+            Logger.logCurrentDriftGarbage(type, this.id, drifted, currentTile.id, targetTile.id)
+        } else {
+            val newGarbage = createGarbage(drifted, GarbageType.CHEMICALS)
+            currentTile.amountOfGarbageDriftedThisTick += drifted
+            Logger.logCurrentDriftGarbage(type, this.id, drifted, currentTile.id, targetTile.id)
+            return newGarbage
+        }
+        return null
     }
     private fun handleOilGarbage(
-        g: Garbage,
-        targetForDriftingTile: Tile?,
         currentTile: DeepOcean,
-        amountToBeDrifted: Int
-    ): Int {
-        var toBeReturned: Int = 0
-        if (targetForDriftingTile != null) {
-            if (targetForDriftingTile.currentOilLevel() + g.amount <= THOUSAND) {
-                currentTile.garbage.minus(g)
-                targetForDriftingTile.garbage.plus(g)
-                toBeReturned = amountToBeDrifted - g.amount
-            } else {
-                createGarbage(THOUSAND - currentTile.currentOilLevel(), GarbageType.OIL)
-                val index = currentTile.garbage.indexOf(g)
-                currentTile.garbage[index].amount -= THOUSAND - currentTile.currentOilLevel()
-                targetForDriftingTile.garbage.plus(
-                    createGarbage(THOUSAND - currentTile.currentOilLevel(), GarbageType.OIL)
-                )
-                toBeReturned = amountToBeDrifted - (THOUSAND - currentTile.currentOilLevel())
-            }
+        targetTile: Tile,
+        toBeDrifted: Int
+    ): Garbage? {
+        val maxDrift = THOUSAND - targetTile.getAmountOfType(GarbageType.OIL)
+        val drifted = minOf(this.amount, toBeDrifted, maxDrift)
+        if (drifted > 0) {
+            this.amount -= drifted
+            currentTile.amountOfGarbageDriftedThisTick += drifted
+            Logger.logCurrentDriftGarbage(type, id, drifted, currentTile.id, targetTile.id)
+            return createGarbage(drifted, GarbageType.OIL)
         }
-        return toBeReturned
-    }
-
-    private fun driftGarbage(
-        g: Garbage,
-        currentTile: DeepOcean,
-        targetForDriftingTile: Tile?,
-        amountToBeDrifted: Int
-    ): Int {
-        var remainingAmount = amountToBeDrifted
-
-        if (remainingAmount <= g.amount && remainingAmount > 0) {
-            if (remainingAmount == g.amount) {
-                targetForDriftingTile?.garbage?.plus(g)
-                currentTile.garbage.minusElement(g)
-                remainingAmount = 0
-            } else {
-                currentTile.garbage[0].amount -= remainingAmount
-                targetForDriftingTile?.garbage?.plus(createGarbage(remainingAmount, g.type))
-                remainingAmount = 0
-            }
-        } else {
-            currentTile.garbage.minusElement(g)
-            targetForDriftingTile?.garbage?.plus(g)
-            remainingAmount -= g.amount
-        }
-
-        return remainingAmount
-    }
-
-    /**
-     * checks if given tile is Valid or not
-     */
-    private fun checkTargetTile(tile: Tile?): Boolean {
-        if (tile is Shore || tile == null) {
-            return false
-        }
-        return true
+        return null
     }
 
     /**

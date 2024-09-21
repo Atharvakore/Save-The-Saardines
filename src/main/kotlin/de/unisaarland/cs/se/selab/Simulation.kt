@@ -7,7 +7,10 @@ import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
+import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Sea
+import de.unisaarland.cs.se.selab.tiles.TEN
+import de.unisaarland.cs.se.selab.tiles.Tile
 
 /**
  * class that represents and handles the simulation
@@ -65,13 +68,32 @@ class Simulation(
      * handles the drift garbage logic
      */
     private fun driftGarbage() {
-        val tiles = sea.tiles
-        val deepOceanTiles = tiles.filterIsInstance<DeepOcean>()
+        val garbageToList: MutableMap<Tile, MutableList<Garbage?>> = mutableMapOf()
 
-        for (tile in deepOceanTiles) {
-            val garbageList = tile.garbage
-            for (garbage in garbageList) {
-                garbage.drift(tile)
+        sea.tiles
+            .filterIsInstance<DeepOcean>()
+            .forEach { tile ->
+                garbageDriftHelper(tile, garbageToList)
+            }
+        garbageToList.forEach { (tile, garbageList) ->
+            garbageList.toList().forEach { garbage ->
+                if (garbage != null) {
+                    tile.addGarbage(garbage)
+                }
+            }
+        }
+    }
+
+    private fun garbageDriftHelper(currentTile: DeepOcean, garbageToList: MutableMap<Tile, MutableList<Garbage?>>) {
+        val garbageList = currentTile.garbage
+        for (garbage in garbageList) {
+            val current = currentTile.getCurrent()
+            if (current != null) {
+                val targetTile = currentTile.getTileInDirection(current.speed / TEN, current.direction)
+                if (targetTile != null) {
+                    val g = garbage.drift(currentTile, targetTile, current)
+                    garbageToList.getOrPut(currentTile) { mutableListOf() }.add(g)
+                }
             }
         }
     }
