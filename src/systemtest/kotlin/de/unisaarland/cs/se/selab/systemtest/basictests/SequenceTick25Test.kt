@@ -27,9 +27,10 @@ class SequenceTick25Test : ExampleSystemTestExtension() {
         assertNextLine("Corporation Action: Corporation 1 finished its actions.")
         assertNextLine("Current Drift: OIL 1 with amount 50 drifted from tile 66 to tile 67.")
         assertNextLine("Current Drift: Ship 1 drifted from tile 66 to tile 67.")
+        assertNextLine("Current Drift: Ship 2 drifted from tile 34 to tile 24.")
         assertNextLine("Simulation Info: Simulation ended.")
 
-        assertNextLine("Simulation Info: Simulation statistics are calculated. ")
+        assertNextLine("Simulation Info: Simulation statistics are calculated.")
         assertNextLine("Simulation Statistics: Corporation 1 collected 0 of garbage.")
         assertNextLine("Simulation Statistics: Total amount of plastic collected: 0.")
         assertNextLine("Simulation Statistics: Total amount of oil collected: 0.")
