@@ -30,6 +30,8 @@ object SystemTestRegistration {
     fun registerSystemTestsMutantValidation(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
         manager.registerTest(SequenceTick25Test())
+        manager.registerTest(IncorrectPropertiesTest())
+        manager.registerTest(ShipAmongUs())
     }
 
     /**
