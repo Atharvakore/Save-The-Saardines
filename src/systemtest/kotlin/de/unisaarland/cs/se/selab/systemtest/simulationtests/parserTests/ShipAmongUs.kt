@@ -12,7 +12,7 @@ class ShipAmongUs : ExampleSystemTestExtension() {
     override val scenario = "scenarioJsons/scenario1.json"
     override suspend fun run() {
         assertNextLine("Initialization Info: map.json successfully parsed and validated.")
-        assertNextLine("Initialization Info: corporations1.json is invalid.")
+        assertNextLine("Initialization Info: corporationIncorrectGarbage.json is invalid.")
         assertEnd()
     }
 }
