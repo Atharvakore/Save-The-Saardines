@@ -131,12 +131,11 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
     }
 
     private fun validateDeepOcean(tile: JSONObject): Boolean {
-        if (tile.keySet() != requiredKeysDeepOcean) return false
         val current = tile.getBoolean(CURRENT)
         if (current) {
             return validateCurrent(tile)
         }
-        return true
+        return tile.keySet() == requiredKeysDeepOcean
     }
 
     /** Validate the id and coordinates of a tile **/
