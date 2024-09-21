@@ -28,50 +28,8 @@ class Garbage(
     }
 
     /**
-     * drifts possible garbage to the respected tile
-     *//* public fun drift(currentTile: DeepOcean) {
-         val localcurrent: Current? = currentTile.getCurrent()
-         var ammounttobedrifted = localcurrent?.intensity?.times(FIFTY)
-         var toBedrifted = localcurrent?.speed?.div(TEN)
-             ?.let { localcurrent.direction?.let { it1 -> currentTile.getTileInDirection(it, it1) } }
-         for (g in currentTile.garbage.sortedBy { it.id }) {
-             if(g.amount >= ammounttobedrifted!!){
-                 driftBigGarbages(ammounttobedrifted,g,currentTile,toBedrifted)
-             }
-             if (g.amount + currentTile.amountOfGarbageDriftedThisTick < ammounttobedrifted!!) {
-                 if (g.type == GarbageType.OIL) {
-                     driftOil(g, currentTile, toBedrifted)
-                     ammounttobedrifted = ammounttobedrifted?.minus(g.amount)
-                 }
-                 driftPlasticandChemicals(g, currentTile, toBedrifted)
-                 ammounttobedrifted = ammounttobedrifted?.minus(g.amount)
-             }
-         }
-
-
-     }
-    public fun drift(currentTile: DeepOcean) {
-        val localCurrent: Current? = currentTile.getCurrent()
-        if (localCurrent != null) {
-            var amountToBeDrifted = localCurrent.intensity * FIFTY
-            var targetForDriftingTile = currentTile.getTileInDirection(localCurrent.speed / TEN, localCurrent.direction)
-            for (g in currentTile.garbage.sortedBy { it.id }) {
-                if (g.amount >= amountToBeDrifted) {
-                    driftBigGarbages(amountToBeDrifted, g, currentTile, targetForDriftingTile)
-                }
-                if (g.amount + currentTile.amountOfGarbageDriftedThisTick < amountToBeDrifted) {
-                    if (g.type == GarbageType.OIL) {
-                        driftOil(g, currentTile, targetForDriftingTile)
-                        amountToBeDrifted -= g.amount
-                    }
-                    driftPlasticandChemicals(g, currentTile, targetForDriftingTile)
-                    amountToBeDrifted -= g.amount
-                }
-            }
-        }
-
-    }*/
-
+     * drifts garbage
+     */
     public fun drift(tile: Tile) {
         if (tile is DeepOcean) {
             driftHelper(tile)
