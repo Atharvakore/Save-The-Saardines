@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.tiles
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.logger.Logger
 
 /**
  * Garbage class implementing all minor stuff related to Garbage
@@ -88,6 +89,7 @@ class Garbage(
         val targetForDriftingTile = currentTile.getTileInDirection(localCurrent.speed / TEN, localCurrent.direction)
         if (checkTargetTile(currentTile) && currentTile.garbage.isNotEmpty()) {
             for (g in currentTile.garbage.sortedBy { it.id }) {
+                val forLogger = amountToBeDrifted
                 if (g.type == GarbageType.OIL) {
                     amountToBeDrifted = handleOilGarbage(
                         g,
@@ -102,10 +104,16 @@ class Garbage(
                     targetForDriftingTile,
                     amountToBeDrifted
                 )
+                Logger.logCurrentDriftGarbage(
+                    g.type,
+                    g.id,
+                    forLogger - amountToBeDrifted,
+                    currentTile.id,
+                    targetForDriftingTile?.id ?: return
+                )
             }
         }
     }
-
     private fun handleOilGarbage(
         g: Garbage,
         targetForDriftingTile: Tile?,
