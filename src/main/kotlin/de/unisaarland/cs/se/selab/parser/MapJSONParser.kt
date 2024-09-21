@@ -190,7 +190,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             }
         }
         if (result is Shore && result.harbor) {
-            accumulator.listOfHarbors.add(result.id)
+            accumulator.listOfHarbors.add(result)
         }
         return result
     }

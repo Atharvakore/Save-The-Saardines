@@ -1,0 +1,13 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "CHEMICALS",
+      "location": 1,
+      "amount": 200
+    }
+  ],
+  "events": [],
+  "tasks": [],
+  "rewards": []
+}
