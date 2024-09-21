@@ -204,11 +204,11 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             } else {
                 0
             }
-            val adjacentTile0 = accumulator.getTileByPos(Vec2D(x - 1, y)) // west
-            val adjacentTile60 = accumulator.getTileByPos(Vec2D(x - 1 + nextValue, y - 1))
-            val adjacentTile120 = accumulator.getTileByPos(Vec2D(x + nextValue, y - 1))
-            val adjacentTile180 = accumulator.getTileByPos(Vec2D(x + 1, y)) // east
-            val adjacentTile240 = accumulator.getTileByPos(Vec2D(x + 1 + nextValue, y + 1))
+            val adjacentTile0 = accumulator.getTileByPos(Vec2D(x + 1, y)) // east
+            val adjacentTile60 = accumulator.getTileByPos(Vec2D(x + nextValue, y - 1))
+            val adjacentTile120 = accumulator.getTileByPos(Vec2D(x + nextValue - 1, y - 1))
+            val adjacentTile180 = accumulator.getTileByPos(Vec2D(x - 1, y)) // west
+            val adjacentTile240 = accumulator.getTileByPos(Vec2D(x - 1 + nextValue, y + 1))
             val adjacentTile300 = accumulator.getTileByPos(Vec2D(x + nextValue, y + 1))
             val adjacentTiles = listOf(
                 adjacentTile0,
