@@ -1,0 +1,22 @@
+{
+  "tiles": [
+    {
+      "id": 1,
+      "coordinates": {
+        "x": 0,
+        "y": 2
+      },
+      "category": "SHORE",
+      "harbor": true
+    },
+    {
+      "id": 2,
+      "coordinates": {
+        "x": 0,
+        "y": 3
+      },
+      "category": "SHORE",
+      "harbor": false
+    }
+  ]
+}

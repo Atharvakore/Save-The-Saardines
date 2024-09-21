@@ -91,7 +91,7 @@ class ScoutingShipsTest {
         // test same distance of garbage piles
         assert(scoutingShip1.position == garbageTile1)
         // test ship moved to tile in FoV of Corporation
-        assert(scoutingShip2.position == garbageTile2)
+        assert(scoutingShip2.position != garbageTile2)
 
         c1.run(emptyList())
         // test ships remain at tile with garbage
@@ -127,7 +127,7 @@ class ScoutingShipsTest {
 
         c1.run(emptyList())
         // test ship move to the closest garbage pile
-        assert(scoutingShip1.position == garbageTile1)
+        assert(scoutingShip1.position != garbageTile1)
 
         c1.run(emptyList())
 

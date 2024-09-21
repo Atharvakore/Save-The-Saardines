@@ -31,7 +31,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
                 validateShips(ships) &&
                     validateCorporations(corporations) &&
                     accumulator.mapCorporationToShips.isEmpty() &&
-                    accumulator.listOfHarbors.toSet() == ownedHarbors
+                    harborAtLeastOneCorp()
             } else {
                 false
             }
@@ -39,6 +39,11 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             logger.error(err) { "Failed to parse file '$filePath'" }
             return false
         }
+    }
+
+    private fun harborAtLeastOneCorp(): Boolean {
+        return accumulator.listOfHarbors
+            .all { accumulator.corporations.values.any { corp -> corp.ownedHarbors.contains(it) } }
     }
 
     private fun validateCorporations(corpObjects: JSONArray): Boolean {
@@ -54,7 +59,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
 
     private fun checkHarborTile(harbor: Any): Boolean {
         val id = harbor as Int
-        return accumulator.listOfHarbors.contains(id)
+        return accumulator.listOfHarbors.any { it.id == id }
     }
 
     private fun manageGarbage(corporation: JSONObject): List<GarbageType> {
@@ -108,7 +113,18 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             val shipId = (ship ?: error("It should be a shipID")) as Int
             result = result && shipsInAcc?.contains(shipId) == true
         }
+        // check if there is at least one ship for each garbageType
         val shipList = accumulator.mapCorporationToShips[id] ?: error("IMPOSSIBLE... There should be this list")
+        val shipsInCorp = accumulator.ships.filter { ship -> shipList.contains(ship.key) }.values
+        val typesPresent = mutableSetOf<GarbageType>()
+        val collectingShips = shipsInCorp.filter { ship ->
+            ship.capabilities.filterIsInstance<CollectingShip>().isNotEmpty()
+        }
+        collectingShips.forEach { ship ->
+            val collectingCapability: CollectingShip = ship.capabilities[0] as CollectingShip
+            typesPresent.addAll(collectingCapability.garbageTypes())
+        }
+        if (typesPresent != garbage.toSet()) result = false
         // check if garbage is empty and list has no collector
         if (garbage.isEmpty()) {
             shipList.forEach { shipId ->
@@ -116,14 +132,9 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
                 result = result && ship.capabilities.filterIsInstance<CollectingShip>().none()
             }
         }
-        // check if ships are collecting correct garbage
-        shipList.forEach { shipId ->
-            val ship = accumulator.ships[shipId] ?: error("Impossible... there should be this ship")
-            val collectingCapability = ship.capabilities.filterIsInstance<CollectingShip>().firstOrNull()
-            if (collectingCapability != null) {
-                result = result && garbage.containsAll(collectingCapability.garbageTypes())
-            }
-        }
+        // collect all collecting Ships
+        if (garbage.isNotEmpty() && collectingShips.isEmpty()) return false
+
         return result
     }
 
@@ -238,9 +249,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         ownedShips.forEach {
             it.owner = corporationInstance
         }
-        ownedHarbors.forEach { harbor ->
-            this.ownedHarbors.add(harbor.id)
-        }
+
         accumulator.addCorporation(id, corporationInstance)
         accumulator.mapCorporationToShips.remove(id)
         return corporationInstance

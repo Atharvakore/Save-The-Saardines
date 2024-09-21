@@ -7,6 +7,7 @@ import de.unisaarland.cs.se.selab.tasks.Reward
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Sea
+import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
 
@@ -23,7 +24,7 @@ class Accumulator {
     val mapCorporationToShips: MutableMap<Int, MutableList<Int>> = mutableMapOf()
     val tiles: MutableMap<Int, Tile> = mutableMapOf()
     val tilesByCoordinate: MutableMap<Vec2D, Tile> = mutableMapOf()
-    val listOfHarbors: MutableList<Int> = mutableListOf()
+    val listOfHarbors: MutableList<Shore> = mutableListOf()
 
     /** Setter for a reward into accumulator*/
     public fun addReward(rewardId: Int, reward: Reward) {
