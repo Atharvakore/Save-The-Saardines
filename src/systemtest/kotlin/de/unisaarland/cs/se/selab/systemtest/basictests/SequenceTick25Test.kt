@@ -13,9 +13,9 @@ class SequenceTick25Test : ExampleSystemTestExtension() {
     override val name = "SequenceTick25Test"
     override val maxTicks = 1
     override suspend fun run() {
-        assertLine("Initialization Info: map_medium_01 successfully parsed and validated.", true)
-        assertNextLine("Initialization Info: tick25Corporation successfully parsed and validated.")
-        assertNextLine("Initialization Info: tick25Scenario successfully parsed and validated.")
+        assertLine("Initialization Info: map_medium_01.json successfully parsed and validated.", true)
+        assertNextLine("Initialization Info: tick25Corporation.json successfully parsed and validated.")
+        assertNextLine("Initialization Info: tick25Scenario.json successfully parsed and validated.")
         assertNextLine("Simulation Info: Simulation started.")
         assertNextLine("Simulation Info: Tick 0 started")
         assertNextLine("Corporation Action: Corporation 1 is starting to move its ships")
