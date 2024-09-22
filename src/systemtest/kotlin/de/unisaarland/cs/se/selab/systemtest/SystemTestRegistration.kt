@@ -3,7 +3,12 @@ package de.unisaarland.cs.se.selab.systemtest
 import de.unisaarland.cs.se.selab.systemtest.basictests.ExampleSystemTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.SequenceTick25Test
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectEventIds
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesOfPirateAttack
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectShipsGarbages
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectShipsIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShipAmongUs
 
 /** The class which will register the tests for Testing on Course Implementation */
@@ -19,6 +24,12 @@ object SystemTestRegistration {
         manager.registerTest(SequenceTick25Test())
         manager.registerTest(IncorrectPropertiesTest())
         manager.registerTest(ShipAmongUs())
+        manager.registerTest(IncorrectPropertiesOfPirateAttack())
+        manager.registerTest(IncorrectShipsGarbages())
+        manager.registerTest(IncorrectShipsGarbages())
+        manager.registerTest(IncorrectShipsIds())
+        manager.registerTest(IncorrectEventIds())
+        manager.registerTest(EverythingInOne())
     }
 
     /**

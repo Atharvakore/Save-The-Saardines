@@ -83,15 +83,25 @@ class Garbage(
         targetTile: Tile,
         toBeDrifted: Int
     ): Garbage? {
+        val result: Garbage?
         val maxDrift = THOUSAND - targetTile.getAmountOfType(GarbageType.OIL)
-        val drifted = minOf(this.amount, toBeDrifted, maxDrift)
+        var drifted = minOf(this.amount, toBeDrifted, maxDrift)
         if (drifted > 0) {
             this.amount -= drifted
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, id, drifted, currentTile.id, targetTile.id)
             return createGarbage(drifted, GarbageType.OIL)
+        } else {
+            drifted = minOf(this.amount, toBeDrifted)
+            currentTile.amountOfGarbageDriftedThisTick += drifted
+            if (drifted > 0) {
+                Logger.logCurrentDriftGarbage(type, id, drifted, currentTile.id, currentTile.id)
+                result = createGarbage(drifted, GarbageType.OIL)
+            } else {
+                result = null
+            }
         }
-        return null
+        return result
     }
 
     /**
