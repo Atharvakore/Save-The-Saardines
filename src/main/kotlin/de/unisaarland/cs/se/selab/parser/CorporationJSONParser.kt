@@ -28,7 +28,9 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
             return if (objects.has(CORPORATIONS) && objects.has(SHIPS)) {
                 corporations = objects.getJSONArray(CORPORATIONS)
                 ships = objects.getJSONArray(SHIPS)
-                validateShips(ships) &&
+                corporations.length() > 0 &&
+                    ships.length() > 0 &&
+                    validateShips(ships) &&
                     validateCorporations(corporations) &&
                     accumulator.mapCorporationToShips.isEmpty() &&
                     harborAtLeastOneCorp()
@@ -91,7 +93,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         val garbage = manageGarbage(corporation)
 
         // check for uniqueness
-        result = result && id > 0 && !accumulator.corporations.containsKey(id)
+        result = result && id >= 0 && !accumulator.corporations.containsKey(id)
         result = result && accumulator.corporations.values.none { corp -> corp.name == name }
         // check if tiles for harbors exists
         harbors.forEach { harbor -> result = result && checkHarborTile(harbor) }

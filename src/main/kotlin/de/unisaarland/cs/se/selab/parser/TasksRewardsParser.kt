@@ -52,7 +52,8 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
     }
 
     private fun validateTask(task: JSONObject): Boolean {
-        val uniqueId: Boolean = accumulator.tasks[task.getInt(id)] == null
+        val id = task.getInt(id)
+        val uniqueId: Boolean = id >= 0 && accumulator.tasks[id] == null
         val taskShip: Ship? = accumulator.ships[task.getInt("shipID")]
         val rewardShip: Ship? = accumulator.ships[task.getInt("rewardShipID")]
         val reward: Reward? = accumulator.rewards[task.getInt("rewardID")]
@@ -150,7 +151,8 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
     }
 
     private fun validateReward(reward: JSONObject): Boolean {
-        val uniqueId: Boolean = accumulator.rewards[reward.getInt(id)] == null
+        val id = reward.getInt(id)
+        val uniqueId: Boolean = id >= 0 && accumulator.rewards[id] == null
         if (uniqueId) {
             return createReward(reward)
         }

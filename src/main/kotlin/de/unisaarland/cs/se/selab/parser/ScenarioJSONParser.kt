@@ -24,12 +24,6 @@ import java.io.IOException
 private val logger = KotlinLogging.logger {}
 private val garbageTypes: List<String> = listOf("PLASTIC", "OIL", "CHEMICALS")
 private var dummyId: Int = -1
-private const val PIRATEATTACK: String = "PIRATE_ATTACK"
-private const val AMOUNT: String = "amount"
-private const val DIRECTION: String = "direction"
-private const val SPEED: String = "speed"
-private const val TYPE: String = "type"
-private const val DURATION: String = "duration"
 
 /**
  * ScenarioParser aka, parsing events and garbage
@@ -64,7 +58,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
     private fun validateEvent(event: JSONObject): Boolean {
         val eventId: Int = event.getInt(id)
         val uniqueId: Boolean = eventId >= 0 && accumulator.events[eventId] == null
-        val eventTick: Int = event.getInt("tick")
+        val eventTick: Int = event.getInt(TICK)
         if (uniqueId && eventTick >= 0) {
             return onlyNecessaryProperties(event) && createEvent(event)
         }
@@ -73,22 +67,14 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
 
     private fun onlyNecessaryProperties(event: JSONObject): Boolean {
         val eventType = event.getString(TYPE)
-        var result: Boolean = true
-        if (eventType != PIRATEATTACK) {
-            result = !event.has("shipID")
-        }
+        var result = true
         when (eventType) {
-            "STORM" -> result = result && !event.has(AMOUNT) && !event.has(DURATION)
-            "RESTRICTION" -> result = result && !event.has(SPEED) && !event.has(DIRECTION) && !event.has(AMOUNT)
-            "OIL_SPILL" -> result = result && !event.has(SPEED) && !event.has(DIRECTION) && !event.has(DURATION)
-            PIRATEATTACK -> result = onlyNecessaryForPirateAttack(event)
+            "STORM" -> result = result && event.keySet() == requiredByStorm
+            "RESTRICTION" -> result = result && event.keySet() == requiredByRestriction
+            "OIL_SPILL" -> result = result && event.keySet() == requiredByOil
+            PIRATEATTACK -> result = event.keySet() == requiredKeysByAttack
         }
         return result
-    }
-
-    private fun onlyNecessaryForPirateAttack(event: JSONObject): Boolean {
-        return !event.has(AMOUNT) && !event.has("radius") && !event.has("location") &&
-            !event.has(DURATION) && !event.has(DIRECTION) && !event.has(SPEED)
     }
 
     private fun createEvent(event: JSONObject): Boolean {
@@ -205,5 +191,26 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
         garbageLocation.addGarbage(g)
         accumulator.map.garbageOnMap += amount
         return true
+    }
+
+    /** All strings */
+    companion object {
+        const val ID = "id"
+        const val TYPE = "type"
+        const val TICK = "tick"
+        const val LOCATION = "location"
+        const val SHIPID = "shipId"
+        const val PIRATEATTACK: String = "PIRATE_ATTACK"
+        const val AMOUNT: String = "amount"
+        const val DIRECTION: String = "direction"
+        const val SPEED: String = "speed"
+        const val RADIUS: String = "radius"
+        const val DURATION: String = "duration"
+        val requiredKeysByDefault = setOf(ID, TYPE, TICK)
+        val requiredKeysByAttack = requiredKeysByDefault + SHIPID
+        val requiredByLocalEvents = requiredKeysByDefault + LOCATION + RADIUS
+        val requiredByRestriction = requiredByLocalEvents + DURATION
+        val requiredByOil = requiredByLocalEvents + AMOUNT
+        val requiredByStorm = requiredByLocalEvents + SPEED + DIRECTION
     }
 }
