@@ -153,19 +153,18 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
     private fun validateReward(reward: JSONObject): Boolean {
         val id = reward.getInt(id)
         val uniqueId: Boolean = id >= 0 && accumulator.rewards[id] == null
-        if (uniqueId) {
-        val uniqueId: Boolean = accumulator.rewards[reward.getInt(id)] == null
         val type: String = reward.getString(TYPE)
         var condition: Boolean = true
         when (type) {
-            "TRACKER", "RADIO" -> condition = !reward.has(CAPACITY) && !reward.has(GARBAGETYPE) &&
-                !reward.has(VISIBILITYRANGE)
-            "CONTAINER" -> condition = !reward.has(VISIBILITYRANGE)
-            "TELESCOPE" -> condition = !reward.has(CAPACITY) && !reward.has(GARBAGETYPE)
+            "TRACKER", "RADIO" -> condition = reward.keySet() == requiredByDefault
+
+            "CONTAINER" -> condition = reward.keySet() == requiredByContainer
+            "TELESCOPE" -> condition = reward.keySet() == requiredByTelescope
         }
         if (uniqueId && condition) {
             return createReward(reward)
         }
+
         return false
     }
 
@@ -195,5 +194,17 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
             }
         }
         return true
+    }
+
+    /** All Strings required*/
+    companion object {
+        const val TYPE = "type"
+        const val ID = "id"
+        const val CAPACITY = "capacity"
+        const val GARBAGETYPE = "garbageType"
+        const val VISIBILITYRANGE = "visibilityRange"
+        val requiredByDefault = setOf(ID, TYPE)
+        val requiredByTelescope = requiredByDefault + VISIBILITYRANGE
+        val requiredByContainer = requiredByDefault + GARBAGETYPE + CAPACITY
     }
 }

@@ -199,7 +199,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
         const val TYPE = "type"
         const val TICK = "tick"
         const val LOCATION = "location"
-        const val SHIPID = "shipId"
+        const val SHIPID = "shipID"
         const val PIRATEATTACK: String = "PIRATE_ATTACK"
         const val AMOUNT: String = "amount"
         const val DIRECTION: String = "direction"
