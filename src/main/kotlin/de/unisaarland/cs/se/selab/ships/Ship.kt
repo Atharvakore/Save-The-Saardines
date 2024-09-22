@@ -46,19 +46,20 @@ class Ship(
         val deepOcean = this.position as? DeepOcean
         val current = deepOcean?.getCurrent()
         if (current != null) {
-            handleCurrentDrift(deepOcean)
+            handleCurrentDrift(deepOcean, current)
         }
     }
 
-    private fun handleCurrentDrift(tile: DeepOcean) {
-        val current: Current? = tile.getCurrent()
-        if (current != null) {
-            val speed = current.speed
-            val direction = current.direction
+    private fun handleCurrentDrift(tile: DeepOcean, current: Current) {
+        val speed = current.speed
+        val direction = current.direction
+        val intensity = current.intensity
+        if (intensity > tile.amountOfShipsDriftedThisTick) {
             val desTile = this.position.getTileInDirection(speed / TEN, direction)
             if (desTile != null) {
                 this.position = desTile
             }
+            tile.amountOfShipsDriftedThisTick += 1
             Logger.logCurrentDriftShip(id, tile.id, position.id)
         }
     }
