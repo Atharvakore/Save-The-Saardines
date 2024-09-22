@@ -113,6 +113,10 @@ class Simulation(
         for (ship in shipsOnDOTiles) {
             ship.drift()
         }
+
+        for (tile in deepOceanTiles) {
+            tile.amountOfShipsDriftedThisTick = 0
+        }
     }
 
     /**

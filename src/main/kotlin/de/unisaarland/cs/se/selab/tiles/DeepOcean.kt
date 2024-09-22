@@ -16,6 +16,8 @@ class DeepOcean(
     garbage,
     0
 ) {
+    var amountOfShipsDriftedThisTick = 0
+
     /**
      * gives current
      */
