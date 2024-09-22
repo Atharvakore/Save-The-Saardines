@@ -123,14 +123,7 @@ class Ship(
      * if it has an assigned task
      * */
     fun tickTask() {
-        val lastTileIndex = destinationPath.size - 1
-        val reachedTileIndex = destinationPath.indexOf(this.position)
-        destinationPath = destinationPath.subList(reachedTileIndex, lastTileIndex)
-        move(destinationPath)
-        if (this.position == destinationPath.last()) {
-            hasTaskAssigned = false
-            destinationPath = emptyList()
-        }
+        moveUninterrupted(destinationPath)
     }
 
     /**
