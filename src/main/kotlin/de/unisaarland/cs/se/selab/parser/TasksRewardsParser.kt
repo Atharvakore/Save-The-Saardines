@@ -76,7 +76,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
 
     private fun createTask(task: JSONObject): Boolean {
         val id = task.getInt(id)
-        val type = task.getString("type")
+        val type = task.getString(TYPE)
         val tick = task.getInt("tick")
         val ship = accumulator.ships[task.getInt("shipID")]
         val rShip = requireNotNull(accumulator.ships[task.getInt("rewardShipID")])
@@ -154,6 +154,16 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
         val id = reward.getInt(id)
         val uniqueId: Boolean = id >= 0 && accumulator.rewards[id] == null
         if (uniqueId) {
+        val uniqueId: Boolean = accumulator.rewards[reward.getInt(id)] == null
+        val type: String = reward.getString(TYPE)
+        var condition: Boolean = true
+        when (type) {
+            "TRACKER", "RADIO" -> condition = !reward.has(CAPACITY) && !reward.has(GARBAGETYPE) &&
+                !reward.has(VISIBILITYRANGE)
+            "CONTAINER" -> condition = !reward.has(VISIBILITYRANGE)
+            "TELESCOPE" -> condition = !reward.has(CAPACITY) && !reward.has(GARBAGETYPE)
+        }
+        if (uniqueId && condition) {
             return createReward(reward)
         }
         return false
@@ -161,10 +171,10 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
 
     private fun createReward(reward: JSONObject): Boolean {
         val rewardId: Int = reward.getInt(id)
-        val rewardType: String = reward.getString("type")
+        val rewardType: String = reward.getString(TYPE)
         when (rewardType) {
             "TELESCOPE" -> {
-                val visibility: Int = reward.getInt("visibilityRange")
+                val visibility: Int = reward.getInt(VISIBILITYRANGE)
                 accumulator.addReward(rewardId, TelescopeReward(rewardId, ScoutingShip(visibility), visibility))
             }
 
@@ -173,8 +183,8 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
             }
 
             "CONTAINER" -> {
-                val capacity: Int = reward.getInt("capacity")
-                val garbageType: GarbageType = GarbageType.valueOf(reward.getString("garbageType"))
+                val capacity: Int = reward.getInt(CAPACITY)
+                val garbageType: GarbageType = GarbageType.valueOf(reward.getString(GARBAGETYPE))
                 val container = Container(garbageType, capacity)
                 val collectingShip = CollectingShip(mutableListOf(container))
                 accumulator.addReward(rewardId, ContainerReward(rewardId, collectingShip, container))
