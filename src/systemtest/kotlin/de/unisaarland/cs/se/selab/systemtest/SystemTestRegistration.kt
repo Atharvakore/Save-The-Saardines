@@ -91,5 +91,12 @@ object SystemTestRegistration {
         manager.registerTest(CollectingChemicalsTest())
         // manager.registerTest(UnloadingChemicalsTest())
         // manager.registerTest(UnloadingPlasticTest())
+        manager.registerTest(IncorrectEventIds())
+        manager.registerTest(IncorrectShipsIds())
+        manager.registerTest(IncorrectShipsGarbages())
+        manager.registerTest(IncorrectPropertiesOfPirateAttack())
+        manager.registerTest(ShipAmongUs())
+        manager.registerTest(IncorrectPropertiesTest())
+        manager.registerTest(LandNextDeepOcean())
     }
 }
