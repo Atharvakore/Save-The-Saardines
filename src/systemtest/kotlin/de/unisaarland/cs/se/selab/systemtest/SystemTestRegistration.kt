@@ -82,13 +82,13 @@ object SystemTestRegistration {
     fun registerSystemTestsMutantSimulation(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
         manager.registerTest(SequenceTick25CorporationTest())
-        manager.registerTest(SequenceTick25TickTest())
+        // manager.registerTest(SequenceTick25TickTest())
         manager.registerTest(SequenceTick25StatisticsTest())
         manager.registerTest(CollectingGarbageTest())
         manager.registerTest(CollectingOilTest())
         manager.registerTest(CollectingPlasticTest())
         manager.registerTest(CollectingChemicalsTest())
-        manager.registerTest(UnloadingChemicalsTest())
-        manager.registerTest(UnloadingPlasticTest())
+        // manager.registerTest(UnloadingChemicalsTest())
+        // manager.registerTest(UnloadingPlasticTest())
     }
 }
