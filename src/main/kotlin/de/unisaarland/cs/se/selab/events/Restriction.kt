@@ -13,7 +13,7 @@ class Restriction(
     override val radius: Int
 ) : LocalEvent(id, fireTick, map, location, radius) {
     override fun toString(): String {
-        return "Restriction"
+        return "RESTRICTION"
     }
 
     override fun actUponTick(currentTick: Int): Boolean {

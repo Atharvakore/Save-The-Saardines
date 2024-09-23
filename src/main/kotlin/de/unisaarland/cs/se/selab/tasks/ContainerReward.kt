@@ -7,7 +7,7 @@ import de.unisaarland.cs.se.selab.ships.Ship
 /** Reward that adds a container. */
 class ContainerReward(id: Int, private val capability: CollectingShip, private val container: Container) : Reward(id) {
     override fun toString(): String {
-        return "Container"
+        return "CONTAINER"
     }
 
     override fun applyReward(ship: Ship) {
