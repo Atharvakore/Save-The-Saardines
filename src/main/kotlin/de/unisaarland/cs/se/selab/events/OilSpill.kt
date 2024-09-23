@@ -17,7 +17,7 @@ class OilSpill(
     private val amount: Int
 ) : LocalEvent(id, fireTick, map, location, radius) {
     override fun toString(): String {
-        return "Oil Spill"
+        return "OIL_SPILL"
     }
 
     /** Constants in the oil spill event */

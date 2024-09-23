@@ -13,7 +13,7 @@ class ExploreMapTask(
     private val targetTile: Tile
 ) : Task(tick, id, taskShip, reward, rewardShip) {
     override fun toString(): String {
-        return "Explore Map"
+        return "EXPLORE"
     }
     override fun checkCondition(): Boolean {
         return taskShip.position.pos == targetTile.pos

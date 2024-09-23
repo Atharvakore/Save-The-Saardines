@@ -12,7 +12,7 @@ class PirateAttack(
     private val owningCorporation: Corporation
 ) : Event(id, fireTick) {
     override fun toString(): String {
-        return "Pirate Attack"
+        return "PIRATE_ATTACK"
     }
     override fun actUponTick(currentTick: Int): Boolean {
         if (currentTick == fireTick) {

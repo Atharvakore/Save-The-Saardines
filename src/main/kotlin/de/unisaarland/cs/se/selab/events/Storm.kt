@@ -16,7 +16,7 @@ class Storm(
     lateinit var direction: Direction
     val sea = Sea()
     override fun toString(): String {
-        return "Storm"
+        return "STORM"
     }
 
     override fun actUponTick(currentTick: Int): Boolean {

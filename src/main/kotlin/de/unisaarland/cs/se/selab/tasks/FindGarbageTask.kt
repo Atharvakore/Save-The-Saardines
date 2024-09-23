@@ -13,7 +13,7 @@ class FindGarbageTask(
     private val targetTile: Tile
 ) : Task(tick, id, taskShip, reward, rewardShip) {
     override fun toString(): String {
-        return "Find Garbage"
+        return "FIND"
     }
 
     override fun checkCondition(): Boolean {

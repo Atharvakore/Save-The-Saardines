@@ -14,7 +14,7 @@ class CooperateTask(
 ) : Task(tick, id, taskShip, reward, rewardShip) {
 
     override fun toString(): String {
-        return "Cooperate with Other Corporation"
+        return "COOPERATE"
     }
 
     override fun checkCondition(): Boolean {
