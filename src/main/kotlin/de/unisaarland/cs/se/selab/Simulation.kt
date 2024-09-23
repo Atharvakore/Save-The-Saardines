@@ -8,6 +8,7 @@ import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Garbage
+import de.unisaarland.cs.se.selab.tiles.Land
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.TEN
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -90,7 +91,7 @@ class Simulation(
             val current = currentTile.getCurrent()
             if (current != null) {
                 val targetTile = currentTile.getTileInDirection(current.speed / TEN, current.direction)
-                if (targetTile != null) {
+                if (targetTile != null && targetTile !is Land) {
                     val g = garbage.drift(currentTile, targetTile, current)
                     garbageToList.getOrPut(currentTile) { mutableListOf() }.add(g)
                 }

@@ -183,17 +183,17 @@ class UTFactory {
         )
 
         val deepOceanTiles = listOf(
-            DeepOcean(33, Vec2D(3, 3), emptyList(), emptyList(), current = Current(10, Direction.D60, 1)),
-            DeepOcean(34, Vec2D(3, 4), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
-            DeepOcean(35, Vec2D(3, 5), emptyList(), emptyList(), current = Current(10, Direction.D60, 1)),
-            DeepOcean(36, Vec2D(3, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
-            DeepOcean(43, Vec2D(4, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
-            DeepOcean(44, Vec2D(4, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
-            DeepOcean(53, Vec2D(5, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
-            DeepOcean(56, Vec2D(6, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
-            DeepOcean(56, Vec2D(6, 4), emptyList(), emptyList(), current = Current(10, Direction.D240, 1)),
-            DeepOcean(56, Vec2D(6, 5), emptyList(), emptyList(), current = Current(10, Direction.D300, 1)),
-            DeepOcean(56, Vec2D(6, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
+            DeepOcean(34, Vec2D(3, 3), emptyList(), emptyList(), current = Current(10, Direction.D60, 1)),
+            DeepOcean(44, Vec2D(3, 4), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
+            DeepOcean(54, Vec2D(3, 5), emptyList(), emptyList(), current = Current(10, Direction.D60, 1)),
+            DeepOcean(64, Vec2D(3, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
+            DeepOcean(35, Vec2D(4, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
+            DeepOcean(65, Vec2D(4, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
+            DeepOcean(36, Vec2D(5, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
+            DeepOcean(37, Vec2D(6, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
+            DeepOcean(47, Vec2D(6, 4), emptyList(), emptyList(), current = Current(10, Direction.D240, 1)),
+            DeepOcean(57, Vec2D(6, 5), emptyList(), emptyList(), current = Current(10, Direction.D300, 1)),
+            DeepOcean(67, Vec2D(6, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
             DeepOcean(66, Vec2D(5, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1))
         )
 
@@ -242,19 +242,25 @@ class UTFactory {
     }
 
     private fun findAdjacentTiles(pos: Vec2D): List<Tile?> {
-        val nextValue = if (pos.posX % 2 == 0 && pos.posY % 2 == 0) {
-            1
-        } else {
+        val nextValue = if (pos.posY % 2 == 0) {
             0
+        } else {
+            -1
         }
+        val adjacentTile0 = sea.getTileByPos(Vec2D(pos.posX + 1, pos.posY)) // east
+        val adjacentTile60 = sea.getTileByPos(Vec2D(pos.posX + nextValue + 1, pos.posY - 1))
+        val adjacentTile120 = sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY - 1))
+        val adjacentTile180 = sea.getTileByPos(Vec2D(pos.posX - 1, pos.posY)) // west
+        val adjacentTile240 = sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY + 1))
+        val adjacentTile300 = sea.getTileByPos(Vec2D(pos.posX + nextValue + 1, pos.posY + 1))
 
         val list = listOf(
-            sea.getTileByPos(Vec2D(pos.posX + 1, pos.posY)), // East
-            sea.getTileByPos(Vec2D(pos.posX - 1, pos.posY)), // West
-            sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY + 1)), // Southeast
-            sea.getTileByPos(Vec2D(pos.posX + nextValue - 1, pos.posY - 1)), // Northwest
-            sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY - 1)), // Northeast
-            sea.getTileByPos(Vec2D(pos.posX + nextValue - 1, pos.posY + 1)) // Southwest
+            adjacentTile0,
+            adjacentTile60,
+            adjacentTile120,
+            adjacentTile180,
+            adjacentTile240,
+            adjacentTile300,
         )
         return list
     }
