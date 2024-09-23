@@ -15,7 +15,7 @@
       "radius":  3,
       "location": 67,
       "speed": 30,
-      "direction": 0
+      "direction": 180
     }
   ],
   "tasks": [],
