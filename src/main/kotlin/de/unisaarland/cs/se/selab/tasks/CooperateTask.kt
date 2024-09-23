@@ -29,6 +29,7 @@ class CooperateTask(
         if (checkCondition()) {
             LoggerEventsAndTasks.logRewardReceived(id, rewardShip.id, reward)
             reward.applyReward(rewardShip)
+            taskShip.owner.tasks.remove(this)
             return true
         }
         return false

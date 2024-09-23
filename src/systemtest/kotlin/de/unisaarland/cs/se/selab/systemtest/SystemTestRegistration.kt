@@ -67,10 +67,6 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsMutantValidation(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
-        manager.registerTest(SequenceTick25ParsingTest())
-        manager.registerTest(SequenceTick25CorporationTest())
-        manager.registerTest(SequenceTick25TickTest())
-        manager.registerTest(SequenceTick25StatisticsTest())
         manager.registerTest(IncorrectPropertiesTest())
         manager.registerTest(ShipAmongUs())
     }
@@ -81,9 +77,19 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsMutantSimulation(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
-        manager.registerTest(SequenceTick25ParsingTest())
         manager.registerTest(SequenceTick25CorporationTest())
-        manager.registerTest(SequenceTick25TickTest())
+        manager.registerTest(SequenceTick25ParsingTest())
         manager.registerTest(SequenceTick25StatisticsTest())
+        manager.registerTest(CollectingGarbageTest())
+        manager.registerTest(CollectingOilTest())
+        manager.registerTest(CollectingPlasticTest())
+        manager.registerTest(CollectingChemicalsTest())
+        manager.registerTest(IncorrectEventIds())
+        manager.registerTest(IncorrectShipsIds())
+        manager.registerTest(IncorrectShipsGarbages())
+        manager.registerTest(IncorrectPropertiesOfPirateAttack())
+        manager.registerTest(ShipAmongUs())
+        manager.registerTest(IncorrectPropertiesTest())
+        manager.registerTest(LandNextDeepOcean())
     }
 }

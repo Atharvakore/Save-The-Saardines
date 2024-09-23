@@ -15,6 +15,9 @@ class CollectingShip(
      * unloads all the containers of the ship
      */
     fun unload(ship: Ship) {
+        if (ship.arrivedToHarborThisTick) {
+            return
+        }
         val amountOfPlastic: Int = auxiliaryContainers
             .filter { it.garbageType == GarbageType.PLASTIC }
             .sumOf { it.garbageLoad }
