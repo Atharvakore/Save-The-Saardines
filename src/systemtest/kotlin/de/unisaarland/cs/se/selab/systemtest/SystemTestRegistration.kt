@@ -48,7 +48,6 @@ object SystemTestRegistration {
         manager.registerTest(ShipAmongUs())
         manager.registerTest(IncorrectPropertiesOfPirateAttack())
         manager.registerTest(IncorrectShipsGarbages())
-        manager.registerTest(IncorrectShipsGarbages())
         manager.registerTest(IncorrectShipsIds())
         manager.registerTest(IncorrectEventIds())
         manager.registerTest(EverythingInOne())
