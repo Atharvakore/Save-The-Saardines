@@ -3,7 +3,7 @@ package de.unisaarland.cs.se.selab.tiles
 /**
  * Sea as static class
  */
-object Sea {
+class Sea {
     // Do not change this val to var: this causes a Detekt error.
     val tiles: MutableList<Tile> = mutableListOf()
     var tileIndex: Map<Vec2D, Tile> = emptyMap()
@@ -15,7 +15,9 @@ object Sea {
 
     fun getTileById(tileId: Int): Tile? {
         for (tile in tiles) {
-            if (tile.id == tileId) return tile
+            if (tile.id == tileId) {
+                return tile
+            }
         }
         return null
     }

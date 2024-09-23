@@ -157,7 +157,6 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
         var condition: Boolean = true
         when (type) {
             "TRACKER", "RADIO" -> condition = reward.keySet() == requiredByDefault
-
             "CONTAINER" -> condition = reward.keySet() == requiredByContainer
             "TELESCOPE" -> condition = reward.keySet() == requiredByTelescope
         }

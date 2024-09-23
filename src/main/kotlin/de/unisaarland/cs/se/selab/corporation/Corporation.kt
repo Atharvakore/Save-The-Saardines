@@ -28,6 +28,7 @@ class Corporation(
     val partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
     val logger: LoggerCorporationAction = LoggerCorporationAction
+    lateinit var sea: Sea
 
     /**
      * Cooperation between ships
@@ -64,7 +65,7 @@ class Corporation(
             .filterIsInstance<ScoutingShip>()
         telescopes.forEach { telescope ->
             val tilesWithGarbage: List<Tile> =
-                telescope.getTilesWithGarbageInFoV(Sea, otherShip.position)
+                telescope.getTilesWithGarbageInFoV(sea, otherShip.position)
             // partnerGarbage is a map of garbage id to tile
             tilesWithGarbage.forEach { tile ->
                 tile.garbage
@@ -88,7 +89,8 @@ class Corporation(
      *
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
-    fun run(otherShips: List<Ship>) {
+    fun run(sea: Sea, otherShips: List<Ship>) {
+        this.sea = sea
         logger.logCorporationStartMoveShips(id)
         moveShips(otherShips)
         logger.logCorporationStartCollectGarbage(id)
@@ -129,7 +131,7 @@ class Corporation(
     private fun moveScoutingShip(capability: ScoutingShip, ship: Ship, scoutTarget: MutableSet<Int>): Boolean {
         val result: Boolean
         // 1. Update our knowledge about the garbage in the sea
-        capability.getTilesWithGarbageInFoV(Sea, ship.position).forEach { tile ->
+        capability.getTilesWithGarbageInFoV(sea, ship.position).forEach { tile ->
             tile.garbage
                 .asSequence()
                 .filter { acceptedGarbageType.contains(it.type) }
@@ -277,7 +279,7 @@ class Corporation(
     private fun handleMoveCoordinating(ship: Ship, capability: CoordinatingShip, otherShips: List<Ship>): Boolean {
         val result: Boolean
         // 1. Get information about which ships are in field of view
-        val tilesInFov = capability.getTilesInFoV(Sea, ship.position)
+        val tilesInFov = capability.getTilesInFoV(sea, ship.position)
         val shipFov = otherShips.filter { tilesInFov.contains(it.position) && it.owner != lastCoordinatingCorporation }
 
         // 2. Check for ships on the current tile of the coordinating ship

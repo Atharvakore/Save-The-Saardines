@@ -14,8 +14,9 @@ class Storm(
     val speed: Int,
 ) : LocalEvent(id, fireTick, map, location, radius) {
     lateinit var direction: Direction
+    val sea = Sea()
     override fun toString(): String {
-        return "Storm"
+        return "STORM"
     }
 
     override fun actUponTick(currentTick: Int): Boolean {
@@ -28,7 +29,7 @@ class Storm(
                 return false
             }
             for (pos in radiusVec2D) {
-                Sea.getTileByPos(pos)?.let { tiles.add(it) }
+                sea.getTileByPos(pos)?.let { tiles.add(it) }
             }
             val tilesWithGarbage = tiles.filter { it.garbage.isNotEmpty() }
             for (tile in tilesWithGarbage) {

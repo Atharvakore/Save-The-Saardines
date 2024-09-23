@@ -20,7 +20,7 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
 
 class UTFactory {
-
+    val sea = Sea()
     fun createListOfCorporations(
         numOfCorp: Int,
         ownedShips: Map<Int, MutableList<Ship>>,
@@ -190,14 +190,14 @@ class UTFactory {
             DeepOcean(66, Vec2D(5, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1))
         )
 
-        Sea.tiles.addAll(shoreTiles)
-        Sea.tiles.addAll(shallowOceanTiles)
-        Sea.tiles.addAll(deepOceanTiles)
+        sea.tiles.addAll(shoreTiles)
+        sea.tiles.addAll(shallowOceanTiles)
+        sea.tiles.addAll(deepOceanTiles)
 
-        for (tile in Sea.tiles) {
+        for (tile in sea.tiles) {
             tile.adjacentTiles = findAdjacentTiles(tile.pos)
         }
-        Sea.tileIndex = Sea.tiles.associateBy { it.pos }
+        sea.tileIndex = sea.tiles.associateBy { it.pos }
     }
 
     private fun createShoreForSea(): List<Shore> {
@@ -242,12 +242,12 @@ class UTFactory {
         }
 
         val list = listOf(
-            Sea.getTileByPos(Vec2D(pos.posX + 1, pos.posY)), // East
-            Sea.getTileByPos(Vec2D(pos.posX - 1, pos.posY)), // West
-            Sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY + 1)), // Southeast
-            Sea.getTileByPos(Vec2D(pos.posX + nextValue - 1, pos.posY - 1)), // Northwest
-            Sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY - 1)), // Northeast
-            Sea.getTileByPos(Vec2D(pos.posX + nextValue - 1, pos.posY + 1)) // Southwest
+            sea.getTileByPos(Vec2D(pos.posX + 1, pos.posY)), // East
+            sea.getTileByPos(Vec2D(pos.posX - 1, pos.posY)), // West
+            sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY + 1)), // Southeast
+            sea.getTileByPos(Vec2D(pos.posX + nextValue - 1, pos.posY - 1)), // Northwest
+            sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY - 1)), // Northeast
+            sea.getTileByPos(Vec2D(pos.posX + nextValue - 1, pos.posY + 1)) // Southwest
         )
         return list
     }

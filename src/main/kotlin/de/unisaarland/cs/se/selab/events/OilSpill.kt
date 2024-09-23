@@ -1,8 +1,8 @@
 package de.unisaarland.cs.se.selab.events
 
 import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
-import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
+import de.unisaarland.cs.se.selab.tiles.MaxGarbageId.createGarbage
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 import kotlin.math.min
@@ -17,7 +17,7 @@ class OilSpill(
     private val amount: Int
 ) : LocalEvent(id, fireTick, map, location, radius) {
     override fun toString(): String {
-        return "Oil Spill"
+        return "OIL_SPILL"
     }
 
     /** Constants in the oil spill event */
@@ -33,7 +33,7 @@ class OilSpill(
                 val garbageTiles = tile.garbage.filter { garbage -> garbage.type == GarbageType.OIL }
                 val oilGarbageAmount = OIL_TILE_MAX - garbageTiles.sumOf { garbage -> garbage.amount }
                 val newGarbageAmount = min(amount, oilGarbageAmount)
-                tile.garbage = tile.garbage.plus(Garbage.createGarbage(newGarbageAmount, GarbageType.OIL))
+                tile.garbage = tile.garbage.plus(createGarbage(newGarbageAmount, GarbageType.OIL))
             }
             LoggerEventsAndTasks.logEventStart(id, this)
             return true

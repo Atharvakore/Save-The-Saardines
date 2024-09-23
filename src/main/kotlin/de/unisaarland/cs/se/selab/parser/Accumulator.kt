@@ -13,7 +13,7 @@ import de.unisaarland.cs.se.selab.tiles.Vec2D
 
 /** The dataclass which will collect all the data from Parsing */
 class Accumulator {
-    var map: Sea = Sea
+    val map: Sea = Sea()
     val corporations: MutableMap<Int, Corporation> = mutableMapOf()
     val ships: MutableMap<Int, Ship> = mutableMapOf()
     val events: MutableMap<Int, Event> = mutableMapOf()
@@ -38,7 +38,11 @@ class Accumulator {
 
     /** Getter for tile based on its Coordinates */
     public fun getTileByCoordinate(tileCoordinates: Vec2D): Tile? {
-        return map.getTileByPos(tileCoordinates)
+        // return map.getTileByPos(tileCoordinates)
+        for (tile in tiles.values) {
+            if (tile.pos == tileCoordinates) return tile
+        }
+        return null
     }
 
     /** return tile by position*/

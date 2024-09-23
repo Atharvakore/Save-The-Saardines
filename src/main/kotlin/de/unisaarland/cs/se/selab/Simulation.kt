@@ -60,7 +60,7 @@ class Simulation(
 
         for (corporation in corporations) {
             val otherShips = allShips.filter { it.owner != corporation }
-            corporation.run(otherShips)
+            corporation.run(sea, otherShips)
         }
     }
 
@@ -107,13 +107,18 @@ class Simulation(
         val tiles = sea.tiles
         val deepOceanTiles = tiles.filterIsInstance<DeepOcean>()
 
-        val shipsOnDOTiles = mutableListOf<Ship>()
         for (corporation in corporations) {
-            shipsOnDOTiles.addAll(corporation.ownedShips.filter { deepOceanTiles.contains(it.position) })
-        }
-
-        for (ship in shipsOnDOTiles) {
-            ship.drift()
+            val deepOceanTilesWithShips = deepOceanTiles
+                .filter { tile -> corporation.ownedShips.any { it.position == tile } }
+                .sortedBy { it.id }
+            for (tile in deepOceanTilesWithShips) {
+                val shipsOnTile = corporation.ownedShips
+                    .filter { it.position == tile }
+                    .sortedBy { it.id }
+                for (ship in shipsOnTile) {
+                    ship.drift()
+                }
+            }
         }
 
         for (tile in deepOceanTiles) {

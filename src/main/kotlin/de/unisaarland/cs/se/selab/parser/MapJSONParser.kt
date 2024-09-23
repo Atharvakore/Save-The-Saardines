@@ -3,7 +3,7 @@ package de.unisaarland.cs.se.selab.parser
 import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Direction
-import de.unisaarland.cs.se.selab.tiles.Sea
+import de.unisaarland.cs.se.selab.tiles.Land
 import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -40,11 +40,16 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         for (elem in objects) {
             if (validateTile((elem ?: error("There should be a tile in ValidateTiles")) as JSONObject)) {
                 val element = elem as JSONObject
+                val tile = this.createTile(element)
+                accumulator.addTile(tile.id, tile)
+                accumulator.addTileByCoordinates(tile.pos, tile)
+                /*
                 if (element.getString(CATEGORY) != LAND) {
                     val tile = this.createTile(element)
-                    accumulator.addTile(tile.id, tile)
-                    accumulator.addTileByCoordinates(tile.pos, tile)
-                }
+                        accumulator.addTile(tile.id, tile)
+                        accumulator.addTileByCoordinates(tile.pos, tile)
+                    }
+                 */
             } else {
                 return false
             }
@@ -183,7 +188,9 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                 val harbor = tile.getBoolean(HARBOR)
                 Shore(id, coordinates, emptyList(), emptyList(), harbor)
             }
-
+            LAND -> {
+                Land(id, coordinates, emptyList())
+            }
             else -> {
                 throw IllegalArgumentException("There should be an Ocean tile")
             }
@@ -196,20 +203,20 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
 
     /** Create Map based on the information from Accumulator **/
     private fun createMap() {
-        for (element in accumulator.tiles.values) {
+        for (element in accumulator.tiles.values.filter { it !is Land }) {
             val x = element.pos.posX
             val y = element.pos.posY
-            val nextValue = if (x % 2 == 0 && y % 2 == 0) {
-                1
-            } else {
+            val nextValue = if (y % 2 == 0) {
                 0
+            } else {
+                -1
             }
             val adjacentTile0 = accumulator.getTileByPos(Vec2D(x + 1, y)) // east
-            val adjacentTile60 = accumulator.getTileByPos(Vec2D(x + nextValue, y - 1))
-            val adjacentTile120 = accumulator.getTileByPos(Vec2D(x + nextValue - 1, y - 1))
+            val adjacentTile60 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y - 1))
+            val adjacentTile120 = accumulator.getTileByPos(Vec2D(x + nextValue, y - 1))
             val adjacentTile180 = accumulator.getTileByPos(Vec2D(x - 1, y)) // west
-            val adjacentTile240 = accumulator.getTileByPos(Vec2D(x - 1 + nextValue, y + 1))
-            val adjacentTile300 = accumulator.getTileByPos(Vec2D(x + nextValue, y + 1))
+            val adjacentTile240 = accumulator.getTileByPos(Vec2D(x + nextValue, y + 1))
+            val adjacentTile300 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y + 1))
             val adjacentTiles = listOf(
                 adjacentTile0,
                 adjacentTile60,
@@ -219,7 +226,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                 adjacentTile300
             )
             element.adjacentTiles = adjacentTiles
-            Sea.tiles.add(element)
+            accumulator.map.tiles.add(element)
         }
     }
 
@@ -230,17 +237,17 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             val x = tile.pos.posX
             val y = tile.pos.posY
             val correct: Boolean
-            val nextValue = if (x % 2 == 0 && y % 2 == 0) {
-                1
-            } else {
+            val nextValue = if (y % 2 == 0) {
                 0
+            } else {
+                -1
             }
-            val adjacentTile0 = accumulator.getTileByCoordinate(Vec2D(x - 1, y)) // west
-            val adjacentTile60 = accumulator.getTileByCoordinate(Vec2D(x - 1 + nextValue, y - 1))
-            val adjacentTile120 = accumulator.getTileByCoordinate(Vec2D(x + nextValue, y - 1))
-            val adjacentTile180 = accumulator.getTileByCoordinate(Vec2D(x + 1, y)) // east
-            val adjacentTile240 = accumulator.getTileByCoordinate(Vec2D(x + 1 + nextValue, y + 1))
-            val adjacentTile300 = accumulator.getTileByCoordinate(Vec2D(x + nextValue, y + 1))
+            val adjacentTile0 = accumulator.getTileByPos(Vec2D(x + 1, y)) // east
+            val adjacentTile60 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y - 1))
+            val adjacentTile120 = accumulator.getTileByPos(Vec2D(x + nextValue, y - 1))
+            val adjacentTile180 = accumulator.getTileByPos(Vec2D(x - 1, y)) // west
+            val adjacentTile240 = accumulator.getTileByPos(Vec2D(x + nextValue, y + 1))
+            val adjacentTile300 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y + 1))
             val adjacentTiles = listOf(
                 adjacentTile0,
                 adjacentTile60,
@@ -250,10 +257,8 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                 adjacentTile300
             )
             when (tile) {
-                is Shore -> {
-                    correct =
-                        adjacentTiles.all { t -> t == null || t is Shore || t is ShallowOcean }
-                }
+                is Shore -> { correct = true }
+                // adjacentTiles.all { t -> t == null || t is Shore || t is ShallowOcean }
 
                 is DeepOcean -> {
                     correct =
@@ -267,11 +272,18 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                         }
                 }
 
+                is Land -> {
+                    correct =
+                        adjacentTiles.all { t -> t == null || t is Land || t is Shore }
+                }
+
                 else -> {
                     correct = true
                 }
             }
-            if (!correct) return false
+            if (!correct) {
+                return false
+            }
         }
 
         return true

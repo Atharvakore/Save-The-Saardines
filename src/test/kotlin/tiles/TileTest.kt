@@ -18,7 +18,7 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TileTest {
 
-    private val sea: Sea = Sea
+    private val sea: Sea = Sea()
 
     @BeforeEach
     fun setUp() {

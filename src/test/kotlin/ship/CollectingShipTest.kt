@@ -23,7 +23,7 @@ class CollectingShipTest {
 
     private lateinit var collectingCapability: CollectingShip
     private lateinit var collectingShip: Ship
-    private val sea: Sea = Sea
+    private val sea: Sea = Sea()
 
     @BeforeEach
     fun setUp() {
