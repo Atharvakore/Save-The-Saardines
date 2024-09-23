@@ -29,9 +29,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             return false
         }
         return if (!tiles.isEmpty && validateTiles(tiles) && checkAdjacentTiles()) {
-            val sea: Sea = Sea()
-            accumulator.map = sea
-            createMap(Sea())
+            createMap(accumulator.map)
             true
         } else {
             false
