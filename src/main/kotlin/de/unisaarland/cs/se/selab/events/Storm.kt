@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.events
 
+import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.tiles.Direction
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -22,6 +23,7 @@ class Storm(
     override fun actUponTick(currentTick: Int): Boolean {
         val result: Boolean
         if (currentTick == fireTick) {
+            LoggerEventsAndTasks.logEventStart(id, this)
             val radiusVec2D = location.pos.tilesInRadius(radius)
             val tiles: MutableList<Tile> = mutableListOf()
             for (pos in radiusVec2D) {
