@@ -1,0 +1,20 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "CHEMICALS",
+      "location": 1,
+      "amount": 100
+    }
+  ],
+  "events": [
+    {
+     "id": 1,
+      "type": "PIRATE_ATTACK",
+      "tick": 0,
+      "shipID": 1
+    }
+  ],
+  "tasks": [],
+  "rewards": []
+}

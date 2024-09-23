@@ -1,0 +1,31 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Cleaners Inc.",
+      "ships": [
+        1
+      ],
+      "homeHarbors": [
+        7
+      ],
+      "garbageTypes": [
+
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "Explorer",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 1,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 8000,
+      "fuelConsumption": 10,
+      "visibilityRange": 4
+    }
+  ]
+}
