@@ -15,14 +15,13 @@ import kotlin.test.assertTrue
 class RestrictionTest {
     lateinit var ship: Ship
     private val factory = UTFactory()
-    val sea = Sea()
+    var sea = Sea()
 
     @BeforeEach
     fun setUp() {
         ship = Ship(1, 50, 15, 5000, 7, mutableListOf())
-        sea.tiles.clear()
-        sea.tileIndex = emptyMap()
         factory.createTestingMap()
+        sea = factory.sea
     }
 
     @Test

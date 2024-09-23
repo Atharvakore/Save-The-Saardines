@@ -14,13 +14,12 @@ import org.junit.jupiter.api.Test
 
 class ScoutingShipsTest {
     private val factory = UTFactory()
-    val sea = Sea()
+    var sea = Sea()
 
     @BeforeEach
     fun setUp() {
-        sea.tiles.clear()
-        sea.tileIndex = emptyMap()
         factory.createTestingMap()
+        sea = factory.sea
     }
 
     /**
