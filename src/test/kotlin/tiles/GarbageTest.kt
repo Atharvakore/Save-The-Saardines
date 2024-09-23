@@ -48,4 +48,9 @@ class GarbageTest {
            val garbageInAdjacentTile: List<Garbage>? = seaInstance.getTileById(5)?.garbage
            assertTrue(garbageInAdjacentTile?.contains(garbage)!!)
        }*/
+
+    @Test
+    fun testDriftOnLand() {
+
+    }
 }
