@@ -2,10 +2,12 @@ package test.kotlin.dijkstra
 
 import corporation.UTFactory
 import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.tiles.Dijkstra
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Shore
+import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -182,5 +184,20 @@ class DijkstraTest {
         c1.run(sea, emptyList())
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == garbageTile1)
+    }
+
+    @Test
+    fun testDijkstra() {
+        val start = sea.getTileByPos(Vec2D(3, 2))
+        val paths: List<Tile>
+        if (start != null) {
+            paths = sea.getTileByPos(Vec2D(8, 5))?.let { Dijkstra(start).shortestPathTo(it) }!!
+            assert(paths[1] == sea.getTileByPos(Vec2D(4, 2)))
+            assert(paths[2] == sea.getTileByPos(Vec2D(5, 2)))
+            assert(paths[3] == sea.getTileByPos(Vec2D(6, 2)))
+            assert(paths[4] == sea.getTileByPos(Vec2D(7, 3)))
+            assert(paths[5] == sea.getTileByPos(Vec2D(7, 4)))
+            assert(paths[6] == sea.getTileByPos(Vec2D(8, 5)))
+        }
     }
 }
