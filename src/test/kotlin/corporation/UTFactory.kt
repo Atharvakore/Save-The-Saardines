@@ -176,17 +176,17 @@ class UTFactory {
         )
 
         val deepOceanTiles = listOf(
-            DeepOcean(33, Vec2D(3, 3), emptyList(), emptyList(), current = Current(10, Direction.D60, 1)),
-            DeepOcean(34, Vec2D(3, 4), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
-            DeepOcean(35, Vec2D(3, 5), emptyList(), emptyList(), current = Current(10, Direction.D60, 1)),
-            DeepOcean(36, Vec2D(3, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
-            DeepOcean(43, Vec2D(4, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
-            DeepOcean(44, Vec2D(4, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
-            DeepOcean(53, Vec2D(5, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
-            DeepOcean(56, Vec2D(6, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
-            DeepOcean(56, Vec2D(6, 4), emptyList(), emptyList(), current = Current(10, Direction.D240, 1)),
-            DeepOcean(56, Vec2D(6, 5), emptyList(), emptyList(), current = Current(10, Direction.D300, 1)),
-            DeepOcean(56, Vec2D(6, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
+            DeepOcean(34, Vec2D(3, 3), emptyList(), emptyList(), current = Current(10, Direction.D60, 1)),
+            DeepOcean(44, Vec2D(3, 4), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
+            DeepOcean(54, Vec2D(3, 5), emptyList(), emptyList(), current = Current(10, Direction.D60, 1)),
+            DeepOcean(64, Vec2D(3, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
+            DeepOcean(35, Vec2D(4, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
+            DeepOcean(65, Vec2D(4, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
+            DeepOcean(36, Vec2D(5, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
+            DeepOcean(37, Vec2D(6, 3), emptyList(), emptyList(), current = Current(10, Direction.D180, 1)),
+            DeepOcean(47, Vec2D(6, 4), emptyList(), emptyList(), current = Current(10, Direction.D240, 1)),
+            DeepOcean(57, Vec2D(6, 5), emptyList(), emptyList(), current = Current(10, Direction.D300, 1)),
+            DeepOcean(67, Vec2D(6, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1)),
             DeepOcean(66, Vec2D(5, 6), emptyList(), emptyList(), current = Current(10, Direction.D0, 1))
         )
 
