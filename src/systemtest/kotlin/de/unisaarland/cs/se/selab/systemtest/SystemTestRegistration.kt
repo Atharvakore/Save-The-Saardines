@@ -1,8 +1,12 @@
 package de.unisaarland.cs.se.selab.systemtest
 
 import de.unisaarland.cs.se.selab.systemtest.basictests.ExampleSystemTest
-import de.unisaarland.cs.se.selab.systemtest.basictests.SequenceTick25Test
+import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25CorporationTest
+import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25ParsingTest
+import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
+import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectEventIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesOfPirateAttack
@@ -22,7 +26,10 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
-        manager.registerTest(SequenceTick25Test())
+        manager.registerTest(SequenceTick25ParsingTest())
+        manager.registerTest(SequenceTick25CorporationTest())
+        manager.registerTest(SequenceTick25TickTest())
+        manager.registerTest(SequenceTick25StatisticsTest())
         manager.registerTest(IncorrectPropertiesTest())
         manager.registerTest(ShipAmongUs())
         manager.registerTest(IncorrectPropertiesOfPirateAttack())
@@ -32,6 +39,7 @@ object SystemTestRegistration {
         manager.registerTest(IncorrectEventIds())
         manager.registerTest(EverythingInOne())
         manager.registerTest(LandNextDeepOcean())
+        manager.registerTest(DriftShipsTest())
     }
 
     /**
@@ -42,7 +50,10 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsMutantValidation(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
-        manager.registerTest(SequenceTick25Test())
+        manager.registerTest(SequenceTick25ParsingTest())
+        manager.registerTest(SequenceTick25CorporationTest())
+        manager.registerTest(SequenceTick25TickTest())
+        manager.registerTest(SequenceTick25StatisticsTest())
         manager.registerTest(IncorrectPropertiesTest())
         manager.registerTest(ShipAmongUs())
     }
@@ -53,6 +64,9 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsMutantSimulation(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
-        manager.registerTest(SequenceTick25Test())
+        manager.registerTest(SequenceTick25ParsingTest())
+        manager.registerTest(SequenceTick25CorporationTest())
+        manager.registerTest(SequenceTick25TickTest())
+        manager.registerTest(SequenceTick25StatisticsTest())
     }
 }

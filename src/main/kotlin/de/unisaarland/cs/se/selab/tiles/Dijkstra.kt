@@ -11,12 +11,12 @@ class Dijkstra(start: Tile) {
     private val accountForRestrictions = start.restrictions == 0
 
     init {
-        val queue = PriorityQueue<Pair<Tile, Int>>(compareBy { it.second })
+        val queue = PriorityQueue<Pair<Tile, Int>>(compareBy({ it.second }, { it.first.id }))
         queue.add(Pair(start, 0))
         distances[start] = 0
         while (queue.isNotEmpty()) {
             val (current, currentDistance) = queue.poll()
-            for (neighbour in current.adjacentTiles) {
+            for (neighbour in current.adjacentTiles.sortedBy { it?.id ?: Int.MAX_VALUE }) {
                 if (neighbour != null) {
                     if (accountForRestrictions && neighbour.restrictions > 0) {
                         continue

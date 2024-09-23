@@ -18,7 +18,7 @@ class ScoutingShipTest {
 
     private lateinit var scoutingCapability: CoordinatingShip
     private lateinit var scoutingShip: Ship
-    private val sea: Sea = Sea
+    private val sea: Sea = Sea()
 
     @BeforeEach
     fun setUp() {

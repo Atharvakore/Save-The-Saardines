@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.tiles
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.logger.Logger
+import de.unisaarland.cs.se.selab.tiles.MaxGarbageId.createGarbage
 
 /**
  * Garbage class implementing all minor stuff related to Garbage
@@ -12,20 +13,6 @@ class Garbage(
     val type: GarbageType,
     var trackedBy: Set<Corporation>?,
 ) {
-    /** Static methods of garbage (factory method) */
-    companion object {
-        var maxId: Int = 0
-
-        private fun getNextId(): Int = maxId++
-
-        /**
-         * Creates garbage when needed
-         */
-        fun createGarbage(
-            amount: Int,
-            type: GarbageType,
-        ): Garbage = Garbage(getNextId(), amount, type, null)
-    }
 
     /**
      * drifts garbage
@@ -40,7 +27,7 @@ class Garbage(
     private fun driftHelper(currentTile: DeepOcean, targetTile: Tile, localCurrent: Current): Garbage? {
         val result: Garbage?
         val toBeDrifted: Int
-        val driftAmount = localCurrent.intensity * FIFTY
+        val driftAmount = localCurrent.intensity * DRIFTAMOUNTPERPOINTINTENSITY
         if (currentTile.amountOfGarbageDriftedThisTick < driftAmount) {
             toBeDrifted = driftAmount - currentTile.amountOfGarbageDriftedThisTick
         } else {
@@ -84,7 +71,7 @@ class Garbage(
         toBeDrifted: Int
     ): Garbage? {
         val result: Garbage?
-        val maxDrift = THOUSAND - targetTile.getAmountOfType(GarbageType.OIL)
+        val maxDrift = MAXOILCAP - targetTile.getAmountOfType(GarbageType.OIL)
         var drifted = minOf(this.amount, toBeDrifted, maxDrift)
         if (drifted > 0) {
             this.amount -= drifted
@@ -116,8 +103,8 @@ class Garbage(
                     .filter { it.type == GarbageType.OIL }
                     .sumOf { it.amount }
 
-                if (totalOilAmount < THOUSAND) {
-                    val driftableAmount = THOUSAND - totalOilAmount
+                if (totalOilAmount < MAXOILCAP) {
+                    val driftableAmount = MAXOILCAP - totalOilAmount
                     if (this.amount <= driftableAmount) {
                         targetTile.addGarbage(createGarbage(amount, GarbageType.OIL))
                         this.amount = 0

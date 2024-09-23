@@ -28,7 +28,8 @@ class Corporation(
     val partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
     val logger: LoggerCorporationAction = LoggerCorporationAction
-    val sea = Sea()
+    lateinit var sea: Sea
+
     /**
      * Cooperation between ships
      *
@@ -88,7 +89,8 @@ class Corporation(
      *
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
-    fun run(otherShips: List<Ship>) {
+    fun run(sea: Sea, otherShips: List<Ship>) {
+        this.sea = sea
         logger.logCorporationStartMoveShips(id)
         moveShips(otherShips)
         logger.logCorporationStartCollectGarbage(id)

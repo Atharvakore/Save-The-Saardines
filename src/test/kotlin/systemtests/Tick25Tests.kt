@@ -15,6 +15,7 @@ import test.kotlin.Witchcraft
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Tick25Tests {
     var map = Map()
+    val sea = Sea()
 
     /**
      * Setup for Tick 25 simulation for complete one tick
@@ -27,10 +28,10 @@ class Tick25Tests {
         val capabilityS = ScoutingShip(5)
         val scoutingShip = Ship(1, 100, 25, 3000, 10, mutableListOf(capabilityS))
         val collectingShip = Ship(2, 100, 25, 3000, 10, mutableListOf(capabilityC))
-        scoutingShip.position = Sea.getTileById(75)!!
-        collectingShip.position = Sea.getTileById(23)!!
+        scoutingShip.position = sea.getTileById(75)!!
+        collectingShip.position = sea.getTileById(23)!!
         val g = Garbage(1, 800, GarbageType.OIL, null)
-        Sea.getTileById(66)?.addGarbage(g)
+        sea.getTileById(66)?.addGarbage(g)
         val c1 = Corporation(
             1,
             "c1",
