@@ -94,10 +94,8 @@ class Simulation(
                 val targetTile = currentTile.getTileInDirection(current.speed / TEN, current.direction)
                 if (targetTile != null && targetTile !is Land) {
                     val g = garbage.drift(currentTile, targetTile, current)
-                    garbageToList.getOrPut(currentTile) { mutableListOf() }.add(g)
+                    garbageToList.getOrPut(targetTile) { mutableListOf() }.add(g)
                 }
-            } else {
-                garbageToList.remove(currentTile)
             }
         }
     }
