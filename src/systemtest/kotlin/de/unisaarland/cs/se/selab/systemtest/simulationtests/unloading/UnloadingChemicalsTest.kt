@@ -16,6 +16,7 @@ class UnloadingChemicalsTest : ExampleSystemTestExtension() {
     override suspend fun run() {
         skipUntilString("Simulation Info: Tick 1 started.")
         skipUntilString("Corporation Action: Corporation 1 is starting to refuel.")
+        assertNextLine("Unload: Ship 6 unloaded 1000 of garbage PLASTIC at harbor 14.")
         assertNextLine("Unload: Ship 5 unloaded 1000 of garbage CHEMICALS at harbor 59.")
     }
 }

@@ -60,7 +60,7 @@ class Simulation(
             allShips.addAll(corporation.ownedShips)
         }
 
-        for (corporation in corporations) {
+        for (corporation in corporations.sortedBy { it.id }) {
             val otherShips = allShips.filter { it.owner != corporation }
             corporation.run(sea, otherShips)
         }
@@ -73,7 +73,7 @@ class Simulation(
         val garbageToList: MutableMap<Tile, MutableList<Garbage?>> = mutableMapOf()
 
         sea.tiles
-            .filterIsInstance<DeepOcean>()
+            .filterIsInstance<DeepOcean>().sortedBy { it.id }
             .forEach { tile ->
                 garbageDriftHelper(tile, garbageToList)
             }
@@ -88,7 +88,7 @@ class Simulation(
 
     private fun garbageDriftHelper(currentTile: DeepOcean, garbageToList: MutableMap<Tile, MutableList<Garbage?>>) {
         val garbageList = currentTile.garbage
-        for (garbage in garbageList) {
+        for (garbage in garbageList.sortedBy { it.id }) {
             val current = currentTile.getCurrent()
             if (current != null) {
                 val targetTile = currentTile.getTileInDirection(current.speed / TEN, current.direction)
@@ -132,7 +132,7 @@ class Simulation(
      * iterates over all events and call actUponTick on them
      */
     private fun processEvents() {
-        for (event in allEvents) {
+        for (event in allEvents.sortedBy { it.id }) {
             event.actUponTick(tick)
         }
     }
@@ -141,7 +141,7 @@ class Simulation(
      * starts new tasks and updates active tasks
      */
     private fun processTasks() {
-        val tasks = collectActiveTasks()
+        val tasks = collectActiveTasks().sortedBy { it.id }
 
         for (task in tasks) {
             task.actUponTick(tick)

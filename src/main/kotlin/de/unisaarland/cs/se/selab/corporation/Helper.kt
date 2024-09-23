@@ -53,7 +53,7 @@ class Helper {
      */
     fun getShipsOnHarbor(corporation: Corporation): List<Ship> {
         val ownedHarbors = corporation.ownedHarbors.sortedBy { it.id }
-        return corporation.ownedShips.filter { ownedHarbors.contains(it.position) }
+        return corporation.ownedShips.filter { ownedHarbors.contains(it.position) }.sortedBy { it.position.id }
     }
 
     /**

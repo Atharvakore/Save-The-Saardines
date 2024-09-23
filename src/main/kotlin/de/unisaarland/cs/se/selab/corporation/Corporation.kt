@@ -257,7 +257,7 @@ class Corporation(
             val targetTile: Tile = task.getGoal()
             Dijkstra(targetTile).allPaths()[ship.position]?.let { path ->
                 if (ship.isFuelSufficient(path.size)) {
-                    ship.move(path)
+                    ship.moveUninterrupted(path)
                     availableShips.remove(ship)
                 } else {
                     val closestHarborPath: List<Tile> = Helper().findClosestHarbor(ship.position, ownedHarbors)
@@ -316,7 +316,7 @@ class Corporation(
      *
      */
     private fun collectGarbage() {
-        val collectingShips: List<Ship> = Helper().filterCollectingShip(this)
+        val collectingShips: List<Ship> = Helper().filterCollectingShip(this).sortedBy { it.id }
         for (ship in collectingShips) {
             for (collectingCapability in ship.capabilities) {
                 (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship)
@@ -332,7 +332,7 @@ class Corporation(
      *
      */
     private fun refuelAndUnloadShips() {
-        val shipsOnHarbor: List<Ship> = Helper().getShipsOnHarbor(this).sortedBy { it.id }
+        val shipsOnHarbor: List<Ship> = Helper().getShipsOnHarbor(this)
         if (shipsOnHarbor.isNotEmpty()) {
             for (ship in shipsOnHarbor) {
                 val collectingCapability = ship.capabilities.find { it is CollectingShip }
