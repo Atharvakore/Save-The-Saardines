@@ -13,6 +13,7 @@ import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Direction
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
+import de.unisaarland.cs.se.selab.tiles.MaxGarbageId.maxId
 import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -190,6 +191,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
         accumulator.addGarbage(garbageId, g)
         garbageLocation.addGarbage(g)
         accumulator.map.garbageOnMap += amount
+        maxId = garbageId
         return true
     }
 
