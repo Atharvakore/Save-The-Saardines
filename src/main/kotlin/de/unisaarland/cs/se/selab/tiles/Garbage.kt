@@ -40,7 +40,7 @@ class Garbage(
     private fun driftHelper(currentTile: DeepOcean, targetTile: Tile, localCurrent: Current): Garbage? {
         val result: Garbage?
         val toBeDrifted: Int
-        val driftAmount = localCurrent.intensity * FIFTY
+        val driftAmount = localCurrent.intensity * DRIFTAMOUNTPERPOINTINTENSITY
         if (currentTile.amountOfGarbageDriftedThisTick < driftAmount) {
             toBeDrifted = driftAmount - currentTile.amountOfGarbageDriftedThisTick
         } else {
@@ -84,7 +84,7 @@ class Garbage(
         toBeDrifted: Int
     ): Garbage? {
         val result: Garbage?
-        val maxDrift = THOUSAND - targetTile.getAmountOfType(GarbageType.OIL)
+        val maxDrift = MAXOILCAP - targetTile.getAmountOfType(GarbageType.OIL)
         var drifted = minOf(this.amount, toBeDrifted, maxDrift)
         if (drifted > 0) {
             this.amount -= drifted
@@ -116,8 +116,8 @@ class Garbage(
                     .filter { it.type == GarbageType.OIL }
                     .sumOf { it.amount }
 
-                if (totalOilAmount < THOUSAND) {
-                    val driftableAmount = THOUSAND - totalOilAmount
+                if (totalOilAmount < MAXOILCAP) {
+                    val driftableAmount = MAXOILCAP - totalOilAmount
                     if (this.amount <= driftableAmount) {
                         targetTile.addGarbage(createGarbage(amount, GarbageType.OIL))
                         this.amount = 0
