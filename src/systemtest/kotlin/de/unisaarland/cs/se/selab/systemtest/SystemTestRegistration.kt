@@ -9,6 +9,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.Incorre
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectShipsGarbages
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectShipsIds
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.LandNextDeepOcean
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShipAmongUs
 
 /** The class which will register the tests for Testing on Course Implementation */
@@ -30,6 +31,7 @@ object SystemTestRegistration {
         manager.registerTest(IncorrectShipsIds())
         manager.registerTest(IncorrectEventIds())
         manager.registerTest(EverythingInOne())
+        manager.registerTest(LandNextDeepOcean())
     }
 
     /**
