@@ -33,7 +33,7 @@ class UTFactory {
             val harbors = ownedHarbors[id].orEmpty()
             val acceptedGarbage = acceptedGarbageType[id].orEmpty()
             val corpTasks = tasks[id].orEmpty()
-            Corporation(id, "unknown$id", ships, harbors, acceptedGarbage, corpTasks)
+            Corporation(id, "unknown$id", ships, harbors, acceptedGarbage, corpTasks.toMutableList())
         }
     }
 
@@ -58,7 +58,14 @@ class UTFactory {
                 capabilities = capability
             )
             ship.position = position[id] ?: Shore(0, Vec2D(-1, -1), emptyList(), emptyList(), false)
-            ship.owner = owner[id] ?: Corporation(-1, "Unknown", mutableListOf(), emptyList(), emptyList(), emptyList())
+            ship.owner = owner[id] ?: Corporation(
+                -1,
+                "Unknown",
+                mutableListOf(),
+                emptyList(),
+                emptyList(),
+                mutableListOf()
+            )
             ship.name = "Ship$id" // Assign a name to the ship
 
             ship // Return the ship

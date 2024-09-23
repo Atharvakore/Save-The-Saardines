@@ -23,6 +23,9 @@ class CooperateTask(
     }
 
     override fun actUponTick(currentTick: Int): Boolean {
+        if (currentTick == tick) {
+            LoggerEventsAndTasks.logTaskStart(id, "COOPERATE", taskShip.id, destinationHomeHarbor.id)
+        }
         if (checkCondition()) {
             LoggerEventsAndTasks.logRewardReceived(id, rewardShip.id, reward)
             reward.applyReward(rewardShip)

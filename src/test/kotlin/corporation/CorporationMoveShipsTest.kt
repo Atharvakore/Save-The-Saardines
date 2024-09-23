@@ -27,8 +27,8 @@ class CorporationMoveShipsTest {
         // setUP
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
-        val c2 = Corporation(2, "c2", mutableListOf(), emptyList(), emptyList(), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
+        val c2 = Corporation(2, "c2", mutableListOf(), emptyList(), emptyList(), mutableListOf())
 
         val c2ShipTile = sea.getTileByPos(Vec2D(6, 2)) ?: error("Tile not found at position (6,2)")
 
@@ -86,7 +86,7 @@ class CorporationMoveShipsTest {
         val collectingShipTile = sea.getTileByPos(Vec2D(1, 1)) ?: error("Tile not found at position (5,7)")
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
 
         val scoutingShip = listOfShips[1]
         scoutingShip.owner = c1
@@ -121,7 +121,7 @@ class CorporationMoveShipsTest {
         // test setup
         val listOfShips = factory.createShips()
         val collectingShipTile = sea.getTileByPos(Vec2D(2, 2)) ?: error("Tile not found at position (5,7)")
-        val c1 = Corporation(1, "c1", mutableListOf(), emptyList(), emptyList(), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(), emptyList(), emptyList(), mutableListOf())
 
         val collectingShip = listOfShips[11]
         collectingShip.owner = c1
@@ -156,7 +156,7 @@ class CorporationMoveShipsTest {
         val collectingShipTile = sea.getTileByPos(Vec2D(1, 1)) ?: error("Tile not found at position (5,7)")
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
 
         val scoutingShip = listOfShips[1]
         scoutingShip.owner = c1

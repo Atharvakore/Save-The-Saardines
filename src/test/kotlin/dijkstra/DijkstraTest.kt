@@ -27,7 +27,7 @@ class DijkstraTest {
         // setUP
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
         val scoutingShipTile = sea.getTileByPos(Vec2D(2, 6)) ?: error("Tile not found at position (2,6)")
         val collectingShipTile = sea.getTileByPos(Vec2D(4, 2)) ?: error("Tile not found at position (4,2)")
 
@@ -68,7 +68,7 @@ class DijkstraTest {
         // setUP
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
         val scoutingShipTile = sea.getTileByPos(Vec2D(8, 2)) ?: error("Tile not found at position (2,6)")
         val collectingShipTile = sea.getTileByPos(Vec2D(5, 3)) ?: error("Tile not found at position (4,2)")
 
@@ -109,7 +109,7 @@ class DijkstraTest {
         // setUP
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
         val scoutingShipTile = sea.getTileByPos(Vec2D(7, 7)) ?: error("Tile not found at position (2,6)")
         val collectingShipTile = sea.getTileByPos(Vec2D(6, 2)) ?: error("Tile not found at position (4,2)")
 
@@ -150,7 +150,7 @@ class DijkstraTest {
         // setUP
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
         val scoutingShipTile = sea.getTileByPos(Vec2D(1, 2)) ?: error("Tile not found at position (2,6)")
         val collectingShipTile = sea.getTileByPos(Vec2D(3, 7)) ?: error("Tile not found at position (4,2)")
 

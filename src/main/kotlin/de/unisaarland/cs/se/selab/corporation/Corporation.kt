@@ -22,13 +22,14 @@ class Corporation(
     val ownedShips: MutableList<Ship>,
     val ownedHarbors: List<Shore>,
     val acceptedGarbageType: List<GarbageType>,
-    val tasks: List<Task>
+    val tasks: MutableList<Task>
 ) {
     val trackedGarbage: MutableList<Garbage> = mutableListOf()
     val partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
     val logger: LoggerCorporationAction = LoggerCorporationAction
     lateinit var sea: Sea
+    private var activeTasks: List<Task> = emptyList()
 
     /**
      * Cooperation between ships
@@ -109,8 +110,9 @@ class Corporation(
      *
      * @return List of active tasks
      */
-    fun getActiveTasks(): List<Task> {
-        return tasks.filter { it.checkCondition() }
+    fun getActiveTasks(tick: Int): List<Task> {
+        activeTasks = tasks.filter { tick >= it.tick }
+        return activeTasks
     }
 
     private fun findUncollectedGarbage(tile: Tile, cap: CollectingShip, target: MutableMap<Int, Int>): Garbage? {
@@ -249,7 +251,7 @@ class Corporation(
         availableShips.removeAll { it.hasTaskAssigned }
         // 1. Process tasks. For each active task, assign the ship from the task to
         // go to the target tile.
-        val activeTasks: List<Task> = getActiveTasks()
+        // val activeTasks: List<Task> = getActiveTasks()
         for (task in activeTasks) {
             val ship: Ship = task.taskShip
             val targetTile: Tile = task.getGoal()

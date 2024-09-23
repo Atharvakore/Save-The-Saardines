@@ -21,6 +21,9 @@ class ExploreMapTask(
     }
 
     override fun actUponTick(currentTick: Int): Boolean {
+        if (currentTick == tick) {
+            LoggerEventsAndTasks.logTaskStart(id, "EXPLORE", taskShip.id, targetTile.id)
+        }
         if (checkCondition()) {
             LoggerEventsAndTasks.logRewardReceived(id, rewardShip.id, reward)
             reward.applyReward(rewardShip)
