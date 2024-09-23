@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.systemtest
 import de.unisaarland.cs.se.selab.systemtest.basictests.ExampleSystemTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.SequenceTick25Test
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectEventIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesOfPirateAttack
@@ -32,6 +33,7 @@ object SystemTestRegistration {
         manager.registerTest(IncorrectEventIds())
         manager.registerTest(EverythingInOne())
         manager.registerTest(LandNextDeepOcean())
+        manager.registerTest(DriftShipsTest())
     }
 
     /**
