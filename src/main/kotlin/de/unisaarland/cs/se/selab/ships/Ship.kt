@@ -55,7 +55,7 @@ class Ship(
         val direction = current.direction
         val intensity = current.intensity
         if (intensity > tile.amountOfShipsDriftedThisTick) {
-            val desTile = this.position.getTileInDirection(speed / TEN, direction)
+            val desTile = this.position.getTileInDirection(speed / SPEED_LENGTH, direction)
             if (desTile != null) {
                 this.position = desTile
             }
@@ -71,22 +71,18 @@ class Ship(
      */
     fun move(path: List<Tile>) {
         // acceleration
-        if (currentVelocity < maxVelocity) {
-            currentVelocity += acceleration
-            if (currentVelocity > maxVelocity) {
-                currentVelocity = maxVelocity
-            }
-        }
+        currentVelocity = minOf(currentVelocity + acceleration, maxVelocity)
+
         // the distance the ship can traverse
-        val distanceLength = currentVelocity / TEN
+        val distanceLength = currentVelocity / SPEED_LENGTH
         val desTile: Tile
         if (path.size > distanceLength) {
             desTile = path[distanceLength]
-            consumedFuel += distanceLength * TEN * fuelConsumption
+            consumedFuel += distanceLength * SPEED_LENGTH * fuelConsumption
             LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
         } else {
             desTile = path.last()
-            consumedFuel += path.size * TEN * fuelConsumption
+            consumedFuel += path.size * SPEED_LENGTH * fuelConsumption
             LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
         }
         if (desTile == path.last()) {
@@ -104,7 +100,7 @@ class Ship(
      * @return if the ship can complete this path
      */
     fun isFuelSufficient(pathLength: Int): Boolean {
-        val neededFuel = fuelConsumption * pathLength * TEN
+        val neededFuel = fuelConsumption * pathLength * SPEED_LENGTH
         return neededFuel <= fuelCapacity - consumedFuel
     }
 
