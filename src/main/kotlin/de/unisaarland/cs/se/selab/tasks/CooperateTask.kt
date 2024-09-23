@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.tasks
 
+import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Tile
 /** Class for Cooperating Task*/
@@ -22,6 +23,9 @@ class CooperateTask(
     }
 
     override fun actUponTick(currentTick: Int): Boolean {
+        if (currentTick == tick) {
+            LoggerEventsAndTasks.logTaskStart(id, "COOPERATE", taskShip.id, destinationHomeHarbor.id)
+        }
         if (checkCondition()) {
             reward.applyReward(rewardShip)
             return true
