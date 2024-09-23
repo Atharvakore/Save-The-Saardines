@@ -10,6 +10,7 @@ import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -37,10 +38,10 @@ class GarbageTest {
         assert(garbage.amount == 10)
         assert(garbage.type == GarbageType.OIL)
     }
-
-  /*  @Test
+ /*
+    @Test
     fun testDrift() {
-        val currentTile: Tile? = seaInstance.getTileById(3)
+        val currentTile: Tile? = Sea.getTileById(3)
         val garbage: Garbage = Garbage.createGarbage(10, GarbageType.OIL)
         currentTile?.addGarbage(garbage)
         garbage.drift((currentTile ?: error("Shouldn't be null")) as DeepOcean)

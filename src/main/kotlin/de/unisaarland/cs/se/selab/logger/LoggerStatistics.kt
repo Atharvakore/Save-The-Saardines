@@ -5,6 +5,7 @@ import de.unisaarland.cs.se.selab.tiles.Sea
 
 /** Logger Statistics class*/
 object LoggerStatistics {
+    val sea = Sea ()
     /** Logged whenever statistics are calculated. */
     fun logSimulationStatisticsCalculated() {
         Logger.log("Simulation Info: Simulation statistics are calculated.")
@@ -25,7 +26,7 @@ object LoggerStatistics {
         totalOil(Logger.totalOilCollected)
         totalChemicals(Logger.totalChemicalsCollected)
         val amountCollected = Logger.totalOilCollected + Logger.totalChemicalsCollected + Logger.totalOilCollected
-        totalGarbageInOcean(Sea.garbageOnMap - amountCollected)
+        totalGarbageInOcean(sea.garbageOnMap - amountCollected)
     }
 
     /** Statistics for corporation */
