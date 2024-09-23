@@ -96,8 +96,6 @@ class Simulation(
                     val g = garbage.drift(currentTile, targetTile, current)
                     garbageToList.getOrPut(targetTile) { mutableListOf() }.add(g)
                 }
-            } else {
-                garbageToList.remove(currentTile)
             }
         }
     }
