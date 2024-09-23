@@ -18,7 +18,7 @@ class SequenceTick25CorporationTest : ExampleSystemTestExtension() {
     override suspend fun run() {
         val expectedString = "Simulation Info: Simulation started."
         if (skipUntilLogType(Logs.SIMULATION_INFO) != expectedString) {
-            throw SystemTestAssertionError("Collected plastic should be 0!")
+            throw SystemTestAssertionError("Simulation should have started")
         }
         assertNextLine("Simulation Info: Tick 0 started.")
         assertNextLine("Corporation Action: Corporation 1 is starting to move its ships.")

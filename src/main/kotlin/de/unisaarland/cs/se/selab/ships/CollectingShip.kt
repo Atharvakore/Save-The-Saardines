@@ -18,20 +18,25 @@ class CollectingShip(
         val amountOfPlastic: Int = auxiliaryContainers
             .filter { it.garbageType == GarbageType.PLASTIC }
             .sumOf { it.garbageLoad }
+        if (amountOfPlastic > 0) {
+            LoggerCorporationAction.logUnloadShip(ship.id, amountOfPlastic, GarbageType.PLASTIC, ship.position.id)
+        }
         val amountOfOil: Int = auxiliaryContainers
             .filter { it.garbageType == GarbageType.OIL }
             .sumOf { it.garbageLoad }
+        if (amountOfOil > 0) {
+            LoggerCorporationAction.logUnloadShip(ship.id, amountOfOil, GarbageType.OIL, ship.position.id)
+        }
         val amountOfChemicals: Int = auxiliaryContainers
             .filter { it.garbageType == GarbageType.CHEMICALS }
             .sumOf { it.garbageLoad }
+        if (amountOfChemicals > 0) {
+            LoggerCorporationAction.logUnloadShip(ship.id, amountOfChemicals, GarbageType.CHEMICALS, ship.position.id)
+        }
 
         for (container in auxiliaryContainers) {
             container.giveGarbage()
         }
-
-        LoggerCorporationAction.logUnloadShip(ship.id, amountOfPlastic, GarbageType.PLASTIC, ship.position.id)
-        LoggerCorporationAction.logUnloadShip(ship.id, amountOfOil, GarbageType.OIL, ship.position.id)
-        LoggerCorporationAction.logUnloadShip(ship.id, amountOfChemicals, GarbageType.CHEMICALS, ship.position.id)
     }
 
     /**

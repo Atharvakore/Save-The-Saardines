@@ -330,14 +330,15 @@ class Corporation(
      *
      */
     private fun refuelAndUnloadShips() {
-        val shipsOnHarbor: List<Ship> = Helper().getShipsOnHarbor(this)
+        val shipsOnHarbor: List<Ship> = Helper().getShipsOnHarbor(this).sortedBy { it.id }
         if (shipsOnHarbor.isNotEmpty()) {
             for (ship in shipsOnHarbor) {
                 val collectingCapability = ship.capabilities.find { it is CollectingShip }
-                if (collectingCapability != null) {
+                if (collectingCapability != null && !ship.refueling) {
                     (collectingCapability as CollectingShip).unload(ship)
+                } else {
+                    ship.refuel()
                 }
-                ship.refuel()
             }
         }
     }

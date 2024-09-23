@@ -52,7 +52,8 @@ class Helper {
      * @return List of ships on the harbor
      */
     fun getShipsOnHarbor(corporation: Corporation): List<Ship> {
-        return corporation.ownedShips.filter { corporation.ownedHarbors.contains(it.position) }
+        val ownedHarbors = corporation.ownedHarbors.sortedBy { it.id }
+        return corporation.ownedShips.filter { ownedHarbors.contains(it.position) }
     }
 
     /**
