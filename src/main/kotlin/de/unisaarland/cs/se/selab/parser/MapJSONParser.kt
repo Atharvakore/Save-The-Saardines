@@ -4,7 +4,6 @@ import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Direction
 import de.unisaarland.cs.se.selab.tiles.Land
-import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -29,7 +28,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             return false
         }
         return if (!tiles.isEmpty && validateTiles(tiles) && checkAdjacentTiles()) {
-            createMap(accumulator.map)
+            createMap()
             true
         } else {
             false
@@ -203,7 +202,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
     }
 
     /** Create Map based on the information from Accumulator **/
-    private fun createMap(sea: Sea) {
+    private fun createMap() {
         for (element in accumulator.tiles.values.filter { it !is Land }) {
             val x = element.pos.posX
             val y = element.pos.posY
@@ -227,7 +226,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                 adjacentTile300
             )
             element.adjacentTiles = adjacentTiles
-            sea.tiles.add(element)
+            accumulator.map.tiles.add(element)
         }
     }
 
