@@ -92,12 +92,26 @@ class Simulation(
             val current = currentTile.getCurrent()
             if (current != null) {
                 val targetTile = currentTile.getTileInDirection(current.speed / TEN, current.direction)
-                if (targetTile != null && targetTile !is Land) {
+                if (targetTile != null && checkValidPath(currentTile)) {
                     val g = garbage.drift(currentTile, targetTile, current)
                     garbageToList.getOrPut(targetTile) { mutableListOf() }.add(g)
                 }
             }
         }
+    }
+
+    private fun checkValidPath(currentTile: DeepOcean): Boolean {
+        val current = currentTile.getCurrent() ?: return false
+        val distance = current.speed / TEN
+        val direction = current.direction
+
+        for (i in 0..distance) {
+            val tileInPath = currentTile.getTileInDirection(i, direction)
+            if (tileInPath == null || tileInPath is Land) {
+                return false
+            }
+        }
+        return true
     }
 
     /**
@@ -113,7 +127,7 @@ class Simulation(
                 .sortedBy { it.id }
             for (tile in deepOceanTilesWithShips) {
                 val shipsOnTile = corporation.ownedShips
-                    .filter { it.position == tile }
+                    .filter { it.position == tile && checkValidPath(tile) }
                     .sortedBy { it.id }
                 for (ship in shipsOnTile) {
                     ship.drift()
