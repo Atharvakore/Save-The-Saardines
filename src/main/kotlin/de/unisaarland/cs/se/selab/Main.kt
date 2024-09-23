@@ -2,7 +2,6 @@ package de.unisaarland.cs.se.selab
 
 import com.github.erosb.jsonsKema.Schema
 import com.github.erosb.jsonsKema.SchemaLoader
-import com.github.erosb.jsonsKema.ValidationFailure
 import com.github.erosb.jsonsKema.Validator
 import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.logger.LoggerStatistics
@@ -138,7 +137,7 @@ private fun readFile(validatingSchema: String, file: String): String? {
         try {
             objects = requireNotNull(objectFile?.readText())
             // objects = objectFile?.readText()
-            val fail: ValidationFailure = validator.validate(objects) ?: return objects
+            validator.validate(objects) ?: return objects
         } catch (notFound: IOException) {
             logger.error(notFound) { "error" }
             // Logger.logInitializationInfoFail(file)

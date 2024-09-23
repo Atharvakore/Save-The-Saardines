@@ -6,16 +6,14 @@ import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceT
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
-<<<<<<< Updated upstream
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingOilTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingPlasticTest
-=======
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
->>>>>>> Stashed changes
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectEventIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesOfPirateAttack
@@ -51,7 +49,6 @@ object SystemTestRegistration {
         manager.registerTest(ShipAmongUs())
         manager.registerTest(IncorrectPropertiesOfPirateAttack())
         manager.registerTest(IncorrectShipsGarbages())
-        manager.registerTest(IncorrectShipsGarbages())
         manager.registerTest(IncorrectShipsIds())
         manager.registerTest(IncorrectEventIds())
         manager.registerTest(EverythingInOne())
@@ -59,6 +56,7 @@ object SystemTestRegistration {
         manager.registerTest(DriftShipsTest())
         manager.registerTest(SimulatePirateAttack())
         manager.registerTest(SimulateStormTest())
+        manager.registerTest(DriftGarbageOnLandTest())
     }
 
     /**
