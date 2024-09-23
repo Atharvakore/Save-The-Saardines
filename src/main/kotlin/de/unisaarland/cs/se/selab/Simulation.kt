@@ -64,6 +64,10 @@ class Simulation(
             val otherShips = allShips.filter { it.owner != corporation }
             corporation.run(sea, otherShips)
         }
+
+        for (ship in allShips) {
+            ship.arrivedToHarborThisTick = false
+        }
     }
 
     /**

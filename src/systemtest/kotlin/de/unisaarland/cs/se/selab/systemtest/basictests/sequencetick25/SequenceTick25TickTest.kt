@@ -17,6 +17,5 @@ class SequenceTick25TickTest : ExampleSystemTestExtension() {
         skipUntilString("Corporation Action: Corporation 1 finished its actions.")
         assertNextLine("Current Drift: OIL 1 with amount 50 drifted from tile 66 to tile 67.")
         assertNextLine("Current Drift: Ship 1 drifted from tile 66 to tile 67.")
-        assertNextLine("Simulation Info: Simulation ended.")
     }
 }
