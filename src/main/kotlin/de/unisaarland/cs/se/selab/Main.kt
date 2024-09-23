@@ -138,13 +138,7 @@ private fun readFile(validatingSchema: String, file: String): String? {
         try {
             objects = requireNotNull(objectFile?.readText())
             // objects = objectFile?.readText()
-            val fail: ValidationFailure? = validator.validate(objects)
-            if (fail != null) {
-                logger.error { "fail when parsing $file" }
-                // Logger.logInitializationInfoFail(file)
-            } else {
-                return objects
-            }
+            val fail: ValidationFailure = validator.validate(objects) ?: return objects
         } catch (notFound: IOException) {
             logger.error(notFound) { "error" }
             // Logger.logInitializationInfoFail(file)
