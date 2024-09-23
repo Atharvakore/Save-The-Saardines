@@ -5,6 +5,7 @@ import com.github.erosb.jsonsKema.SchemaLoader
 import com.github.erosb.jsonsKema.ValidationFailure
 import com.github.erosb.jsonsKema.Validator
 import de.unisaarland.cs.se.selab.logger.Logger
+import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.parser.Accumulator
 import de.unisaarland.cs.se.selab.parser.CorporationJSONParser
 import de.unisaarland.cs.se.selab.parser.MapJSONParser
@@ -45,6 +46,7 @@ fun main(args: Array<String>) {
     Logger.setOutBuffer(file)
     val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks)
     if (acc != null && maxTicks != null) {
+        LoggerStatistics.sea = acc.map
         val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, acc.map)
         sim.start()
     }
