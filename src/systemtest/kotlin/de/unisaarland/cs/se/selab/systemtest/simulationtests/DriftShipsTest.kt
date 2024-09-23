@@ -23,6 +23,7 @@ class DriftShipsTest : ExampleSystemTestExtension() {
         assertNextLine("Corporation Action: Corporation 1 is starting to cooperate with other corporations.")
         assertNextLine("Corporation Action: Corporation 1 is starting to refuel.")
         assertNextLine("Corporation Action: Corporation 1 finished its actions.")
+        assertNextLine("Current Drift: Ship 1 drifted from tile 54 to tile 53.")
         assertNextLine("Current Drift: Ship 2 drifted from tile 54 to tile 53.")
         assertNextLine("Simulation Info: Simulation ended.")
         assertNextLine("Simulation Info: Simulation statistics are calculated.")
