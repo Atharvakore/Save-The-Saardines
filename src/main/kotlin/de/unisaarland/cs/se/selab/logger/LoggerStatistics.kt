@@ -5,7 +5,8 @@ import de.unisaarland.cs.se.selab.tiles.Sea
 
 /** Logger Statistics class*/
 object LoggerStatistics {
-    val sea = Sea ()
+    val sea = Sea()
+
     /** Logged whenever statistics are calculated. */
     fun logSimulationStatisticsCalculated() {
         Logger.log("Simulation Info: Simulation statistics are calculated.")

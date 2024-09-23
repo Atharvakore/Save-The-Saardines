@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.tiles
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.logger.Logger
+import de.unisaarland.cs.se.selab.tiles.MaxGarbageId.createGarbage
 
 /**
  * Garbage class implementing all minor stuff related to Garbage
@@ -12,20 +13,6 @@ class Garbage(
     val type: GarbageType,
     var trackedBy: Set<Corporation>?,
 ) {
-    /** Static methods of garbage (factory method) */
-    companion object {
-        var maxId: Int = 0
-
-        private fun getNextId(): Int = maxId++
-
-        /**
-         * Creates garbage when needed
-         */
-        fun createGarbage(
-            amount: Int,
-            type: GarbageType,
-        ): Garbage = Garbage(getNextId(), amount, type, null)
-    }
 
     /**
      * drifts garbage

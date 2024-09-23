@@ -18,7 +18,7 @@ class CoordinatingShipTest {
 
     private lateinit var coordinatingCapability: CoordinatingShip
     private lateinit var coordinatingShip: Ship
-    private val sea: Sea = Sea
+    private val sea: Sea = Sea()
 
     @BeforeEach
     fun setUp() {

@@ -20,7 +20,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class RewardsTest {
-
+    val sea = Sea()
     var container: Container = Container(
         GarbageType.CHEMICALS,
         1000
@@ -48,8 +48,8 @@ class RewardsTest {
     @BeforeEach
     fun setUp() {
         factory.createTestingMap()
-        val initialTile = Sea.getTileByPos(Vec2D(5, 7)) ?: error("Tile not found at position (5,7)")
-        targetTile = Sea.getTileByPos(Vec2D(6, 6)) ?: error("Tile not found at position (6,6)")
+        val initialTile = sea.getTileByPos(Vec2D(5, 7)) ?: error("Tile not found at position (5,7)")
+        targetTile = sea.getTileByPos(Vec2D(6, 6)) ?: error("Tile not found at position (6,6)")
         container = Container(GarbageType.CHEMICALS, 5000)
         collectingReward = ContainerReward(1, collectingCapability, container)
         ship2.owner = corporation

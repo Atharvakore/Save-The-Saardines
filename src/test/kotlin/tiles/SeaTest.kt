@@ -14,6 +14,7 @@ import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class SeaTest {
+    val sea = Sea()
 
     @BeforeEach
     fun setUp() {
@@ -25,18 +26,19 @@ class SeaTest {
             ShallowOcean(5, Vec2D(2, 0), emptyList(), emptyList()),
             ShallowOcean(6, Vec2D(2, 1), emptyList(), emptyList())
         )
-        Sea.tiles.addAll(listOfTiles)
+
+        sea.tiles.addAll(listOfTiles)
     }
 
     @Test
     fun testGetTileById() {
-        val tile = Sea.getTileById(1)
+        val tile = sea.getTileById(1)
         assert(tile is Shore)
     }
 
     @Test
     fun testGetTileByPos() {
-        val tile = Sea.getTileByPos(Vec2D(0, 0))
+        val tile = sea.getTileByPos(Vec2D(0, 0))
         assert(tile != null)
     }
 }

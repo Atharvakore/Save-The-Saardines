@@ -3,7 +3,6 @@ package de.unisaarland.cs.se.selab.parser
 import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Direction
-import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -219,7 +218,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                 adjacentTile300
             )
             element.adjacentTiles = adjacentTiles
-            Sea.tiles.add(element)
+            accumulator.map.tiles.add(element)
         }
     }
 
