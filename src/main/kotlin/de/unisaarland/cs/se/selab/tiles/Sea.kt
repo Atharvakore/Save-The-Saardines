@@ -14,8 +14,10 @@ class Sea {
      */
 
     fun getTileById(tileId: Int): Tile? {
-        if (tiles[tileId] != null) {
-            return tiles[tileId]
+        for (tile in tiles) {
+            if (tile.id == tileId) {
+                return tile
+            }
         }
         return null
     }
