@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.tasks
 
+import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -22,6 +23,7 @@ class FindGarbageTask(
 
     override fun actUponTick(currentTick: Int): Boolean {
         if (checkCondition()) {
+            LoggerEventsAndTasks.logRewardReceived(id, rewardShip.id, reward)
             reward.applyReward(rewardShip)
             return true
         }
