@@ -235,7 +235,9 @@ class Corporation(
             it.position.restrictions > 0
         }.forEach {
             val path = Dijkstra(it.position).allPaths()
-            val destination = path.keys.firstOrNull { x -> x.restrictions == 0 }
+            val destination = path.toList()
+                .sortedWith(compareBy({ x -> x.second.size }, { x -> x.first.id }))
+                .map { x -> x.first }.firstOrNull { x -> x.restrictions == 0 }
             if (destination != null) {
                 it.move(path[destination] ?: error("There should be a path..."))
                 availableShips.remove(it)
