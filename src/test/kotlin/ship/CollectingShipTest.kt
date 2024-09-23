@@ -43,7 +43,7 @@ class CollectingShipTest {
 
         collectingCapability = CollectingShip(auxiliaryContainers)
         collectingShip = Ship(1, 50, 15, 5000, 7, mutableListOf(collectingCapability))
-        val c1 = Corporation(1, "c1", mutableListOf(collectingShip), emptyList(), emptyList(), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(collectingShip), emptyList(), emptyList(), mutableListOf())
         collectingShip.owner = c1
 
         val tile62: Tile = Shore(62, Vec2D(1, 6), emptyList(), emptyList(), false)

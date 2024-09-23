@@ -6,8 +6,14 @@ import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceT
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingChemicalsTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingOilTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingPlasticTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectEventIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesOfPirateAttack
@@ -16,6 +22,8 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.Incorre
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectShipsIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.LandNextDeepOcean
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShipAmongUs
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingChemicalsTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingPlasticTest
 
 /** The class which will register the tests for Testing on Course Implementation */
 object SystemTestRegistration {
@@ -31,10 +39,15 @@ object SystemTestRegistration {
         manager.registerTest(SequenceTick25CorporationTest())
         manager.registerTest(SequenceTick25TickTest())
         manager.registerTest(SequenceTick25StatisticsTest())
+        manager.registerTest(CollectingGarbageTest())
+        manager.registerTest(CollectingOilTest())
+        manager.registerTest(CollectingPlasticTest())
+        manager.registerTest(CollectingChemicalsTest())
+        manager.registerTest(UnloadingChemicalsTest())
+        manager.registerTest(UnloadingPlasticTest())
         manager.registerTest(IncorrectPropertiesTest())
         manager.registerTest(ShipAmongUs())
         manager.registerTest(IncorrectPropertiesOfPirateAttack())
-        manager.registerTest(IncorrectShipsGarbages())
         manager.registerTest(IncorrectShipsGarbages())
         manager.registerTest(IncorrectShipsIds())
         manager.registerTest(IncorrectEventIds())
@@ -42,6 +55,8 @@ object SystemTestRegistration {
         manager.registerTest(LandNextDeepOcean())
         manager.registerTest(DriftShipsTest())
         manager.registerTest(SimulatePirateAttack())
+        manager.registerTest(SimulateStormTest())
+        manager.registerTest(DriftGarbageOnLandTest())
     }
 
     /**

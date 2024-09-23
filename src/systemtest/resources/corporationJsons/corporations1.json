@@ -39,7 +39,8 @@
       "acceleration": 25,
       "fuelCapacity": 8000,
       "fuelConsumption": 10,
-      "visibilityRange": 4
+      "visibilityRange": 4,
+
     }
   ]
 }

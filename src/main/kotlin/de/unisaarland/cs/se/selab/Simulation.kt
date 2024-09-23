@@ -3,11 +3,13 @@ package de.unisaarland.cs.se.selab
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.logger.Logger
+import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Garbage
+import de.unisaarland.cs.se.selab.tiles.Land
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.TEN
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -90,7 +92,7 @@ class Simulation(
             val current = currentTile.getCurrent()
             if (current != null) {
                 val targetTile = currentTile.getTileInDirection(current.speed / TEN, current.direction)
-                if (targetTile != null) {
+                if (targetTile != null && targetTile !is Land) {
                     val g = garbage.drift(currentTile, targetTile, current)
                     garbageToList.getOrPut(currentTile) { mutableListOf() }.add(g)
                 }
@@ -143,13 +145,16 @@ class Simulation(
 
         for (task in tasks) {
             task.actUponTick(tick)
+            if (task.tick == this.tick) {
+                LoggerEventsAndTasks.logTaskAddedToShip(task.id, task, task.taskShip.id, task.getGoal().id)
+            }
         }
     }
 
     private fun collectActiveTasks(): List<Task> {
         val allTasks = mutableListOf<Task>()
         for (corporation in corporations) {
-            allTasks.addAll(corporation.getActiveTasks())
+            allTasks.addAll(corporation.getActiveTasks(tick))
         }
         return allTasks
     }

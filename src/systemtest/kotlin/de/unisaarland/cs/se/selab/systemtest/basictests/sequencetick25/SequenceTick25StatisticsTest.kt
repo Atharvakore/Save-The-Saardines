@@ -17,7 +17,7 @@ class SequenceTick25StatisticsTest : ExampleSystemTestExtension() {
     override suspend fun run() {
         val expectedString = "Simulation Statistics: Corporation 1 collected 0 of garbage."
         if (skipUntilLogType(Logs.SIMULATION_STATISTICS) != expectedString) {
-            throw SystemTestAssertionError("Collected plastic should be 0!")
+            throw SystemTestAssertionError("Corporation 1 collected 0 of garbage")
         }
         assertNextLine("Simulation Statistics: Total amount of plastic collected: 0.")
         assertNextLine("Simulation Statistics: Total amount of oil collected: 0.")

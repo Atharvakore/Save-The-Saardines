@@ -2,7 +2,6 @@ package de.unisaarland.cs.se.selab
 
 import com.github.erosb.jsonsKema.Schema
 import com.github.erosb.jsonsKema.SchemaLoader
-import com.github.erosb.jsonsKema.ValidationFailure
 import com.github.erosb.jsonsKema.Validator
 import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.logger.LoggerStatistics
@@ -56,64 +55,63 @@ fun main(args: Array<String>) {
 /** The main function for parsing */
 fun parse(files: List<String?>, maxTicks: Int?): Accumulator? {
     val contents = validate(files)
-    if (contents != null) {
-        val accumulator = Accumulator()
-        var cond: Boolean = maxTicks == null
-        cond = cond || parseMap(files, contents, accumulator) == null
-        if (!(cond || parseScenario(files, contents, accumulator) == null)) {
-            return accumulator
-        }
+    val accumulator = Accumulator()
+    var cond: Boolean = maxTicks == null
+    cond = cond || parseMap(files, contents[0], accumulator) == null
+    cond = cond || parseCorporations(files, contents[1], accumulator) == null
+    cond = cond || parseScenario(files, contents[2], accumulator) == null
+    if (!cond) {
+        return accumulator
     }
     return null
 }
 
 /** Parsing the Map */
-fun parseMap(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
-    var condition = true
+fun parseMap(files: List<String?>, content: String?, accumulator: Accumulator): Accumulator? {
     val mapParser = MapJSONParser(accumulator)
-    if (mapParser.parseMap(contents[0])) {
+    if (content != null && mapParser.parseMap(content)) {
         Logger.logInitializationInfoSuccess(requireNotNull(files[0]))
     } else {
         Logger.logInitializationInfoFail(requireNotNull(files[0]))
         return null
     }
+    return accumulator
+}
+
+private fun parseCorporations(files: List<String?>, content: String?, accumulator: Accumulator): Accumulator? {
     val corpParser = CorporationJSONParser(accumulator)
-    if (corpParser.parseCorporationsFile(contents[1])) {
+    if (content != null && corpParser.parseCorporationsFile(content)) {
         Logger.logInitializationInfoSuccess(requireNotNull(files[1]))
     } else {
         Logger.logInitializationInfoFail(requireNotNull(files[1]))
-        condition = false
-    }
-    return if (condition) {
-        accumulator
-    } else {
-        null
-    }
-}
-
-private fun parseScenario(files: List<String?>, contents: List<String>, accumulator: Accumulator): Accumulator? {
-    val scenarioParser = ScenarioJSONParser(accumulator)
-    val taskPars = TasksRewardsParser(accumulator)
-    var validScenario = scenarioParser.parseGarbage(contents[2]) && scenarioParser.parseEvents(contents[2])
-    validScenario = validScenario && taskPars.parseRewards(contents[2]) && taskPars.parseTasks(contents[2])
-    if (validScenario) {
-        Logger.logInitializationInfoSuccess(requireNotNull(files[2]))
-    } else {
-        Logger.logInitializationInfoFail(requireNotNull(files[2]))
         return null
     }
     return accumulator
 }
+private fun parseScenario(files: List<String?>, content: String?, accumulator: Accumulator): Accumulator? {
+    val scenarioParser = ScenarioJSONParser(accumulator)
+    val taskPars = TasksRewardsParser(accumulator)
+    if (content == null) return null
+    var validScenario = scenarioParser.parseGarbage(content) && scenarioParser.parseEvents(content)
+    validScenario = validScenario && taskPars.parseRewards(content) && taskPars.parseTasks(content)
+    return if (validScenario) {
+        Logger.logInitializationInfoSuccess(requireNotNull(files[2]))
+        accumulator
+    } else {
+        Logger.logInitializationInfoFail(requireNotNull(files[2]))
+        null
+    }
+}
 
-private fun validate(files: List<String?>): List<String>? {
-    val contents: MutableList<String> = mutableListOf()
+private fun validate(files: List<String?>): List<String?> {
+    val contents: MutableList<String?> = mutableListOf()
     val validatingSchemas: MutableList<String> = mutableListOf("classpath://schema/map.schema")
     validatingSchemas.add("classpath://schema/corporations.schema")
     validatingSchemas.add("classpath://schema/scenario.schema")
     for (i in 0..2) {
         val file: String? = files[i]
         if (file != null) {
-            val validatedFile: String = readFile(validatingSchemas[i], file) ?: return null
+            val validatedFile: String? = readFile(validatingSchemas[i], file)
             contents.add(validatedFile)
         } else {
             break
@@ -131,23 +129,18 @@ private fun readFile(validatingSchema: String, file: String): String? {
     try {
         objectFile = File(file)
     } catch (notFound: FileNotFoundException) {
-        Logger.logInitializationInfoFail(file)
         logger.error(notFound) { "error" }
         condition = false
+        //  Logger.logInitializationInfoFail(file)
     }
     if (condition) {
         try {
             objects = requireNotNull(objectFile?.readText())
             // objects = objectFile?.readText()
-            val fail: ValidationFailure? = validator.validate(objects)
-            if (fail != null) {
-                Logger.logInitializationInfoFail(file)
-            } else {
-                return objects
-            }
+            validator.validate(objects) ?: return objects
         } catch (notFound: IOException) {
             logger.error(notFound) { "error" }
-            Logger.logInitializationInfoFail(file)
+            // Logger.logInitializationInfoFail(file)
         }
     }
     return null

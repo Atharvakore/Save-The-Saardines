@@ -27,12 +27,14 @@ class Ship(
     var hasTaskAssigned: Boolean = false
     private var destinationPath = emptyList<Tile>()
     private var currentVelocity = 0
+    var refueling = false
 
     /**
      * Call: when the ship is on the harbor
      * Logic: the ship has to max its fuelCapacity
      */
     fun refuel() {
+        refueling = false
         this.consumedFuel = 0
         LoggerCorporationAction.logRefuelingShip(id, position.id)
     }
@@ -101,7 +103,11 @@ class Ship(
      */
     fun isFuelSufficient(pathLength: Int): Boolean {
         val neededFuel = fuelConsumption * pathLength * SPEED_LENGTH
-        return neededFuel <= fuelCapacity - consumedFuel
+        val result = neededFuel <= fuelCapacity - consumedFuel
+        if (!result) {
+            this.refueling = true
+        }
+        return result
     }
 
     /**

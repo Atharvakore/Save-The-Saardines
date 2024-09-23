@@ -7,7 +7,7 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 abstract class LocalEvent(
     override val id: Int,
     override val fireTick: Int,
-    open val map: Sea?,
-    open val location: Tile?,
+    open val map: Sea,
+    open val location: Tile,
     open val radius: Int
 ) : Event(id, fireTick)

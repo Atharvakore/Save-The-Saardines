@@ -1,0 +1,61 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "OIL",
+      "location": 30,
+      "amount": 1000
+    },
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 5,
+      "amount": 1000
+    },
+    {
+      "id": 3,
+      "type": "OIL",
+      "location": 6,
+      "amount": 5000
+    },
+    {
+      "id": 4,
+      "type": "OIL",
+      "location": 13,
+      "amount": 5000
+    },
+    {
+      "id": 5,
+      "type": "OIL",
+      "location": 19,
+      "amount": 1000
+    }
+
+  ],
+  "events": [
+    {
+      "id": 1,
+      "type": "RESTRICTION",
+      "tick": 10,
+      "duration": 2,
+      "location": 9,
+      "radius": 1
+    },
+    {
+      "id": 4,
+      "type": "OIL_SPILL",
+      "tick": 1,
+      "location": 5,
+      "radius": 1,
+      "amount": 800
+    },
+    {
+      "id": 3,
+      "type": "PIRATE_ATTACK",
+      "tick": 2,
+      "shipID": 1
+    }
+  ],
+  "tasks": [],
+  "rewards": []
+}

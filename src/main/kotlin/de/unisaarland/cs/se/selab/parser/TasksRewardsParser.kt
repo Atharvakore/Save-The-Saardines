@@ -88,6 +88,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
                 if (reward is ContainerReward) {
                     val taskObj = CollectGarbageTask(tick, id, requireNotNull(ship), reward, rShip, tile)
                     accumulator.addTask(id, taskObj)
+                    taskObj.taskShip.owner.tasks.add(taskObj)
                     returnCond = true
                 }
             }
@@ -95,6 +96,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
             "EXPLORE" -> {
                 if (reward is TelescopeReward) {
                     val taskObj = ExploreMapTask(tick, id, requireNotNull(ship), reward, rShip, tile)
+                    taskObj.taskShip.owner.tasks.add(taskObj)
                     accumulator.addTask(id, taskObj)
                     returnCond = true
                 }
@@ -103,6 +105,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
             "FIND" -> {
                 if (reward is TrackerReward) {
                     val taskObj = FindGarbageTask(tick, id, requireNotNull(ship), reward, rShip, tile)
+                    taskObj.taskShip.owner.tasks.add(taskObj)
                     accumulator.addTask(id, taskObj)
                     returnCond = true
                 }
@@ -123,6 +126,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
                         tile
                     )
                     accumulator.addTask(id, taskObj)
+                    taskObj.taskShip.owner.tasks.add(taskObj)
                     returnCond = true
                 }
             }
