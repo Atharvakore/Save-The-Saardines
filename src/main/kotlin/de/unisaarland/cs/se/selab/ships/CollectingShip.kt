@@ -111,21 +111,20 @@ class CollectingShip(
          } **/
 
         for (plastic in plasticGarbage) {
-            val collected = collectGarbage(plastic.amount, GarbageType.PLASTIC)
+            val collected = collectGarbage(ship, plastic, plastic.amount, GarbageType.PLASTIC)
             currentTile.removeGarbageOfType(GarbageType.PLASTIC, collected)
-            LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.PLASTIC, plastic.id, collected)
+            // LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.PLASTIC, plastic.id, collected)
         }
 
         for (oil in oilGarbage) {
-            val collected = collectGarbage(oil.amount, GarbageType.OIL)
+            val collected = collectGarbage(ship, oil, oil.amount, GarbageType.OIL)
             currentTile.removeGarbageOfType(GarbageType.OIL, collected)
-            LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.OIL, oil.id, collected)
+            // LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.OIL, oil.id, collected)
         }
 
         for (chemicals in chemicalsGarbage) {
-            val collected = collectGarbage(chemicals.amount, GarbageType.CHEMICALS)
+            val collected = collectGarbage(ship, chemicals, chemicals.amount, GarbageType.CHEMICALS)
             currentTile.removeGarbageOfType(GarbageType.CHEMICALS, collected)
-            LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.CHEMICALS, chemicals.id, collected)
         }
     }
 
@@ -137,10 +136,15 @@ class CollectingShip(
         return auxiliaryContainers.map { it.garbageType }.toSet()
     }
 
-    private fun collectGarbage(amount: Int, garbageType: GarbageType): Int {
+    private fun collectGarbage(ship: Ship, garbage: Garbage, amount: Int, garbageType: GarbageType): Int {
         var collected = 0
         for (container in auxiliaryContainers) {
+            val collect: Int = container.collect(amount, garbageType)
             collected += container.collect(amount, garbageType)
+            if (collect != 0) {
+                ship.position.removeGarbageOfType(garbageType, collect)
+                LoggerCorporationAction.logGarbageCollectionByShip(ship, container.garbageType, garbage.id, collect)
+            }
         }
         return collected
     }
