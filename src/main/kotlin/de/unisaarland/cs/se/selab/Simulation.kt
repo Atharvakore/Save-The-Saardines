@@ -111,14 +111,17 @@ class Simulation(
     private fun getValidTile(currentTile: DeepOcean, current: Current): Tile? {
         val distance = current.speed / TEN
         val direction = current.direction
-        var tile: Tile? = currentTile
+        var targetTile = currentTile.getTileInDirection(distance, direction)
 
-        if (distance > 0) {
-            repeat(distance) {
-                tile = tile?.adjacentTiles?.get(direction.ordinal) ?: return tile
+        if (distance == 0) {
+            targetTile = currentTile.getTileInDirection(distance, direction)
+        } else {
+            for (i in 1..distance) {
+                currentTile.getTileInDirection(i, direction)
+                    ?: return currentTile.getTileInDirection(i - 1, current.direction)
             }
         }
-        return tile
+        return targetTile
     }
 
     /**
