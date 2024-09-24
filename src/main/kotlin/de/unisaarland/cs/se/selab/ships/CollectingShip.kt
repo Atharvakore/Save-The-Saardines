@@ -114,19 +114,19 @@ class CollectingShip(
 
         for (plastic in plasticGarbage) {
             val collected = collectGarbage(ship, plastic, plastic.amount, GarbageType.PLASTIC)
-            currentTile.removeGarbageOfType(GarbageType.PLASTIC, collected)
+            // currentTile.removeGarbageOfType(GarbageType.PLASTIC, collected)
             // LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.PLASTIC, plastic.id, collected)
         }
 
         for (oil in oilGarbage) {
             val collected = collectGarbage(ship, oil, oil.amount, GarbageType.OIL)
-            currentTile.removeGarbageOfType(GarbageType.OIL, collected)
+            // currentTile.removeGarbageOfType(GarbageType.OIL, collected)
             // LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.OIL, oil.id, collected)
         }
 
         for (chemicals in chemicalsGarbage) {
             val collected = collectGarbage(ship, chemicals, chemicals.amount, GarbageType.CHEMICALS)
-            currentTile.removeGarbageOfType(GarbageType.CHEMICALS, collected)
+            // currentTile.removeGarbageOfType(GarbageType.CHEMICALS, collected)
         }
     }
 
@@ -142,8 +142,10 @@ class CollectingShip(
         var collected = 0
         for (container in auxiliaryContainers) {
             val collect: Int = container.collect(amount, garbageType)
-            collected += container.collect(amount, garbageType)
+            collected += collect
             if (collect != 0) {
+                // GARBAGE IS REMOVED TWICE, ONCE BELOW, AND ANOTHER TIME IN LINE 123
+                // ALSO, IN LINE 123, WE ARE GIVING COLLECTED AND NOT COLLECT AS ARGUMENT WHICH IS WRONG
                 ship.position.removeGarbageOfType(garbageType, collect)
                 LoggerCorporationAction.logGarbageCollectionByShip(ship, container.garbageType, garbage.id, collect)
             }
