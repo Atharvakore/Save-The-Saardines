@@ -118,8 +118,8 @@ class Corporation(
         getActiveTasks(tick)
         logger.logCorporationStartMoveShips(id)
         moveShips(otherShips)
-        logger.logCorporationStartCollectGarbage(id)
         tryAttachTrackers()
+        logger.logCorporationStartCollectGarbage(id)
         collectGarbage()
         logger.logCorporationCooperationStart(id)
         cooperate(otherShips)
@@ -299,6 +299,11 @@ class Corporation(
             val ship: Ship = task.taskShip
             if (ship.hasTaskAssigned) {
                 // Task failed: already navigating to a harbor.
+                /**
+                 * THIS IS PROBABLY WRONG, if it has already a task assigned, the new one overwrites it and is not
+                 * cancelled
+                 */
+
                 tasks.remove(task)
             }
             val targetTile: Tile = task.getGoal()

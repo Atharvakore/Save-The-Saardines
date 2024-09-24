@@ -117,6 +117,11 @@ class Ship(
      * @return if the ship can complete this path
      */
     fun isFuelSufficient(pathLength: Int): Boolean {
+        /**
+         * we are we only checking weitheir it has fuel sufficient to go to the target,
+         * but are we not checking if it can to target + go to harbor after that ????
+         */
+
         val neededFuel = fuelConsumption * pathLength * SPEED_LENGTH
         val result = neededFuel <= fuelCapacity - consumedFuel
         if (!result) {
@@ -148,6 +153,11 @@ class Ship(
      * and store the path until its completed
      * */
     fun moveUninterrupted(pathToHarbor: List<Tile>) {
+        /**
+         * THIS DOESN'T MAKE SENSE, first comparison already has the check this.position == pathToHarbor.last(),
+         * the part after move is basically dead code !!!
+         */
+
         hasTaskAssigned = true
         if (pathToHarbor.isEmpty() || this.position == pathToHarbor.last()) {
             return
