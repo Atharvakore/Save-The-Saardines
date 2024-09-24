@@ -258,7 +258,6 @@ class Corporation(
             if (ship.hasTaskAssigned) {
                 // Task failed: already navigating to a harbor.
                 tasks.remove(task)
-                task.fail()
             }
             val targetTile: Tile = task.getGoal()
             Dijkstra(targetTile).allPaths()[ship.position]?.let { path ->
@@ -268,7 +267,6 @@ class Corporation(
                 } else {
                     // Task failed, not enough fuel.
                     tasks.remove(task)
-                    task.fail()
                 }
             }
         }
