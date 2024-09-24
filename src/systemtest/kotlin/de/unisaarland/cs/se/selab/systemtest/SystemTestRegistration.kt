@@ -100,8 +100,11 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsMutantSimulation(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
+        manager.registerTest(MoveNearHome())
+        manager.registerTest(ReturnToHomeWater())
         manager.registerTest(SequenceTick25CorporationTest())
         manager.registerTest(SequenceTick25ParsingTest())
+        manager.registerTest(SequenceTick25TickTest())
         manager.registerTest(SequenceTick25StatisticsTest())
         manager.registerTest(CollectingGarbageTest())
         manager.registerTest(CollectingOilTest())
@@ -109,6 +112,10 @@ object SystemTestRegistration {
         manager.registerTest(CollectingChemicalsTest())
         manager.registerTest(UnloadingChemicalsTest())
         manager.registerTest(UnloadingPlasticTest())
+        manager.registerTest(IncorrectPropertiesTest())
+        manager.registerTest(SimulatePirateAttack())
+        manager.registerTest(SimulateStormTest())
+
         manager.registerTest(IncorrectEventIds())
         manager.registerTest(IncorrectShipsIds())
         manager.registerTest(IncorrectShipsGarbages())
