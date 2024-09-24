@@ -153,7 +153,7 @@ class Ship(
             }
         } else {
             val startIndex = pathToHarbor.indexOf(this.position)
-            val lastIndex = pathToHarbor.size - 1
+            val lastIndex = pathToHarbor.size
             destinationPath = pathToHarbor.subList(startIndex, lastIndex)
         }
     }
