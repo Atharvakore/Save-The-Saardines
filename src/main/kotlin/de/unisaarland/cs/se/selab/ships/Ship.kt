@@ -61,11 +61,11 @@ class Ship(
         val intensity = current.intensity
         if (intensity > tile.amountOfShipsDriftedThisTick) {
             val desTile = this.position.getTileInDirection(speed / SPEED_LENGTH, direction)
-            if (desTile != null) {
+            if (desTile != null && desTile != this.position) {
                 this.position = desTile
+                tile.amountOfShipsDriftedThisTick += 1
+                Logger.logCurrentDriftShip(id, tile.id, position.id)
             }
-            tile.amountOfShipsDriftedThisTick += 1
-            Logger.logCurrentDriftShip(id, tile.id, position.id)
         }
     }
 
