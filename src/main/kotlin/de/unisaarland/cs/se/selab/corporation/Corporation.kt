@@ -85,7 +85,7 @@ class Corporation(
     }
 
     private fun tryAttachTrackers() {
-        val shipsWithTrackers: List<Ship> = ownedShips.filter { it.capabilities.any { it is ShipWithTracker } }
+        val shipsWithTrackers: List<Ship> = ownedShips.filter { it.capabilities.any { x -> x is ShipWithTracker } }
         shipsWithTrackers.forEach { ship ->
             // Get all garbage on the current tile
             val garbageOnTile: List<Garbage> = ship.position.garbage
