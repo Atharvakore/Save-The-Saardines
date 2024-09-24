@@ -23,7 +23,7 @@ class DriftGarbageOnLandTest : ExampleSystemTestExtension() {
         assertNextLine("Corporation Action: Corporation 1 is starting to cooperate with other corporations.")
         assertNextLine("Corporation Action: Corporation 1 is starting to refuel.")
         assertNextLine("Corporation Action: Corporation 1 finished its actions.")
-        assertNextLine("Current Drift: PLASTIC 3 with amount 100 drifted from tile 54 to tile 52.")
+        assertNextLine("Current Drift: PLASTIC 2 with amount 10 drifted from tile 54 to tile 52.")
         assertNextLine("Simulation Info: Simulation ended.")
         assertNextLine("Simulation Info: Simulation statistics are calculated.")
         assertNextLine("Simulation Statistics: Corporation 1 collected 0 of garbage.")
