@@ -33,6 +33,7 @@ class Storm(
             for (tile in tilesWithGarbage) {
                 tile.garbage.forEach { gar -> gar.stormDrift(speed, direction, tile) }
             }
+            // corporations will update their knowledge about which garbage was drifted but not where
             result = true
         } else {
             result = false

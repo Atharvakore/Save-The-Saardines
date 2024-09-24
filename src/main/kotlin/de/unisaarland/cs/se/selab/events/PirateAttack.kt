@@ -17,6 +17,7 @@ class PirateAttack(
     override fun actUponTick(currentTick: Int): Boolean {
         if (currentTick == fireTick) {
             owningCorporation.ownedShips.remove(ship)
+            // corporation knowledge about the visibility range of this ship should be updated
             LoggerEventsAndTasks.logEventStart(id, this)
             return true
         }

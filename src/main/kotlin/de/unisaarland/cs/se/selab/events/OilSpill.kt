@@ -34,6 +34,7 @@ class OilSpill(
                 val oilGarbageAmount = OIL_TILE_MAX - garbageTiles.sumOf { garbage -> garbage.amount }
                 val newGarbageAmount = min(amount, oilGarbageAmount)
                 tile.garbage = tile.garbage.plus(createGarbage(newGarbageAmount, GarbageType.OIL))
+                // corporations will have knowledge of these new garbage piles
             }
             LoggerEventsAndTasks.logEventStart(id, this)
             return true
