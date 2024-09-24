@@ -87,6 +87,10 @@ class Simulation(
                 }
             }
         }
+
+        sea.tiles.filterIsInstance<DeepOcean>().forEach{
+            tile -> tile.amountOfGarbageDriftedThisTick = 0
+        }
     }
 
     private fun garbageDriftHelper(currentTile: DeepOcean, garbageToList: MutableMap<Tile, MutableList<Garbage?>>) {

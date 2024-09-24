@@ -84,6 +84,9 @@ open class Tile(
         while (toBeRemoved > 0 && filteredList.isNotEmpty()) {
             if (toBeRemoved >= filteredList[0].amount) {
                 toBeRemoved -= filteredList[0].amount
+                filteredList[0].trackedBy?.forEach {
+                    it.trackedGarbage.remove(filteredList[0])
+                }
                 filteredList = filteredList.filterIndexed { index, _ -> index != 0 } // removes element at 0th Index
             } else {
                 filteredList[0].amount -= toBeRemoved

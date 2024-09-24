@@ -5,13 +5,13 @@ import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 /**
  * test the drifting of garbage on land
  * */
-class DriftGarbageOnLandTest : ExampleSystemTestExtension() {
+class DriftGarbageMultipleCurrents : ExampleSystemTestExtension() {
     override val description = "tests drifting of garbage on land"
-    override val corporations = "driftGarbageOnLandJsons/corporation.json"
-    override val scenario = "driftGarbageOnLandJsons/scenario.json"
-    override val map = "driftGarbageOnLandJsons/map.json"
-    override val name = "DriftGarbageOnLandTest"
-    override val maxTicks = 1
+    override val corporations = "driftGarbageMultipleCurrentsJsons/corporation.json"
+    override val scenario = "driftGarbageMultipleCurrentsJsons/scenario.json"
+    override val map = "driftGarbageMultipleCurrentsJsons/map.json"
+    override val name = "DriftGarbageMultipleCurrents"
+    override val maxTicks = 2
     override suspend fun run() {
         assertLine("Initialization Info: map.json successfully parsed and validated.", true)
         assertNextLine("Initialization Info: corporation.json successfully parsed and validated.")
@@ -23,7 +23,15 @@ class DriftGarbageOnLandTest : ExampleSystemTestExtension() {
         assertNextLine("Corporation Action: Corporation 1 is starting to cooperate with other corporations.")
         assertNextLine("Corporation Action: Corporation 1 is starting to refuel.")
         assertNextLine("Corporation Action: Corporation 1 finished its actions.")
-        assertNextLine("Current Drift: PLASTIC 4 with amount 100 drifted from tile 54 to tile 52.")
+        assertNextLine("Current Drift: PLASTIC 4 with amount 50 drifted from tile 64 to tile 65.")
+        assertNextLine("Simulation Info: Tick 1 started.")
+        assertNextLine("Corporation Action: Corporation 1 is starting to move its ships.")
+        assertNextLine("Corporation Action: Corporation 1 is starting to collect garbage.")
+        assertNextLine("Corporation Action: Corporation 1 is starting to cooperate with other corporations.")
+        assertNextLine("Corporation Action: Corporation 1 is starting to refuel.")
+        assertNextLine("Corporation Action: Corporation 1 finished its actions.")
+        assertNextLine("Current Drift: PLASTIC 5 with amount 50 drifted from tile 64 to tile 65.")
+        assertNextLine("Current Drift: PLASTIC 4 with amount 50 drifted from tile 65 to tile 66.")
         assertNextLine("Simulation Info: Simulation ended.")
         assertNextLine("Simulation Info: Simulation statistics are calculated.")
         assertNextLine("Simulation Statistics: Corporation 1 collected 0 of garbage.")
