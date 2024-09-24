@@ -2,9 +2,9 @@
   "garbage": [
     {
       "id": 2,
-      "type": "OIL",
-      "location": 27,
-      "amount": 1000
+      "type": "PLASTIC",
+      "location": 77,
+      "amount": 100000
     }
   ],
   "events": [],
@@ -13,8 +13,8 @@
       "id": 5,
       "type": "EXPLORE",
       "tick": 1,
-      "shipID": 2,
-      "targetTile": 27,
+      "shipID": 3,
+      "targetTile": 78,
       "rewardID": 6,
       "rewardShipID": 2
     }
