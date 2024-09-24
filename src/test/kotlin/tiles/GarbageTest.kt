@@ -71,9 +71,9 @@ class GarbageTest {
 
     @Test
     fun garbageSplitDueCurrent() {
-        val currentTile: Tile? = seaInstance.getTileById(3)
+        val currentTile: Tile = (seaInstance.getTileById(3) ?: error("null assertion message")) as DeepOcean
         val garbage: Garbage = createGarbage(100, GarbageType.OIL)
-        currentTile?.addGarbage(garbage)
+        currentTile.addGarbage(garbage)
         val remaining: Pair<Tile, Garbage> = garbage.drift(
             currentTile as DeepOcean,
             currentTile.getTileInDirection(1, Direction.D0)!!,

@@ -191,7 +191,7 @@ class Corporation(
         } else {
             // Explore: Navigate to the furthest tile
             val dest = paths.toList().sortedWith(compareBy({ INFTY - it.second.size }, { it.first.id }))
-                .first { it.second.size <= ship.speed() }.first
+                .first { it.second.size <= ship.speed() + 1 }.first
             val path = paths[dest] ?: return false
             if (ship.isFuelSufficient(path.size)) {
                 ship.move(path)

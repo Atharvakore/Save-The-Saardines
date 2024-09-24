@@ -15,7 +15,6 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.C
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingOilTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingPlasticTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.MoveNearHome
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.ReturnToHomeWater
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorporationWhereShip
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
@@ -41,6 +40,7 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
+        manager.registerTest(MoveNearHome())
         manager.registerTest(SequenceTick25ParsingTest())
         manager.registerTest(SequenceTick25CorporationTest())
         manager.registerTest(SequenceTick25TickTest())

@@ -73,8 +73,7 @@ class Ship(
      * How many tiles can we traverse in one tick
      */
     fun speed(): Int {
-        currentVelocity = minOf(currentVelocity + acceleration, maxVelocity)
-        return currentVelocity / SPEED_LENGTH
+        return minOf(currentVelocity + acceleration, maxVelocity) / SPEED_LENGTH
     }
 
     /**

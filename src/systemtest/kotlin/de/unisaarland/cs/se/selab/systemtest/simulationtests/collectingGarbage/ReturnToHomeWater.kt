@@ -2,7 +2,10 @@ package de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage
 
 import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 
-class ReturnToHomeWater: ExampleSystemTestExtension() {
+/**
+ * Test the behaviour of collecting ship with full capacity
+ * */
+class ReturnToHomeWater : ExampleSystemTestExtension() {
     override val corporations = "garbageCollecting/corporationPlastic.json"
     override val description = "Test the behaviour of collecting ship with full capacity"
     override val map = "garbageCollecting/map.json"
@@ -41,8 +44,6 @@ class ReturnToHomeWater: ExampleSystemTestExtension() {
 //        assertNextLine("Corporation Action: Corporation 1 is starting to cooperate with other corporations.")
 //        assertNextLine("Corporation Action: Corporation 1 is starting to refuel.")
 //        assertNextLine("Corporation Action: Corporation 1 finished its actions.")
-        //simulation end
-
-
+        // simulation end
     }
 }
