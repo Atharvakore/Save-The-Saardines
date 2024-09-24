@@ -3,7 +3,6 @@ package de.unisaarland.cs.se.selab
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.logger.Logger
-import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tasks.Task
@@ -62,7 +61,7 @@ class Simulation(
 
         for (corporation in corporations.sortedBy { it.id }) {
             val otherShips = allShips.filter { it.owner != corporation }
-            corporation.run(sea, otherShips)
+            corporation.run(tick, sea, otherShips)
         }
 
         for (ship in allShips) {
@@ -161,9 +160,6 @@ class Simulation(
 
         for (task in tasks) {
             task.actUponTick(tick)
-            if (task.tick == this.tick) {
-                LoggerEventsAndTasks.logTaskAddedToShip(task.id, task, task.taskShip.id, task.getGoal().id)
-            }
         }
     }
 

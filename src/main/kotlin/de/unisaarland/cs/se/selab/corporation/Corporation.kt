@@ -5,6 +5,7 @@ import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.ships.ShipWithTracker
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Dijkstra
 import de.unisaarland.cs.se.selab.tiles.Garbage
@@ -83,6 +84,20 @@ class Corporation(
         )
     }
 
+    private fun tryAttachTrackers() {
+        val shipsWithTrackers: List<Ship> = ownedShips.filter { it.capabilities.any { x -> x is ShipWithTracker } }
+        shipsWithTrackers.forEach { ship ->
+            // Get all garbage on the current tile
+            val garbageOnTile: List<Garbage> = ship.position.garbage
+            garbageOnTile.forEach { garbage ->
+                if (!trackedGarbage.contains(garbage)) {
+                    trackedGarbage.add(garbage)
+                    LoggerCorporationAction.logAttachTracker(id, ship.id, garbage.id)
+                }
+            }
+        }
+    }
+
     /**
      * Main function to run the simulation
      *
@@ -90,11 +105,13 @@ class Corporation(
      *
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
-    fun run(sea: Sea, otherShips: List<Ship>) {
+    fun run(tick: Int, sea: Sea, otherShips: List<Ship>) {
         this.sea = sea
+        getActiveTasks(tick)
         logger.logCorporationStartMoveShips(id)
         moveShips(otherShips)
         logger.logCorporationStartCollectGarbage(id)
+        tryAttachTrackers()
         collectGarbage()
         logger.logCorporationCooperationStart(id)
         cooperate(otherShips)
@@ -130,6 +147,15 @@ class Corporation(
             .firstOrNull()
     }
 
+    private fun getPosOfGarbage(garbage: Garbage): Tile {
+        sea.tiles.forEach { tile ->
+            if (tile.garbage.contains(garbage)) {
+                return tile
+            }
+        }
+        error("Garbage not found")
+    }
+
     private fun moveScoutingShip(capability: ScoutingShip, ship: Ship, scoutTarget: MutableSet<Int>): Boolean {
         val result: Boolean
         // 1. Update our knowledge about the garbage in the sea
@@ -144,7 +170,7 @@ class Corporation(
         val sorted = paths.toList().sortedWith(compareBy({ it.second.size }, { it.first.id }))
         val closestGarbagePatch = sorted
             .map { it.first }
-            .intersect(partnerGarbage.values.toSet())
+            .intersect(partnerGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) }).toSet())
             .filter { !scoutTarget.contains(it.id) }
             .firstOrNull { tile ->
                 tile.garbage
@@ -186,7 +212,7 @@ class Corporation(
             val sorted = paths.toList().sortedWith(compareBy({ it.second.size }, { it.first.id }))
             val attainableGarbage = sorted
                 .map { it.first }
-                .intersect(partnerGarbage.values.toSet())
+                .intersect(partnerGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) }).toSet())
                 .filter { tile ->
                     findUncollectedGarbage(tile, cap, collectorTarget) != null
                 }
@@ -254,15 +280,18 @@ class Corporation(
         // val activeTasks: List<Task> = getActiveTasks()
         for (task in activeTasks) {
             val ship: Ship = task.taskShip
+            if (ship.hasTaskAssigned) {
+                // Task failed: already navigating to a harbor.
+                tasks.remove(task)
+            }
             val targetTile: Tile = task.getGoal()
             Dijkstra(targetTile).allPaths()[ship.position]?.let { path ->
                 if (ship.isFuelSufficient(path.size)) {
                     ship.moveUninterrupted(path)
                     availableShips.remove(ship)
                 } else {
-                    val closestHarborPath: List<Tile> = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                    ship.moveUninterrupted(closestHarborPath)
-                    availableShips.remove(ship)
+                    // Task failed, not enough fuel.
+                    tasks.remove(task)
                 }
             }
         }
@@ -319,7 +348,9 @@ class Corporation(
         val collectingShips: List<Ship> = Helper().filterCollectingShip(this).sortedBy { it.id }
         for (ship in collectingShips) {
             for (collectingCapability in ship.capabilities) {
-                (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship)
+                if (collectingCapability is CollectingShip) {
+                    collectingCapability.collectGarbageFromCurrentTile(ship)
+                }
             }
         }
     }
