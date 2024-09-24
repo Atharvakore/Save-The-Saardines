@@ -12,6 +12,7 @@ import de.unisaarland.cs.se.selab.tiles.Land
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.TEN
 import de.unisaarland.cs.se.selab.tiles.Tile
+import java.util.PriorityQueue
 
 /**
  * class that represents and handles the simulation
@@ -126,23 +127,33 @@ class Simulation(
      * handles the drift ships logic
      */
     private fun driftShips() {
+        /**
+         * This is wrong, drifts should be logged from the lowest tile id to the highest, also where are we checking
+         * that we are only drifting when there is current ???????
+         */
         val tiles = sea.tiles
-        val deepOceanTiles = tiles.filterIsInstance<DeepOcean>()
-
+        val deepOceanTiles = tiles.filterIsInstance<DeepOcean>().filter { it.getCurrent() != null }
+        val deepOceanTilesHavingShips: PriorityQueue<DeepOcean> = PriorityQueue<DeepOcean>(compareBy { it.id })
+        val shipsInDeepOcean: MutableSet<Ship> = mutableSetOf()
         for (corporation in corporations) {
-            val deepOceanTilesWithShips = deepOceanTiles
+            deepOceanTiles
                 .filter { tile -> corporation.ownedShips.any { it.position == tile } }
-                .sortedBy { it.id }
-            for (tile in deepOceanTilesWithShips) {
-                val shipsOnTile = corporation.ownedShips
-                    .filter { it.position == tile }
-                    .sortedBy { it.id }
-                for (ship in shipsOnTile) {
-                    ship.drift()
+                .sortedBy { it.id }.forEach {
+                        deepOcean ->
+                    deepOceanTilesHavingShips.add(deepOcean)
+                }
+            corporation.ownedShips.forEach { ship ->
+                if (ship.position in deepOceanTilesHavingShips) {
+                    shipsInDeepOcean.add(ship)
                 }
             }
         }
-
+        for (tile in deepOceanTilesHavingShips) {
+            shipsInDeepOcean.filter { ship -> ship.position == tile }.sortedBy { it.id }.forEach {
+                it.drift()
+            }
+        }
+        // WHY DO WE HAVE THIS ??
         for (tile in deepOceanTiles) {
             tile.amountOfShipsDriftedThisTick = 0
         }
