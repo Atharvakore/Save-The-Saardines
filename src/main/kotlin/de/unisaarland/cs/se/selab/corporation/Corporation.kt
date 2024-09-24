@@ -299,6 +299,11 @@ class Corporation(
             val ship: Ship = task.taskShip
             if (ship.hasTaskAssigned) {
                 // Task failed: already navigating to a harbor.
+                /**
+                 * THIS IS PROBABLY WRONG, if it has already a task assigned, the new one overwrites it and is not
+                 * cancelled
+                 */
+
                 tasks.remove(task)
                 /**
                  * THIS IS PROBABLY WRONG, if it has already a task assigned, the new one overwrites it and is not

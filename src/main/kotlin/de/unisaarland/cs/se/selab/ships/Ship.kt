@@ -61,6 +61,7 @@ class Ship(
         val intensity = current.intensity
         if (intensity > tile.amountOfShipsDriftedThisTick) {
             val desTile = this.position.getTileInDirection(speed / SPEED_LENGTH, direction)
+            // ANOTHER CHECK FOR THE VALID PATH SHOULD BE ADDED HERE, SAME AS FOR GARBAGE DRIFT
             if (desTile != null && desTile != this.position) {
                 this.position = desTile
                 tile.amountOfShipsDriftedThisTick += 1
@@ -97,7 +98,7 @@ class Ship(
         } else {
             desTile = path.last()
             if (desTile != this.position) {
-                consumedFuel += (path.size - 1) * SPEED_LENGTH * fuelConsumption
+                consumedFuel += path.size * SPEED_LENGTH * fuelConsumption
                 LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
             }
         }
@@ -120,6 +121,7 @@ class Ship(
          * we are we only checking weitheir it has fuel sufficient to go to the target,
          * but are we not checking if it can to target + go to harbor after that ????
          */
+
         val neededFuel = fuelConsumption * pathLength * SPEED_LENGTH
         val result = neededFuel <= fuelCapacity - consumedFuel
         if (!result) {
