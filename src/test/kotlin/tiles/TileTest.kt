@@ -29,12 +29,13 @@ class TileTest {
         val tile74: Tile = ShallowOcean(74, Vec2D(3, 7), emptyList(), emptyList())
         val tile63: Tile = ShallowOcean(63, Vec2D(2, 6), emptyList(), emptyList())
         val tile73: Tile = ShallowOcean(73, Vec2D(2, 7), emptyList(), emptyList())
+        val tile75: Tile = ShallowOcean(75, Vec2D(4, 7), emptyList(), emptyList())
 
         val adjTile62: List<Tile?> = listOf(tile72, tile63, tile73, null, null, null)
         val adjTile72: List<Tile?> = listOf(tile62, tile82, tile73, null, null, null)
         val adjTile82: List<Tile?> = listOf(tile72, tile83, tile73, null, null, null)
         val adjTile83: List<Tile?> = listOf(tile82, tile74, tile73, null, null, null)
-        val adjTile74: List<Tile?> = listOf(tile63, tile73, tile83, null, null, null)
+        val adjTile74: List<Tile?> = listOf(tile75, null, tile63, tile73, tile83, null)
         val adjTile63: List<Tile?> = listOf(tile62, tile73, tile74, null, null, null)
         val adjTile73: List<Tile?> = listOf(tile74, tile63, tile62, tile72, tile82, tile83)
 
@@ -51,7 +52,7 @@ class TileTest {
         tile82.addGarbage(oil)
         tile63.addGarbage(chemical)
 
-        val tiles: MutableList<Tile> = mutableListOf(tile62, tile72, tile82, tile83, tile74, tile63, tile73)
+        val tiles: MutableList<Tile> = mutableListOf(tile62, tile72, tile82, tile83, tile74, tile63, tile73, tile75)
 
         sea.tiles.addAll(tiles)
     }
@@ -68,6 +69,14 @@ class TileTest {
         val currTile: Tile? = sea.getTileById(73)
         val tile: Tile? = currTile?.getTileInDirection(1, Direction.D0)
         val expectedTile: Tile? = sea.getTileById(74)
+        assert(tile == expectedTile)
+    }
+
+    @Test
+    fun testGetTileInDirection2() {
+        val currTile: Tile? = sea.getTileById(73)
+        val tile: Tile? = currTile?.getTileInDirection(2, Direction.D0)
+        val expectedTile: Tile? = sea.getTileById(75)
         assert(tile == expectedTile)
     }
 
