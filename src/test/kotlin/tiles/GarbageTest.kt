@@ -19,7 +19,7 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class GarbageTest {
 
-    lateinit var seaInstance: Sea
+    private lateinit var seaInstance: Sea
 
     @BeforeEach
     fun setUp() {
@@ -67,5 +67,18 @@ class GarbageTest {
         )
 
         assertFalse(currentTile.garbage.isEmpty())
+    }
+
+    @Test
+    fun garbageSplitDueCurrent() {
+        val currentTile: Tile? = seaInstance.getTileById(3)
+        val garbage: Garbage = createGarbage(100, GarbageType.OIL)
+        currentTile?.addGarbage(garbage)
+        val remaining: Pair<Tile, Garbage> = garbage.drift(
+            currentTile as DeepOcean,
+            currentTile.getTileInDirection(1, Direction.D0)!!,
+            currentTile.getCurrent()!!
+        )
+        assert(remaining.second.amount == 50)
     }
 }
