@@ -113,19 +113,19 @@ class CollectingShip(
          } **/
 
         for (plastic in plasticGarbage) {
-            val collected = collectGarbage(ship, plastic, plastic.amount, GarbageType.PLASTIC)
+            collectGarbage(ship, plastic, plastic.amount, GarbageType.PLASTIC)
             // currentTile.removeGarbageOfType(GarbageType.PLASTIC, collected)
             // LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.PLASTIC, plastic.id, collected)
         }
 
         for (oil in oilGarbage) {
-            val collected = collectGarbage(ship, oil, oil.amount, GarbageType.OIL)
+            collectGarbage(ship, oil, oil.amount, GarbageType.OIL)
             // currentTile.removeGarbageOfType(GarbageType.OIL, collected)
             // LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.OIL, oil.id, collected)
         }
 
         for (chemicals in chemicalsGarbage) {
-            val collected = collectGarbage(ship, chemicals, chemicals.amount, GarbageType.CHEMICALS)
+            collectGarbage(ship, chemicals, chemicals.amount, GarbageType.CHEMICALS)
             // currentTile.removeGarbageOfType(GarbageType.CHEMICALS, collected)
         }
     }

@@ -106,8 +106,7 @@ class Simulation(
                     /**
                      * I GUESS THIS SHOULD BE ADDED HERE
                      *currentTile.garbage.remove(garbageTile.second)
-                      */
-
+                     */
                 }
             }
         }
