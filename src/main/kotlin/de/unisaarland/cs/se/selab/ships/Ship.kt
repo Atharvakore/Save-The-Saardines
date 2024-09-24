@@ -121,7 +121,6 @@ class Ship(
          * we are we only checking weitheir it has fuel sufficient to go to the target,
          * but are we not checking if it can to target + go to harbor after that ????
          */
-
         val neededFuel = fuelConsumption * pathLength * SPEED_LENGTH
         val result = neededFuel <= fuelCapacity - consumedFuel
         if (!result) {
