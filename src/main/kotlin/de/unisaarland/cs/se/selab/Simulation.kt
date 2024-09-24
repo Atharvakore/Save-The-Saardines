@@ -59,9 +59,13 @@ class Simulation(
             allShips.addAll(corporation.ownedShips)
         }
 
-        for (corporation in corporations) {
+        for (corporation in corporations.sortedBy { it.id }) {
             val otherShips = allShips.filter { it.owner != corporation }
-            corporation.run(sea, otherShips)
+            corporation.run(tick, sea, otherShips)
+        }
+
+        for (ship in allShips) {
+            ship.arrivedToHarborThisTick = false
         }
     }
 
@@ -72,7 +76,7 @@ class Simulation(
         val garbageToList: MutableMap<Tile, MutableList<Garbage?>> = mutableMapOf()
 
         sea.tiles
-            .filterIsInstance<DeepOcean>()
+            .filterIsInstance<DeepOcean>().sortedBy { it.id }
             .forEach { tile ->
                 garbageDriftHelper(tile, garbageToList)
             }
@@ -87,18 +91,30 @@ class Simulation(
 
     private fun garbageDriftHelper(currentTile: DeepOcean, garbageToList: MutableMap<Tile, MutableList<Garbage?>>) {
         val garbageList = currentTile.garbage
-        for (garbage in garbageList) {
+        for (garbage in garbageList.sortedBy { it.id }) {
             val current = currentTile.getCurrent()
             if (current != null) {
                 val targetTile = currentTile.getTileInDirection(current.speed / TEN, current.direction)
-                if (targetTile != null && targetTile !is Land) {
+                if (targetTile != null && checkValidPath(currentTile)) {
                     val g = garbage.drift(currentTile, targetTile, current)
-                    garbageToList.getOrPut(currentTile) { mutableListOf() }.add(g)
+                    garbageToList.getOrPut(targetTile) { mutableListOf() }.add(g)
                 }
-            } else {
-                garbageToList.remove(currentTile)
             }
         }
+    }
+
+    private fun checkValidPath(currentTile: DeepOcean): Boolean {
+        val current = currentTile.getCurrent() ?: return false
+        val distance = current.speed / TEN
+        val direction = current.direction
+
+        for (i in 0..distance) {
+            val tileInPath = currentTile.getTileInDirection(i, direction)
+            if (tileInPath == null || tileInPath is Land) {
+                return false
+            }
+        }
+        return true
     }
 
     /**
@@ -114,7 +130,7 @@ class Simulation(
                 .sortedBy { it.id }
             for (tile in deepOceanTilesWithShips) {
                 val shipsOnTile = corporation.ownedShips
-                    .filter { it.position == tile }
+                    .filter { it.position == tile && checkValidPath(tile) }
                     .sortedBy { it.id }
                 for (ship in shipsOnTile) {
                     ship.drift()
@@ -131,7 +147,7 @@ class Simulation(
      * iterates over all events and call actUponTick on them
      */
     private fun processEvents() {
-        for (event in allEvents) {
+        for (event in allEvents.sortedBy { it.id }) {
             event.actUponTick(tick)
         }
     }
@@ -140,7 +156,7 @@ class Simulation(
      * starts new tasks and updates active tasks
      */
     private fun processTasks() {
-        val tasks = collectActiveTasks()
+        val tasks = collectActiveTasks().sortedBy { it.id }
 
         for (task in tasks) {
             task.actUponTick(tick)
@@ -150,7 +166,7 @@ class Simulation(
     private fun collectActiveTasks(): List<Task> {
         val allTasks = mutableListOf<Task>()
         for (corporation in corporations) {
-            allTasks.addAll(corporation.getActiveTasks())
+            allTasks.addAll(corporation.getActiveTasks(tick))
         }
         return allTasks
     }

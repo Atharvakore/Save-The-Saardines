@@ -33,7 +33,7 @@ class UTFactory {
             val harbors = ownedHarbors[id].orEmpty()
             val acceptedGarbage = acceptedGarbageType[id].orEmpty()
             val corpTasks = tasks[id].orEmpty()
-            Corporation(id, "unknown$id", ships, harbors, acceptedGarbage, corpTasks)
+            Corporation(id, "unknown$id", ships, harbors, acceptedGarbage, corpTasks.toMutableList())
         }
     }
 
@@ -58,7 +58,14 @@ class UTFactory {
                 capabilities = capability
             )
             ship.position = position[id] ?: Shore(0, Vec2D(-1, -1), emptyList(), emptyList(), false)
-            ship.owner = owner[id] ?: Corporation(-1, "Unknown", mutableListOf(), emptyList(), emptyList(), emptyList())
+            ship.owner = owner[id] ?: Corporation(
+                -1,
+                "Unknown",
+                mutableListOf(),
+                emptyList(),
+                emptyList(),
+                mutableListOf()
+            )
             ship.name = "Ship$id" // Assign a name to the ship
 
             ship // Return the ship
@@ -235,19 +242,25 @@ class UTFactory {
     }
 
     private fun findAdjacentTiles(pos: Vec2D): List<Tile?> {
-        val nextValue = if (pos.posX % 2 == 0 && pos.posY % 2 == 0) {
-            1
-        } else {
+        val nextValue = if (pos.posY % 2 == 0) {
             0
+        } else {
+            -1
         }
+        val adjacentTile0 = sea.getTileByPos(Vec2D(pos.posX + 1, pos.posY)) // east
+        val adjacentTile60 = sea.getTileByPos(Vec2D(pos.posX + nextValue + 1, pos.posY - 1))
+        val adjacentTile120 = sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY - 1))
+        val adjacentTile180 = sea.getTileByPos(Vec2D(pos.posX - 1, pos.posY)) // west
+        val adjacentTile240 = sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY + 1))
+        val adjacentTile300 = sea.getTileByPos(Vec2D(pos.posX + nextValue + 1, pos.posY + 1))
 
         val list = listOf(
-            sea.getTileByPos(Vec2D(pos.posX + 1, pos.posY)), // East
-            sea.getTileByPos(Vec2D(pos.posX - 1, pos.posY)), // West
-            sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY + 1)), // Southeast
-            sea.getTileByPos(Vec2D(pos.posX + nextValue - 1, pos.posY - 1)), // Northwest
-            sea.getTileByPos(Vec2D(pos.posX + nextValue, pos.posY - 1)), // Northeast
-            sea.getTileByPos(Vec2D(pos.posX + nextValue - 1, pos.posY + 1)) // Southwest
+            adjacentTile0,
+            adjacentTile60,
+            adjacentTile120,
+            adjacentTile180,
+            adjacentTile240,
+            adjacentTile300,
         )
         return list
     }

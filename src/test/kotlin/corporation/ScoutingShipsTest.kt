@@ -3,7 +3,6 @@ package corporation
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
@@ -31,7 +30,7 @@ class ScoutingShipsTest {
         val shipTile = sea.getTileByPos(Vec2D(5, 7)) ?: error("Tile not found at position (5,7)")
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList<Task>())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
         val capability = ScoutingShip(5)
         val scoutingShip = Ship(1, 100, 25, 3000, 10, mutableListOf(capability))
         scoutingShip.owner = c1
@@ -45,12 +44,12 @@ class ScoutingShipsTest {
         val garbageTile = sea.getTileByPos(Vec2D(6, 6))
         garbageTile?.garbage = listOf(garbage)
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
 
         // test ship moved to garbage tile
         assert(scoutingShip.position == garbageTile)
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
 
         // assure scouting ship didn't leave tile in next tick
         assert(scoutingShip.position == garbageTile)
@@ -64,7 +63,7 @@ class ScoutingShipsTest {
         val shipTile2 = sea.getTileByPos(Vec2D(6, 8)) ?: error("Tile not found at position (6,8)")
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList<Task>())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
 
         val scoutingShip1 = listOfShips[1]
         scoutingShip1.position = shipTile1
@@ -87,13 +86,13 @@ class ScoutingShipsTest {
         garbageTile1?.garbage = listOf(garbage1)
         garbageTile2?.garbage = listOf(garbage2)
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         // test same distance of garbage piles
         assert(scoutingShip1.position == garbageTile1)
         // test ship moved to tile in FoV of Corporation
         assert(scoutingShip2.position != garbageTile2)
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         // test ships remain at tile with garbage
         assert(scoutingShip1.position == garbageTile1)
         assert(scoutingShip2.position == garbageTile2)
@@ -106,7 +105,7 @@ class ScoutingShipsTest {
         val shipTile1 = sea.getTileByPos(Vec2D(2, 6)) ?: error("Tile not found at position (2,6)")
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList<Task>())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
 
         val scoutingShip1 = listOfShips[1]
         scoutingShip1.position = shipTile1
@@ -125,11 +124,11 @@ class ScoutingShipsTest {
         garbageTile1?.garbage = listOf(garbage1)
         garbageTile2?.garbage = listOf(garbage2)
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         // test ship move to the closest garbage pile
         assert(scoutingShip1.position != garbageTile1)
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
 
         // test ships remain at tile with garbage
         assert(scoutingShip1.position == garbageTile1)

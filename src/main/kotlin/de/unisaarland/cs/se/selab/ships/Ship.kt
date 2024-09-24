@@ -28,15 +28,18 @@ class Ship(
     private var destinationPath = emptyList<Tile>()
     private var currentVelocity = 0
     var refueling = false
+    var arrivedToHarborThisTick = false
 
     /**
      * Call: when the ship is on the harbor
      * Logic: the ship has to max its fuelCapacity
      */
     fun refuel() {
-        refueling = false
-        this.consumedFuel = 0
-        LoggerCorporationAction.logRefuelingShip(id, position.id)
+        if (!arrivedToHarborThisTick) {
+            refueling = false
+            this.consumedFuel = 0
+            LoggerCorporationAction.logRefuelingShip(id, position.id)
+        }
     }
 
     /**
@@ -80,12 +83,16 @@ class Ship(
         val desTile: Tile
         if (path.size > distanceLength) {
             desTile = path[distanceLength]
-            consumedFuel += distanceLength * SPEED_LENGTH * fuelConsumption
-            LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
+            if (desTile != this.position) {
+                consumedFuel += distanceLength * SPEED_LENGTH * fuelConsumption
+                LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
+            }
         } else {
             desTile = path.last()
-            consumedFuel += path.size * SPEED_LENGTH * fuelConsumption
-            LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
+            if (desTile != this.position) {
+                consumedFuel += path.size * SPEED_LENGTH * fuelConsumption
+                LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
+            }
         }
         if (desTile == path.last()) {
             currentVelocity = 0
@@ -134,10 +141,16 @@ class Ship(
      * */
     fun moveUninterrupted(pathToHarbor: List<Tile>) {
         hasTaskAssigned = true
+        if (pathToHarbor.isEmpty() || this.position == pathToHarbor.last()) {
+            return
+        }
         move(pathToHarbor)
         if (this.position == pathToHarbor.last()) {
             hasTaskAssigned = false
             destinationPath = emptyList()
+            if (this.owner.ownedHarbors.contains(this.position)) {
+                arrivedToHarborThisTick = true
+            }
         } else {
             val startIndex = pathToHarbor.indexOf(this.position)
             val lastIndex = pathToHarbor.size - 1

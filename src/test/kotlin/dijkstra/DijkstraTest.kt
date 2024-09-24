@@ -27,7 +27,7 @@ class DijkstraTest {
         // setUP
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
         val scoutingShipTile = sea.getTileByPos(Vec2D(2, 6)) ?: error("Tile not found at position (2,6)")
         val collectingShipTile = sea.getTileByPos(Vec2D(4, 2)) ?: error("Tile not found at position (4,2)")
 
@@ -49,16 +49,16 @@ class DijkstraTest {
         garbageTile1?.garbage = listOf(garbage1)
 
         // test ships movement after one tick
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
 
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == sea.getTileByPos(Vec2D(4, 3)))
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == sea.getTileByPos(Vec2D(3, 5)))
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == garbageTile1)
     }
@@ -68,7 +68,7 @@ class DijkstraTest {
         // setUP
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
         val scoutingShipTile = sea.getTileByPos(Vec2D(8, 2)) ?: error("Tile not found at position (2,6)")
         val collectingShipTile = sea.getTileByPos(Vec2D(5, 3)) ?: error("Tile not found at position (4,2)")
 
@@ -90,16 +90,16 @@ class DijkstraTest {
         garbageTile1?.garbage = listOf(garbage1)
 
         // test ships movement after one tick
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
 
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == sea.getTileByPos(Vec2D(5, 2)))
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == sea.getTileByPos(Vec2D(7, 1)))
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == garbageTile1)
     }
@@ -109,7 +109,7 @@ class DijkstraTest {
         // setUP
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
         val scoutingShipTile = sea.getTileByPos(Vec2D(7, 7)) ?: error("Tile not found at position (2,6)")
         val collectingShipTile = sea.getTileByPos(Vec2D(6, 2)) ?: error("Tile not found at position (4,2)")
 
@@ -131,16 +131,16 @@ class DijkstraTest {
         garbageTile1?.garbage = listOf(garbage1)
 
         // test ships movement after one tick
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
 
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == sea.getTileByPos(Vec2D(6, 3)))
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == sea.getTileByPos(Vec2D(6, 5)))
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == garbageTile1)
     }
@@ -150,7 +150,7 @@ class DijkstraTest {
         // setUP
         val harborTile = sea.getTileByPos(Vec2D(1, 5)) ?: error("Tile not found at position (1,5)")
         val gType = GarbageType.OIL
-        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), emptyList())
+        val c1 = Corporation(1, "c1", mutableListOf(), listOf(harborTile as Shore), listOf(gType), mutableListOf())
         val scoutingShipTile = sea.getTileByPos(Vec2D(1, 2)) ?: error("Tile not found at position (2,6)")
         val collectingShipTile = sea.getTileByPos(Vec2D(3, 7)) ?: error("Tile not found at position (4,2)")
 
@@ -172,16 +172,16 @@ class DijkstraTest {
         garbageTile1?.garbage = listOf(garbage1)
 
         // test ships movement after one tick
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
 
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == sea.getTileByPos(Vec2D(2, 6)))
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == sea.getTileByPos(Vec2D(1, 4)))
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         assert(scoutingShip.position == garbageTile1)
         assert(collectingShip.position == garbageTile1)
     }

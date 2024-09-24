@@ -10,11 +10,11 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.AllIn
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingOilTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingPlasticTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectEventIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesOfPirateAttack
@@ -69,10 +69,6 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsMutantValidation(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
-        manager.registerTest(SequenceTick25ParsingTest())
-        manager.registerTest(SequenceTick25CorporationTest())
-        manager.registerTest(SequenceTick25TickTest())
-        manager.registerTest(SequenceTick25StatisticsTest())
         manager.registerTest(IncorrectPropertiesTest())
         manager.registerTest(ShipAmongUs())
     }
@@ -83,9 +79,19 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsMutantSimulation(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
-        manager.registerTest(SequenceTick25ParsingTest())
         manager.registerTest(SequenceTick25CorporationTest())
-        manager.registerTest(SequenceTick25TickTest())
+        manager.registerTest(SequenceTick25ParsingTest())
         manager.registerTest(SequenceTick25StatisticsTest())
+        manager.registerTest(CollectingGarbageTest())
+        manager.registerTest(CollectingOilTest())
+        manager.registerTest(CollectingPlasticTest())
+        manager.registerTest(CollectingChemicalsTest())
+        manager.registerTest(IncorrectEventIds())
+        manager.registerTest(IncorrectShipsIds())
+        manager.registerTest(IncorrectShipsGarbages())
+        manager.registerTest(IncorrectPropertiesOfPirateAttack())
+        manager.registerTest(ShipAmongUs())
+        manager.registerTest(IncorrectPropertiesTest())
+        manager.registerTest(LandNextDeepOcean())
     }
 }
