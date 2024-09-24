@@ -197,6 +197,9 @@ class Ship(
                 result = false
             }
         }
+        if (!result) {
+            capability.unloading = true
+        }
         return result
     }
 

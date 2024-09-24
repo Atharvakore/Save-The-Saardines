@@ -57,13 +57,13 @@ class GarbageTest {
 
     @Test
     fun garbageDriftToNull() {
-        val currentTile: Tile? = seaInstance.getTileById(4)
+        val currentTile: DeepOcean = (seaInstance.getTileById(4) ?: error("null assertion message")) as DeepOcean
         val garbage: Garbage = createGarbage(10, GarbageType.OIL)
-        currentTile?.addGarbage(garbage)
+        currentTile.addGarbage(garbage)
         garbage.drift(
-            currentTile as DeepOcean,
+            currentTile,
             currentTile.getTileInDirection(1, Direction.D0)!!,
-            (currentTile as DeepOcean).getCurrent()!!
+            currentTile.getCurrent()!!
         )
 
         assertFalse(currentTile.garbage.isEmpty())

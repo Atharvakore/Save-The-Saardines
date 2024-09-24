@@ -11,11 +11,13 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 class CollectingShip(
     var auxiliaryContainers: MutableList<Container>
 ) : ShipCapability {
+    var unloading: Boolean = false
+
     /**
      * unloads all the containers of the ship
      */
     fun unload(ship: Ship) {
-        if (ship.arrivedToHarborThisTick) {
+        if (ship.arrivedToHarborThisTick || !unloading) {
             return
         }
         val amountOfPlastic: Int = auxiliaryContainers

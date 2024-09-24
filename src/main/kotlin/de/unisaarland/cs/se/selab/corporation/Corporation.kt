@@ -361,16 +361,12 @@ class Corporation(
      *
      * Filters the ships to get only the ships that have the CollectingShip capability, then collects garbage from the
      * current tile of each ship
-     *
      */
     private fun collectGarbage() {
         val collectingShips: List<Ship> = Helper().filterCollectingShip(this).sortedBy { it.id }
         for (ship in collectingShips) {
-            for (collectingCapability in ship.capabilities) {
-                if (collectingCapability is CollectingShip) {
-                    collectingCapability.collectGarbageFromCurrentTile(ship)
-                }
-            }
+            val capability = ship.capabilities.first() as CollectingShip
+            capability.collectGarbageFromCurrentTile(ship)
         }
     }
 
@@ -382,14 +378,19 @@ class Corporation(
      *
      */
     private fun refuelAndUnloadShips() {
+        val collectingShips: List<Ship> = Helper().filterCollectingCapabilities(this).sortedBy { it.id }
         val shipsOnHarbor: List<Ship> = Helper().getShipsOnHarbor(this)
         if (shipsOnHarbor.isNotEmpty()) {
             for (ship in shipsOnHarbor) {
-                val collectingCapability = ship.capabilities.find { it is CollectingShip }
-                if (collectingCapability != null && !ship.refueling) {
-                    (collectingCapability as CollectingShip).unload(ship)
-                } else {
+                var capability: CollectingShip? = null
+                if (collectingShips.contains(ship)) {
+                    capability = ship.capabilities.filterIsInstance<CollectingShip>().first()
+                }
+
+                if (ship.refueling) {
                     ship.refuel()
+                } else if (capability != null && capability.unloading) {
+                    capability.unload(ship)
                 }
             }
         }
