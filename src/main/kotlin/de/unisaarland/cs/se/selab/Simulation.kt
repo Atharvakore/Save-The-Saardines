@@ -8,7 +8,6 @@ import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Garbage
-import de.unisaarland.cs.se.selab.tiles.Land
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.TEN
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -112,15 +111,14 @@ class Simulation(
     private fun getValidTile(currentTile: DeepOcean, current: Current): Tile? {
         val distance = current.speed / TEN
         val direction = current.direction
-        val targetTile = currentTile.getTileInDirection(distance, direction)
+        var tile: Tile? = currentTile
 
-        for (i in 1..distance) {
-            val tileInPath = currentTile.getTileInDirection(i, direction)
-            if (tileInPath == null || tileInPath is Land) {
-                return currentTile.getTileInDirection(i - 1, current.direction)
+        if (distance > 0) {
+            repeat(distance) {
+                tile = tile?.adjacentTiles?.get(direction.ordinal) ?: return tile
             }
         }
-        return targetTile
+        return tile
     }
 
     /**

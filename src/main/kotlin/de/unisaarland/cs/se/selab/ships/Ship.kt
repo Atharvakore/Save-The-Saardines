@@ -97,7 +97,7 @@ class Ship(
         } else {
             desTile = path.last()
             if (desTile != this.position) {
-                consumedFuel += path.size * SPEED_LENGTH * fuelConsumption
+                consumedFuel += (path.size - 1) * SPEED_LENGTH * fuelConsumption
                 LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
             }
         }
