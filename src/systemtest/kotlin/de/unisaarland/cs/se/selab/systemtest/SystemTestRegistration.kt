@@ -6,6 +6,7 @@ import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceT
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageMultipleCurrents
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
@@ -41,6 +42,7 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
+        manager.registerTest(DriftGarbageMultipleCurrents())
         manager.registerTest(ExampleSystemTest())
         manager.registerTest(MoveNearHome())
         manager.registerTest(ReturnToHomeWater())
@@ -72,6 +74,7 @@ object SystemTestRegistration {
         manager.registerTest(CorporationWhereShip())
         manager.registerTest(CorpNoShips())
         manager.registerTest(TasksTest())
+
     }
 
     /**
