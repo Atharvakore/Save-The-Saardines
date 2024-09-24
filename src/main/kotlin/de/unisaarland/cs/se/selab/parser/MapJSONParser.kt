@@ -188,9 +188,11 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                 val harbor = tile.getBoolean(HARBOR)
                 Shore(id, coordinates, emptyList(), emptyList(), harbor)
             }
+
             LAND -> {
                 Land(id, coordinates, emptyList())
             }
+
             else -> {
                 throw IllegalArgumentException("There should be an Ocean tile")
             }
@@ -217,7 +219,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             val adjacentTile180 = accumulator.getTileByPos(Vec2D(x - 1, y)) // west
             val adjacentTile240 = accumulator.getTileByPos(Vec2D(x + nextValue, y + 1))
             val adjacentTile300 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y + 1))
-            val adjacentTiles = listOf(
+            val adjacentTiles = mutableListOf(
                 adjacentTile0,
                 adjacentTile60,
                 adjacentTile120,
@@ -225,6 +227,11 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                 adjacentTile240,
                 adjacentTile300
             )
+            for (tile in adjacentTiles) {
+                if (tile is Land) {
+                    adjacentTiles[adjacentTiles.indexOf(tile)] = null
+                }
+            }
             element.adjacentTiles = adjacentTiles
             accumulator.map.tiles.add(element)
         }
@@ -257,7 +264,9 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                 adjacentTile300
             )
             when (tile) {
-                is Shore -> { correct = true }
+                is Shore -> {
+                    correct = true
+                }
                 // adjacentTiles.all { t -> t == null || t is Shore || t is ShallowOcean }
 
                 is DeepOcean -> {

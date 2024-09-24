@@ -29,11 +29,11 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
                 corporations = objects.getJSONArray(CORPORATIONS)
                 ships = objects.getJSONArray(SHIPS)
                 corporations.length() > 0 &&
-                    ships.length() > 0 &&
-                    validateShips(ships) &&
-                    validateCorporations(corporations) &&
-                    accumulator.mapCorporationToShips.isEmpty() &&
-                    harborAtLeastOneCorp()
+                        ships.length() > 0 &&
+                        validateShips(ships) &&
+                        validateCorporations(corporations) &&
+                        accumulator.mapCorporationToShips.isEmpty() &&
+                        harborAtLeastOneCorp()
             } else {
                 false
             }
@@ -80,9 +80,9 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         result = result && accumulator.corporations[corporation.getInt(ID)] == null
         val shipsSet = corporation.getJSONArray(SHIPS).toSet()
         result = result && shipsSet == (
-            accumulator.mapCorporationToShips[corporation.getInt(ID)]?.toSet()
-                ?: return false
-            )
+                accumulator.mapCorporationToShips[corporation.getInt(ID)]?.toSet()
+                    ?: return false
+                )
 
         val id = corporation.getInt(ID)
         val name = corporation.getString(NAME)
@@ -241,9 +241,9 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         harbors.forEach {
             ownedHarbors.add(
                 (
-                    accumulator.tiles[(it ?: error("This is not a number")) as Int]
-                        ?: error("There should exists this tile")
-                    ) as Shore
+                        accumulator.tiles[(it ?: error("This is not a number")) as Int]
+                            ?: error("There should exists this tile")
+                        ) as Shore
             )
         }
         val garbageTypes: List<GarbageType> = listOf(GarbageType.OIL, GarbageType.PLASTIC, GarbageType.CHEMICALS)
@@ -269,8 +269,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         var result: Boolean = true
         result = result && checkShipUnique(id, name)
         result = result && checkShipProperties(type, maxV, accel, fuel, consumption)
-        val tile = accumulator.tiles[location]
-        result = result && tile != null
+        result = result && accumulator.map.getTileById(location) != null
         when (type) {
             COLLECTER -> {
                 result = result && shipObject.keySet() == requiredCollectingKeys
