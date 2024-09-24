@@ -105,7 +105,11 @@ class Garbage(
          */
 
         if (garbageSum + drifted > MAXOILCAP) {
-            target = getValidTileInPath(currentTile, targetTile, drifted, localCurrent)
+            val targetsList = getTilesPath(currentTile, localCurrent)
+            val tile = checkOilCap(targetsList, amount)
+            if (tile != null) {
+                target = tile
+            }
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
         } else {
@@ -115,35 +119,35 @@ class Garbage(
         return Pair(target, newGarbage)
     }
 
-    private fun getValidTileInPath(currentTile: DeepOcean, targetTile: Tile, drifted: Int, current: Current): Tile {
-        var distance = current.speed / TEN
-        val dir = current.direction
-        val tile = currentTile.getTileInDirection(distance, dir)
+    private fun checkOilCap(path: List<Tile?>, amount: Int): Tile? {
+        val listOfTiles = path.reversed()
+        var targetTile: Tile? = null
 
-        if (tile != targetTile) {
-            for (i in 0..distance) {
-                val temp = currentTile.getTileInDirection(i, dir)
-                if (temp == targetTile) {
-                    distance = i
-                    break
-                }
+        for (tile in listOfTiles) {
+            if (tile == null) {
+                continue
             }
-        }
-
-        for (i in distance downTo 0) {
-            val temp = currentTile.getTileInDirection(i, dir)
-            if (temp != null) {
-                val oil = temp.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
-                /**
-                 * WHY ARE WE COMPARING THE AMOUNT OF OIL IN THE TILE WITH THE AMOUNT OF DRIFT WITHOUT TAKING THE MAXCAP
-                 * FOR WHICH THIS METHOD WAS INITIALLY CALLED INTO CONSIDERATION ??
-                 */
-                if (oil + drifted <= MAXOILCAP) {
-                    return temp
-                }
+            val garbageSum = tile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
+            if (garbageSum + amount > MAXOILCAP) {
+                targetTile = tile
             }
         }
         return targetTile
+    }
+
+    private fun getTilesPath(currentTile: DeepOcean, current: Current): List<Tile?> {
+        val distance = current.speed / TEN
+        val dir = current.direction
+        val tilesPath = mutableListOf<Tile?>()
+
+        if (distance == 0) {
+            return listOf(currentTile)
+        } else {
+            for (i in 0..distance) {
+                tilesPath.add(currentTile.getTileInDirection(i, dir))
+            }
+            return tilesPath.toList()
+        }
     }
 
     /**
