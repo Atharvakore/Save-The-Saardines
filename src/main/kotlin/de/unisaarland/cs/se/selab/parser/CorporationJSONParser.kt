@@ -269,8 +269,7 @@ class CorporationJSONParser(override val accumulator: Accumulator) : JSONParser 
         var result: Boolean = true
         result = result && checkShipUnique(id, name)
         result = result && checkShipProperties(type, maxV, accel, fuel, consumption)
-        val tile = accumulator.tiles[location]
-        result = result && tile != null
+        result = result && accumulator.map.getTileById(location) != null
         when (type) {
             COLLECTER -> {
                 result = result && shipObject.keySet() == requiredCollectingKeys

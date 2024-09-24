@@ -20,7 +20,7 @@ class StormTest {
         factory.createTestingMap()
         sea = factory.sea
         sea.getTileByPos(Vec2D(6, 6))?.addGarbage(
-            Garbage(1, 1000, GarbageType.OIL, null)
+            Garbage(1, 1000, GarbageType.OIL, emptySet())
         )
     }
 

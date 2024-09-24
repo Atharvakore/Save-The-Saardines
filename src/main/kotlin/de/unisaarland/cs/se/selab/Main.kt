@@ -92,16 +92,23 @@ private fun parseCorporations(files: List<String?>, content: String?, accumulato
 private fun parseScenario(files: List<String?>, content: String?, accumulator: Accumulator): Accumulator? {
     val scenarioParser = ScenarioJSONParser(accumulator)
     val taskPars = TasksRewardsParser(accumulator)
-    if (content == null) return null
-    var validScenario = scenarioParser.parseGarbage(content) && scenarioParser.parseEvents(content)
-    validScenario = validScenario && taskPars.parseRewards(content) && taskPars.parseTasks(content)
+    var validScenario = content != null && scenarioParser.parseGarbage(content) && scenarioParser.parseEvents(content)
+    validScenario = validScenario && content != null && taskPars.parseRewards(content) && taskPars.parseTasks(content)
+    if (validScenario) {
+        Logger.logInitializationInfoSuccess(requireNotNull(files[2]))
+    } else {
+        Logger.logInitializationInfoFail(requireNotNull(files[2]))
+        return null
+    }
+    return accumulator
+    /*
     return if (validScenario) {
         Logger.logInitializationInfoSuccess(requireNotNull(files[2]))
         accumulator
     } else {
         Logger.logInitializationInfoFail(requireNotNull(files[2]))
         null
-    }
+    } */
 }
 
 private fun validate(files: List<String?>): List<String?> {

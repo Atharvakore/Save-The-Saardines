@@ -1,6 +1,5 @@
 package systemtests
 
-import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
@@ -83,13 +82,11 @@ class Map {
         numOfPiles: Int,
         amount: Map<Int, Int>,
         type: Map<Int, GarbageType>,
-        trackedBy: Map<Int, Set<Corporation>?>,
     ): List<Garbage> {
         return (1 until numOfPiles).map { id ->
             val garbageAmount = amount[id] ?: 0
             val garbageType = type[id] ?: GarbageType.OIL
-            val garbageTrackedBy = trackedBy[id]
-            Garbage(id, garbageAmount, garbageType, garbageTrackedBy)
+            Garbage(id, garbageAmount, garbageType, emptySet())
         }
     }
 

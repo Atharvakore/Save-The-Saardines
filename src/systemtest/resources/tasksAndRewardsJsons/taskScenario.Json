@@ -1,0 +1,70 @@
+{
+  "garbage": [
+    {
+      "id": 10,
+      "type": "OIL",
+      "location": 66,
+      "amount": 800
+    }
+  ],
+  "events": [],
+  "tasks": [
+    {
+      "id": 1,
+      "type": "COLLECT",
+      "tick": 0,
+      "shipID": 2,
+      "targetTile": 66,
+      "rewardID": 1,
+      "rewardShipID": 1
+    },
+    {
+      "id": 2,
+      "type": "EXPLORE",
+      "tick": 1,
+      "shipID": 1,
+      "targetTile": 63,
+      "rewardID": 2,
+      "rewardShipID": 2
+    },
+    {
+      "id": 3,
+      "type": "FIND",
+      "tick": 2,
+      "shipID": 3,
+      "targetTile": 36,
+      "rewardID": 3,
+      "rewardShipID": 4
+    },
+    {
+      "id": 4,
+      "type": "COOPERATE",
+      "tick": 3,
+      "shipID": 4,
+      "targetTile": 66,
+      "rewardID": 4,
+      "rewardShipID": 3
+    }
+  ],
+  "rewards": [
+    {
+      "id": 1,
+      "type": "CONTAINER",
+      "capacity": 40000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 2,
+      "type": "TELESCOPE",
+      "visibilityRange": 2
+    },
+    {
+      "id": 3,
+      "type": "TRACKER"
+    },
+    {
+      "id": 4,
+      "type": "RADIO"
+    }
+  ]
+}
