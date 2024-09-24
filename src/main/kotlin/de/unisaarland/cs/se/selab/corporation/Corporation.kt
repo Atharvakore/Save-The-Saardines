@@ -128,7 +128,7 @@ class Corporation(
      * @return List of active tasks
      */
     fun getActiveTasks(tick: Int): List<Task> {
-        activeTasks = tasks.filter { tick >= it.tick }
+        activeTasks = tasks.filter { tick == it.tick }
         return activeTasks
     }
 
@@ -271,10 +271,6 @@ class Corporation(
                 availableShips.remove(it)
             }
         }
-        // 0. For each ship that has an assigned destination, tick the
-        // ship and remove the ship from the available ships
-        availableShips.forEach { if (it.hasTaskAssigned) it.tickTask() }
-        availableShips.removeAll { it.hasTaskAssigned }
         // 1. Process tasks. For each active task, assign the ship from the task to
         // go to the target tile.
         // val activeTasks: List<Task> = getActiveTasks()
@@ -287,7 +283,7 @@ class Corporation(
             val targetTile: Tile = task.getGoal()
             Dijkstra(targetTile).allPaths()[ship.position]?.let { path ->
                 if (ship.isFuelSufficient(path.size)) {
-                    ship.moveUninterrupted(path)
+                    ship.moveUninterrupted(path.reversed())
                     availableShips.remove(ship)
                 } else {
                     // Task failed, not enough fuel.
@@ -295,6 +291,10 @@ class Corporation(
                 }
             }
         }
+        // 0. For each ship that has an assigned destination, tick the
+        // ship and remove the ship from the available ships
+        availableShips.forEach { if (it.hasTaskAssigned) it.tickTask() }
+        availableShips.removeAll { it.hasTaskAssigned }
         // 2. Iterate over available ships in increasing ID order
         val usedShips: MutableList<Int> = mutableListOf()
         val scoutTarget: MutableSet<Int> = mutableSetOf()

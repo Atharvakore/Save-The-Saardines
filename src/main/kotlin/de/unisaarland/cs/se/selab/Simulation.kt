@@ -156,18 +156,9 @@ class Simulation(
      * starts new tasks and updates active tasks
      */
     private fun processTasks() {
-        val tasks = collectActiveTasks().sortedBy { it.id }
-
+        val tasks = corporations.map { it.tasks }.flatten().sortedBy { it.id }
         for (task in tasks) {
             task.actUponTick(tick)
         }
-    }
-
-    private fun collectActiveTasks(): List<Task> {
-        val allTasks = mutableListOf<Task>()
-        for (corporation in corporations) {
-            allTasks.addAll(corporation.getActiveTasks(tick))
-        }
-        return allTasks
     }
 }
