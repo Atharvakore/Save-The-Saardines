@@ -101,10 +101,6 @@ class Garbage(
         val garbageSum = targetTile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
 
         if (garbageSum + drifted > MAXOILCAP) {
-            /**
-             * THIS CHECK SHOULD BE MADE BEFORE, WHAT IF THERE'S NO TILE WHERE OIL CAN BE DRIFTED BUT WE ARE STILL
-             * DEDUCTING THE AMOUNT
-             */
             target = getValidTileInPath(currentTile, targetTile, drifted, localCurrent)
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
@@ -134,11 +130,7 @@ class Garbage(
             val temp = currentTile.getTileInDirection(i, dir)
             if (temp != null) {
                 val oil = temp.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
-                /**
-                 * WHY ARE WE COMPARING THE AMOUNT OF OIL IN THE TILE WITH THE AMOUNT OF DRIFT WITHOUT TAKING THE MAXCAP
-                 * FOR WHICH THIS METHOD WAS INITIALLY CALLED INTO CONSIDERATION ??
-                 */
-                if (oil + drifted <= MAXOILCAP) {
+                if (oil >= drifted) {
                     return temp
                 }
             }
