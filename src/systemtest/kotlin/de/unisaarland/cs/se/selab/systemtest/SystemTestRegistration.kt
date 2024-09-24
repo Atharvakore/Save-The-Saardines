@@ -30,6 +30,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.Incorre
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectShipsIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.LandNextDeepOcean
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.OneIDTwoTasks
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.OneTileNoHarbor
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShipAmongUs
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShoreNoHarbor
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingChemicalsTest
@@ -78,6 +79,7 @@ object SystemTestRegistration {
         manager.registerTest(FileNotExistent())
         manager.registerTest(CorporationNotFound())
         manager.registerTest(TasksTest())
+        manager.registerTest(OneTileNoHarbor())
     }
 
     /**
