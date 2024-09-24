@@ -4,13 +4,13 @@
       "id": 1,
       "name": "Ocean Scouters Inc.",
       "ships": [
-        2
+        2 ,3
       ],
       "homeHarbors": [
-        14, 52, 59
+        52, 59
       ],
       "garbageTypes": [
-        "OIL"
+        "PLASTIC"
       ]
     }
   ],
@@ -23,10 +23,22 @@
       "location": 23,
       "maxVelocity": 50,
       "acceleration": 10,
-      "fuelCapacity": 5000,
+      "fuelCapacity": 3000,
       "fuelConsumption": 9,
-      "capacity": 80000,
-      "garbageType": "OIL"
+      "capacity": 5000,
+      "garbageType": "PLASTIC"
+    } ,
+    {
+      "id": 3,
+      "name": "Scouting",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 24,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 4000,
+      "fuelConsumption": 9,
+      "visibilityRange": 3
     }
   ]
 }
