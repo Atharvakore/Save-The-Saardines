@@ -26,7 +26,7 @@ class CooperateTask(
         if (currentTick == tick) {
             LoggerEventsAndTasks.logTaskStart(id, "COOPERATE", taskShip.id, destinationHomeHarbor.id)
         }
-        if (checkCondition()) {
+        if (checkCondition() && currentTick >= tick) {
             LoggerEventsAndTasks.logRewardReceived(id, rewardShip.id, reward)
             reward.applyReward(rewardShip)
             taskShip.owner.tasks.remove(this)

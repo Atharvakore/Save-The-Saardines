@@ -5,7 +5,6 @@ import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Land
@@ -156,18 +155,9 @@ class Simulation(
      * starts new tasks and updates active tasks
      */
     private fun processTasks() {
-        val tasks = collectActiveTasks().sortedBy { it.id }
-
+        val tasks = corporations.map { it.tasks }.flatten().sortedBy { it.id }
         for (task in tasks) {
             task.actUponTick(tick)
         }
-    }
-
-    private fun collectActiveTasks(): List<Task> {
-        val allTasks = mutableListOf<Task>()
-        for (corporation in corporations) {
-            allTasks.addAll(corporation.getActiveTasks(tick))
-        }
-        return allTasks
     }
 }
