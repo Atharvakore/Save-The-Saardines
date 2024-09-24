@@ -64,13 +64,13 @@ class CorporationMoveShipsTest {
         garbageTile1?.garbage = listOf(garbage1)
 
         // test ships movement after one tick
-        c1.run(sea, otherShips = listOf(c2Ship))
+        c1.run(0, sea, otherShips = listOf(c2Ship))
 
         assert(scoutingShip.position == garbageTile1)
         assert(coordinatingShip.position == c2ShipTile)
         assert(collectingShip.position != garbageTile1)
 
-        c2.run(sea, otherShips = listOf(scoutingShip, coordinatingShip, collectingShip))
+        c2.run(0, sea, otherShips = listOf(scoutingShip, coordinatingShip, collectingShip))
 
         assert(c2Ship.position == c2ShipTile)
     }
@@ -105,12 +105,12 @@ class CorporationMoveShipsTest {
         val garbageTile = sea.getTileByPos(Vec2D(8, 8))
         garbageTile?.garbage = listOf(garbage)
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         // test ship moved to garbage tile
         assert(scoutingShip.position != garbageTile)
         assert(collectingShip.position != garbageTile)
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         // assure scouting ship didn't leave tile in next tick and collecting ship arrived
         assert(scoutingShip.position == garbageTile)
         assert(collectingShip.position != garbageTile)
@@ -136,7 +136,7 @@ class CorporationMoveShipsTest {
         garbageTile?.garbage = listOf(garbage)
 
         // test no move when garbage away
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         assert(collectingShip.position == collectingShipTile)
 
         val garbage2 = Garbage(2, 200, GarbageType.OIL, emptySet())
@@ -144,7 +144,7 @@ class CorporationMoveShipsTest {
         garbageTile2?.garbage = listOf(garbage2)
 
         // test no move when garbage close
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         assert(collectingShip.position == collectingShipTile)
     }
 
