@@ -38,10 +38,10 @@ class CollectingShip(
         if (amountOfChemicals > 0) {
             LoggerCorporationAction.logUnloadShip(ship.id, amountOfChemicals, GarbageType.CHEMICALS, ship.position.id)
         }
-
         for (container in auxiliaryContainers) {
             container.giveGarbage()
         }
+        this.unloading = false
     }
 
     /**
