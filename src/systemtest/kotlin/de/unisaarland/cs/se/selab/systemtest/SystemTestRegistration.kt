@@ -106,5 +106,9 @@ object SystemTestRegistration {
         manager.registerTest(ShipAmongUs())
         manager.registerTest(IncorrectPropertiesTest())
         manager.registerTest(LandNextDeepOcean())
+        manager.registerTest(OneIDTwoTasks())
+        manager.registerTest(ShoreNoHarbor())
+        manager.registerTest(CorporationWhereShip())
+        manager.registerTest(CorpNoShips())
     }
 }

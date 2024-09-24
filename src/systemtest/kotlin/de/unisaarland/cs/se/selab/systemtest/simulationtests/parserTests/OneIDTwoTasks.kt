@@ -10,7 +10,7 @@ class OneIDTwoTasks : ExampleSystemTestExtension() {
     override val corporations = "corporationJsons/corporations.json"
     override val scenario = "scenarioJsons/scenarioOneIDTwoTasks.json"
     override val map = "mapFiles/smallMap1.json"
-    override val name = "ExampleTest"
+    override val name = "oneIdTwoTasks"
     override val maxTicks = 0
     override suspend fun run() {
         assertNextLine("Initialization Info: smallMap1.json successfully parsed and validated.")
