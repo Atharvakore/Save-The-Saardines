@@ -74,7 +74,6 @@ object SystemTestRegistration {
         manager.registerTest(CorporationWhereShip())
         manager.registerTest(CorpNoShips())
         manager.registerTest(TasksTest())
-
     }
 
     /**

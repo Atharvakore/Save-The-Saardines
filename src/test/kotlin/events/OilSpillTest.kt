@@ -44,7 +44,7 @@ class OilSpillTest {
         assertTrue(sea.getTileByPos(Vec2D(3, 6))?.currentOilLevel() == 500)
 
         val oilSpillEvent3 = OilSpill(1, 5, sea, DeepOcean(0, Vec2D(3, 5), emptyList(), emptyList(), null), 1, 500)
-        sea.getTileByPos(Vec2D(2, 4))?.addGarbage(Garbage(0, 800, GarbageType.OIL, null))
+        sea.getTileByPos(Vec2D(2, 4))?.addGarbage(Garbage(0, 800, GarbageType.OIL, emptySet()))
         assertTrue(oilSpillEvent3.actUponTick(5))
         assertTrue(sea.getTileByPos(Vec2D(3, 5))?.currentOilLevel() == 1000)
         assertTrue(sea.getTileByPos(Vec2D(3, 4))?.currentOilLevel() == 1000)

@@ -99,7 +99,7 @@ class Corporation(
             garbageOnTile.forEach { garbage ->
                 if (!trackedGarbage.contains(garbage)) {
                     trackedGarbage.add(garbage)
-                    garbage.trackedBy = garbage.trackedBy?.plus(this)
+                    garbage.trackedBy = garbage.trackedBy.plus(this)
                     LoggerCorporationAction.logAttachTracker(id, ship.id, garbage.id)
                 }
             }

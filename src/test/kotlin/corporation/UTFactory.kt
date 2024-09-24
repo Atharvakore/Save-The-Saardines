@@ -139,13 +139,17 @@ class UTFactory {
         numOfPiles: Int,
         amount: Map<Int, Int>,
         type: Map<Int, GarbageType>,
-        trackedBy: Map<Int, Set<Corporation>?>,
+        trackedBy: Map<Int, Set<Corporation>>,
     ): List<Garbage> {
         return (1 until numOfPiles).map { id ->
             val garbageAmount = amount[id] ?: 0
             val garbageType = type[id] ?: GarbageType.OIL
             val garbageTrackedBy = trackedBy[id]
-            Garbage(id, garbageAmount, garbageType, garbageTrackedBy)
+            if (garbageTrackedBy != null) {
+                Garbage(id, garbageAmount, garbageType, garbageTrackedBy)
+            } else {
+                Garbage(id, garbageAmount, garbageType, emptySet())
+            }
         }
     }
 

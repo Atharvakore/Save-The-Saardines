@@ -15,5 +15,5 @@ object MaxGarbageId {
     fun createGarbage(
         amount: Int,
         type: GarbageType,
-    ): Garbage = Garbage(getNextId(), amount, type, null)
+    ): Garbage = Garbage(getNextId(), amount, type, emptySet())
 }

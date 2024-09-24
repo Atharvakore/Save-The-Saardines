@@ -11,7 +11,7 @@ class Garbage(
     val id: Int,
     var amount: Int,
     val type: GarbageType,
-    var trackedBy: Set<Corporation>?,
+    var trackedBy: Set<Corporation>,
 ) {
 
     /**

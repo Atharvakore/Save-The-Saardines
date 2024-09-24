@@ -47,8 +47,8 @@ class TileTest {
         tile63.adjacentTiles = adjTile63
         tile73.adjacentTiles = adjTile73
 
-        val chemical: Garbage = Garbage(1, 100, GarbageType.CHEMICALS, null)
-        val oil: Garbage = Garbage(2, 600, GarbageType.OIL, null)
+        val chemical: Garbage = Garbage(1, 100, GarbageType.CHEMICALS, emptySet())
+        val oil: Garbage = Garbage(2, 600, GarbageType.OIL, emptySet())
         tile82.addGarbage(oil)
         tile63.addGarbage(chemical)
 
@@ -82,7 +82,7 @@ class TileTest {
 
     @Test
     fun testAddGarbage() {
-        val garbageToAdd: Garbage = Garbage(1, 500, GarbageType.PLASTIC, null)
+        val garbageToAdd: Garbage = Garbage(1, 500, GarbageType.PLASTIC, emptySet())
         val currTile: Tile? = sea.getTileById(62)
         currTile?.addGarbage(garbageToAdd)
         assertTrue(currTile?.garbage?.contains(garbageToAdd)!!)
@@ -98,7 +98,7 @@ class TileTest {
     @Test
     fun testRemoveGarbageOfType() {
         val currTile: Tile? = sea.getTileById(83)
-        val garbage: Garbage = Garbage(1, 100, GarbageType.CHEMICALS, null)
+        val garbage: Garbage = Garbage(1, 100, GarbageType.CHEMICALS, emptySet())
         currTile!!.garbage = mutableListOf(garbage)
         currTile.removeGarbageOfType(GarbageType.CHEMICALS, 100)
         assertFalse(currTile.garbage.any { it.id == 1 })

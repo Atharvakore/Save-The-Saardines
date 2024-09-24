@@ -55,7 +55,7 @@ class ScoutingShipTest {
         tile63.adjacentTiles = adjTile63
         tile73.adjacentTiles = adjTile73
 
-        val garbage: Garbage = Garbage(1, 500, GarbageType.CHEMICALS, null)
+        val garbage: Garbage = Garbage(1, 500, GarbageType.CHEMICALS, emptySet())
         tile63.addGarbage(garbage)
 
         val tiles: MutableList<Tile> = mutableListOf(tile62, tile72, tile82, tile83, tile74, tile63, tile73)
