@@ -90,8 +90,9 @@ class Corporation(
      *
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
-    fun run(sea: Sea, otherShips: List<Ship>) {
+    fun run(tick: Int, sea: Sea, otherShips: List<Ship>) {
         this.sea = sea
+        getActiveTasks(tick)
         logger.logCorporationStartMoveShips(id)
         moveShips(otherShips)
         logger.logCorporationStartCollectGarbage(id)
@@ -254,15 +255,20 @@ class Corporation(
         // val activeTasks: List<Task> = getActiveTasks()
         for (task in activeTasks) {
             val ship: Ship = task.taskShip
+            if (ship.hasTaskAssigned) {
+                // Task failed: already navigating to a harbor.
+                tasks.remove(task)
+                task.fail()
+            }
             val targetTile: Tile = task.getGoal()
             Dijkstra(targetTile).allPaths()[ship.position]?.let { path ->
                 if (ship.isFuelSufficient(path.size)) {
                     ship.moveUninterrupted(path)
                     availableShips.remove(ship)
                 } else {
-                    val closestHarborPath: List<Tile> = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                    ship.moveUninterrupted(closestHarborPath)
-                    availableShips.remove(ship)
+                    // Task failed, not enough fuel.
+                    tasks.remove(task)
+                    task.fail()
                 }
             }
         }
@@ -319,7 +325,9 @@ class Corporation(
         val collectingShips: List<Ship> = Helper().filterCollectingShip(this).sortedBy { it.id }
         for (ship in collectingShips) {
             for (collectingCapability in ship.capabilities) {
-                (collectingCapability as CollectingShip).collectGarbageFromCurrentTile(ship)
+                if (collectingCapability is CollectingShip) {
+                    collectingCapability.collectGarbageFromCurrentTile(ship)
+                }
             }
         }
     }

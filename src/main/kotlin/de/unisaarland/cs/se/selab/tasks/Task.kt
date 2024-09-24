@@ -19,4 +19,7 @@ abstract class Task(
 
     /** Determine the goal tile of the task. */
     abstract fun getGoal(): Tile
+
+    /** Called when the task is failed */
+    abstract fun fail(): Unit
 }

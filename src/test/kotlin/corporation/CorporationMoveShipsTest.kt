@@ -179,12 +179,12 @@ class CorporationMoveShipsTest {
         val garbageTile = sea.getTileByPos(Vec2D(4, 6))
         garbageTile?.garbage = listOf(garbage)
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         // test ship moved to garbage tile
         assert(scoutingShip.position == garbageTile)
         assert(collectingShip.position != harborTile)
 
-        c1.run(sea, emptyList())
+        c1.run(0, sea, emptyList())
         // assure scouting ship didn't leave tile in next tick and collecting ship arrived
         assert(scoutingShip.position == garbageTile)
         assert(collectingShip.position != garbageTile)
