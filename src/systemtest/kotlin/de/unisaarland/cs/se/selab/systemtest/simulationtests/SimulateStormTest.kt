@@ -25,7 +25,7 @@ class SimulateStormTest : ExampleSystemTestExtension() {
         assertNextLine("Corporation Action: Corporation 1 is starting to cooperate with other corporations.")
         assertNextLine("Corporation Action: Corporation 1 is starting to refuel.")
         assertNextLine("Corporation Action: Corporation 1 finished its actions.")
-        assertNextLine("Current Drift: OIL 1 with amount 50 drifted from tile 67 to tile 68.")
+        assertNextLine("Current Drift: OIL 2 with amount 50 drifted from tile 66 to tile 67.")
         assertNextLine("Event: Event 1 of type STORM happened.")
         assertNextLine("Simulation Info: Simulation ended.")
     }
