@@ -43,7 +43,7 @@
       "name": "Collecter",
       "type": "COLLECTING",
       "corporation": 2,
-      "location": 7,
+      "location": 36,
       "maxVelocity": 10,
       "acceleration": 10,
       "fuelCapacity": 3000,

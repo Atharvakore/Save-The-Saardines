@@ -3,7 +3,7 @@ package de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests
 import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 
 /**
- * example system test
+ * mutant test
  */
 class CorpNoShips : ExampleSystemTestExtension() {
     override val description = "no ships for corp"

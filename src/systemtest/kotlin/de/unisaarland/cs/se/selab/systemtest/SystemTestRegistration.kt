@@ -17,8 +17,10 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.C
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.MoveNearHome
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.ReturnToHomeWater
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorporationNotFound
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorporationWhereShip
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.FileNotExistent
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectEventIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesOfPirateAttack
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesTest
@@ -70,6 +72,9 @@ object SystemTestRegistration {
         manager.registerTest(ShoreNoHarbor())
         manager.registerTest(CorporationWhereShip())
         manager.registerTest(CorpNoShips())
+        manager.registerTest(FileNotExistent())
+        manager.registerTest(CorporationNotFound())
+
     }
 
     /**
