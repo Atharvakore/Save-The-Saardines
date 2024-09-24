@@ -82,4 +82,9 @@ object LoggerCorporationAction {
     fun logUnloadShip(shipId: Int, amount: Int, garbageType: GarbageType, tileId: Int) {
         log("Unload: Ship $shipId unloaded $amount of garbage $garbageType at harbor $tileId.")
     }
+
+    /** Log attachment of a tracker. */
+    fun logAttachTracker(corpId: Int, shipId: Int, trashId: Int) {
+        log("Corporation Action: Corporation $corpId attached tracker to garbage $trashId with ship $shipId.")
+    }
 }
