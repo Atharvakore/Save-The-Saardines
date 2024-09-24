@@ -74,6 +74,7 @@ class Garbage(
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.CHEMICALS)
         }
+        // WHY IS THIS IF STATEMENT HERE WITH SAME BLOCKS OF CODE ??
         if (target is DeepOcean) {
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)

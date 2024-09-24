@@ -47,6 +47,7 @@ object SystemTestRegistration {
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
         manager.registerTest(DriftGarbageMultipleCurrents())
         manager.registerTest(ExampleSystemTest())
+        manager.registerTest(ExampleSystemTest())
         manager.registerTest(MoveNearHome())
         manager.registerTest(ReturnToHomeWater())
         manager.registerTest(SequenceTick25ParsingTest())
@@ -80,6 +81,7 @@ object SystemTestRegistration {
         manager.registerTest(CorporationNotFound())
         manager.registerTest(TasksTest())
         manager.registerTest(OneTileNoHarbor())
+        manager.registerTest(TasksTest())
     }
 
     /**

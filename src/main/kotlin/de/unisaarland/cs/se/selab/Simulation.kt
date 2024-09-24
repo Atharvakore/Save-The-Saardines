@@ -128,9 +128,7 @@ class Simulation(
      */
     private fun driftShips() {
         /**
-         * This is wrong, drifts should be logged from the lowest tile id to the highest, also where are we checking
-         * that we are only drifting when there is current ???????
-         */
+         * This is wrong, drifts should be logged from the lowest tile id to the highest*/
         val tiles = sea.tiles
         val deepOceanTiles = tiles.filterIsInstance<DeepOcean>().filter { it.getCurrent() != null }
         val deepOceanTilesHavingShips: PriorityQueue<DeepOcean> = PriorityQueue<DeepOcean>(compareBy { it.id })
@@ -153,7 +151,6 @@ class Simulation(
                 it.drift()
             }
         }
-        // WHY DO WE HAVE THIS ??
         for (tile in deepOceanTiles) {
             tile.amountOfShipsDriftedThisTick = 0
         }
