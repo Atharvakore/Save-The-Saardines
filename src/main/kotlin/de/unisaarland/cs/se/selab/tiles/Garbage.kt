@@ -120,6 +120,7 @@ class Garbage(
                 val temp = currentTile.getTileInDirection(i, dir)
                 if (temp == targetTile) {
                     distance = i
+                    break
                 }
             }
         }

@@ -1,0 +1,95 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Scouters Inc.",
+      "ships": [
+        1, 2
+      ],
+      "homeHarbors": [
+        14, 52, 59
+      ],
+      "garbageTypes": [
+        "OIL"
+      ]
+    },
+
+    {
+      "id": 2,
+      "name": "Ocean Collectors Inc.",
+      "ships": [
+        3, 4, 5
+      ],
+      "homeHarbors": [
+        14, 52, 59
+      ],
+      "garbageTypes": [
+        "OIL"
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "Explorer1",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 66,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 10000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    },
+    {
+      "id": 2,
+      "name": "Collecter1",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 66,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 9,
+      "capacity": 80000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 3,
+      "name": "Explorer2",
+      "type": "SCOUTING",
+      "corporation": 2,
+      "location": 30,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 10000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    },
+    {
+      "id": 4,
+      "name": "Collecter2",
+      "type": "COORDINATING",
+      "corporation": 2,
+      "location": 61,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 7,
+      "visibilityRange": 1
+    },
+    {
+      "id": 5,
+      "name": "Collecter3",
+      "type": "COLLECTING",
+      "corporation": 2,
+      "location": 61,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 7,
+      "capacity": 80000,
+      "garbageType": "OIL"
+    }
+  ]
+}
