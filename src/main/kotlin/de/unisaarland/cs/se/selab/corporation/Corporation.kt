@@ -388,6 +388,10 @@ class Corporation(
      *
      */
     private fun refuelAndUnloadShips() {
+        /**
+         * NOT SURE ABOUT THIS BUT: WHEN A SHIP GOES TO HARBOR FOR REFUEL/UNLOAD, hastaskassigned is set to true,
+         * but it should be set again to false after reload/refuel in order to be usable next tick ????
+         */
         val collectingShips: List<Ship> = Helper().filterCollectingCapabilities(this).sortedBy { it.id }
         val shipsOnHarbor: List<Ship> = Helper().getShipsOnHarbor(this)
         if (shipsOnHarbor.isNotEmpty()) {

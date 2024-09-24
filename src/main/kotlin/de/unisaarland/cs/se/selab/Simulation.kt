@@ -151,7 +151,6 @@ class Simulation(
                 it.drift()
             }
         }
-        // WHY DO WE HAVE THIS ??
         for (tile in deepOceanTiles) {
             tile.amountOfShipsDriftedThisTick = 0
         }
