@@ -6,7 +6,6 @@ import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceT
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.AllIn
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
@@ -94,6 +93,8 @@ object SystemTestRegistration {
         manager.registerTest(CollectingOilTest())
         manager.registerTest(CollectingPlasticTest())
         manager.registerTest(CollectingChemicalsTest())
+        manager.registerTest(UnloadingChemicalsTest())
+        manager.registerTest(UnloadingPlasticTest())
         manager.registerTest(IncorrectEventIds())
         manager.registerTest(IncorrectShipsIds())
         manager.registerTest(IncorrectShipsGarbages())

@@ -5,6 +5,7 @@ import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Land
@@ -93,27 +94,27 @@ class Simulation(
         for (garbage in garbageList.sortedBy { it.id }) {
             val current = currentTile.getCurrent()
             if (current != null) {
-                val targetTile = currentTile.getTileInDirection(current.speed / TEN, current.direction)
-                if (targetTile != null && checkValidPath(currentTile)) {
-                    val g = garbage.drift(currentTile, targetTile, current)
-                    garbageToList.getOrPut(targetTile) { mutableListOf() }.add(g)
+                val targetTile = getValidTile(currentTile, current)
+                if (targetTile != null) {
+                    val garbageTile: Pair<Tile, Garbage> = garbage.drift(currentTile, targetTile, current)
+                    garbageToList.getOrPut(garbageTile.first) { mutableListOf() }.add(garbageTile.second)
                 }
             }
         }
     }
 
-    private fun checkValidPath(currentTile: DeepOcean): Boolean {
-        val current = currentTile.getCurrent() ?: return false
+    private fun getValidTile(currentTile: DeepOcean, current: Current): Tile? {
         val distance = current.speed / TEN
         val direction = current.direction
+        val targetTile = currentTile.getTileInDirection(distance, direction)
 
-        for (i in 0..distance) {
+        for (i in 1..distance) {
             val tileInPath = currentTile.getTileInDirection(i, direction)
             if (tileInPath == null || tileInPath is Land) {
-                return false
+                return currentTile.getTileInDirection(i - 1, current.direction)
             }
         }
-        return true
+        return targetTile
     }
 
     /**
@@ -129,7 +130,7 @@ class Simulation(
                 .sortedBy { it.id }
             for (tile in deepOceanTilesWithShips) {
                 val shipsOnTile = corporation.ownedShips
-                    .filter { it.position == tile && checkValidPath(tile) }
+                    .filter { it.position == tile }
                     .sortedBy { it.id }
                 for (ship in shipsOnTile) {
                     ship.drift()

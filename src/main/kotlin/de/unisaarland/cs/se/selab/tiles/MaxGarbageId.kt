@@ -4,7 +4,10 @@ package de.unisaarland.cs.se.selab.tiles
 object MaxGarbageId {
     var maxId: Int = 0
 
-    private fun getNextId(): Int = maxId++
+    private fun getNextId(): Int {
+        maxId++
+        return maxId
+    }
 
     /**
      * Creates garbage when needed

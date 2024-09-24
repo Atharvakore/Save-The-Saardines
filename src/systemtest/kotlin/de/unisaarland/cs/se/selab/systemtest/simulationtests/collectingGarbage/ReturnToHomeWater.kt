@@ -5,7 +5,7 @@ import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 class ReturnToHomeWater : ExampleSystemTestExtension() {
     override val corporations = "garbageCollecting/corporation.json"
     override val description = "Test the behaviour of collecting ship"
-    override val map ="garbageCollecting/map.json"
+    override val map = "garbageCollecting/map.json"
     override val maxTicks = 5
     override val name = "Return To Home Water"
     override val scenario = "garbageCollecting/scenario.json"
