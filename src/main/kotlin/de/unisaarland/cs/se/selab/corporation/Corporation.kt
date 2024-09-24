@@ -187,7 +187,6 @@ class Corporation(
                 scoutTarget.add(closestGarbagePatch.id)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                ship.refueling = true
                 ship.moveUninterrupted(closestHarborPath)
             }
             result = true
@@ -200,7 +199,6 @@ class Corporation(
                 ship.move(path)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                ship.refueling = true
                 ship.moveUninterrupted(closestHarborPath)
             }
             result = false
@@ -413,10 +411,8 @@ class Corporation(
                 }
                 if (ship.refueling) {
                     ship.refuel()
-                    ship.hasTaskAssigned = false
                 } else if (capability != null && capability.unloading) {
                     capability.unload(ship)
-                    ship.hasTaskAssigned = false
                 }
             }
         }
