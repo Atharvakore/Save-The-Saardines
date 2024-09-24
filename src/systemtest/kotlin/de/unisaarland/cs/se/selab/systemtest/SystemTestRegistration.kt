@@ -10,6 +10,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandT
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.TasksTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingOilTest
@@ -70,6 +71,7 @@ object SystemTestRegistration {
         manager.registerTest(ShoreNoHarbor())
         manager.registerTest(CorporationWhereShip())
         manager.registerTest(CorpNoShips())
+        manager.registerTest(TasksTest())
     }
 
     /**
