@@ -61,6 +61,7 @@ class Ship(
         val intensity = current.intensity
         if (intensity > tile.amountOfShipsDriftedThisTick) {
             val desTile = this.position.getTileInDirection(speed / SPEED_LENGTH, direction)
+            // ANOTHER CHECK FOR THE VALID PATH SHOULD BE ADDED HERE, SAME AS FOR GARBAGE DRIFT
             if (desTile != null && desTile != this.position) {
                 this.position = desTile
                 tile.amountOfShipsDriftedThisTick += 1
