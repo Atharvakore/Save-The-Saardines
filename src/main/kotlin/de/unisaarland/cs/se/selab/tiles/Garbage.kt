@@ -94,7 +94,7 @@ class Garbage(
         this.amount -= drifted
         var newGarbage: Garbage = this
         if (this.amount > 0) {
-            newGarbage = createGarbage(drifted, GarbageType.CHEMICALS)
+            newGarbage = createGarbage(drifted, GarbageType.OIL)
         }
 
         val garbageSum = targetTile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
