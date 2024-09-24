@@ -1,4 +1,4 @@
-package de.unisaarland.cs.se.selab.systemtest.basictests
+package de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests
 
 import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 

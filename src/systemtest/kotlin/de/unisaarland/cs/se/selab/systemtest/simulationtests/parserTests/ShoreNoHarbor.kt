@@ -1,8 +1,6 @@
-package de.unisaarland.cs.se.selab.systemtest.basictests
+package de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests
 
-import de.unisaarland.cs.se.selab.systemtest.api.SystemTestAssertionError
 import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
-import de.unisaarland.cs.se.selab.systemtest.utils.Logs
 
 /**
  * example system test
@@ -16,6 +14,5 @@ class ShoreNoHarbor : ExampleSystemTestExtension() {
     override val maxTicks = 0
     override suspend fun run() {
         assertNextLine("Initialization Info: shoreNoHarbor.json is invalid.")
-
     }
 }

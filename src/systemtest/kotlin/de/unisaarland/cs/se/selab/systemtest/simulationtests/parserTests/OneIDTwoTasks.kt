@@ -1,8 +1,6 @@
-package de.unisaarland.cs.se.selab.systemtest.basictests
+package de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests
 
-import de.unisaarland.cs.se.selab.systemtest.api.SystemTestAssertionError
 import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
-import de.unisaarland.cs.se.selab.systemtest.utils.Logs
 
 /**
  * example system test
@@ -18,6 +16,5 @@ class OneIDTwoTasks : ExampleSystemTestExtension() {
         assertNextLine("Initialization Info: smallMap1.json successfully parsed and validated.")
         assertNextLine("Initialization Info: corporations.json successfully parsed and validated.")
         assertNextLine("Initialization Info: scenarioOneIDTwoTasks.json is invalid.")
-
     }
 }

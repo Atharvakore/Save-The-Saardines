@@ -1,11 +1,6 @@
 package de.unisaarland.cs.se.selab.systemtest
 
-import de.unisaarland.cs.se.selab.systemtest.basictests.CorpNoShips
-import de.unisaarland.cs.se.selab.systemtest.basictests.CorporationWhereShip
 import de.unisaarland.cs.se.selab.systemtest.basictests.ExampleSystemTest
-import de.unisaarland.cs.se.selab.systemtest.basictests.NonExistingMap
-import de.unisaarland.cs.se.selab.systemtest.basictests.OneIDTwoTasks
-import de.unisaarland.cs.se.selab.systemtest.basictests.ShoreNoHarbor
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25CorporationTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25ParsingTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
@@ -19,6 +14,8 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.C
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingOilTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingPlasticTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorporationWhereShip
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectEventIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesOfPirateAttack
@@ -26,7 +23,9 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.Incorre
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectShipsGarbages
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectShipsIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.LandNextDeepOcean
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.OneIDTwoTasks
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShipAmongUs
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShoreNoHarbor
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingPlasticTest
 
@@ -67,7 +66,6 @@ object SystemTestRegistration {
         manager.registerTest(ShoreNoHarbor())
         manager.registerTest(CorporationWhereShip())
         manager.registerTest(CorpNoShips())
-
     }
 
     /**
