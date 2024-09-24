@@ -5,7 +5,6 @@ import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Land
