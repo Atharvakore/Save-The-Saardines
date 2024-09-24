@@ -187,7 +187,6 @@ class Corporation(
                 scoutTarget.add(closestGarbagePatch.id)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                ship.refueling = true
                 ship.moveUninterrupted(closestHarborPath)
             }
             result = true
@@ -200,7 +199,6 @@ class Corporation(
                 ship.move(path)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                ship.refueling = true
                 ship.moveUninterrupted(closestHarborPath)
             }
             result = false
@@ -208,6 +206,7 @@ class Corporation(
         return result
     }
 
+    // ships move in the wrong order if they taskAssigned = true
     private fun moveCollectingShip(ship: Ship, cap: CollectingShip, collectorTarget: MutableMap<Int, Int>): Boolean {
         val result: Boolean
         // May not handle the fact that plastic needs collected all at once
@@ -215,21 +214,28 @@ class Corporation(
         val garbage = ship.position.garbage
             .asSequence()
             .filter { acceptedGarbageType.contains(it.type) && cap.garbageTypes().contains(it.type) }
-            .sortedBy { it.id }
-            .firstOrNull()
-        if (garbage != null) {
+            .sortedBy { it.id }.toList()
+        if (garbage.isNotEmpty()) {
             // Don't move.
-            result = true
+            if (ship.isCapacitySufficient(garbage)) {
+                result = true
+            } else {
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath)
+                result = true
+            }
         } else {
             // Navigate to the closest garbage patch that it can collect.
             val paths = Dijkstra(ship.position).allPaths()
             val sorted = paths.toList().sortedWith(compareBy({ it.second.size }, { it.first.id }))
+            // if two paths have equal length, then the garbage with lowest id
             val attainableGarbage = sorted
                 .map { it.first }
                 .intersect(partnerGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) }).toSet())
                 .filter { tile ->
                     findUncollectedGarbage(tile, cap, collectorTarget) != null
-                }
+                }.sortedWith(compareBy({ paths[it]?.size }, { it.garbage.first().id }))
+
             // attainableGarbage is a set of tiles that have garbage that the ship can collect
             // and requires extra ships to be dispatched. Just take the first one:
             val closestGarbagePatch = attainableGarbage.firstOrNull()
@@ -239,7 +245,6 @@ class Corporation(
                     ship.move(path)
                 } else {
                     val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                    ship.refueling = true
                     ship.moveUninterrupted(closestHarborPath)
                 }
                 result = true
@@ -408,10 +413,8 @@ class Corporation(
                 }
                 if (ship.refueling) {
                     ship.refuel()
-                    ship.hasTaskAssigned = false
                 } else if (capability != null && capability.unloading) {
                     capability.unload(ship)
-                    ship.hasTaskAssigned = false
                 }
             }
         }

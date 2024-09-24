@@ -270,7 +270,7 @@ class UTFactory {
     }
 
     /**
-     * will return 5 scouting, 5 coordinating and 6 collecting ships in order from 1 to 16 with maximum possible values
+     * will return 5 scouting, 5 coordinating and 6 collecting ships in order from 11 to 16 with maximum possible values
      * collecting ships are: 2 oil with indexes 11, 12 / 2 plastic with indexes 13, 14 and 2 chemicals with indexes 15,
      * 16 after getting them need to assign tiles and owner
      * */
