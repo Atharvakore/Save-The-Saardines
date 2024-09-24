@@ -120,15 +120,8 @@ class Corporation(
         logger.logCorporationFinishedActions(id)
     }
 
-    /**
-     * Gets all active tasks
-     *
-     * Filters the tasks list to get only the tasks that are currently active
-     *
-     * @return List of active tasks
-     */
-    fun getActiveTasks(tick: Int): List<Task> {
-        activeTasks = tasks.filter { tick == it.tick }
+    private fun getActiveTasks(tick: Int): List<Task> {
+        activeTasks = tasks.filter { tick == it.tick + 1 }
         return activeTasks
     }
 
