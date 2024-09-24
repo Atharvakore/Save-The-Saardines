@@ -286,8 +286,13 @@ class Corporation(
         }
         // 0. For each ship that has an assigned destination, tick the
         // ship and remove the ship from the available ships
-        availableShips.forEach { if (it.hasTaskAssigned) it.tickTask() }
-        availableShips.removeAll { it.hasTaskAssigned }
+        availableShips.removeIf {
+            if (it.hasTaskAssigned) {
+                it.tickTask()
+                return@removeIf true;
+            }
+            return@removeIf false;
+        }
         // 2. Iterate over available ships in increasing ID order
         val usedShips: MutableList<Int> = mutableListOf()
         val scoutTarget: MutableSet<Int> = mutableSetOf()
