@@ -45,12 +45,9 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
-<<<<<<< Updated upstream
         manager.registerTest(DriftGarbageMultipleCurrents())
         manager.registerTest(ExampleSystemTest())
-=======
-       manager.registerTest(ExampleSystemTest())
->>>>>>> Stashed changes
+        manager.registerTest(ExampleSystemTest())
         manager.registerTest(MoveNearHome())
         manager.registerTest(ReturnToHomeWater())
         manager.registerTest(SequenceTick25ParsingTest())
@@ -83,11 +80,8 @@ object SystemTestRegistration {
         manager.registerTest(FileNotExistent())
         manager.registerTest(CorporationNotFound())
         manager.registerTest(TasksTest())
-<<<<<<< Updated upstream
         manager.registerTest(OneTileNoHarbor())
-=======
         manager.registerTest(TasksTest())
->>>>>>> Stashed changes
     }
 
     /**
