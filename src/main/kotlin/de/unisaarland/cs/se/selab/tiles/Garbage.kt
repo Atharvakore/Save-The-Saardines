@@ -102,15 +102,16 @@ class Garbage(
          * THIS CHECK SHOULD BE MADE BEFORE, WHAT IF THERE'S NO TILE WHERE OIL CAN BE DRIFTED BUT WE ARE STILL
          * DEDUCTING THE AMOUNT
          */
-
+        // THIS COULD BE FURTHER OPTIMIZED, WILL DO IT LATER IF ENOUGH TIME
         if (garbageSum + drifted > MAXOILCAP) {
             val targetsList = getTilesPath(currentTile, localCurrent)
             val tile = checkOilCap(targetsList, amount)
             if (tile != null) {
                 target = tile
+                currentTile.amountOfGarbageDriftedThisTick += drifted
+                Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
             }
-            currentTile.amountOfGarbageDriftedThisTick += drifted
-            Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
+            // THE CASE WHERE TILE==NULL SHOULD BE HANDLED HERE, OTHERWISE WE ARE USING TARGETTILE
         } else {
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
@@ -120,18 +121,17 @@ class Garbage(
 
     private fun checkOilCap(path: List<Tile?>, amount: Int): Tile? {
         val listOfTiles = path.reversed()
-        var targetTile: Tile? = null
+        // val targetTile: Tile? = null
 
         for (tile in listOfTiles) {
-            if (tile == null) {
-                continue
-            }
-            val garbageSum = tile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
-            if (garbageSum + amount > MAXOILCAP) {
-                targetTile = tile
+            if (tile != null) {
+                val garbageSum = tile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
+                if (garbageSum + amount <= MAXOILCAP) {
+                    return tile
+                }
             }
         }
-        return targetTile
+        return null
     }
 
     private fun getTilesPath(currentTile: DeepOcean, current: Current): List<Tile?> {
