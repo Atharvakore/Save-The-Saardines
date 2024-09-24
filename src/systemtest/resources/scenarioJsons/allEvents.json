@@ -10,27 +10,26 @@
       "id": 2,
       "type": "OIL",
       "location": 5,
-      "amount": 1000
+      "amount": 200
     },
     {
       "id": 3,
       "type": "OIL",
       "location": 6,
-      "amount": 5000
+      "amount": 600
     },
     {
       "id": 4,
       "type": "OIL",
       "location": 13,
-      "amount": 5000
+      "amount": 500
     },
     {
       "id": 5,
       "type": "OIL",
       "location": 19,
-      "amount": 1000
+      "amount": 500
     }
-
   ],
   "events": [
     {

@@ -14,6 +14,10 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.C
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingOilTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingPlasticTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.MoveNearHome
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.ReturnToHomeWater
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorporationWhereShip
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectEventIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesOfPirateAttack
@@ -21,7 +25,9 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.Incorre
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectShipsGarbages
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectShipsIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.LandNextDeepOcean
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.OneIDTwoTasks
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShipAmongUs
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShoreNoHarbor
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingPlasticTest
 
@@ -35,6 +41,8 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
         manager.registerTest(ExampleSystemTest())
+        manager.registerTest(MoveNearHome())
+        manager.registerTest(ReturnToHomeWater())
         manager.registerTest(SequenceTick25ParsingTest())
         manager.registerTest(SequenceTick25CorporationTest())
         manager.registerTest(SequenceTick25TickTest())
@@ -57,6 +65,11 @@ object SystemTestRegistration {
         manager.registerTest(SimulatePirateAttack())
         manager.registerTest(SimulateStormTest())
         manager.registerTest(DriftGarbageOnLandTest())
+        // Section for tests to check on reference to test later against mutant:
+        manager.registerTest(OneIDTwoTasks())
+        manager.registerTest(ShoreNoHarbor())
+        manager.registerTest(CorporationWhereShip())
+        manager.registerTest(CorpNoShips())
     }
 
     /**
@@ -84,6 +97,8 @@ object SystemTestRegistration {
         manager.registerTest(CollectingOilTest())
         manager.registerTest(CollectingPlasticTest())
         manager.registerTest(CollectingChemicalsTest())
+        manager.registerTest(UnloadingChemicalsTest())
+        manager.registerTest(UnloadingPlasticTest())
         manager.registerTest(IncorrectEventIds())
         manager.registerTest(IncorrectShipsIds())
         manager.registerTest(IncorrectShipsGarbages())

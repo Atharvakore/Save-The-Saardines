@@ -1,0 +1,29 @@
+{
+  "garbage": [
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 27,
+      "amount": 1000
+    }
+  ],
+  "events": [],
+  "tasks": [
+    {
+      "id": 5,
+      "type": "EXPLORE",
+      "tick": 1,
+      "shipID": 2,
+      "targetTile": 27,
+      "rewardID": 6,
+      "rewardShipID": 2
+    }
+  ],
+  "rewards": [
+    {
+      "id": 6,
+      "type": "TELESCOPE",
+      "visibilityRange": 2
+    }
+  ]
+}

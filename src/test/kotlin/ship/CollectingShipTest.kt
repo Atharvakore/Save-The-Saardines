@@ -89,6 +89,7 @@ class CollectingShipTest {
 
     @Test
     fun testUnload() {
+        collectingCapability.unloading = true
         collectingCapability.unload(collectingShip)
         for (container in collectingCapability.auxiliaryContainers) {
             assert(container.garbageLoad == 0)

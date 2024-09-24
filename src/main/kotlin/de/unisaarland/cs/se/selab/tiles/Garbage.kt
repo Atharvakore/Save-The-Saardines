@@ -17,78 +17,123 @@ class Garbage(
     /**
      * drifts garbage
      */
-    fun drift(tile: DeepOcean, targetTile: Tile, current: Current): Garbage? {
-        return driftHelper(tile, targetTile, current)
+    fun drift(tile: DeepOcean, targetTile: Tile, current: Current): Pair<Tile, Garbage> {
+        return if (tile.id != targetTile.id && targetTile !is Land) {
+            driftHelper(tile, targetTile, current)
+        } else {
+            Pair(tile, this)
+        }
     }
 
     /**
      * helps drifting
      */
-    private fun driftHelper(currentTile: DeepOcean, targetTile: Tile, localCurrent: Current): Garbage? {
-        val result: Garbage?
+    private fun driftHelper(currentTile: DeepOcean, targetTile: Tile, localCurrent: Current): Pair<Tile, Garbage> {
+        val result: Pair<Tile, Garbage>
         val toBeDrifted: Int
         val driftAmount = localCurrent.intensity * DRIFTAMOUNTPERPOINTINTENSITY
         if (currentTile.amountOfGarbageDriftedThisTick < driftAmount) {
             toBeDrifted = driftAmount - currentTile.amountOfGarbageDriftedThisTick
         } else {
-            return null
+            return Pair(currentTile, this)
         }
-        when (this.type) {
+
+        result = when (this.type) {
             GarbageType.OIL -> {
-                result = handleOilGarbage(currentTile, targetTile, toBeDrifted)
+                handleOilGarbage(currentTile, targetTile, toBeDrifted, localCurrent)
             }
+
             GarbageType.CHEMICALS -> {
-                result = handleChemicalsGarbage(currentTile, targetTile, toBeDrifted)
+                handleChemicalsGarbage(currentTile, targetTile, toBeDrifted)
             }
+
             else -> {
-                val drifted = minOf(this.amount, toBeDrifted)
-                this.amount -= drifted
-                result = createGarbage(drifted, GarbageType.PLASTIC)
-                currentTile.amountOfGarbageDriftedThisTick += drifted
-                Logger.logCurrentDriftGarbage(type, this.id, drifted, currentTile.id, targetTile.id)
+                handlePlasticGarbage(currentTile, targetTile, toBeDrifted)
             }
         }
         return result
     }
 
-    private fun handleChemicalsGarbage(currentTile: DeepOcean, targetTile: Tile, toBeDrifted: Int): Garbage? {
+    private fun handlePlasticGarbage(currentTile: Tile, targetTile: Tile, toBeDrifted: Int): Pair<Tile, Garbage> {
+        var newGarbage = this
         val drifted = minOf(this.amount, toBeDrifted)
         this.amount -= drifted
-        if (targetTile is DeepOcean) {
-            currentTile.amountOfGarbageDriftedThisTick += drifted
-            Logger.logCurrentDriftGarbage(type, this.id, drifted, currentTile.id, targetTile.id)
-        } else {
-            val newGarbage = createGarbage(drifted, GarbageType.CHEMICALS)
-            currentTile.amountOfGarbageDriftedThisTick += drifted
-            Logger.logCurrentDriftGarbage(type, this.id, drifted, currentTile.id, targetTile.id)
-            return newGarbage
+        if (this.amount > 0) {
+            newGarbage = createGarbage(drifted, GarbageType.PLASTIC)
         }
-        return null
+        currentTile.amountOfGarbageDriftedThisTick += drifted
+        Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, targetTile.id)
+
+        return Pair(targetTile, newGarbage)
+    }
+
+    private fun handleChemicalsGarbage(currentTile: DeepOcean, target: Tile, toBeDrifted: Int): Pair<Tile, Garbage> {
+        val drifted = minOf(this.amount, toBeDrifted)
+        this.amount -= drifted
+        var newGarbage: Garbage = this
+        if (this.amount > 0) {
+            newGarbage = createGarbage(drifted, GarbageType.CHEMICALS)
+        }
+        if (target is DeepOcean) {
+            currentTile.amountOfGarbageDriftedThisTick += drifted
+            Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
+        } else {
+            currentTile.amountOfGarbageDriftedThisTick += drifted
+            Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
+        }
+        return Pair(target, newGarbage)
     }
     private fun handleOilGarbage(
         currentTile: DeepOcean,
         targetTile: Tile,
-        toBeDrifted: Int
-    ): Garbage? {
-        val result: Garbage?
-        val maxDrift = MAXOILCAP - targetTile.getAmountOfType(GarbageType.OIL)
-        var drifted = minOf(this.amount, toBeDrifted, maxDrift)
-        if (drifted > 0) {
-            this.amount -= drifted
+        toBeDrifted: Int,
+        localCurrent: Current
+    ): Pair<Tile, Garbage> {
+        var target = targetTile
+        val drifted = minOf(this.amount, toBeDrifted)
+        this.amount -= drifted
+        var newGarbage: Garbage = this
+        if (this.amount > 0) {
+            newGarbage = createGarbage(drifted, GarbageType.CHEMICALS)
+        }
+
+        val garbageSum = targetTile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
+
+        if (garbageSum + drifted > MAXOILCAP) {
+            target = getValidTileInPath(currentTile, targetTile, drifted, localCurrent)
             currentTile.amountOfGarbageDriftedThisTick += drifted
-            Logger.logCurrentDriftGarbage(type, id, drifted, currentTile.id, targetTile.id)
-            return createGarbage(drifted, GarbageType.OIL)
+            Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
         } else {
-            drifted = minOf(this.amount, toBeDrifted)
             currentTile.amountOfGarbageDriftedThisTick += drifted
-            if (drifted > 0) {
-                Logger.logCurrentDriftGarbage(type, id, drifted, currentTile.id, currentTile.id)
-                result = createGarbage(drifted, GarbageType.OIL)
-            } else {
-                result = null
+            Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
+        }
+        return Pair(target, newGarbage)
+    }
+
+    private fun getValidTileInPath(currentTile: DeepOcean, targetTile: Tile, drifted: Int, current: Current): Tile {
+        var distance = current.speed / TEN
+        val dir = current.direction
+        val tile = currentTile.getTileInDirection(distance, dir)
+
+        if (tile != targetTile) {
+            for (i in 0..distance) {
+                val temp = currentTile.getTileInDirection(i, dir)
+                if (temp == targetTile) {
+                    distance = i
+                }
             }
         }
-        return result
+
+        for (i in distance downTo 0) {
+            val temp = currentTile.getTileInDirection(i, dir)
+            if (temp != null) {
+                val oil = temp.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
+                if (oil >= drifted) {
+                    return temp
+                }
+            }
+        }
+        return targetTile
     }
 
     /**
@@ -123,11 +168,16 @@ class Garbage(
             else -> {
                 if (targetTile is DeepOcean) {
                     this.amount = 0
+                    currentTile.garbage = currentTile.garbage.filter { it.id == this.id }
                 } else {
                     targetTile.addGarbage(createGarbage(this.amount, GarbageType.CHEMICALS))
                     this.amount = 0
                 }
             }
+        }
+
+        if (this.amount == 0) {
+            currentTile.garbage = currentTile.garbage.filter { it != this }
         }
     }
 }

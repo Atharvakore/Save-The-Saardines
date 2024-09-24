@@ -45,7 +45,7 @@ fun main(args: Array<String>) {
     Logger.setOutBuffer(file)
     val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks)
     if (acc != null && maxTicks != null) {
-        LoggerStatistics.sea = acc.map
+        LoggerStatistics.garbageOnMap = acc.map.garbageOnMap
         val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, acc.map)
         sim.start()
     }
@@ -88,6 +88,7 @@ private fun parseCorporations(files: List<String?>, content: String?, accumulato
     }
     return accumulator
 }
+
 private fun parseScenario(files: List<String?>, content: String?, accumulator: Accumulator): Accumulator? {
     val scenarioParser = ScenarioJSONParser(accumulator)
     val taskPars = TasksRewardsParser(accumulator)
@@ -129,7 +130,9 @@ private fun readFile(validatingSchema: String, file: String): String? {
     try {
         objectFile = File(file)
     } catch (notFound: FileNotFoundException) {
-        logger.error(notFound) { "error" }
+        notFound.toString()
+        // logger.error(notFound) { "error" }
+        // System.err.println(notFound)
         condition = false
         //  Logger.logInitializationInfoFail(file)
     }
@@ -139,7 +142,9 @@ private fun readFile(validatingSchema: String, file: String): String? {
             // objects = objectFile?.readText()
             validator.validate(objects) ?: return objects
         } catch (notFound: IOException) {
-            logger.error(notFound) { "error" }
+            notFound.toString()
+            // System.err.println(notFound)
+            // logger.error(notFound) { "error" }
             // Logger.logInitializationInfoFail(file)
         }
     }

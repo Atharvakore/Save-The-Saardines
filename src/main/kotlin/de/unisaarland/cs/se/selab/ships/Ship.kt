@@ -70,6 +70,13 @@ class Ship(
     }
 
     /**
+     * How many tiles can we traverse in one tick
+     */
+    fun speed(): Int {
+        return minOf(currentVelocity + acceleration, maxVelocity) / SPEED_LENGTH
+    }
+
+    /**
      * Call: when a ship is the closest one to the garbage or when the ship has to return to the harbor
      * Logic: the ship gets a path (a list of tiles from destination to ship), has to reverse path and move along it
      * the ship moves along the path as long as it can
@@ -141,7 +148,7 @@ class Ship(
      * */
     fun moveUninterrupted(pathToHarbor: List<Tile>) {
         hasTaskAssigned = true
-        if (this.position == pathToHarbor.last()) {
+        if (pathToHarbor.isEmpty() || this.position == pathToHarbor.last()) {
             return
         }
         move(pathToHarbor)
@@ -153,7 +160,7 @@ class Ship(
             }
         } else {
             val startIndex = pathToHarbor.indexOf(this.position)
-            val lastIndex = pathToHarbor.size - 1
+            val lastIndex = pathToHarbor.size
             destinationPath = pathToHarbor.subList(startIndex, lastIndex)
         }
     }
@@ -188,6 +195,9 @@ class Ship(
             } else {
                 result = false
             }
+        }
+        if (!result) {
+            capability.unloading = true
         }
         return result
     }
