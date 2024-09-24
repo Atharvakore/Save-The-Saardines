@@ -129,7 +129,9 @@ private fun readFile(validatingSchema: String, file: String): String? {
     try {
         objectFile = File(file)
     } catch (notFound: FileNotFoundException) {
-        logger.error(notFound) { "error" }
+        notFound.toString()
+        // logger.error(notFound) { "error" }
+        // System.err.println(notFound)
         condition = false
         //  Logger.logInitializationInfoFail(file)
     }
@@ -139,7 +141,9 @@ private fun readFile(validatingSchema: String, file: String): String? {
             // objects = objectFile?.readText()
             validator.validate(objects) ?: return objects
         } catch (notFound: IOException) {
-            logger.error(notFound) { "error" }
+            notFound.toString()
+            // System.err.println(notFound)
+            // logger.error(notFound) { "error" }
             // Logger.logInitializationInfoFail(file)
         }
     }
