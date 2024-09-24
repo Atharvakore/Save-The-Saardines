@@ -1,6 +1,11 @@
 package de.unisaarland.cs.se.selab.systemtest
 
+import de.unisaarland.cs.se.selab.systemtest.basictests.CorpNoShips
+import de.unisaarland.cs.se.selab.systemtest.basictests.CorporationWhereShip
 import de.unisaarland.cs.se.selab.systemtest.basictests.ExampleSystemTest
+import de.unisaarland.cs.se.selab.systemtest.basictests.NonExistingMap
+import de.unisaarland.cs.se.selab.systemtest.basictests.OneIDTwoTasks
+import de.unisaarland.cs.se.selab.systemtest.basictests.ShoreNoHarbor
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25CorporationTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25ParsingTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
@@ -57,6 +62,12 @@ object SystemTestRegistration {
         manager.registerTest(SimulatePirateAttack())
         manager.registerTest(SimulateStormTest())
         manager.registerTest(DriftGarbageOnLandTest())
+        // Section for tests to check on reference to test later against mutant:
+        manager.registerTest(OneIDTwoTasks())
+        manager.registerTest(ShoreNoHarbor())
+        manager.registerTest(CorporationWhereShip())
+        manager.registerTest(CorpNoShips())
+
     }
 
     /**

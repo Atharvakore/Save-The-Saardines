@@ -22,9 +22,6 @@ class CollectGarbageTask(
     }
 
     override fun actUponTick(currentTick: Int): Boolean {
-        if (currentTick == tick) {
-            LoggerEventsAndTasks.logTaskStart(id, "COLLECT", taskShip.id, targetTile.id)
-        }
         if (checkCondition()) {
             LoggerEventsAndTasks.logRewardReceived(id, rewardShip.id, reward)
             reward.applyReward(rewardShip)
