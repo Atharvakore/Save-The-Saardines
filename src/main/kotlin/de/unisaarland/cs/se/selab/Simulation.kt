@@ -88,8 +88,9 @@ class Simulation(
             }
         }
 
-        sea.tiles.filterIsInstance<DeepOcean>().forEach{
-            tile -> tile.amountOfGarbageDriftedThisTick = 0
+        sea.tiles.filterIsInstance<DeepOcean>().forEach {
+                tile ->
+            tile.amountOfGarbageDriftedThisTick = 0
         }
     }
 
