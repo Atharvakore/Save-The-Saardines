@@ -141,7 +141,7 @@ class Ship(
      * */
     fun moveUninterrupted(pathToHarbor: List<Tile>) {
         hasTaskAssigned = true
-        if (this.position == pathToHarbor.last()) {
+        if (pathToHarbor.isEmpty() || this.position == pathToHarbor.last()) {
             return
         }
         move(pathToHarbor)
