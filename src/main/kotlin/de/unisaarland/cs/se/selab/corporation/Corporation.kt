@@ -49,23 +49,24 @@ class Corporation(
      * @param otherShips List of all ships in the simulation
      */
     fun cooperate(otherShips: List<Ship>) {
-        val myCoordinatingShips: List<Ship> = Helper().filterCoordinatingShips(this)
+        val myCoordinatingShips: List<Ship> = Helper().filterCoordinatingShips(this).sortedBy { it.id }
 
         myCoordinatingShips.forEach { coordinatingShip ->
             val otherShipsOnTile: List<Ship> = otherShips
                 .filter {
                     coordinatingShip.position == it.position && it.owner != lastCoordinatingCorporation
-                }
+                }.sortedBy { it.id }
 
-            val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.owner }.distinct()
-            val otherShipsToCooperate: List<Ship> =
-                otherShips.filter { otherCorporations.contains(it.owner) }
+            val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.owner }.distinct().sortedBy { it.id }
 
-            otherShipsToCooperate.forEach { otherShipToCooperate ->
-                getInfoFromShip(otherShipToCooperate, coordinatingShip)
+            otherCorporations.forEach {
+                    corporation ->
+                val toCooperateWith = corporation.ownedShips.filter { otherShipsOnTile.contains(it) }
+                    .sortedBy { it.id }.first()
+                getInfoFromShip(toCooperateWith, coordinatingShip)
+                lastCoordinatingCorporation = otherCorporations.maxByOrNull { it.id }
+                otherCorporations.minus(corporation)
             }
-            val lastCorporation: Corporation? = otherCorporations.maxByOrNull { it.id }
-            lastCoordinatingCorporation = lastCorporation
         }
     }
 
@@ -299,6 +300,12 @@ class Corporation(
             val ship: Ship = task.taskShip
             if (ship.hasTaskAssigned) {
                 // Task failed: already navigating to a harbor.
+                /**
+                 * THIS IS PROBABLY WRONG, if it has already a task assigned, the new one overwrites it and is not
+                 * cancelled
+                 */
+
+                tasks.remove(task)
                 /**
                  * THIS IS PROBABLY WRONG, if it has already a task assigned, the new one overwrites it and is not
                  * cancelled
