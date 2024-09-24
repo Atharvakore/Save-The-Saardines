@@ -103,6 +103,11 @@ class Simulation(
                 if (targetTile != null) {
                     val garbageTile: Pair<Tile, Garbage> = garbage.drift(currentTile, targetTile, current)
                     garbageToList.getOrPut(garbageTile.first) { mutableListOf() }.add(garbageTile.second)
+                    /**
+                     * I GUESS THIS SHOULD BE ADDED HERE
+                     *currentTile.garbage.remove(garbageTile.second)
+                      */
+
                 }
             }
         }
