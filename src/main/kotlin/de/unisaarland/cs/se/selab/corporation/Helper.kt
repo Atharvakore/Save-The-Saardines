@@ -18,7 +18,18 @@ class Helper {
      * @return List of collecting ships
      */
     fun filterCollectingShip(corporation: Corporation): List<Ship> {
-        return corporation.ownedShips.filter { ownedShip -> ownedShip.capabilities.any { it is CollectingShip } }
+        return corporation.ownedShips.filter { it.capabilities.first() is CollectingShip }
+    }
+
+    /**
+     * Filter collecting ships
+     *
+     * Filters the owned ships to get only the ships that have the CollectingShip capability
+     *
+     * @return List of collecting ships
+     */
+    fun filterCollectingCapabilities(corporation: Corporation): List<Ship> {
+        return corporation.ownedShips.filter { it.capabilities.any { capability -> capability is CollectingShip } }
     }
 
     /**

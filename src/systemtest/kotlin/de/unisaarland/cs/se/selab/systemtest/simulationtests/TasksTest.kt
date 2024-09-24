@@ -10,10 +10,10 @@ import de.unisaarland.cs.se.selab.systemtest.utils.Logs
 class TasksTest : ExampleSystemTestExtension() {
     override val description = "tests Task Assignment and Working"
     override val corporations = "corporationJsons/stormEventCorporation.json"
-    override val scenario = "scenarioJsons/stormEventTest.json"
+    override val scenario = "scenarioJsons/TaskTest.json"
     override val map = "mapFiles/map_medium_01.json"
-    override val name = "StormEventTest"
-    override val maxTicks = 1
+    override val name = "TaskTest"
+    override val maxTicks = 10
 
     override suspend fun run() {
         val expectedString = "Simulation Info: Simulation started."

@@ -18,7 +18,11 @@ class Garbage(
      * drifts garbage
      */
     fun drift(tile: DeepOcean, targetTile: Tile, current: Current): Pair<Tile, Garbage> {
-        return driftHelper(tile, targetTile, current)
+        return if (tile.id != targetTile.id && targetTile !is Land) {
+            driftHelper(tile, targetTile, current)
+        } else {
+            Pair(tile, this)
+        }
     }
 
     /**

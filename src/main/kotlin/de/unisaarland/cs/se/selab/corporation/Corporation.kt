@@ -25,6 +25,13 @@ class Corporation(
     val acceptedGarbageType: List<GarbageType>,
     val tasks: MutableList<Task>
 ) {
+    /**
+     * Some constants.
+     */
+    companion object {
+        const val INFTY = 1000000
+    }
+
     val trackedGarbage: MutableList<Garbage> = mutableListOf()
     val partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
@@ -182,6 +189,16 @@ class Corporation(
             }
             result = true
         } else {
+            // Explore: Navigate to the furthest tile
+            val dest = paths.toList().sortedWith(compareBy({ INFTY - it.second.size }, { it.first.id }))
+                .first { it.second.size <= ship.speed() }.first
+            val path = paths[dest] ?: return false
+            if (ship.isFuelSufficient(path.size)) {
+                ship.move(path)
+            } else {
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath)
+            }
             result = false
         }
         return result
@@ -248,6 +265,16 @@ class Corporation(
         return result
     }
 
+    private fun tickTasksInMoveShips(availableShips: MutableSet<Ship>) {
+        availableShips.removeIf {
+            if (it.hasTaskAssigned) {
+                it.tickTask()
+                return@removeIf true
+            }
+            return@removeIf false
+        }
+    }
+
     /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
     private fun moveShips(otherShips: List<Ship>) {
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
@@ -286,8 +313,7 @@ class Corporation(
         }
         // 0. For each ship that has an assigned destination, tick the
         // ship and remove the ship from the available ships
-        availableShips.forEach { if (it.hasTaskAssigned) it.tickTask() }
-        availableShips.removeAll { it.hasTaskAssigned }
+        tickTasksInMoveShips(availableShips)
         // 2. Iterate over available ships in increasing ID order
         val usedShips: MutableList<Int> = mutableListOf()
         val scoutTarget: MutableSet<Int> = mutableSetOf()
@@ -335,16 +361,12 @@ class Corporation(
      *
      * Filters the ships to get only the ships that have the CollectingShip capability, then collects garbage from the
      * current tile of each ship
-     *
      */
     private fun collectGarbage() {
         val collectingShips: List<Ship> = Helper().filterCollectingShip(this).sortedBy { it.id }
         for (ship in collectingShips) {
-            for (collectingCapability in ship.capabilities) {
-                if (collectingCapability is CollectingShip) {
-                    collectingCapability.collectGarbageFromCurrentTile(ship)
-                }
-            }
+            val capability = ship.capabilities.first() as CollectingShip
+            capability.collectGarbageFromCurrentTile(ship)
         }
     }
 
@@ -356,14 +378,19 @@ class Corporation(
      *
      */
     private fun refuelAndUnloadShips() {
+        val collectingShips: List<Ship> = Helper().filterCollectingCapabilities(this).sortedBy { it.id }
         val shipsOnHarbor: List<Ship> = Helper().getShipsOnHarbor(this)
         if (shipsOnHarbor.isNotEmpty()) {
             for (ship in shipsOnHarbor) {
-                val collectingCapability = ship.capabilities.find { it is CollectingShip }
-                if (collectingCapability != null && !ship.refueling) {
-                    (collectingCapability as CollectingShip).unload(ship)
-                } else {
+                var capability: CollectingShip? = null
+                if (collectingShips.contains(ship)) {
+                    capability = ship.capabilities.filterIsInstance<CollectingShip>().first()
+                }
+
+                if (ship.refueling) {
                     ship.refuel()
+                } else if (capability != null && capability.unloading) {
+                    capability.unload(ship)
                 }
             }
         }
