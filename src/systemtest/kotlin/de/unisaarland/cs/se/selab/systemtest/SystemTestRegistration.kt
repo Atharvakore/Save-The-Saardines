@@ -6,6 +6,7 @@ import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceT
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftALL
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageMultipleCurrents
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
@@ -83,6 +84,7 @@ object SystemTestRegistration {
         manager.registerTest(TasksTest())
         // DAY 2:
         manager.registerTest(HarborNoCorp())
+        manager.registerTest(DriftALL())
     }
 
     /**
