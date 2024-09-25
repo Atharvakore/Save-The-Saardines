@@ -399,10 +399,12 @@ class Corporation(
      * current tile of each ship
      */
     private fun collectGarbage() {
-        val collectingShips: List<Ship> = Helper().filterCollectingShip(this).sortedBy { it.id }
+        val collectingShips: List<Ship> = Helper().filterCollectingCapabilities(this).sortedBy { it.id }
         for (ship in collectingShips) {
-            val capability = ship.capabilities.first() as CollectingShip
-            capability.collectGarbageFromCurrentTile(ship)
+            val capability = ship.capabilities.filterIsInstance<CollectingShip>()
+            for (cap in capability) {
+                cap.collectGarbageFromCurrentTile(ship)
+            }
         }
     }
 
