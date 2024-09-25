@@ -119,7 +119,8 @@ object SystemTestRegistration {
         CorpNoShips(),
         OneTileNoHarbor(),
         // DAY 2:
-        HarborNoCorp()
+        HarborNoCorp(),
+        RewardTest()
 
     )
 
@@ -130,10 +131,9 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
-        /** testsForReferenceImpl.forEach {
-         manager.registerTest(it)
-         } **/
-        manager.registerTest(RewardTest())
+        testsForReferenceImpl.forEach {
+            manager.registerTest(it)
+        }
     }
 
     /**
