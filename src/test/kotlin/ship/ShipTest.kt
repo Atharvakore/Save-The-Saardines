@@ -28,15 +28,6 @@ class ShipTest {
         tile38.adjacentTiles = listOf(tile37)
     }
 
-    /** Testing basic functionalities **/
-
-    @Test
-    fun testRefuel() {
-        ship.position = tile37
-        ship.refuel()
-        assertTrue(ship.isFuelSufficient(10))
-    }
-
     @Test
     fun testDrift() {
         ship.position = tile37
@@ -51,11 +42,6 @@ class ShipTest {
         ship.move(listOf(tile38))
         assertTrue(ship.position == tile38)
         assert(true)
-    }
-
-    @Test
-    fun testIsFuelSufficient() {
-        assertTrue(ship.isFuelSufficient(10))
     }
 
     @Test

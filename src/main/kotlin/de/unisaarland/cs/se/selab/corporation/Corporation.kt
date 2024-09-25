@@ -385,32 +385,38 @@ class Corporation(
         if (onPos != null) {
             result = true
         } else {
-            // 3. Navigate to the closest ship
-            val closestShipPath = Helper().findClosestShip(ship.position, otherShips)
-            if (closestShipPath.isNotEmpty()) {
-                if (ship.isFuelSufficient(closestShipPath.size, ownedHarbors, closestShipPath.last())) {
-                    ship.move(closestShipPath)
-                } else {
-                    val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                    ship.moveUninterrupted(closestHarborPath, false, true)
-                }
-                result = true
-            } else {
-                // Explore: Navigate to the furthest tile
-                val paths = Dijkstra(ship.position).allPaths()
-                val dest = paths.toList().sortedWith(compareBy({ INFTY - it.second.size }, { it.first.id }))
-                    .first { it.second.size <= ship.speed() + 1 }.first
-                val path = paths[dest] ?: return false
-                if (ship.isFuelSufficient(path.size)) {
-                    ship.move(path)
-                } else {
-                    val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                    ship.moveUninterrupted(closestHarborPath)
-                }
-                result = true
-            }
+            result = helperMoveCoordinating(ship, otherShips)
         }
         return result
+    }
+
+    private fun helperMoveCoordinating(ship: Ship, otherShips: List<Ship>): Boolean {
+        val result: Boolean
+        // 3. Navigate to the closest ship
+        val closestShipPath = Helper().findClosestShip(ship.position, otherShips)
+        if (closestShipPath.isNotEmpty()) {
+            if (ship.isFuelSufficient(closestShipPath.size, ownedHarbors, closestShipPath.last())) {
+                ship.move(closestShipPath)
+            } else {
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath, false, true)
+            }
+            result = true
+        } else {
+            // Explore: Navigate to the furthest tile
+            val paths = Dijkstra(ship.position).allPaths()
+            val dest = paths.toList().sortedWith(compareBy({ INFTY - it.second.size }, { it.first.id }))
+                .first { it.second.size <= ship.speed() + 1 }.first
+            val path = paths[dest] ?: return false
+            if (ship.isFuelSufficient(path.size, ownedHarbors, dest)) {
+                ship.move(path)
+            } else {
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath, false, true)
+            }
+            result = true
+        }
+        return true
     }
 
     /**
