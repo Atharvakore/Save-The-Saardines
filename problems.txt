@@ -1,0 +1,5 @@
+
+- Chemicals don't disperse when they move into deep ocean.
+- We need to remove trackers from garbage when it is removed from the simulation.
+- Collecting ship behaviours are not implemented for collecting plastic garbage with more than one ship at once.
+- Off-by-one errors in event/task handling.
