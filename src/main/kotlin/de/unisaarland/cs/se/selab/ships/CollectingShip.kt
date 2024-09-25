@@ -43,6 +43,7 @@ class CollectingShip(
             container.giveGarbage()
         }
         this.unloading = false
+        ship.currentVelocity = 0
         return true
     }
 
@@ -114,6 +115,7 @@ class CollectingShip(
             val collected = collectGarbage(oil.amount, GarbageType.OIL)
             if (collected > 0) {
                 currentTile.removeGarbageOfType(GarbageType.OIL, collected)
+                ship.currentVelocity = 0
                 LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.OIL, oil.id, collected)
             }
         }
@@ -122,6 +124,7 @@ class CollectingShip(
             val collected = collectGarbage(chem.amount, GarbageType.CHEMICALS)
             if (collected > 0) {
                 currentTile.removeGarbageOfType(GarbageType.CHEMICALS, collected)
+                ship.currentVelocity = 0
                 LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.CHEMICALS, chem.id, collected)
             }
         }
@@ -155,6 +158,7 @@ class CollectingShip(
             for (garbage in plastic) {
                 val collected = collectGarbage(garbage.amount, garbage.type)
                 if (collected > 0) {
+                    ship.currentVelocity = 0
                     ship.position.removeGarbageOfType(garbage.type, collected)
                     LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.PLASTIC, garbage.id, collected)
                 }

@@ -28,7 +28,7 @@ open class Ship(
     private var consumedFuel: Int = 0
     var hasTaskAssigned: Boolean = false
     var destinationPath = emptyList<Tile>()
-    private var currentVelocity = 0
+    var currentVelocity = 0
     var refueling = false
     var arrivedToHarborThisTick = false
     open var isInWayToRefuelOrUnload: Boolean = false
@@ -42,6 +42,7 @@ open class Ship(
         if (!arrivedToHarborThisTick) {
             isInWayToRefuelOrUnload = false
             refueling = false
+            currentVelocity = 0
             this.consumedFuel = 0
             LoggerCorporationAction.logRefuelingShip(id, position.id)
         }
@@ -114,9 +115,6 @@ open class Ship(
                 // LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
             }
         }
-        if (desTile == path.last()) {
-            currentVelocity = 0
-        }
         this.position = desTile
     }
 
@@ -179,6 +177,7 @@ open class Ship(
             destinationPath = emptyList()
             if (this.owner.ownedHarbors.contains(this.position)) {
                 arrivedToHarborThisTick = true
+                currentVelocity = 0
             }
         } else {
             val startIndex = pathToHarbor.indexOf(this.position)
