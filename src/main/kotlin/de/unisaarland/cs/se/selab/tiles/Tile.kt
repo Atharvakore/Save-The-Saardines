@@ -82,22 +82,19 @@ open class Tile(
                 .filter { it.type == type }
                 .sortedBy(Garbage::id)
                 .toMutableList()
-        while (toBeRemoved > 0 && filteredList.isNotEmpty()) {
-            if (toBeRemoved >= filteredList[0].amount) {
-                toBeRemoved -= filteredList[0].amount
-                filteredList[0].trackedBy.forEach {
-                    it.trackedGarbage.remove(filteredList[0])
+        for (garbage in filteredList) {
+            toBeRemoved = minOf(0, toBeRemoved - garbage.amount)
+            garbage.amount = minOf(garbage.amount - toBeRemoved, 0)
+            if (garbage.amount == 0) {
+                this.garbage.remove(garbage)
+                garbage.trackedBy.forEach { corporation ->
+                    corporation.trackedGarbage.remove(garbage)
                 }
-                val x: Garbage = filteredList.get(0)
-                filteredList.remove(x)
-                this.garbage.remove(x)
             } else {
-                filteredList[0].amount -= toBeRemoved
-                // toBeRemoved = 0
                 break
             }
-            this.garbage.addAll(filteredList)
         }
+
     }
 
     /**
