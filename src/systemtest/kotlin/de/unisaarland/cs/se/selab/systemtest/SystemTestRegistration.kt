@@ -10,6 +10,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftALL
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageMultipleCurrents
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.RewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.StormOverMultipleTiles
@@ -80,7 +81,6 @@ object SystemTestRegistration {
         // DAY 2:
         HarborNoCorp(),
         DriftALL()
-
     )
 
     private val testsForMutants = listOf(
@@ -130,9 +130,10 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
-        testsForReferenceImpl.forEach {
-            manager.registerTest(it)
-        }
+        /** testsForReferenceImpl.forEach {
+         manager.registerTest(it)
+         } **/
+        manager.registerTest(RewardTest())
     }
 
     /**
