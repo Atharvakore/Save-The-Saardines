@@ -106,7 +106,6 @@ object SystemTestRegistration {
         StormOverMultipleTiles(),
         DriftGarbageMultipleCurrents(),
         ExampleSystemTest(),
-        ExampleSystemTest(),
         MoveNearHome(),
         ReturnToHomeWater(),
         SequenceTick25ParsingTest(),
@@ -139,7 +138,8 @@ object SystemTestRegistration {
         OneTileNoHarbor(),
         // DAY 2:
         HarborNoCorp(),
-        DriftMeBaby(),
+        MoreMorePlastic(),
+        CollectingMutliplePlasticTest()
     )
 
     /**
