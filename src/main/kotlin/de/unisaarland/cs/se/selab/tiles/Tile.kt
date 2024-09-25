@@ -94,7 +94,6 @@ open class Tile(
                 break
             }
         }
-
     }
 
     /**
