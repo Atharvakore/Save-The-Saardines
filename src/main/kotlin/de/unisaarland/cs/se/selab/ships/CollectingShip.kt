@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.ships
 
+import de.unisaarland.cs.se.selab.corporation.Helper
 import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
@@ -135,6 +136,11 @@ class CollectingShip(
                 currentTile.removeGarbageOfType(GarbageType.CHEMICALS, collected)
                 LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.CHEMICALS, chemicals.id, collected)
             }
+        }
+        if (this.auxiliaryContainers.any { it.garbageLoad == it.getGarbageCapacity() }) {
+            ship.isInWayToRefuelOrUnload = true
+            val pathToHarbor = Helper().findClosestHarbor(ship.position, ship.owner.ownedHarbors)
+            ship.destinationPath = pathToHarbor
         }
     }
 
