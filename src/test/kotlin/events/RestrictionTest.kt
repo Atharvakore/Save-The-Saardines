@@ -28,8 +28,8 @@ class RestrictionTest {
     fun startRestrictionTest() {
         val restrictionEvent = Restriction(1, 1, sea, sea.getTileByPos(Vec2D(3, 6))!!, 2)
         val endRestriction = EndRestriction(2, 5, sea, sea.getTileByPos(Vec2D(3, 6))!!, 1)
-        assertTrue(!restrictionEvent.actUponTick(0) && !endRestriction.actUponTick(0))
-        assertTrue(restrictionEvent.actUponTick(1))
+        assertTrue(!restrictionEvent.actUponTick(0, emptyList()) && !endRestriction.actUponTick(0, emptyList()))
+        assertTrue(restrictionEvent.actUponTick(1, emptyList()))
         assertTrue((sea.getTileByPos(Vec2D(3, 5))?.restrictions ?: true) == 1)
         assertTrue((sea.getTileByPos(Vec2D(3, 6))?.restrictions ?: true) == 1)
         assertTrue((sea.getTileByPos(Vec2D(3, 4))?.restrictions ?: true) == 1)
@@ -54,9 +54,9 @@ class RestrictionTest {
     fun endRestrictionTest() {
         val restrictionEvent = Restriction(1, 1, sea, sea.getTileByPos(Vec2D(3, 6))!!, 2)
         val endRestriction = EndRestriction(2, 5, sea, sea.getTileByPos(Vec2D(3, 6))!!, 2)
-        assertTrue(!restrictionEvent.actUponTick(0) && !endRestriction.actUponTick(0))
-        assert(restrictionEvent.actUponTick(1))
-        assert(endRestriction.actUponTick(5))
+        assertTrue(!restrictionEvent.actUponTick(0, emptyList()) && !endRestriction.actUponTick(0, emptyList()))
+        assert(restrictionEvent.actUponTick(1, emptyList()))
+        assert(endRestriction.actUponTick(5, emptyList()))
         assertTrue((sea.getTileByPos(Vec2D(3, 5))?.restrictions ?: true) == 0)
         assertTrue((sea.getTileByPos(Vec2D(3, 6))?.restrictions ?: true) == 0)
         assertTrue((sea.getTileByPos(Vec2D(3, 4))?.restrictions ?: true) == 0)

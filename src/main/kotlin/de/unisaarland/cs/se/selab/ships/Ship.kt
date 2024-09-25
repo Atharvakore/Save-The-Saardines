@@ -158,11 +158,12 @@ class Ship(
      * and store the path until its completed
      * */
     fun moveUninterrupted(pathToHarbor: List<Tile>) {
-        hasTaskAssigned = true
         /**
          * THIS DOESN'T MAKE SENSE, first comparison already has the check this.position == pathToHarbor.last(),
          * the part after move is basically dead code !!!
          */
+
+        hasTaskAssigned = true
         if (pathToHarbor.isEmpty() || this.position == pathToHarbor.last()) {
             return
         }

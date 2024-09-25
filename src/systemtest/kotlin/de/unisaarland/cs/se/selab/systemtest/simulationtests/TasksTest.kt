@@ -13,12 +13,12 @@ class TasksTest : ExampleSystemTestExtension() {
     override val scenario = "scenarioJsons/TaskTest.json"
     override val map = "mapFiles/map_medium_01.json"
     override val name = "TaskTest"
-    override val maxTicks = 5
+    override val maxTicks = 25
 
     override suspend fun run() {
         val expectedString = "Simulation Info: Simulation started."
         if (skipUntilLogType(Logs.SIMULATION_INFO) != expectedString) {
-            throw SystemTestAssertionError("Collected plastic should be 0!")
+            throw SystemTestAssertionError("Simulation Info: Tick 15 started.")
         }
         val corporationAction = "Corporation Action: Corporation 1 is starting to move its ships."
         val collect = "Corporation Action: Corporation 1 is starting to collect garbage."

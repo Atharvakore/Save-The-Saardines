@@ -74,6 +74,7 @@ class Garbage(
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.CHEMICALS)
         }
+        // WHY IS THIS IF STATEMENT HERE WITH SAME BLOCKS OF CODE ??
         if (target is DeepOcean) {
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
@@ -152,8 +153,9 @@ class Garbage(
     /**
      * Drift function for storm. A drift that sweeps away all the garbage
      * */
-    fun stormDrift(speed: Int, direction: Direction, currentTile: Tile) {
+    fun stormDrift(speed: Int, direction: Direction, currentTile: Tile, corporations: List<Corporation>) {
         val targetTile = currentTile.getTileInDirection(speed / TEN, direction) ?: return
+        var newGarbage = this
 
         when (this.type) {
             GarbageType.OIL -> {
@@ -164,10 +166,12 @@ class Garbage(
                 if (totalOilAmount < MAXOILCAP) {
                     val driftableAmount = MAXOILCAP - totalOilAmount
                     if (this.amount <= driftableAmount) {
-                        targetTile.addGarbage(createGarbage(amount, GarbageType.OIL))
+                        newGarbage = createGarbage(amount, GarbageType.OIL)
+                        targetTile.addGarbage(newGarbage)
                         this.amount = 0
                     } else {
-                        targetTile.addGarbage(createGarbage(driftableAmount, GarbageType.OIL))
+                        newGarbage = createGarbage(driftableAmount, GarbageType.OIL)
+                        targetTile.addGarbage(newGarbage)
                         this.amount -= driftableAmount
                     }
                 }
@@ -187,6 +191,11 @@ class Garbage(
                     this.amount = 0
                 }
             }
+        }
+
+        corporations.forEach { corporation ->
+            corporation.partnerGarbage.remove(newGarbage.id)
+            corporation.partnerGarbage.putIfAbsent(newGarbage.id, targetTile)
         }
 
         if (this.amount == 0) {
