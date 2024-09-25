@@ -208,7 +208,7 @@ class Corporation(
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
             }
-            result = false
+            result = true
         }
         return result
     }
@@ -223,7 +223,10 @@ class Corporation(
             .filter { acceptedGarbageType.contains(it.type) && cap.garbageTypes().contains(it.type) }
             .sortedBy { it.id }.toList()
         if (garbage.isNotEmpty()) {
-            // Don't move.
+            // Don't move. Add info about the garbage on this tile to corp knowledge.
+            ship.position.garbage.forEach {
+                partnerGarbage[it.id] = ship.position
+            }
             if (ship.isCapacitySufficient(garbage)) {
                 result = true
             } else {
@@ -393,7 +396,18 @@ class Corporation(
                 }
                 result = true
             } else {
-                result = false
+                // Explore: Navigate to the furthest tile
+                val paths = Dijkstra(ship.position).allPaths()
+                val dest = paths.toList().sortedWith(compareBy({ INFTY - it.second.size }, { it.first.id }))
+                    .first { it.second.size <= ship.speed() + 1 }.first
+                val path = paths[dest] ?: return false
+                if (ship.isFuelSufficient(path.size)) {
+                    ship.move(path)
+                } else {
+                    val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                    ship.moveUninterrupted(closestHarborPath)
+                }
+                result = true
             }
         }
         return result
@@ -406,10 +420,12 @@ class Corporation(
      * current tile of each ship
      */
     private fun collectGarbage() {
-        val collectingShips: List<Ship> = Helper().filterCollectingShip(this).sortedBy { it.id }
+        val collectingShips: List<Ship> = Helper().filterCollectingCapabilities(this).sortedBy { it.id }
         for (ship in collectingShips) {
-            val capability = ship.capabilities.first() as CollectingShip
-            capability.collectGarbageFromCurrentTile(ship)
+            val capability = ship.capabilities.filterIsInstance<CollectingShip>()
+            for (cap in capability) {
+                cap.collectGarbageFromCurrentTile(ship)
+            }
         }
     }
 
