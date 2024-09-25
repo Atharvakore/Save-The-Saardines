@@ -96,6 +96,8 @@ class Garbage(
         var newGarbage: Garbage = this
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.OIL)
+        } else {
+            currentTile.garbage.remove(this)
         }
 
         val garbageSum = targetTile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }

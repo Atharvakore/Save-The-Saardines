@@ -25,7 +25,7 @@ class StormOverMultipleTiles : ExampleSystemTestExtension() {
         assertNextLine("Corporation Action: Corporation 1 finished its actions.")
         assertNextLine("Current Drift: PLASTIC 3 with amount 50 drifted from tile 64 to tile 65.")
         assertNextLine("Current Drift: OIL 4 with amount 50 drifted from tile 65 to tile 66.")
-        assertNextLine("Current Drift: Ship 1 drifted from tile 54 to tile 44.")
+        assertNextLine("Current Drift: Ship 1 drifted from tile 54 to tile 64.")
         assertNextLine("Event: Event 1 of type STORM happened.")
         assertNextLine("Simulation Info: Simulation ended.")
     }

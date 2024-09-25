@@ -42,7 +42,7 @@ class ScoutingShipsTest {
         // add garbage to tile
         val garbage = Garbage(1, 200, GarbageType.OIL, emptySet())
         val garbageTile = sea.getTileByPos(Vec2D(6, 6))
-        garbageTile?.garbage = listOf(garbage)
+        garbageTile?.garbage = mutableListOf(garbage)
 
         c1.run(0, sea, emptyList())
 
@@ -83,8 +83,8 @@ class ScoutingShipsTest {
         val garbageTile1 = sea.getTileByPos(Vec2D(3, 4))
         val garbageTile2 = sea.getTileByPos(Vec2D(4, 6))
 
-        garbageTile1?.garbage = listOf(garbage1)
-        garbageTile2?.garbage = listOf(garbage2)
+        garbageTile1?.garbage = mutableListOf(garbage1)
+        garbageTile2?.garbage = mutableListOf(garbage2)
 
         c1.run(0, sea, emptyList())
         // test same distance of garbage piles
@@ -121,8 +121,8 @@ class ScoutingShipsTest {
         val garbageTile1 = sea.getTileByPos(Vec2D(3, 3))
         val garbageTile2 = sea.getTileByPos(Vec2D(6, 6))
 
-        garbageTile1?.garbage = listOf(garbage1)
-        garbageTile2?.garbage = listOf(garbage2)
+        garbageTile1?.garbage = mutableListOf(garbage1)
+        garbageTile2?.garbage = mutableListOf(garbage2)
 
         c1.run(0, sea, emptyList())
         // test ship move to the closest garbage pile

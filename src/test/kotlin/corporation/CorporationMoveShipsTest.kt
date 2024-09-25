@@ -61,7 +61,7 @@ class CorporationMoveShipsTest {
 
         val garbageTile1 = sea.getTileByPos(Vec2D(4, 6))
         val garbage1 = Garbage(1, 200, GarbageType.OIL, emptySet())
-        garbageTile1?.garbage = listOf(garbage1)
+        garbageTile1?.garbage = mutableListOf(garbage1)
 
         // test ships movement after one tick
         c1.run(0, sea, otherShips = listOf(c2Ship))
@@ -103,7 +103,7 @@ class CorporationMoveShipsTest {
         // add garbage to tile
         val garbage = Garbage(1, 200, GarbageType.OIL, emptySet())
         val garbageTile = sea.getTileByPos(Vec2D(8, 8))
-        garbageTile?.garbage = listOf(garbage)
+        garbageTile?.garbage = mutableListOf(garbage)
 
         c1.run(0, sea, emptyList())
         // test ship moved to garbage tile
@@ -133,7 +133,7 @@ class CorporationMoveShipsTest {
         // add garbage to tile
         val garbage = Garbage(1, 200, GarbageType.OIL, emptySet())
         val garbageTile = sea.getTileByPos(Vec2D(8, 8))
-        garbageTile?.garbage = listOf(garbage)
+        garbageTile?.garbage = mutableListOf(garbage)
 
         // test no move when garbage away
         c1.run(0, sea, emptyList())
@@ -141,7 +141,7 @@ class CorporationMoveShipsTest {
 
         val garbage2 = Garbage(2, 200, GarbageType.OIL, emptySet())
         val garbageTile2 = sea.getTileByPos(Vec2D(2, 3))
-        garbageTile2?.garbage = listOf(garbage2)
+        garbageTile2?.garbage = mutableListOf(garbage2)
 
         // test no move when garbage close
         c1.run(0, sea, emptyList())
@@ -177,7 +177,7 @@ class CorporationMoveShipsTest {
         // add garbage to tile
         val garbage = Garbage(1, 200, GarbageType.OIL, emptySet())
         val garbageTile = sea.getTileByPos(Vec2D(4, 6))
-        garbageTile?.garbage = listOf(garbage)
+        garbageTile?.garbage = mutableListOf(garbage)
 
         c1.run(0, sea, emptyList())
         // test ship moved to garbage tile
