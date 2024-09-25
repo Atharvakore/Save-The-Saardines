@@ -208,7 +208,7 @@ class Corporation(
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath)
             }
-            result = false
+            result = true
         }
         return result
     }
