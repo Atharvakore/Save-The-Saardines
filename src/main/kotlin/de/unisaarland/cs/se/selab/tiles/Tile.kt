@@ -7,7 +7,7 @@ open class Tile(
     val id: Int,
     val pos: Vec2D,
     var adjacentTiles: List<Tile?>,
-    var garbage: List<Garbage>,
+    var garbage: MutableList<Garbage>,
     var amountOfGarbageDriftedThisTick: Int,
 ) {
     /* private var id: Int = 0
@@ -53,7 +53,7 @@ open class Tile(
      * adds given Garbage to the List of already present Garbage
      */
     public fun addGarbage(garbage: Garbage) {
-        this.garbage += garbage
+        this.garbage.add(garbage)
     }
 
     /**
@@ -94,7 +94,7 @@ open class Tile(
                 // toBeRemoved = 0
                 break
             }
-            this.garbage = filteredList
+            this.garbage.addAll(filteredList)
         }
     }
 

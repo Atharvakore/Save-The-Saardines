@@ -8,7 +8,7 @@ class Shore(
     id: Int,
     pos: Vec2D,
     adjacentTiles: List<Tile?>,
-    garbage: List<Garbage>,
+    garbage: MutableList<Garbage>,
     val harbor: Boolean
 ) : Tile(
     id,

@@ -177,16 +177,16 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                     val intensity = tile.getInt(INTENSITY)
                     currentObject = Current(speed, requireNotNull(Direction.getDirection(direction)), intensity)
                 }
-                DeepOcean(id, coordinates, emptyList(), emptyList(), currentObject)
+                DeepOcean(id, coordinates, emptyList(), mutableListOf(), currentObject)
             }
 
             SHALLOW_OCEAN -> {
-                ShallowOcean(id, coordinates, emptyList(), emptyList())
+                ShallowOcean(id, coordinates, emptyList(), mutableListOf())
             }
 
             SHORE -> {
                 val harbor = tile.getBoolean(HARBOR)
-                Shore(id, coordinates, emptyList(), emptyList(), harbor)
+                Shore(id, coordinates, emptyList(), mutableListOf(), harbor)
             }
 
             LAND -> {

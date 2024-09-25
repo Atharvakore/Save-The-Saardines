@@ -7,7 +7,7 @@ class ShallowOcean(
     id: Int,
     pos: Vec2D,
     adjacentTiles: List<Tile>,
-    garbage: List<Garbage>
+    garbage: MutableList<Garbage>
 ) : Tile(
     id,
     pos,
