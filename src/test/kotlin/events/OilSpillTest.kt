@@ -7,7 +7,6 @@ import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Vec2D
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
