@@ -185,7 +185,7 @@ class Garbage(
             else -> {
                 if (targetTile is DeepOcean) {
                     this.amount = 0
-                    currentTile.garbage = (currentTile.garbage.filter { it.id == this.id }).toMutableList()
+                    currentTile.garbage = currentTile.garbage.filter { it.id == this.id }.toMutableList()
                 } else {
                     targetTile.addGarbage(createGarbage(this.amount, GarbageType.CHEMICALS))
                     this.amount = 0
@@ -199,7 +199,7 @@ class Garbage(
         }
 
         if (this.amount == 0) {
-            currentTile.garbage = (currentTile.garbage.filter { it != this }).toMutableList()
+            currentTile.garbage.remove(this)
         }
     }
 }
