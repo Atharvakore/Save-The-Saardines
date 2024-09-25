@@ -53,4 +53,20 @@ class OilSpillTest {
         assertTrue(sea.getTileByPos(Vec2D(2, 6))?.currentOilLevel() == 1000)
         assertTrue(sea.getTileByPos(Vec2D(3, 6))?.currentOilLevel() == 1000)
     }
+
+    @Test
+    fun testSpillInRadius1() {
+        val tile53 = sea.getTileById(53)!!
+        val tile62 = sea.getTileById(62)!!
+        val tile73 = sea.getTileById(73)!!
+        val tile63 = sea.getTileById(63)!!
+        tile53.addGarbage(Garbage(1, 200, GarbageType.OIL, emptySet()))
+        tile62.addGarbage(Garbage(2, 1000, GarbageType.OIL, emptySet()))
+        tile73.addGarbage(Garbage(3, 700, GarbageType.OIL, emptySet()))
+        val oilSpillEvent = OilSpill(1, 0, sea, tile63, 1, 500)
+        oilSpillEvent.actUponTick(0, emptyList())
+        assertTrue(tile53.currentOilLevel() == 700)
+        assertTrue(tile62.currentOilLevel() == 1000)
+        assertTrue(tile73.currentOilLevel() == 1000)
+    }
 }

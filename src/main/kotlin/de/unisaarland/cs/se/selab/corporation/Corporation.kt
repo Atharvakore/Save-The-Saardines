@@ -382,14 +382,13 @@ class Corporation(
 
         // 2. Check for ships on the current tile of the coordinating ship
         val onPos = shipFov.firstOrNull { it.position == ship.position && it.owner != lastCoordinatingCorporation }
-        if (onPos != null) {
-            result = true
+        result = if (onPos != null) {
+            true
         } else {
-            result = helperMoveCoordinating(ship, otherShips)
+            helperMoveCoordinating(ship, otherShips)
         }
         return result
     }
-
     private fun helperMoveCoordinating(ship: Ship, otherShips: List<Ship>): Boolean {
         val result: Boolean
         // 3. Navigate to the closest ship
