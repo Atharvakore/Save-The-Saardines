@@ -14,7 +14,7 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 /**
  * class representing a ship
  */
-class Ship(
+open class Ship(
     val id: Int,
     private val maxVelocity: Int,
     private val acceleration: Int,
@@ -27,11 +27,11 @@ class Ship(
     lateinit var owner: Corporation
     private var consumedFuel: Int = 0
     var hasTaskAssigned: Boolean = false
-    private var destinationPath = emptyList<Tile>()
+    var destinationPath = emptyList<Tile>()
     private var currentVelocity = 0
     var refueling = false
     var arrivedToHarborThisTick = false
-    var isInWayToRefuelOrUnload: Boolean = false
+    open var isInWayToRefuelOrUnload: Boolean = false
     var movedThisTick: MovementTuple = MovementTuple(false, -1, -1, -1)
 
     /**
@@ -175,7 +175,11 @@ class Ship(
         move(pathToHarbor)
         if (this.position == pathToHarbor.last()) {
             hasTaskAssigned = false
-            isInWayToRefuelOrUnload = false
+            if (isInWayToRefuelOrUnload) {
+                isInWayToRefuelOrUnload = false
+                this.capabilities.filterIsInstance<CollectingShip>().forEach { it.unloading = true }
+            }
+
             destinationPath = emptyList()
             if (this.owner.ownedHarbors.contains(this.position)) {
                 arrivedToHarborThisTick = true

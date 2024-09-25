@@ -60,6 +60,11 @@ class Garbage(
         this.amount -= drifted
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.PLASTIC)
+        } else {
+            currentTile.garbage.remove(this)
+            this.trackedBy.forEach { corporation ->
+                corporation.trackedGarbage.remove(this)
+            }
         }
         currentTile.amountOfGarbageDriftedThisTick += drifted
         Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, targetTile.id)
@@ -81,6 +86,11 @@ class Garbage(
                 currentTile.amountOfGarbageDriftedThisTick += drifted
                 Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
             }
+        } else {
+            currentTile.garbage.remove(this)
+            this.trackedBy.forEach { corporation ->
+                corporation.trackedGarbage.remove(this)
+            }
         }
         return Pair(target, newGarbage)
     }
@@ -98,6 +108,9 @@ class Garbage(
             newGarbage = createGarbage(drifted, GarbageType.OIL)
         } else {
             currentTile.garbage.remove(this)
+            this.trackedBy.forEach { corporation ->
+                corporation.trackedGarbage.remove(this)
+            }
         }
 
         val garbageSum = targetTile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
