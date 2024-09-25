@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.corporation
 import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
+import de.unisaarland.cs.se.selab.ships.MovementTuple
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.ships.ShipWithTracker
@@ -302,6 +303,7 @@ class Corporation(
     }
 
     private fun moveShipsOutOfRestriction(availableShips: MutableSet<Ship>) {
+        // BUG POTENTIAL
         availableShips.filter {
             it.position.restrictions > 0
         }.forEach {
@@ -318,6 +320,7 @@ class Corporation(
 
     /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
     private fun moveShips(otherShips: List<Ship>) {
+        ownedShips.forEach { it.movedThisTick = MovementTuple(false, -1, -1, -1) }
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
         // -1. Move ships that are inside a restriction out of a restriction
         moveShipsOutOfRestriction(availableShips)
@@ -342,6 +345,13 @@ class Corporation(
         tickTasksInMoveShips(availableShips)
         val usedShips = helpermoveShips(availableShips, otherShips)
         availableShips.removeAll { usedShips.contains(it.id) }
+        ownedShips.filter { it.movedThisTick.moved }.sortedBy { it.id }.forEach {
+            LoggerCorporationAction.logShipMovement(
+                it.movedThisTick.shipId,
+                it.movedThisTick.velocity,
+                it.movedThisTick.destinationId
+            )
+        }
         // 3. Unused ships are jobless. Something might happen to them here.
     }
 

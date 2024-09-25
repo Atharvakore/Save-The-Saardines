@@ -32,6 +32,7 @@ class Ship(
     var refueling = false
     var arrivedToHarborThisTick = false
     var isInWayToRefuelOrUnload: Boolean = false
+    var movedThisTick: MovementTuple = MovementTuple(false, -1, -1, -1)
 
     /**
      * Call: when the ship is on the harbor
@@ -102,13 +103,15 @@ class Ship(
             desTile = path[distanceLength]
             if (desTile != this.position) {
                 consumedFuel += distanceLength * SPEED_LENGTH * fuelConsumption
-                LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
+                this.movedThisTick = MovementTuple(true, id, currentVelocity, desTile.id)
+                // LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
             }
         } else {
             desTile = path.last()
             if (desTile != this.position) {
                 consumedFuel += (path.size - 1) * SPEED_LENGTH * fuelConsumption
-                LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
+                this.movedThisTick = MovementTuple(true, id, currentVelocity, desTile.id)
+                // LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
             }
         }
         if (desTile == path.last()) {
