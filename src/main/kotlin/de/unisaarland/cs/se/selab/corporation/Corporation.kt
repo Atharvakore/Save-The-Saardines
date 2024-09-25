@@ -165,11 +165,15 @@ class Corporation(
                 .asSequence()
                 .filter { acceptedGarbageType.contains(it.type) }
                 .forEach { garbage -> partnerGarbage[garbage.id] = tile }
+            tile.garbage.forEach {
+                if (partnerGarbage[it.id] != tile) {
+                    partnerGarbage.remove(it.id) // Remove if the garbage is on a different tile...
+                }
+            }
         }
     }
 
     private fun moveScoutingShip(ship: Ship, scoutTarget: MutableSet<Int>): Boolean {
-        val result: Boolean
         // 2. Navigate to the closest garbage patch.
         val paths = Dijkstra(ship.position).allPaths()
         val sorted = paths.toList().sortedWith(
@@ -197,7 +201,6 @@ class Corporation(
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
             }
-            result = true
         } else {
             // Explore: Navigate to the furthest tile
             val dest = paths.toList().sortedWith(compareBy({ INFTY - it.second.size }, { it.first.id }))
@@ -209,9 +212,8 @@ class Corporation(
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
             }
-            result = true
         }
-        return result
+        return true
     }
 
     // ships move in the wrong order if they taskAssigned = true
