@@ -15,6 +15,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.StormOverMultipleTiles
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingMutliplePlasticTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingOilTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingPlasticTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.MoveNearHome
@@ -117,7 +118,9 @@ object SystemTestRegistration {
         CorpNoShips(),
         OneTileNoHarbor(),
         // DAY 2:
-        HarborNoCorp()
+        HarborNoCorp(),
+        DriftALL(),
+        CollectingMutliplePlasticTest()
 
     )
 
