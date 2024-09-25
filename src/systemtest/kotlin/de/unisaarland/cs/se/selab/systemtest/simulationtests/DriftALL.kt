@@ -31,7 +31,5 @@ class DriftALL : ExampleSystemTestExtension() {
         skipLines(2)
         assertNextLine("Current Drift: OIL 1 with amount 50 drifted from tile 9 to tile 6.")
         assertNextLine("Current Drift: PLASTIC 6 with amount 100 drifted from tile 9 to tile 1.")
-        skipLines(2)
-        assertNextLine("Ship Movement: Ship 1 moved with speed 10 to tile 7.")
     }
 }

@@ -100,26 +100,14 @@ class CollectingShip(
      * Call: when the corporation is calling on its ships to collect the garbage
      * Logic: checks the garbage of its tile, collects it if it can
      */
-    fun collectGarbageFromCurrentTile(ship: Ship) {
-        /** val acceptableGarbageType = garbageTypes() **/
-
+    fun collectGarbageFromCurrentTile(ship: Ship, otherShips: List<Ship>, corpShips: List<Ship>) {
         val currentTile: Tile = ship.position
-        val plasticGarbage: List<Garbage> = currentTile.garbage.filter { it.type == GarbageType.PLASTIC }
-        val oilGarbage: List<Garbage> = currentTile.garbage.filter { it.type == GarbageType.OIL }
-        val chemicalsGarbage: List<Garbage> = currentTile.garbage.filter { it.type == GarbageType.CHEMICALS }
+        val plasticGarbage = currentTile.garbage.filter { it.type == GarbageType.PLASTIC }.sortedBy { it.id }
+        val oilGarbage = currentTile.garbage.filter { it.type == GarbageType.OIL }.sortedBy { it.id }
+        val chemicalsGarbage = currentTile.garbage.filter { it.type == GarbageType.CHEMICALS }.sortedBy { it.id }
 
-        /** for (garbageType in acceptableGarbageType) {
-         val amount = currentTile.getAmountOfType(garbageType)
-         val collected = collectGarbage(amount, garbageType)
-         currentTile.removeGarbageOfType(garbageType, collected)
-         } **/
-
-        for (plastic in plasticGarbage) {
-            val collected = collectGarbage(plastic.amount, GarbageType.PLASTIC)
-            if (collected > 0) {
-                currentTile.removeGarbageOfType(GarbageType.PLASTIC, collected)
-                LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.PLASTIC, plastic.id, collected)
-            }
+        if (garbageTypes().contains(GarbageType.PLASTIC)) {
+            collectPlasticGarbage(ship, plasticGarbage, otherShips, corpShips)
         }
 
         for (oil in oilGarbage) {
@@ -130,11 +118,46 @@ class CollectingShip(
             }
         }
 
-        for (chemicals in chemicalsGarbage) {
-            val collected = collectGarbage(chemicals.amount, GarbageType.CHEMICALS)
+        for (chem in chemicalsGarbage) {
+            val collected = collectGarbage(chem.amount, GarbageType.CHEMICALS)
             if (collected > 0) {
                 currentTile.removeGarbageOfType(GarbageType.CHEMICALS, collected)
-                LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.CHEMICALS, chemicals.id, collected)
+                LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.CHEMICALS, chem.id, collected)
+            }
+        }
+    }
+
+    private fun collectPlasticGarbage(
+        ship: Ship,
+        plastic: List<Garbage>,
+        otherShips: List<Ship>,
+        corpShips: List<Ship>
+    ) {
+        val sumOfPlastic = plastic.sumOf { it.amount }
+        val capability: MutableList<CollectingShip> = mutableListOf()
+
+        otherShips.forEach { other ->
+            val cap = other.capabilities.filterIsInstance<CollectingShip>()
+            if (cap.isNotEmpty()) {
+                capability.addAll(cap)
+            }
+        }
+
+        corpShips.forEach { corp ->
+            val cap = corp.capabilities.filterIsInstance<CollectingShip>()
+            if (cap.isNotEmpty()) {
+                capability.addAll(cap)
+            }
+        }
+
+        val sumOfContainers = capability.sumOf { it.hasPlasticCapacity() }
+        if (sumOfContainers >= sumOfPlastic) {
+            for (garbage in plastic) {
+                val collected = collectGarbage(garbage.amount, garbage.type)
+                if (collected > 0) {
+                    ship.position.removeGarbageOfType(garbage.type, collected)
+                    LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.PLASTIC, garbage.id, collected)
+                }
             }
         }
         if (this.auxiliaryContainers.any { it.garbageLoad == it.getGarbageCapacity() }) {
