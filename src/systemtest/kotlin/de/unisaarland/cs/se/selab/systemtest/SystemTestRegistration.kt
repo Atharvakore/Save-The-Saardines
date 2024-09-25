@@ -6,17 +6,18 @@ import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceT
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftALL
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageMultipleCurrents
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftMeBaby
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.RewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftToMe
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.MoreMorePlastic
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.StormOverMultipleTiles
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.TasksTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingMutliplePlasticTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingOilTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingPlasticTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.MoveNearHome
@@ -35,6 +36,14 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.OneIDTw
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.OneTileNoHarbor
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShipAmongUs
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShoreNoHarbor
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.ContainerRewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.RadioRewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TelescopeRewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TrackerRewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CollectGarbageTaskTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CooperateTaskTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.ExploreMapTaskTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.FindGarbageTaskTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingPlasticTest
 
@@ -77,10 +86,20 @@ object SystemTestRegistration {
         CorporationWhereShip(),
         CorpNoShips(),
         OneTileNoHarbor(),
-        TasksTest(),
         // DAY 2:
         HarborNoCorp(),
-        DriftALL()
+        DriftMeBaby(),
+        DriftToMe(),
+        MoreMorePlastic(),
+        CollectingMutliplePlasticTest(),
+        ContainerRewardTest(),
+        RadioRewardTest(),
+        TelescopeRewardTest(),
+        TrackerRewardTest(),
+        CollectGarbageTaskTest(),
+        CooperateTaskTest(),
+        ExploreMapTaskTest(),
+        FindGarbageTaskTest()
     )
 
     private val testsForMutants = listOf(
@@ -120,8 +139,6 @@ object SystemTestRegistration {
         OneTileNoHarbor(),
         // DAY 2:
         HarborNoCorp(),
-        RewardTest()
-
     )
 
     /**

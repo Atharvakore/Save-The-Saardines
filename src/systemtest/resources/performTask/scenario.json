@@ -1,0 +1,50 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "OIL",
+      "location": 9,
+      "amount": 1000
+    },
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 8,
+      "amount": 1000
+    }
+  ],
+  "events": [],
+  "tasks": [
+    {
+      "id": 1,
+      "type": "EXPLORE",
+      "tick": 0,
+      "shipID": 1,
+      "targetTile": 15,
+      "rewardID": 2,
+      "rewardShipID": 2
+    },
+    {
+      "id": 2,
+      "type": "COLLECT",
+      "tick": 0,
+      "shipID": 2,
+      "targetTile": 8,
+      "rewardID": 1,
+      "rewardShipID": 1
+    }
+  ],
+  "rewards": [
+    {
+      "id": 1,
+      "type": "CONTAINER",
+      "capacity": 1000,
+      "garbageType":"OIL"
+    },
+    {
+      "id": 2,
+      "type": "TELESCOPE",
+      "visibilityRange":2
+    }
+  ]
+}
