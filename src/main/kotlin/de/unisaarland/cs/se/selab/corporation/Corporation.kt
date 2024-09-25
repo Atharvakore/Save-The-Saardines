@@ -223,7 +223,10 @@ class Corporation(
             .filter { acceptedGarbageType.contains(it.type) && cap.garbageTypes().contains(it.type) }
             .sortedBy { it.id }.toList()
         if (garbage.isNotEmpty()) {
-            // Don't move.
+            // Don't move. Add info about the garbage on this tile to corp knowledge.
+            ship.position.garbage.forEach {
+                partnerGarbage[it.id] = ship.position
+            }
             if (ship.isCapacitySufficient(garbage)) {
                 result = true
             } else {
