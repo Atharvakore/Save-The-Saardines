@@ -386,7 +386,18 @@ class Corporation(
                 }
                 result = true
             } else {
-                result = false
+                // Explore: Navigate to the furthest tile
+                val paths = Dijkstra(ship.position).allPaths()
+                val dest = paths.toList().sortedWith(compareBy({ INFTY - it.second.size }, { it.first.id }))
+                    .first { it.second.size <= ship.speed() + 1 }.first
+                val path = paths[dest] ?: return false
+                if (ship.isFuelSufficient(path.size)) {
+                    ship.move(path)
+                } else {
+                    val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                    ship.moveUninterrupted(closestHarborPath)
+                }
+                result = true
             }
         }
         return result
