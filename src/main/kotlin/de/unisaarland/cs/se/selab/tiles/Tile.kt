@@ -88,7 +88,9 @@ open class Tile(
                 filteredList[0].trackedBy.forEach {
                     it.trackedGarbage.remove(filteredList[0])
                 }
-                filteredList.removeAt(0)
+                val x: Garbage = filteredList.get(0)
+                filteredList.remove(x)
+                this.garbage.remove(x)
             } else {
                 filteredList[0].amount -= toBeRemoved
                 // toBeRemoved = 0

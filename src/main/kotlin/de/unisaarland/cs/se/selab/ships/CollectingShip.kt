@@ -147,7 +147,7 @@ class CollectingShip(
             if (collect != 0) {
                 // GARBAGE IS REMOVED TWICE, ONCE BELOW, AND ANOTHER TIME IN LINE 123
                 // ALSO, IN LINE 123, WE ARE GIVING COLLECTED AND NOT COLLECT AS ARGUMENT WHICH IS WRONG
-                ship.position.removeGarbageOfType(garbageType, collect)
+                ship.position.removeGarbageOfType(garbageType, collected)
                 LoggerCorporationAction.logGarbageCollectionByShip(ship, container.garbageType, garbage.id, collect)
             }
         }
