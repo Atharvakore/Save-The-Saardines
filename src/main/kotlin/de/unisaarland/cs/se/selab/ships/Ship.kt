@@ -28,7 +28,7 @@ open class Ship(
     private var consumedFuel: Int = 0
     var hasTaskAssigned: Boolean = false
     var destinationPath = emptyList<Tile>()
-    private var currentVelocity = 0
+    var currentVelocity = 0
     var refueling = false
     var arrivedToHarborThisTick = false
     open var isInWayToRefuelOrUnload: Boolean = false
@@ -42,6 +42,7 @@ open class Ship(
         if (!arrivedToHarborThisTick) {
             isInWayToRefuelOrUnload = false
             refueling = false
+            currentVelocity = 0
             this.consumedFuel = 0
             LoggerCorporationAction.logRefuelingShip(id, position.id)
         }
@@ -95,11 +96,9 @@ open class Ship(
     fun move(path: List<Tile>) {
         // acceleration
         currentVelocity = minOf(currentVelocity + acceleration, maxVelocity)
+
         // the distance the ship can traverse
         val distanceLength = currentVelocity / SPEED_LENGTH
-        if (distanceLength == 0) {
-            return
-        }
         val desTile: Tile
         if (path.size > distanceLength) {
             desTile = path[distanceLength]
@@ -110,14 +109,11 @@ open class Ship(
             }
         } else {
             desTile = path.last()
-            if (desTile != this.position && distanceLength > 0) {
+            if (desTile != this.position) {
                 consumedFuel += (path.size - 1) * SPEED_LENGTH * fuelConsumption
                 this.movedThisTick = MovementTuple(true, id, currentVelocity, desTile.id)
                 // LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
             }
-        }
-        if (desTile == path.last()) {
-            currentVelocity = 0
         }
         this.position = desTile
     }
@@ -177,14 +173,11 @@ open class Ship(
         move(pathToHarbor)
         if (this.position == pathToHarbor.last()) {
             hasTaskAssigned = false
-            if (isInWayToRefuelOrUnload) {
-                isInWayToRefuelOrUnload = false
-                this.capabilities.filterIsInstance<CollectingShip>().forEach { it.unloading = true }
-            }
-
+            isInWayToRefuelOrUnload = false
             destinationPath = emptyList()
             if (this.owner.ownedHarbors.contains(this.position)) {
                 arrivedToHarborThisTick = true
+                currentVelocity = 0
             }
         } else {
             val startIndex = pathToHarbor.indexOf(this.position)

@@ -139,6 +139,7 @@ object SystemTestRegistration {
         OneTileNoHarbor(),
         // DAY 2:
         HarborNoCorp(),
+        DriftMeBaby(),
     )
 
     /**

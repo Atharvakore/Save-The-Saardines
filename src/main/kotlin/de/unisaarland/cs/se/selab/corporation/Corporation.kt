@@ -174,6 +174,7 @@ class Corporation(
     }
 
     private fun moveScoutingShip(ship: Ship, scoutTarget: MutableSet<Int>): Boolean {
+        var result: Boolean = false
         // 2. Navigate to the closest garbage patch.
         val paths = Dijkstra(ship.position).allPaths()
         val sorted = paths.toList().sortedWith(
@@ -192,7 +193,7 @@ class Corporation(
                     .filter { acceptedGarbageType.contains(it.type) }
                     .any()
             }
-        if (closestGarbagePatch != null) {
+        if (closestGarbagePatch != null && closestGarbagePatch != ship.position) {
             val path = paths[closestGarbagePatch] ?: return false
             if (ship.isFuelSufficient(path.size, ownedHarbors, closestGarbagePatch)) {
                 ship.move(path)
@@ -201,7 +202,8 @@ class Corporation(
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
             }
-        } else {
+            result = true
+        } else if (closestGarbagePatch != ship.position) {
             // Explore: Navigate to the furthest tile
             val dest = paths.toList().sortedWith(compareBy({ INFTY - it.second.size }, { it.first.id }))
                 .first { it.second.size <= ship.speed() + 1 }.first
@@ -212,8 +214,9 @@ class Corporation(
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
             }
+            result = true
         }
-        return true
+        return result
     }
 
     // ships move in the wrong order if they taskAssigned = true
@@ -364,6 +367,7 @@ class Corporation(
                 ship.moveUninterrupted(path.reversed(), true, false)
                 availableShips.remove(ship)
             } else {
+                // WE SHOULD ADD A REFUELING HERE
                 // Task failed, not enough fuel.
                 tasks.remove(task)
             }
@@ -465,6 +469,7 @@ class Corporation(
                 }
                 if (ship.refueling) {
                     ship.refuel()
+                    // ship.currentVelocity = 0
                 } else if (capability != null && capability.unloading) {
                     ship.isInWayToRefuelOrUnload = !capability.unload(ship)
                 }
