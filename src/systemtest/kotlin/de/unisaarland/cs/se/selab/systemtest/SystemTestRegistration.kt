@@ -21,6 +21,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.R
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorporationWhereShip
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.HarborNoCorp
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectEventIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesOfPirateAttack
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectPropertiesTest
@@ -78,6 +79,8 @@ object SystemTestRegistration {
         manager.registerTest(TasksTest())
         manager.registerTest(OneTileNoHarbor())
         manager.registerTest(TasksTest())
+        // DAY 2:
+        manager.registerTest(HarborNoCorp())
     }
 
     /**
