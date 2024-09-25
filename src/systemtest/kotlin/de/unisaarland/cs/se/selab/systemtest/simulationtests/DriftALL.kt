@@ -9,7 +9,7 @@ class DriftALL : ExampleSystemTestExtension() {
     override val scenario = "driftAll/scenario.json"
     override val map = "driftAll/map.json"
     override val name = "DriftALL"
-    override val maxTicks = 3
+    override val maxTicks = 5
     override suspend fun run() {
         assertNextLine("Initialization Info: map.json successfully parsed and validated.")
         assertNextLine("Initialization Info: corporation.json successfully parsed and validated.")
