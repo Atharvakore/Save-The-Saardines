@@ -15,10 +15,10 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OilSpillTest {
     var sea = Sea()
-    private val factory = UTFactory()
 
     @BeforeEach
     fun setUp() {
+        val factory = UTFactory()
         factory.createTestingMap()
         sea = factory.sea
     }

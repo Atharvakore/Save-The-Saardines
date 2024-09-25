@@ -390,7 +390,6 @@ class Corporation(
         return result
     }
     private fun helperMoveCoordinating(ship: Ship, otherShips: List<Ship>): Boolean {
-        val result: Boolean
         // 3. Navigate to the closest ship
         val closestShipPath = Helper().findClosestShip(ship.position, otherShips)
         if (closestShipPath.isNotEmpty()) {
@@ -400,7 +399,6 @@ class Corporation(
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
             }
-            result = true
         } else {
             // Explore: Navigate to the furthest tile
             val paths = Dijkstra(ship.position).allPaths()
@@ -413,7 +411,6 @@ class Corporation(
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
             }
-            result = true
         }
         return true
     }
