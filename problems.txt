@@ -6,3 +6,10 @@
 - Corporation information is not extensive enough, some scouting ships go exploring instead of investigating garbage, because they do not see it.
 - Drifting is completely and irredeemably broken.
 - cooperate task: cooperating with other corp harbor
+------------#OFFICE HOUR NOTES
+- collecting same garbage -probably loop
+- no such element when moving ships
+- account for velocity & acceleration when move ships
+- ship moving on same tick as task
+- moving ships is not behaving correctly
+- conccurent modification in process events (dont cut the line -- AFTER LOGGING)
