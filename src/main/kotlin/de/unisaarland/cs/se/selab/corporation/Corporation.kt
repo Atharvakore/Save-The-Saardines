@@ -165,6 +165,11 @@ class Corporation(
                 .asSequence()
                 .filter { acceptedGarbageType.contains(it.type) }
                 .forEach { garbage -> partnerGarbage[garbage.id] = tile }
+            tile.garbage.forEach {
+                if (partnerGarbage[it.id] != null && partnerGarbage[it.id] != tile) {
+                    partnerGarbage.remove(it.id) // Remove if the garbage is on a different tile...
+                }
+            }
         }
     }
 
