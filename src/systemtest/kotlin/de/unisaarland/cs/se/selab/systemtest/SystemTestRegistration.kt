@@ -39,6 +39,90 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.Unloading
 
 /** The class which will register the tests for Testing on Course Implementation */
 object SystemTestRegistration {
+
+    // Seperated tests because of Detekt
+    private val testsForReferenceImpl = listOf(
+        StormOverMultipleTiles(),
+        DriftGarbageMultipleCurrents(),
+        ExampleSystemTest(),
+        ExampleSystemTest(),
+        MoveNearHome(),
+        ReturnToHomeWater(),
+        SequenceTick25ParsingTest(),
+        SequenceTick25CorporationTest(),
+        SequenceTick25TickTest(),
+        SequenceTick25StatisticsTest(),
+        CollectingGarbageTest(),
+        CollectingOilTest(),
+        CollectingPlasticTest(),
+        CollectingChemicalsTest(),
+        UnloadingChemicalsTest(),
+        UnloadingPlasticTest(),
+        IncorrectPropertiesTest(),
+        ShipAmongUs(),
+        IncorrectPropertiesOfPirateAttack(),
+        IncorrectShipsGarbages(),
+        IncorrectShipsIds(),
+        IncorrectEventIds(),
+        EverythingInOne(),
+        LandNextDeepOcean(),
+        DriftShipsTest(),
+        SimulatePirateAttack(),
+        SimulateStormTest(),
+        DriftGarbageOnLandTest(),
+        // Section for tests to check on reference to test later against mutant:
+        OneIDTwoTasks(),
+        ShoreNoHarbor(),
+        CorporationWhereShip(),
+        CorpNoShips(),
+        OneTileNoHarbor(),
+        TasksTest(),
+        // DAY 2:
+        HarborNoCorp(),
+        DriftALL()
+
+    )
+
+    private val testsForMutants = listOf(
+        StormOverMultipleTiles(),
+        DriftGarbageMultipleCurrents(),
+        ExampleSystemTest(),
+        ExampleSystemTest(),
+        MoveNearHome(),
+        ReturnToHomeWater(),
+        SequenceTick25ParsingTest(),
+        SequenceTick25CorporationTest(),
+        SequenceTick25TickTest(),
+        SequenceTick25StatisticsTest(),
+        CollectingGarbageTest(),
+        CollectingOilTest(),
+        CollectingPlasticTest(),
+        CollectingChemicalsTest(),
+        UnloadingChemicalsTest(),
+        UnloadingPlasticTest(),
+        IncorrectPropertiesTest(),
+        ShipAmongUs(),
+        IncorrectPropertiesOfPirateAttack(),
+        IncorrectShipsGarbages(),
+        IncorrectShipsIds(),
+        IncorrectEventIds(),
+        EverythingInOne(),
+        LandNextDeepOcean(),
+        DriftShipsTest(),
+        SimulatePirateAttack(),
+        SimulateStormTest(),
+        DriftGarbageOnLandTest(),
+        // Section for tests to check on reference to test later against mutant:
+        OneIDTwoTasks(),
+        ShoreNoHarbor(),
+        CorporationWhereShip(),
+        CorpNoShips(),
+        OneTileNoHarbor(),
+        // DAY 2:
+        HarborNoCorp()
+
+    )
+
     /**
      * Register your tests to run against the reference implementation!
      * This can also be used to debug our system test, or to see if we
@@ -46,44 +130,9 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
-        manager.registerTest(StormOverMultipleTiles())
-        manager.registerTest(DriftGarbageMultipleCurrents())
-        manager.registerTest(ExampleSystemTest())
-        manager.registerTest(ExampleSystemTest())
-        manager.registerTest(MoveNearHome())
-        manager.registerTest(ReturnToHomeWater())
-        manager.registerTest(SequenceTick25ParsingTest())
-        manager.registerTest(SequenceTick25CorporationTest())
-        manager.registerTest(SequenceTick25TickTest())
-        manager.registerTest(SequenceTick25StatisticsTest())
-        manager.registerTest(CollectingGarbageTest())
-        manager.registerTest(CollectingOilTest())
-        manager.registerTest(CollectingPlasticTest())
-        manager.registerTest(CollectingChemicalsTest())
-        manager.registerTest(UnloadingChemicalsTest())
-        manager.registerTest(UnloadingPlasticTest())
-        manager.registerTest(IncorrectPropertiesTest())
-        manager.registerTest(ShipAmongUs())
-        manager.registerTest(IncorrectPropertiesOfPirateAttack())
-        manager.registerTest(IncorrectShipsGarbages())
-        manager.registerTest(IncorrectShipsIds())
-        manager.registerTest(IncorrectEventIds())
-        manager.registerTest(EverythingInOne())
-        manager.registerTest(LandNextDeepOcean())
-        manager.registerTest(DriftShipsTest())
-        manager.registerTest(SimulatePirateAttack())
-        manager.registerTest(SimulateStormTest())
-        manager.registerTest(DriftGarbageOnLandTest())
-        // Section for tests to check on reference to test later against mutant:
-        manager.registerTest(OneIDTwoTasks())
-        manager.registerTest(ShoreNoHarbor())
-        manager.registerTest(CorporationWhereShip())
-        manager.registerTest(CorpNoShips())
-        manager.registerTest(OneTileNoHarbor())
-        manager.registerTest(TasksTest())
-        // DAY 2:
-        manager.registerTest(HarborNoCorp())
-        manager.registerTest(DriftALL())
+        testsForReferenceImpl.forEach {
+            manager.registerTest(it)
+        }
     }
 
     /**
@@ -103,33 +152,8 @@ object SystemTestRegistration {
      * from the 'Simulation start' log onwards
      */
     fun registerSystemTestsMutantSimulation(manager: SystemTestManager) {
-        manager.registerTest(ExampleSystemTest())
-        manager.registerTest(MoveNearHome())
-        manager.registerTest(ReturnToHomeWater())
-        manager.registerTest(SequenceTick25CorporationTest())
-        manager.registerTest(SequenceTick25ParsingTest())
-        manager.registerTest(SequenceTick25TickTest())
-        manager.registerTest(SequenceTick25StatisticsTest())
-        manager.registerTest(CollectingGarbageTest())
-        manager.registerTest(CollectingOilTest())
-        manager.registerTest(CollectingPlasticTest())
-        manager.registerTest(CollectingChemicalsTest())
-        manager.registerTest(UnloadingChemicalsTest())
-        manager.registerTest(UnloadingPlasticTest())
-        manager.registerTest(IncorrectPropertiesTest())
-        manager.registerTest(SimulatePirateAttack())
-        manager.registerTest(SimulateStormTest())
-
-        manager.registerTest(IncorrectEventIds())
-        manager.registerTest(IncorrectShipsIds())
-        manager.registerTest(IncorrectShipsGarbages())
-        manager.registerTest(IncorrectPropertiesOfPirateAttack())
-        manager.registerTest(ShipAmongUs())
-        manager.registerTest(IncorrectPropertiesTest())
-        manager.registerTest(LandNextDeepOcean())
-        manager.registerTest(OneIDTwoTasks())
-        manager.registerTest(ShoreNoHarbor())
-        manager.registerTest(CorporationWhereShip())
-        manager.registerTest(CorpNoShips())
+        testsForMutants.forEach {
+            manager.registerTest(it)
+        }
     }
 }
