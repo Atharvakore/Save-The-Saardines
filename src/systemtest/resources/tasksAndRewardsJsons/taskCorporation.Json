@@ -4,24 +4,23 @@
       "id": 1,
       "name": "Ocean Scouters Inc.",
       "ships": [
-        1, 2
+        1, 2, 3, 4, 5
       ],
       "homeHarbors": [
-        14, 52, 59
+        14, 52
       ],
       "garbageTypes": [
         "OIL"
       ]
     },
-
     {
       "id": 2,
-      "name": "Ocean Collectors Inc.",
+      "name": "Ocean Scouters Inc.2",
       "ships": [
-        3, 4, 5
+        6, 7
       ],
       "homeHarbors": [
-        14, 52, 59
+        59
       ],
       "garbageTypes": [
         "OIL"
@@ -56,22 +55,36 @@
     },
     {
       "id": 3,
-      "name": "Explorer2",
-      "type": "SCOUTING",
-      "corporation": 2,
-      "location": 30,
-      "maxVelocity": 100,
-      "acceleration": 25,
-      "fuelCapacity": 10000,
-      "fuelConsumption": 10,
-      "visibilityRange": 5
+      "name": "Collecter3",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 66,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 9,
+      "capacity": 80000,
+      "garbageType": "OIL"
     },
     {
       "id": 4,
-      "name": "Collecter2",
+      "name": "Collecter4",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 66,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 9,
+      "capacity": 80000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 5,
+      "name": "coordinator",
       "type": "COORDINATING",
-      "corporation": 2,
-      "location": 61,
+      "corporation": 1,
+      "location": 66,
       "maxVelocity": 50,
       "acceleration": 10,
       "fuelCapacity": 5000,
@@ -79,15 +92,27 @@
       "visibilityRange": 1
     },
     {
-      "id": 5,
-      "name": "Collecter3",
+      "id": 6,
+      "name": "Explorer6",
+      "type": "SCOUTING",
+      "corporation": 2,
+      "location": 66,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 10000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    },
+    {
+      "id": 7,
+      "name": "Collecter01",
       "type": "COLLECTING",
       "corporation": 2,
-      "location": 61,
+      "location": 66,
       "maxVelocity": 50,
       "acceleration": 10,
       "fuelCapacity": 5000,
-      "fuelConsumption": 7,
+      "fuelConsumption": 9,
       "capacity": 80000,
       "garbageType": "OIL"
     }

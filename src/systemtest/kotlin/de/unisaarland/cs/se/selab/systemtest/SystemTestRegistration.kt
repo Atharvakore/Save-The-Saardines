@@ -36,6 +36,14 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.OneIDTw
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.OneTileNoHarbor
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShipAmongUs
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShoreNoHarbor
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.ContainerRewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.RadioRewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TelescopeRewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TrackerRewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CollectGarbageTaskTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CooperateTaskTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.ExploreMapTaskTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.FindGarbageTaskTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingPlasticTest
 
@@ -82,8 +90,16 @@ object SystemTestRegistration {
         HarborNoCorp(),
         DriftMeBaby(),
         DriftToMe(),
-        MoreMorePlastic()
-
+        MoreMorePlastic(),
+        CollectingMutliplePlasticTest(),
+        ContainerRewardTest(),
+        RadioRewardTest(),
+        TelescopeRewardTest(),
+        TrackerRewardTest(),
+        CollectGarbageTaskTest(),
+        CooperateTaskTest(),
+        ExploreMapTaskTest(),
+        FindGarbageTaskTest()
     )
 
     private val testsForMutants = listOf(
@@ -124,8 +140,6 @@ object SystemTestRegistration {
         // DAY 2:
         HarborNoCorp(),
         DriftMeBaby(),
-        CollectingMutliplePlasticTest()
-
     )
 
     /**
