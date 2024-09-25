@@ -21,6 +21,7 @@ class SimulateStormTest : ExampleSystemTestExtension() {
         }
         assertNextLine("Simulation Info: Tick 0 started.")
         assertNextLine("Corporation Action: Corporation 1 is starting to move its ships.")
+        assertNextLine("Ship Movement: Ship 3 moved with speed 10 to tile 14.")
         assertNextLine("Corporation Action: Corporation 1 is starting to collect garbage.")
         assertNextLine("Corporation Action: Corporation 1 is starting to cooperate with other corporations.")
         assertNextLine("Corporation Action: Corporation 1 is starting to refuel.")
