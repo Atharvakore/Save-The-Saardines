@@ -35,7 +35,7 @@ class StormTest {
             30
         )
         storm.direction = Direction.D180
-        assertTrue(storm.actUponTick(0))
+        assertTrue(storm.actUponTick(0, emptyList()))
         assertTrue(sea.getTileByPos(Vec2D(3, 6))!!.currentOilLevel() == 1000)
     }
 }

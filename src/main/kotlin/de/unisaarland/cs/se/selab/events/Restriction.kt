@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.events
 
+import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -16,7 +17,7 @@ class Restriction(
         return "RESTRICTION"
     }
 
-    override fun actUponTick(currentTick: Int): Boolean {
+    override fun actUponTick(currentTick: Int, corporations: List<Corporation>): Boolean {
         if (currentTick == fireTick) {
             location.pos.tilesInRadius(radius).forEach {
                 val tile = map.getTileByPos(it)

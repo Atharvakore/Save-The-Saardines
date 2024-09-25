@@ -166,7 +166,7 @@ class Simulation(
      */
     private fun processEvents() {
         for (event in allEvents.sortedBy { it.id }) {
-            event.actUponTick(tick)
+            event.actUponTick(tick, corporations)
         }
     }
 

@@ -11,6 +11,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandT
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.StormOverMultipleTiles
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.TasksTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
@@ -44,6 +45,7 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
+        manager.registerTest(StormOverMultipleTiles())
         manager.registerTest(DriftGarbageMultipleCurrents())
         manager.registerTest(ExampleSystemTest())
         manager.registerTest(ExampleSystemTest())

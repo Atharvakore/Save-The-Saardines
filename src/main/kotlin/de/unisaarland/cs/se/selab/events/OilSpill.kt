@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.events
 
+import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.tiles.GarbageType
 import de.unisaarland.cs.se.selab.tiles.MaxGarbageId.createGarbage
@@ -25,7 +26,7 @@ class OilSpill(
         private const val OIL_TILE_MAX = 1000
     }
 
-    override fun actUponTick(currentTick: Int): Boolean {
+    override fun actUponTick(currentTick: Int, corporations: List<Corporation>): Boolean {
         if (currentTick == fireTick) {
             // Each tile can hold 1000 units of oil
             location.pos.tilesInRadius(radius).forEach {
@@ -33,8 +34,12 @@ class OilSpill(
                 val garbageTiles = tile.garbage.filter { garbage -> garbage.type == GarbageType.OIL }
                 val oilGarbageAmount = OIL_TILE_MAX - garbageTiles.sumOf { garbage -> garbage.amount }
                 val newGarbageAmount = min(amount, oilGarbageAmount)
-                tile.garbage = tile.garbage.plus(createGarbage(newGarbageAmount, GarbageType.OIL))
-                // corporations will have knowledge of these new garbage piles
+                val newGarbage = createGarbage(newGarbageAmount, GarbageType.OIL)
+                tile.garbage = tile.garbage.plus(newGarbage)
+
+                corporations.forEach { corporation ->
+                    corporation.partnerGarbage.putIfAbsent(newGarbage.id, tile)
+                }
             }
             LoggerEventsAndTasks.logEventStart(id, this)
             return true
