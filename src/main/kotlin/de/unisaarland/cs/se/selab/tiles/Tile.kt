@@ -77,17 +77,18 @@ open class Tile(
         amount: Int,
     ) {
         var toBeRemoved = amount
-        var filteredList =
+        val filteredList =
             this.garbage
                 .filter { it.type == type }
                 .sortedBy(Garbage::id)
+                .toMutableList()
         while (toBeRemoved > 0 && filteredList.isNotEmpty()) {
             if (toBeRemoved >= filteredList[0].amount) {
                 toBeRemoved -= filteredList[0].amount
                 filteredList[0].trackedBy.forEach {
                     it.trackedGarbage.remove(filteredList[0])
                 }
-                filteredList = filteredList.filterIndexed { index, _ -> index != 0 } // removes element at 0th Index
+                filteredList.removeAt(0)
             } else {
                 filteredList[0].amount -= toBeRemoved
                 // toBeRemoved = 0
