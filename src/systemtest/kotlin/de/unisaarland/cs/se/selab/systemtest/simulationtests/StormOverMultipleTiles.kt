@@ -1,8 +1,6 @@
 package de.unisaarland.cs.se.selab.systemtest.simulationtests
 
-import de.unisaarland.cs.se.selab.systemtest.api.SystemTestAssertionError
 import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
-import de.unisaarland.cs.se.selab.systemtest.utils.Logs
 
 /** Simulates Storm Event over multiple Tiles*/
 class StormOverMultipleTiles : ExampleSystemTestExtension() {
