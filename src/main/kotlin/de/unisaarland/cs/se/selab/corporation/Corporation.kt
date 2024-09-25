@@ -131,7 +131,7 @@ class Corporation(
     }
 
     private fun getActiveTasks(tick: Int): List<Task> {
-        activeTasks = tasks.filter { tick == it.tick + 1 }
+        activeTasks = tasks.filter { tick + 1 == it.tick }
         return activeTasks
     }
 

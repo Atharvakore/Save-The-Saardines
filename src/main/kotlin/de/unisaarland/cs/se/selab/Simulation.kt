@@ -80,13 +80,6 @@ class Simulation(
             .forEach { tile ->
                 garbageDriftHelper(tile, garbageToList)
             }
-        /**
-         * garbageToRemove.forEach { (tile, garbageList) -> {
-         *             garbageList.toList().forEach {
-         *                 garbage -> tile.ga
-         *             }
-         *         }}
-         */
 
         garbageToList.forEach { (tile, garbageList) ->
             garbageList.toList().forEach { garbage ->
