@@ -177,16 +177,16 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                     val intensity = tile.getInt(INTENSITY)
                     currentObject = Current(speed, requireNotNull(Direction.getDirection(direction)), intensity)
                 }
-                DeepOcean(id, coordinates, emptyList(), emptyList(), currentObject)
+                DeepOcean(id, coordinates, emptyList(), mutableListOf(), currentObject)
             }
 
             SHALLOW_OCEAN -> {
-                ShallowOcean(id, coordinates, emptyList(), emptyList())
+                ShallowOcean(id, coordinates, emptyList(), mutableListOf())
             }
 
             SHORE -> {
                 val harbor = tile.getBoolean(HARBOR)
-                Shore(id, coordinates, emptyList(), emptyList(), harbor)
+                Shore(id, coordinates, emptyList(), mutableListOf(), harbor)
             }
 
             LAND -> {
@@ -214,11 +214,11 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                 -1
             }
             val adjacentTile0 = accumulator.getTileByPos(Vec2D(x + 1, y)) // east
-            val adjacentTile60 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y - 1))
-            val adjacentTile120 = accumulator.getTileByPos(Vec2D(x + nextValue, y - 1))
+            val adjacentTile60 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y + 1))
+            val adjacentTile120 = accumulator.getTileByPos(Vec2D(x + nextValue, y + 1))
             val adjacentTile180 = accumulator.getTileByPos(Vec2D(x - 1, y)) // west
-            val adjacentTile240 = accumulator.getTileByPos(Vec2D(x + nextValue, y + 1))
-            val adjacentTile300 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y + 1))
+            val adjacentTile240 = accumulator.getTileByPos(Vec2D(x + nextValue, y - 1))
+            val adjacentTile300 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y - 1))
             val adjacentTiles = mutableListOf(
                 adjacentTile0,
                 adjacentTile60,
@@ -250,11 +250,11 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
                 -1
             }
             val adjacentTile0 = accumulator.getTileByPos(Vec2D(x + 1, y)) // east
-            val adjacentTile60 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y - 1))
-            val adjacentTile120 = accumulator.getTileByPos(Vec2D(x + nextValue, y - 1))
+            val adjacentTile60 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y + 1))
+            val adjacentTile120 = accumulator.getTileByPos(Vec2D(x + nextValue, y + 1))
             val adjacentTile180 = accumulator.getTileByPos(Vec2D(x - 1, y)) // west
-            val adjacentTile240 = accumulator.getTileByPos(Vec2D(x + nextValue, y + 1))
-            val adjacentTile300 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y + 1))
+            val adjacentTile240 = accumulator.getTileByPos(Vec2D(x + nextValue, y - 1))
+            val adjacentTile300 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y - 1))
             val adjacentTiles = listOf(
                 adjacentTile0,
                 adjacentTile60,

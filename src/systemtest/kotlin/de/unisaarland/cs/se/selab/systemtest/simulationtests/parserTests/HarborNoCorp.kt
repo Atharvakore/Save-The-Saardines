@@ -7,7 +7,7 @@ import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
  */
 class HarborNoCorp : ExampleSystemTestExtension() {
     override val description = "harbor not belonging to any corp"
-    override val corporations = "corporationJsons/corporations.json"
+    override val corporations = "corporationJsons/harborNoCorp.json"
     override val scenario = "scenarioJsons/scenario.json"
     override val map = "mapFiles/smallMap1.json"
     override val name = "harbor with no corp"

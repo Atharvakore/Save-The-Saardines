@@ -4,6 +4,12 @@
       "id": 2,
       "type": "PLASTIC",
       "location": 77,
+      "amount": 5000
+    },
+    {
+      "id": 2,
+      "type": "PLASTIC",
+      "location": 77,
       "amount": 4000
     }
   ],

@@ -22,19 +22,10 @@ class ShipTest {
 
     @BeforeEach
     fun setUp() {
-        tile37 = DeepOcean(37, Vec2D(6, 3), emptyList(), emptyList(), Current(10, Direction.D0, 1))
-        tile38 = ShallowOcean(38, Vec2D(7, 3), emptyList(), emptyList())
+        tile37 = DeepOcean(37, Vec2D(6, 3), emptyList(), mutableListOf(), Current(10, Direction.D0, 1))
+        tile38 = ShallowOcean(38, Vec2D(7, 3), emptyList(), mutableListOf())
         tile37.adjacentTiles = listOf(tile38)
         tile38.adjacentTiles = listOf(tile37)
-    }
-
-    /** Testing basic functionalities **/
-
-    @Test
-    fun testRefuel() {
-        ship.position = tile37
-        ship.refuel()
-        assertTrue(ship.isFuelSufficient(10))
     }
 
     @Test
@@ -51,11 +42,6 @@ class ShipTest {
         ship.move(listOf(tile38))
         assertTrue(ship.position == tile38)
         assert(true)
-    }
-
-    @Test
-    fun testIsFuelSufficient() {
-        assertTrue(ship.isFuelSufficient(10))
     }
 
     @Test

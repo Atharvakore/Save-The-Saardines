@@ -3,3 +3,6 @@
 - We need to remove trackers from garbage when it is removed from the simulation.
 - Collecting ship behaviours are not implemented for collecting plastic garbage with more than one ship at once.
 - Off-by-one errors in event/task handling.
+- Corporation information is not extensive enough, some scouting ships go exploring instead of investigating garbage, because they do not see it.
+- Drifting is completely and irredeemably broken.
+- cooperate task: cooperating with other corp harbor

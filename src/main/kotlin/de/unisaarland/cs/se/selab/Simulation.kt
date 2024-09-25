@@ -80,6 +80,14 @@ class Simulation(
             .forEach { tile ->
                 garbageDriftHelper(tile, garbageToList)
             }
+        /**
+         * garbageToRemove.forEach { (tile, garbageList) -> {
+         *             garbageList.toList().forEach {
+         *                 garbage -> tile.ga
+         *             }
+         *         }}
+         */
+
         garbageToList.forEach { (tile, garbageList) ->
             garbageList.toList().forEach { garbage ->
                 if (garbage != null) {
@@ -94,7 +102,10 @@ class Simulation(
         }
     }
 
-    private fun garbageDriftHelper(currentTile: DeepOcean, garbageToList: MutableMap<Tile, MutableList<Garbage?>>) {
+    private fun garbageDriftHelper(
+        currentTile: DeepOcean,
+        garbageToList: MutableMap<Tile, MutableList<Garbage?>>,
+    ) {
         val garbageList = currentTile.garbage
         for (garbage in garbageList.sortedBy { it.id }) {
             val current = currentTile.getCurrent()

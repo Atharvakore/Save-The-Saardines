@@ -73,14 +73,14 @@ class Garbage(
         var newGarbage: Garbage = this
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.CHEMICALS)
-        }
-        // WHY IS THIS IF STATEMENT HERE WITH SAME BLOCKS OF CODE ??
-        if (target is DeepOcean) {
-            currentTile.amountOfGarbageDriftedThisTick += drifted
-            Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
-        } else {
-            currentTile.amountOfGarbageDriftedThisTick += drifted
-            Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
+            // WHY IS THIS IF STATEMENT HERE WITH SAME BLOCKS OF CODE ??
+            if (target is DeepOcean) {
+                currentTile.amountOfGarbageDriftedThisTick += drifted
+                Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
+            } else {
+                currentTile.amountOfGarbageDriftedThisTick += drifted
+                Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
+            }
         }
         return Pair(target, newGarbage)
     }
@@ -96,6 +96,8 @@ class Garbage(
         var newGarbage: Garbage = this
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.OIL)
+        } else {
+            currentTile.garbage.remove(this)
         }
 
         val garbageSum = targetTile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
@@ -106,7 +108,7 @@ class Garbage(
         // THIS COULD BE FURTHER OPTIMIZED, WILL DO IT LATER IF ENOUGH TIME
         if (garbageSum + drifted > MAXOILCAP) {
             val targetsList = getTilesPath(currentTile, localCurrent)
-            val tile = checkOilCap(targetsList, amount)
+            val tile = checkOilCap(targetsList, newGarbage.amount)
             if (tile != null) {
                 target = tile
                 currentTile.amountOfGarbageDriftedThisTick += drifted
@@ -127,7 +129,7 @@ class Garbage(
         for (tile in listOfTiles) {
             if (tile != null) {
                 val garbageSum = tile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
-                if (garbageSum + amount <= MAXOILCAP) {
+                if (garbageSum + amount < MAXOILCAP) {
                     return tile
                 }
             }
@@ -185,7 +187,7 @@ class Garbage(
             else -> {
                 if (targetTile is DeepOcean) {
                     this.amount = 0
-                    currentTile.garbage = currentTile.garbage.filter { it.id == this.id }
+                    currentTile.garbage = currentTile.garbage.filter { it.id == this.id }.toMutableList()
                 } else {
                     targetTile.addGarbage(createGarbage(this.amount, GarbageType.CHEMICALS))
                     this.amount = 0
@@ -199,7 +201,7 @@ class Garbage(
         }
 
         if (this.amount == 0) {
-            currentTile.garbage = currentTile.garbage.filter { it != this }
+            currentTile.garbage.remove(this)
         }
     }
 }

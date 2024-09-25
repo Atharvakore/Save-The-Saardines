@@ -1,12 +1,14 @@
 package de.unisaarland.cs.se.selab.ships
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.corporation.Helper
 import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
+import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 
 /**
@@ -29,6 +31,7 @@ class Ship(
     private var currentVelocity = 0
     var refueling = false
     var arrivedToHarborThisTick = false
+    var isInWayToRefuelOrUnload: Boolean = false
 
     /**
      * Call: when the ship is on the harbor
@@ -36,6 +39,7 @@ class Ship(
      */
     fun refuel() {
         if (!arrivedToHarborThisTick) {
+            isInWayToRefuelOrUnload = false
             refueling = false
             this.consumedFuel = 0
             LoggerCorporationAction.logRefuelingShip(id, position.id)
@@ -121,13 +125,15 @@ class Ship(
      * @param pathLength of path
      * @return if the ship can complete this path
      */
-    fun isFuelSufficient(pathLength: Int): Boolean {
+    fun isFuelSufficient(pathLength: Int, ownedHarbors: List<Shore>, targetTile: Tile): Boolean {
         /**
          * we are we only checking weitheir it has fuel sufficient to go to the target,
          * but are we not checking if it can to target + go to harbor after that ????
          */
 
-        val neededFuel = fuelConsumption * pathLength * SPEED_LENGTH
+        val shortestPathToHarbor: List<Tile> = Helper().findClosestHarbor(targetTile, ownedHarbors)
+        val fullPath = pathLength + shortestPathToHarbor.size
+        val neededFuel = fuelConsumption * fullPath * SPEED_LENGTH
         val result = neededFuel <= fuelCapacity - consumedFuel
         if (!result) {
             this.refueling = true
@@ -149,27 +155,24 @@ class Ship(
      * complete the movement of the ship along the destination path
      * if it has an assigned task
      * */
-    fun tickTask() {
-        moveUninterrupted(destinationPath)
+    fun tickTask(isTask: Boolean, isRefuel: Boolean) {
+        moveUninterrupted(destinationPath, isTask, isRefuel)
     }
 
     /**
      * set destination for the ship
      * and store the path until its completed
      * */
-    fun moveUninterrupted(pathToHarbor: List<Tile>) {
-        /**
-         * THIS DOESN'T MAKE SENSE, first comparison already has the check this.position == pathToHarbor.last(),
-         * the part after move is basically dead code !!!
-         */
-
-        hasTaskAssigned = true
+    fun moveUninterrupted(pathToHarbor: List<Tile>, isTask: Boolean, isRefuel: Boolean) {
+        isInWayToRefuelOrUnload = isRefuel
+        hasTaskAssigned = isTask
         if (pathToHarbor.isEmpty() || this.position == pathToHarbor.last()) {
             return
         }
         move(pathToHarbor)
         if (this.position == pathToHarbor.last()) {
             hasTaskAssigned = false
+            isInWayToRefuelOrUnload = false
             destinationPath = emptyList()
             if (this.owner.ownedHarbors.contains(this.position)) {
                 arrivedToHarborThisTick = true

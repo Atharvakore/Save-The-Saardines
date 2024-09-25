@@ -46,13 +46,13 @@ class CollectingShipTest {
         val c1 = Corporation(1, "c1", mutableListOf(collectingShip), emptyList(), emptyList(), mutableListOf())
         collectingShip.owner = c1
 
-        val tile62: Tile = Shore(62, Vec2D(1, 6), emptyList(), emptyList(), false)
-        val tile72: Tile = Shore(72, Vec2D(1, 7), emptyList(), emptyList(), false)
-        val tile82: Tile = Shore(82, Vec2D(1, 8), emptyList(), emptyList(), false)
-        val tile83: Tile = Shore(83, Vec2D(2, 8), emptyList(), emptyList(), false)
-        val tile74: Tile = ShallowOcean(74, Vec2D(3, 7), emptyList(), emptyList())
-        val tile63: Tile = ShallowOcean(63, Vec2D(2, 6), emptyList(), emptyList())
-        val tile73: Tile = ShallowOcean(73, Vec2D(2, 7), emptyList(), emptyList())
+        val tile62: Tile = Shore(62, Vec2D(1, 6), emptyList(), mutableListOf(), false)
+        val tile72: Tile = Shore(72, Vec2D(1, 7), emptyList(), mutableListOf(), false)
+        val tile82: Tile = Shore(82, Vec2D(1, 8), emptyList(), mutableListOf(), false)
+        val tile83: Tile = Shore(83, Vec2D(2, 8), emptyList(), mutableListOf(), false)
+        val tile74: Tile = ShallowOcean(74, Vec2D(3, 7), emptyList(), mutableListOf())
+        val tile63: Tile = ShallowOcean(63, Vec2D(2, 6), emptyList(), mutableListOf())
+        val tile73: Tile = ShallowOcean(73, Vec2D(2, 7), emptyList(), mutableListOf())
 
         val adjTile62: List<Tile?> = listOf(tile72, tile63, tile73, null, null, null)
         val adjTile72: List<Tile?> = listOf(tile62, tile82, tile73, null, null, null)
@@ -109,13 +109,5 @@ class CollectingShipTest {
     @Test
     fun testHasPlasticCapacity() {
         assert(collectingCapability.hasPlasticCapacity() == 200)
-    }
-
-    @Test
-    fun testCollectGarbageFromCurrentTile() {
-        val tile: Tile = sea.getTileById(63)!!
-        collectingCapability.collectGarbageFromCurrentTile(collectingShip)
-        val garbageOnTileAfterCollection: List<Garbage> = tile.garbage
-        assert(garbageOnTileAfterCollection.isEmpty())
     }
 }

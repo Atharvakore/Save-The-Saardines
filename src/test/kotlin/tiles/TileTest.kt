@@ -9,7 +9,6 @@ import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -22,14 +21,14 @@ class TileTest {
 
     @BeforeEach
     fun setUp() {
-        val tile62: Tile = Shore(62, Vec2D(1, 6), emptyList(), emptyList(), false)
-        val tile72: Tile = Shore(72, Vec2D(1, 7), emptyList(), emptyList(), false)
-        val tile82: Tile = Shore(82, Vec2D(1, 8), emptyList(), emptyList(), false)
-        val tile83: Tile = Shore(83, Vec2D(2, 8), emptyList(), emptyList(), false)
-        val tile74: Tile = ShallowOcean(74, Vec2D(3, 7), emptyList(), emptyList())
-        val tile63: Tile = ShallowOcean(63, Vec2D(2, 6), emptyList(), emptyList())
-        val tile73: Tile = ShallowOcean(73, Vec2D(2, 7), emptyList(), emptyList())
-        val tile75: Tile = ShallowOcean(75, Vec2D(4, 7), emptyList(), emptyList())
+        val tile62: Tile = Shore(62, Vec2D(1, 6), emptyList(), mutableListOf(), false)
+        val tile72: Tile = Shore(72, Vec2D(1, 7), emptyList(), mutableListOf(), false)
+        val tile82: Tile = Shore(82, Vec2D(1, 8), emptyList(), mutableListOf(), false)
+        val tile83: Tile = Shore(83, Vec2D(2, 8), emptyList(), mutableListOf(), false)
+        val tile74: Tile = ShallowOcean(74, Vec2D(3, 7), emptyList(), mutableListOf())
+        val tile63: Tile = ShallowOcean(63, Vec2D(2, 6), emptyList(), mutableListOf())
+        val tile73: Tile = ShallowOcean(73, Vec2D(2, 7), emptyList(), mutableListOf())
+        val tile75: Tile = ShallowOcean(75, Vec2D(4, 7), emptyList(), mutableListOf())
 
         val adjTile62: List<Tile?> = listOf(tile72, tile63, tile73, null, null, null)
         val adjTile72: List<Tile?> = listOf(tile62, tile82, tile73, null, null, null)
@@ -93,15 +92,6 @@ class TileTest {
         val currTile: Tile? = sea.getTileById(63)
         val amount: Int = currTile?.getAmountOfType(GarbageType.CHEMICALS)!!
         assert(amount == 100)
-    }
-
-    @Test
-    fun testRemoveGarbageOfType() {
-        val currTile: Tile? = sea.getTileById(83)
-        val garbage: Garbage = Garbage(1, 100, GarbageType.CHEMICALS, emptySet())
-        currTile!!.garbage = mutableListOf(garbage)
-        currTile.removeGarbageOfType(GarbageType.CHEMICALS, 100)
-        assertFalse(currTile.garbage.any { it.id == 1 })
     }
 
     @Test

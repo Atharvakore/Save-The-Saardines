@@ -29,18 +29,27 @@ class OilSpill(
     override fun actUponTick(currentTick: Int, corporations: List<Corporation>): Boolean {
         if (currentTick == fireTick) {
             // Each tile can hold 1000 units of oil
+            val affectedTiles: MutableList<Tile?> = mutableListOf()
             location.pos.tilesInRadius(radius).forEach {
-                val tile = map.getTileByPos(it) ?: return@forEach
-                val garbageTiles = tile.garbage.filter { garbage -> garbage.type == GarbageType.OIL }
-                val oilGarbageAmount = OIL_TILE_MAX - garbageTiles.sumOf { garbage -> garbage.amount }
-                val newGarbageAmount = min(amount, oilGarbageAmount)
-                val newGarbage = createGarbage(newGarbageAmount, GarbageType.OIL)
-                tile.garbage = tile.garbage.plus(newGarbage)
-
-                corporations.forEach { corporation ->
-                    corporation.partnerGarbage.putIfAbsent(newGarbage.id, tile)
-                }
+                val tile = map.getTileByPos(it)
+                affectedTiles.add(tile)
             }
+
+            affectedTiles
+                .sortedBy { it?.id }
+                .forEach {
+                    val tile = it ?: return@forEach
+                    val garbageTiles = tile.garbage.filter { garbage -> garbage.type == GarbageType.OIL }
+                    val oilGarbageAmount = OIL_TILE_MAX - garbageTiles.sumOf { garbage -> garbage.amount }
+                    val newGarbageAmount = min(amount, oilGarbageAmount)
+                    val newGarbage = createGarbage(newGarbageAmount, GarbageType.OIL)
+                    tile.garbage.add(newGarbage)
+
+                    corporations.forEach { corporation ->
+                        corporation.partnerGarbage.putIfAbsent(newGarbage.id, tile)
+                    }
+                }
+
             LoggerEventsAndTasks.logEventStart(id, this)
             return true
         }
