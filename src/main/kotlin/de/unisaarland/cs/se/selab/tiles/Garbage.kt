@@ -96,6 +96,8 @@ class Garbage(
         var newGarbage: Garbage = this
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.OIL)
+        } else {
+            currentTile.garbage.remove(this)
         }
 
         val garbageSum = targetTile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
@@ -185,7 +187,7 @@ class Garbage(
             else -> {
                 if (targetTile is DeepOcean) {
                     this.amount = 0
-                    currentTile.garbage = currentTile.garbage.filter { it.id == this.id } as MutableList<Garbage>
+                    currentTile.garbage = currentTile.garbage.filter { it.id == this.id }.toMutableList()
                 } else {
                     targetTile.addGarbage(createGarbage(this.amount, GarbageType.CHEMICALS))
                     this.amount = 0
@@ -199,7 +201,7 @@ class Garbage(
         }
 
         if (this.amount == 0) {
-            currentTile.garbage = currentTile.garbage.filter { it != this } as MutableList<Garbage>
+            currentTile.garbage.remove(this)
         }
     }
 }

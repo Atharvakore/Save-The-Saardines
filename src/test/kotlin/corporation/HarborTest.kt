@@ -53,10 +53,10 @@ class HarborTest {
         (collectingShip2.capabilities.first() as CollectingShip).auxiliaryContainers.first().garbageLoad = 100000
 
         val garbage1 = Garbage(1, 200, GarbageType.OIL, emptySet())
-        shipTile1.garbage = listOf(garbage1)
+        shipTile1.garbage = mutableListOf(garbage1)
 
         val garbage2 = Garbage(2, 200, GarbageType.OIL, emptySet())
-        shipTile2.garbage = listOf(garbage2)
+        shipTile2.garbage = mutableListOf(garbage2)
 
         c1.run(0, sea, emptyList<Ship>())
 

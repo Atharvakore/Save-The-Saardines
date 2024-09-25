@@ -46,7 +46,7 @@ class DijkstraTest {
 
         val garbageTile1 = sea.getTileByPos(Vec2D(4, 6))
         val garbage1 = Garbage(1, 200, GarbageType.OIL, emptySet())
-        garbageTile1?.garbage = listOf(garbage1)
+        garbageTile1?.garbage = mutableListOf(garbage1)
 
         // test ships movement after one tick
         c1.run(0, sea, emptyList())
@@ -87,7 +87,7 @@ class DijkstraTest {
 
         val garbageTile1 = sea.getTileByPos(Vec2D(8, 1))
         val garbage1 = Garbage(1, 200, GarbageType.OIL, emptySet())
-        garbageTile1?.garbage = listOf(garbage1)
+        garbageTile1?.garbage = mutableListOf(garbage1)
 
         // test ships movement after one tick
         c1.run(0, sea, emptyList())
@@ -128,7 +128,7 @@ class DijkstraTest {
 
         val garbageTile1 = sea.getTileByPos(Vec2D(7, 7))
         val garbage1 = Garbage(1, 200, GarbageType.OIL, emptySet())
-        garbageTile1?.garbage = listOf(garbage1)
+        garbageTile1?.garbage = mutableListOf(garbage1)
 
         // test ships movement after one tick
         c1.run(0, sea, emptyList())
@@ -169,7 +169,7 @@ class DijkstraTest {
 
         val garbageTile1 = sea.getTileByPos(Vec2D(1, 2))
         val garbage1 = Garbage(1, 200, GarbageType.OIL, emptySet())
-        garbageTile1?.garbage = listOf(garbage1)
+        garbageTile1?.garbage = mutableListOf(garbage1)
 
         // test ships movement after one tick
         c1.run(0, sea, emptyList())
