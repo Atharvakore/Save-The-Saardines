@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.events
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.tiles.Direction
+import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -31,9 +32,22 @@ class Storm(
                 map.getTileByPos(pos)?.let { tiles.add(it) }
             }
             val tilesWithGarbage = tiles.filter { it.garbage.isNotEmpty() }
+            val garbageToAdd: MutableMap<Tile, MutableList<Garbage>> = mutableMapOf()
+            val garbageToRemove: MutableMap<Tile, MutableList<Garbage>> = mutableMapOf()
             for (tile in tilesWithGarbage) {
-                tile.garbage.forEach { gar -> gar.stormDrift(speed, direction, tile, corporations) }
+                tile.garbage.forEach { gar ->
+                    gar.stormDrift(
+                        speed,
+                        direction,
+                        tile,
+                        corporations,
+                        garbageToAdd,
+                        garbageToRemove
+                    )
+                }
             }
+            garbageToAdd.forEach { (tile, garbageList) -> tile.garbage.addAll(garbageList) }
+            garbageToRemove.forEach { (tile, garbageList) -> tile.garbage.removeAll(garbageList) }
             // corporations will update their knowledge about which garbage was drifted but not where
             result = true
         } else {

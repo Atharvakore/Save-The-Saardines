@@ -155,7 +155,14 @@ class Garbage(
     /**
      * Drift function for storm. A drift that sweeps away all the garbage
      * */
-    fun stormDrift(speed: Int, direction: Direction, currentTile: Tile, corporations: List<Corporation>) {
+    fun stormDrift(
+        speed: Int,
+        direction: Direction,
+        currentTile: Tile,
+        corporations: List<Corporation>,
+        garbageToAdd: MutableMap<Tile, MutableList<Garbage>>,
+        garbageToRemove: MutableMap<Tile, MutableList<Garbage>>,
+    ) {
         val targetTile = currentTile.getTileInDirection(speed / TEN, direction) ?: return
         var newGarbage = this
 
@@ -169,18 +176,27 @@ class Garbage(
                     val driftableAmount = MAXOILCAP - totalOilAmount
                     if (this.amount <= driftableAmount) {
                         newGarbage = createGarbage(amount, GarbageType.OIL)
-                        targetTile.addGarbage(newGarbage)
+                        garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(
+                            newGarbage
+                        )
+                        // targetTile.addGarbage(newGarbage)
                         this.amount = 0
                     } else {
                         newGarbage = createGarbage(driftableAmount, GarbageType.OIL)
-                        targetTile.addGarbage(newGarbage)
+                        garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(
+                            newGarbage
+                        )
+                        // targetTile.addGarbage(newGarbage)
                         this.amount -= driftableAmount
                     }
                 }
             }
 
             GarbageType.PLASTIC -> {
-                targetTile.addGarbage(createGarbage(this.amount, GarbageType.PLASTIC))
+                garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(
+                    createGarbage(this.amount, GarbageType.PLASTIC)
+                )
+                // targetTile.addGarbage(createGarbage(this.amount, GarbageType.PLASTIC))
                 this.amount = 0
             }
 
@@ -189,7 +205,10 @@ class Garbage(
                     this.amount = 0
                     currentTile.garbage = currentTile.garbage.filter { it.id == this.id }.toMutableList()
                 } else {
-                    targetTile.addGarbage(createGarbage(this.amount, GarbageType.CHEMICALS))
+                    garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(
+                        createGarbage(this.amount, GarbageType.CHEMICALS)
+                    )
+                    // targetTile.addGarbage(createGarbage(this.amount, GarbageType.CHEMICALS))
                     this.amount = 0
                 }
             }
@@ -201,7 +220,8 @@ class Garbage(
         }
 
         if (this.amount == 0) {
-            currentTile.garbage.remove(this)
+            garbageToRemove.getOrPut(currentTile) { mutableListOf() }.add(this)
+            // currentTile.garbage.remove(this)
         }
     }
 }
