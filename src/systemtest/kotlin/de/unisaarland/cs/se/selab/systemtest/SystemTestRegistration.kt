@@ -99,7 +99,8 @@ object SystemTestRegistration {
         CollectGarbageTaskTest(),
         CooperateTaskTest(),
         ExploreMapTaskTest(),
-        FindGarbageTaskTest()
+        FindGarbageTaskTest(),
+        HardChoice()
     )
 
     private val testsForMutants = listOf(
