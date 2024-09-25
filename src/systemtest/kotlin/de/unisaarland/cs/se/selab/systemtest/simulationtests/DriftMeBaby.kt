@@ -3,12 +3,12 @@ package de.unisaarland.cs.se.selab.systemtest.simulationtests
 import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 
 /**  Drift garbage and ship to multiple tiles*/
-class DriftALL : ExampleSystemTestExtension() {
+class DriftMeBaby : ExampleSystemTestExtension() {
     override val description = "Test drifting of garbage and ships to multiple tiles"
     override val corporations = "driftAll/corporation.json"
     override val scenario = "driftAll/scenario.json"
     override val map = "driftAll/map.json"
-    override val name = "DriftALL"
+    override val name = "Drift Me Baby"
     override val maxTicks = 5
     override suspend fun run() {
         assertNextLine("Initialization Info: map.json successfully parsed and validated.")
