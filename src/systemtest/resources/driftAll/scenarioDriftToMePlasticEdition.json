@@ -1,0 +1,26 @@
+{
+  "garbage": [
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 9,
+      "amount": 200
+    },
+    {
+      "id": 1,
+      "type": "PLASTIC",
+      "location": 9,
+      "amount": 10000
+    },
+    {
+      "id": 3,
+      "type": "CHEMICALS",
+      "location": 1,
+      "amount": 5000
+    }
+  ],
+  "events": [
+  ],
+  "tasks": [],
+  "rewards": []
+}
