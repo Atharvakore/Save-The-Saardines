@@ -5,3 +5,4 @@
 - Off-by-one errors in event/task handling.
 - Corporation information is not extensive enough, some scouting ships go exploring instead of investigating garbage, because they do not see it.
 - Drifting is completely and irredeemably broken.
+- cooperate task: cooperating with other corp harbor

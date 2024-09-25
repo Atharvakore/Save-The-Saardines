@@ -73,14 +73,14 @@ class Garbage(
         var newGarbage: Garbage = this
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.CHEMICALS)
-        }
-        // WHY IS THIS IF STATEMENT HERE WITH SAME BLOCKS OF CODE ??
-        if (target is DeepOcean) {
-            currentTile.amountOfGarbageDriftedThisTick += drifted
-            Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
-        } else {
-            currentTile.amountOfGarbageDriftedThisTick += drifted
-            Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
+            // WHY IS THIS IF STATEMENT HERE WITH SAME BLOCKS OF CODE ??
+            if (target is DeepOcean) {
+                currentTile.amountOfGarbageDriftedThisTick += drifted
+                Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
+            } else {
+                currentTile.amountOfGarbageDriftedThisTick += drifted
+                Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
+            }
         }
         return Pair(target, newGarbage)
     }
@@ -106,7 +106,7 @@ class Garbage(
         // THIS COULD BE FURTHER OPTIMIZED, WILL DO IT LATER IF ENOUGH TIME
         if (garbageSum + drifted > MAXOILCAP) {
             val targetsList = getTilesPath(currentTile, localCurrent)
-            val tile = checkOilCap(targetsList, amount)
+            val tile = checkOilCap(targetsList, newGarbage.amount)
             if (tile != null) {
                 target = tile
                 currentTile.amountOfGarbageDriftedThisTick += drifted
