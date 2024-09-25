@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.events
 
+import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.tiles.Direction
 import de.unisaarland.cs.se.selab.tiles.Sea
@@ -20,7 +21,7 @@ class Storm(
         return "STORM"
     }
 
-    override fun actUponTick(currentTick: Int): Boolean {
+    override fun actUponTick(currentTick: Int, corporations: List<Corporation>): Boolean {
         val result: Boolean
         if (currentTick == fireTick) {
             LoggerEventsAndTasks.logEventStart(id, this)
@@ -31,7 +32,7 @@ class Storm(
             }
             val tilesWithGarbage = tiles.filter { it.garbage.isNotEmpty() }
             for (tile in tilesWithGarbage) {
-                tile.garbage.forEach { gar -> gar.stormDrift(speed, direction, tile) }
+                tile.garbage.forEach { gar -> gar.stormDrift(speed, direction, tile, corporations) }
             }
             // corporations will update their knowledge about which garbage was drifted but not where
             result = true

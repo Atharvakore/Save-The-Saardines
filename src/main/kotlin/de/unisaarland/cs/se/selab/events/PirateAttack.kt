@@ -14,10 +14,9 @@ class PirateAttack(
     override fun toString(): String {
         return "PIRATE_ATTACK"
     }
-    override fun actUponTick(currentTick: Int): Boolean {
+    override fun actUponTick(currentTick: Int, corporations: List<Corporation>): Boolean {
         if (currentTick == fireTick) {
             owningCorporation.ownedShips.remove(ship)
-            // corporation knowledge about the visibility range of this ship should be updated
             LoggerEventsAndTasks.logEventStart(id, this)
             return true
         }
