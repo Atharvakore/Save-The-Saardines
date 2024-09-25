@@ -16,6 +16,5 @@ class AdventureTime : ExampleSystemTestExtension() {
         assertNextLine("Task: Task 1 of type EXPLORE with ship 1 is added with destination 15.")
         skipLines(2)
         assertNextLine("Ship Movement: Ship 1 moved with speed 20 to tile 11.")
-
     }
 }

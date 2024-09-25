@@ -6,10 +6,12 @@ import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceT
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftALL
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageMultipleCurrents
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftMeBaby
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftToMe
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.MoreMorePlastic
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.StormOverMultipleTiles
@@ -78,7 +80,9 @@ object SystemTestRegistration {
         OneTileNoHarbor(),
         // DAY 2:
         HarborNoCorp(),
-        DriftALL()
+        DriftMeBaby(),
+        DriftToMe(),
+        MoreMorePlastic()
 
     )
 
@@ -119,7 +123,7 @@ object SystemTestRegistration {
         OneTileNoHarbor(),
         // DAY 2:
         HarborNoCorp(),
-        DriftALL(),
+        DriftMeBaby(),
         CollectingMutliplePlasticTest()
 
     )
