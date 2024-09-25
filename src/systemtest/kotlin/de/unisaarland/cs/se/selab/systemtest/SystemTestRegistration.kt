@@ -79,7 +79,6 @@ object SystemTestRegistration {
         manager.registerTest(ShoreNoHarbor())
         manager.registerTest(CorporationWhereShip())
         manager.registerTest(CorpNoShips())
-        manager.registerTest(TasksTest())
         manager.registerTest(OneTileNoHarbor())
         manager.registerTest(TasksTest())
         // DAY 2:
