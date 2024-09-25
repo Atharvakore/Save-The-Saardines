@@ -11,10 +11,10 @@ class CollectGarbageTaskTest : ExampleSystemTestExtension() {
     override val scenario = "tasksAndRewardsJsons/taskScenario.Json"
     override val map = "mapFiles/map_medium_01.json"
     override val name = "CollectGarbageTaskTest"
-    override val maxTicks = 1
+    override val maxTicks = 6
 
     override suspend fun run() {
-        skipUntilString("Task: Task 1 of type COLLECT with ship 2 is added with destination 66.")
-        assertNextLine("Reward: Task 2: Ship 1 received reward of type RADIO.")
+        skipUntilString("Event: Event 15 of type RESTRICTION happened.")
+        assertNextLine("Task: Task 1 of type COLLECT with ship 1 is added with destination 66.")
     }
 }

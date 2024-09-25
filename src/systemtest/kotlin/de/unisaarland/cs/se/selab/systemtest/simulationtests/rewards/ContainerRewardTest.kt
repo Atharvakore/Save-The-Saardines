@@ -10,11 +10,11 @@ class ContainerRewardTest : ExampleSystemTestExtension() {
     override val corporations = "tasksAndRewardsJsons/taskCorporation.Json"
     override val scenario = "tasksAndRewardsJsons/taskScenario.Json"
     override val map = "mapFiles/map_medium_01.json"
-    override val name = "CollectGarbageTaskTest"
-    override val maxTicks = 1
+    override val name = "ContainerRewardTest"
+    override val maxTicks = 6
 
     override suspend fun run() {
-        skipUntilString("Task: Task 1 of type COLLECT with ship 2 is added with destination 66.")
-        assertNextLine("Reward: Task 1: Ship 2 received reward of type TELESCOPE.")
+        skipUntilString("Task: Task 2 of type EXPLORE with ship 1 is added with destination 65.")
+        assertNextLine("Reward: Task 1: Ship 1 received reward of type CONTAINER.")
     }
 }

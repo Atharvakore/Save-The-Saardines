@@ -1,21 +1,70 @@
 {
   "garbage": [
     {
-      "id": 10,
+      "id": 20,
       "type": "OIL",
       "location": 66,
       "amount": 800
     }
   ],
-  "events": [],
+  "events": [
+    {
+      "id": 15,
+      "type": "RESTRICTION",
+      "tick": 0,
+      "duration": 1,
+      "location": 36,
+      "radius": 0
+    },
+    {
+      "id": 16,
+      "type": "RESTRICTION",
+      "tick": 1,
+      "duration": 1,
+      "location": 36,
+      "radius": 0
+    },
+    {
+      "id": 17,
+      "type": "RESTRICTION",
+      "tick": 2,
+      "duration": 1,
+      "location": 36,
+      "radius": 0
+    },
+    {
+      "id": 18,
+      "type": "RESTRICTION",
+      "tick": 3,
+      "duration": 1,
+      "location": 36,
+      "radius": 0
+    },
+    {
+      "id": 19,
+      "type": "RESTRICTION",
+      "tick": 4,
+      "duration": 1,
+      "location": 36,
+      "radius": 0
+    },
+    {
+      "id": 20,
+      "type": "RESTRICTION",
+      "tick": 5,
+      "duration": 1,
+      "location": 36,
+      "radius": 0
+    }
+  ],
   "tasks": [
     {
       "id": 1,
       "type": "COLLECT",
       "tick": 0,
-      "shipID": 2,
+      "shipID": 1,
       "targetTile": 66,
-      "rewardID": 1,
+      "rewardID": 5,
       "rewardShipID": 1
     },
     {
@@ -23,47 +72,47 @@
       "type": "EXPLORE",
       "tick": 1,
       "shipID": 1,
-      "targetTile": 63,
-      "rewardID": 2,
+      "targetTile": 65,
+      "rewardID": 6,
       "rewardShipID": 2
     },
     {
       "id": 3,
       "type": "FIND",
       "tick": 2,
-      "shipID": 3,
-      "targetTile": 36,
-      "rewardID": 3,
-      "rewardShipID": 4
+      "shipID": 1,
+      "targetTile": 64,
+      "rewardID": 7,
+      "rewardShipID": 3
     },
     {
       "id": 4,
       "type": "COOPERATE",
       "tick": 3,
-      "shipID": 4,
-      "targetTile": 66,
-      "rewardID": 4,
-      "rewardShipID": 3
+      "shipID": 1,
+      "targetTile": 52,
+      "rewardID": 8,
+      "rewardShipID": 5
     }
   ],
   "rewards": [
     {
-      "id": 1,
+      "id": 5,
       "type": "CONTAINER",
-      "capacity": 40000,
+      "capacity": 20000,
       "garbageType": "OIL"
     },
     {
-      "id": 2,
+      "id": 6,
       "type": "TELESCOPE",
       "visibilityRange": 2
     },
     {
-      "id": 3,
+      "id": 7,
       "type": "TRACKER"
     },
     {
-      "id": 4,
+      "id": 8,
       "type": "RADIO"
     }
   ]
