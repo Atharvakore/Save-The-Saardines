@@ -158,18 +158,25 @@ class Corporation(
         error("Garbage not found")
     }
 
-    private fun moveScoutingShip(capability: ScoutingShip, ship: Ship, scoutTarget: MutableSet<Int>): Boolean {
-        val result: Boolean
-        // 1. Update our knowledge about the garbage in the sea
+    private fun updateScoutFOV(capability: ScoutingShip, ship: Ship) {
         capability.getTilesWithGarbageInFoV(sea, ship.position).forEach { tile ->
             tile.garbage
                 .asSequence()
                 .filter { acceptedGarbageType.contains(it.type) }
                 .forEach { garbage -> partnerGarbage[garbage.id] = tile }
         }
+    }
+
+    private fun moveScoutingShip(ship: Ship, scoutTarget: MutableSet<Int>): Boolean {
+        val result: Boolean
         // 2. Navigate to the closest garbage patch.
         val paths = Dijkstra(ship.position).allPaths()
-        val sorted = paths.toList().sortedWith(compareBy({ it.second.size }, { it.first.id }))
+        val sorted = paths.toList().sortedWith(
+            compareBy(
+                { it.second.size },
+                { it.first.garbage.minOfOrNull { g -> g.id } }
+            )
+        )
         val closestGarbagePatch = sorted
             .map { it.first }
             .intersect(partnerGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) }).toSet())
@@ -265,7 +272,7 @@ class Corporation(
         val result: Boolean
         val capability = ship.capabilities[capabilityIndex]
         result = if (capability is ScoutingShip) {
-            moveScoutingShip(capability, ship, scoutTarget)
+            moveScoutingShip(ship, scoutTarget)
         } else if (capability is CollectingShip) {
             moveCollectingShip(ship, capability, collectorTarget)
         } else if (capability is CoordinatingShip) {
@@ -289,10 +296,7 @@ class Corporation(
         }
     }
 
-    /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
-    private fun moveShips(otherShips: List<Ship>) {
-        val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
-        // -1. Move ships that are inside a restriction out of a restriction
+    private fun moveShipsOutOfRestriction(availableShips: MutableSet<Ship>) {
         availableShips.filter {
             it.position.restrictions > 0
         }.forEach {
@@ -305,6 +309,13 @@ class Corporation(
                 availableShips.remove(it)
             }
         }
+    }
+
+    /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
+    private fun moveShips(otherShips: List<Ship>) {
+        val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
+        // -1. Move ships that are inside a restriction out of a restriction
+        moveShipsOutOfRestriction(availableShips)
         // 1. Process tasks. For each active task, assign the ship from the task to
         // go to the target tile.
         // val activeTasks: List<Task> = getActiveTasks()
@@ -337,8 +348,12 @@ class Corporation(
         val scoutTarget: MutableSet<Int> = mutableSetOf()
         val collectorTarget: MutableMap<Int, Int> = mutableMapOf()
         for (ship in availableShips.sortedBy { it.id }) {
-            val status = tryMove(ship, scoutTarget, collectorTarget, otherShips)
-            if (status) {
+            ship.capabilities.forEach {
+                if (it is ScoutingShip) {
+                    updateScoutFOV(it, ship)
+                }
+            }
+            if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
                 usedShips.add(ship.id)
             }
         }
