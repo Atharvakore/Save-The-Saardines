@@ -16,9 +16,9 @@ class CollectingShip(
     /**
      * unloads all the containers of the ship
      */
-    fun unload(ship: Ship) {
+    fun unload(ship: Ship): Boolean {
         if (ship.arrivedToHarborThisTick || !unloading) {
-            return
+            return false
         }
         val amountOfPlastic: Int = auxiliaryContainers
             .filter { it.garbageType == GarbageType.PLASTIC }
@@ -42,6 +42,7 @@ class CollectingShip(
             container.giveGarbage()
         }
         this.unloading = false
+        return true
     }
 
     /**

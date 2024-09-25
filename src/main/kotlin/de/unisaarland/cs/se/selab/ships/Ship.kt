@@ -39,6 +39,7 @@ class Ship(
      */
     fun refuel() {
         if (!arrivedToHarborThisTick) {
+            isInWayToRefuelOrUnload = false
             refueling = false
             this.consumedFuel = 0
             LoggerCorporationAction.logRefuelingShip(id, position.id)

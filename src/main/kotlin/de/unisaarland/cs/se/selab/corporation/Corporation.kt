@@ -457,7 +457,7 @@ class Corporation(
                 if (ship.refueling) {
                     ship.refuel()
                 } else if (capability != null && capability.unloading) {
-                    capability.unload(ship)
+                    ship.isInWayToRefuelOrUnload = !capability.unload(ship)
                 }
             }
         }

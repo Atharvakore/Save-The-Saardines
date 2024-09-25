@@ -74,12 +74,20 @@ class Simulation(
      */
     private fun driftGarbage() {
         val garbageToList: MutableMap<Tile, MutableList<Garbage?>> = mutableMapOf()
-
+        // val garbageToRemove: MutableMap<Tile, MutableList<Garbage?>> = mutableMapOf()
         sea.tiles
             .filterIsInstance<DeepOcean>().sortedBy { it.id }
             .forEach { tile ->
                 garbageDriftHelper(tile, garbageToList)
             }
+        /**
+         * garbageToRemove.forEach { (tile, garbageList) -> {
+         *             garbageList.toList().forEach {
+         *                 garbage -> tile.ga
+         *             }
+         *         }}
+         */
+
         garbageToList.forEach { (tile, garbageList) ->
             garbageList.toList().forEach { garbage ->
                 if (garbage != null) {
@@ -94,7 +102,11 @@ class Simulation(
         }
     }
 
-    private fun garbageDriftHelper(currentTile: DeepOcean, garbageToList: MutableMap<Tile, MutableList<Garbage?>>) {
+    private fun garbageDriftHelper(
+        currentTile: DeepOcean,
+        garbageToList: MutableMap<Tile, MutableList<Garbage?>>,
+        // garbageToRemove: MutableMap<Tile, MutableList<Garbage?>>
+    ) {
         val garbageList = currentTile.garbage
         for (garbage in garbageList.sortedBy { it.id }) {
             val current = currentTile.getCurrent()
