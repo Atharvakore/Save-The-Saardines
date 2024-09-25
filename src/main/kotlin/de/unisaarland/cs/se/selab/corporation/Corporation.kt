@@ -259,10 +259,11 @@ class Corporation(
         ship: Ship,
         scoutTarget: MutableSet<Int>,
         collectorTarget: MutableMap<Int, Int>,
-        otherShips: List<Ship>
+        otherShips: List<Ship>,
+        capabilityIndex: Int = 0
     ): Boolean {
         val result: Boolean
-        val capability = ship.capabilities.first()
+        val capability = ship.capabilities[capabilityIndex]
         result = if (capability is ScoutingShip) {
             moveScoutingShip(capability, ship, scoutTarget)
         } else if (capability is CollectingShip) {
@@ -271,6 +272,9 @@ class Corporation(
             handleMoveCoordinating(ship, capability, otherShips)
         } else {
             error("Unknown ship capability")
+        }
+        if (!result && capabilityIndex + 1 < ship.capabilities.size) {
+            return tryMove(ship, scoutTarget, collectorTarget, otherShips, capabilityIndex + 1)
         }
         return result
     }
@@ -312,13 +316,6 @@ class Corporation(
                  * THIS IS PROBABLY WRONG, if it has already a task assigned, the new one overwrites it and is not
                  * cancelled
                  */
-
-                tasks.remove(task)
-                /**
-                 * THIS IS PROBABLY WRONG, if it has already a task assigned, the new one overwrites it and is not
-                 * cancelled
-                 */
-
                 tasks.remove(task)
             }
             val targetTile: Tile = task.getGoal()
