@@ -178,7 +178,11 @@ object SystemTestRegistration {
         CoordinatingShipDefaultTest(),
         // CollectAndRefuelTest(),
         GodVision(),
-        MultiTasking()
+        MultiTasking(),
+        ExploringPacific(),
+        AdventureTime(),
+        AvengersAssemble(),
+        OilBillionaire(),
     )
 
     /**
