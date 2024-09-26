@@ -508,14 +508,11 @@ class Corporation(
         val usedShips: MutableList<Int> = mutableListOf()
         val scoutTarget: MutableSet<Int> = mutableSetOf()
         val collectorTarget: MutableMap<Int, Int> = mutableMapOf()
-        for (ship in availableShips.sortedBy { it.id }) {
-            ship.capabilities.forEach {
-                if (it is ScoutingShip) {
-                    updateScoutFOV(it, ship)
-                }
-            }
-        }
-        for (ship in availableShips.sortedBy { it.id }) {
+        val collectingShips = Helper().filterCollectingShip(this)
+
+        val otherShipsTwo = availableShips.filter { !collectingShips.contains(it) }
+
+        for (ship in otherShipsTwo.sortedBy { it.id }) {
             if (tryMove(ship, scoutTarget, collectorTarget, otherShips, garbageAssignment)) {
                 usedShips.add(ship.id)
             }
@@ -525,8 +522,51 @@ class Corporation(
                 }
             }
         }
+
+        knownGarbage.forEach { garbage ->
+
+            val distances = Dijkstra(garbage.value)
+            val shipsByIncDistance = collectingShips.sortedBy { distances.allPaths()[it.position]?.size }
+            for (ship in shipsByIncDistance) {
+                moveCollectingShipNew(
+                    ship,
+                    garbage,
+                    scoutTarget,
+                    collectorTarget,
+                    otherShips,
+                    usedShips,
+                    garbageAssignment
+                )
+            }
+        }
+
         return usedShips
     }
+
+    private fun moveCollectingShipNew(
+        ship: Ship,
+        garbage: Map.Entry<Int, Tile>,
+        scoutTarget: MutableSet<Int>,
+        collectorTarget: MutableMap<Int, Int>,
+        otherShips: List<Ship>,
+        usedShips: MutableList<Int>,
+        garbageAssignment: MutableMap<Garbage, Pair<Int, Boolean>>
+    ) {
+        val collectingCap = ship.capabilities.filterIsInstance<CollectingShip>()
+        collectingCap.forEach { cap ->
+            if (cap.auxiliaryContainers
+                    .any { container ->
+                        container.garbageType == garbage.value.garbage
+                            .find { it.id == garbage.key }!!.type
+                    }
+            ) {
+                if (tryMove(ship, scoutTarget, collectorTarget, otherShips, garbageAssignment)) {
+                    usedShips.add(ship.id)
+                }
+            }
+        }
+    }
+
     private fun handleMoveCoordinating(ship: Ship, capability: CoordinatingShip, otherShips: List<Ship>): Boolean {
         val result: Boolean
         // 1. Get information about which ships are in field of view
