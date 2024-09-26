@@ -3,10 +3,10 @@ package de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants
 import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 
 /**
- * test moving to tile with ship in FoV
+ * test moving to tile from coordinating
  * */
 class CoordinatingTest : ExampleSystemTestExtension() {
-    override val description = "test moving to tile with ship in FoV"
+    override val description = "test moving to tile from coordinating"
     override val corporations = "mutants/CoordinatingCorporation.Json"
     override val scenario = "mutants/CoordinatingScenario.Json"
     override val map = "mapFiles/map_medium_01.json"

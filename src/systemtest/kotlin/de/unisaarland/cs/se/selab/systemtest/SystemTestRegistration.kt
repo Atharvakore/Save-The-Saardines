@@ -117,7 +117,8 @@ object SystemTestRegistration {
         CorporationProfessionalObserverTest(),
         CooperateOnceTest(),
         CoordinatingShipDefaultTest(),
-        CoordinatingTest()
+        CoordinatingTest(),
+        EventSchedulingTest()
     )
 
     private val testsForMutants = listOf(

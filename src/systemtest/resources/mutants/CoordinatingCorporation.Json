@@ -34,7 +34,7 @@
       "type": "COLLECTING",
       "corporation": 1,
       "location": 78,
-      "maxVelocity": 50,
+      "maxVelocity": 66,
       "acceleration": 10,
       "fuelCapacity": 5000,
       "fuelConsumption": 9,

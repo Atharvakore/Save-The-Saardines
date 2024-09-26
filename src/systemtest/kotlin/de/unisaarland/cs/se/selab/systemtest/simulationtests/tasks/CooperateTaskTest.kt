@@ -14,7 +14,7 @@ class CooperateTaskTest : ExampleSystemTestExtension() {
     override val maxTicks = 6
 
     override suspend fun run() {
-        skipUntilString("Event: Event 19 of type RESTRICTION happened.")
+        skipUntilString("Event: Event 18 of type RESTRICTION happened.")
         assertNextLine("Task: Task 4 of type COOPERATE with ship 4 is added with destination 52.")
     }
 }
