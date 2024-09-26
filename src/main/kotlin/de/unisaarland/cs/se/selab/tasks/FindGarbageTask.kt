@@ -25,7 +25,7 @@ class FindGarbageTask(
         if (currentTick == tick) {
             LoggerEventsAndTasks.logTaskStart(id, "FIND", taskShip.id, targetTile.id)
         }
-        if (checkCondition() && currentTick >= tick) {
+        if (checkCondition() && currentTick > tick) {
             LoggerEventsAndTasks.logRewardReceived(id, rewardShip.id, reward)
             reward.applyReward(rewardShip)
             taskShip.owner.tasks.remove(this)
