@@ -468,10 +468,11 @@ class Corporation(
                     updateScoutFOV(it, ship)
                 }
             }
+        }
+        for (ship in availableShips.sortedBy { it.id }) {
             if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
                 usedShips.add(ship.id)
             }
-            // May be wrong or may not.
             ship.capabilities.forEach {
                 if (it is ScoutingShip) {
                     updateScoutFOV(it, ship)
