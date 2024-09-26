@@ -149,7 +149,7 @@ class Corporation(
             .filter { cap.garbageTypes().contains(it.type) }
             .filter {
                 if (target.contains(it.id)) {
-                    return@filter (target[it.id] ?: error("there should be a target")) < it.amount
+                    return@filter (target[it.id] ?: error("ajdfidsvbkhkhfv")) < it.amount
                 } else {
                     return@filter true
                 }
@@ -233,6 +233,59 @@ class Corporation(
         return result
     }
 
+    private fun howMuchMoreDetektCanITake(c: CollectingShip, h: Triple<Int, Int, Int>): Triple<Int, Int, Int> {
+        var t = h
+        for (container in c.auxiliaryContainers) {
+            t = when (container.garbageType) {
+                GarbageType.PLASTIC -> {
+                    Triple(t.first + container.getGarbageCapacity(), t.second, t.third)
+                }
+
+                GarbageType.OIL -> {
+                    Triple(t.first, t.second + container.getGarbageCapacity(), t.third)
+                }
+
+                GarbageType.CHEMICALS -> {
+                    Triple(t.first, t.second, t.third + container.getGarbageCapacity())
+                }
+            }
+        }
+        return t
+    }
+
+    private fun howMuchCanItTake(ship: Ship): Triple<Int, Int, Int> {
+        var tup = Triple(0, 0, 0)
+        for (capability in ship.capabilities) {
+            if (capability is CollectingShip) {
+                tup = howMuchMoreDetektCanITake(capability, tup)
+            }
+        }
+        return tup
+    }
+
+    private fun doStuff(ship: Ship, closestGarbagePatch: Tile, collectorTarget: MutableMap<Int, Int>) {
+        // Put all the garbage that this ship will be able to collect once on the tile closestGarbagePatch
+        // into the collectorTarget map.
+        var (plastic, oil, chemicals) = howMuchCanItTake(ship)
+        // For each garbage on the tile:
+        for (g in closestGarbagePatch.garbage) {
+            when (g.type) {
+                GarbageType.PLASTIC -> {
+                    collectorTarget[g.id] = minOf(g.amount, plastic)
+                    plastic -= collectorTarget[g.id] ?: error("egSvd")
+                }
+                GarbageType.OIL -> {
+                    collectorTarget[g.id] = minOf(g.amount, oil)
+                    oil -= collectorTarget[g.id] ?: error("ueslngrv")
+                }
+                GarbageType.CHEMICALS -> {
+                    collectorTarget[g.id] = minOf(g.amount, chemicals)
+                    chemicals -= collectorTarget[g.id] ?: error("grvhjdshj")
+                }
+            }
+        }
+    }
+
     // ships move in the wrong order if they taskAssigned = true
     private fun moveCollectingShip(ship: Ship, cap: CollectingShip, collectorTarget: MutableMap<Int, Int>): Boolean {
         val result: Boolean
@@ -276,6 +329,7 @@ class Corporation(
                     ship.isCapacitySufficient(closestGarbagePatch.garbage)
                 ) {
                     ship.move(path, true)
+                    doStuff(ship, closestGarbagePatch, collectorTarget)
                 } else {
                     val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                     ship.moveUninterrupted(closestHarborPath, false, true)

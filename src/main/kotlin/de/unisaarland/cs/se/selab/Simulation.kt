@@ -35,6 +35,7 @@ class Simulation(
             tick++
         }
         Logger.logSimulationEnded()
+        LoggerStatistics.garbageOnMap = sea.calculateGarbageOnMap()
         LoggerStatistics.logSimulationStatistics(corporations)
     }
 

@@ -25,8 +25,7 @@ object LoggerStatistics {
         totalPlastic(Logger.totalPlasticCollected)
         totalOil(Logger.totalOilCollected)
         totalChemicals(Logger.totalChemicalsCollected)
-        val amountCollected = Logger.totalOilCollected + Logger.totalChemicalsCollected + Logger.totalPlasticCollected
-        totalGarbageInOcean(garbageOnMap - amountCollected)
+        totalGarbageInOcean(garbageOnMap)
     }
 
     /** Statistics for corporation */
