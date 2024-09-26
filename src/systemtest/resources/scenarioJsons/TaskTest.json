@@ -2,34 +2,18 @@
   "garbage": [
     {
       "id": 2,
-      "type": "PLASTIC",
+      "type": "CHEMICALS",
       "location": 77,
       "amount": 5000
     },
     {
       "id": 3,
-      "type": "PLASTIC",
+      "type": "CHEMICALS",
       "location": 77,
       "amount": 7000
     }
   ],
   "events": [],
-  "tasks": [
-    {
-      "id": 5,
-      "type": "EXPLORE",
-      "tick": 1,
-      "shipID": 2,
-      "targetTile": 78,
-      "rewardID": 6,
-      "rewardShipID": 3
-    }
-  ],
-  "rewards": [
-    {
-      "id": 6,
-      "type": "TELESCOPE",
-      "visibilityRange": 2
-    }
-  ]
+  "tasks": [],
+  "rewards": []
 }

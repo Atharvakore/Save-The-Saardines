@@ -140,6 +140,12 @@ class CollectingShip(
                 LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.CHEMICALS, chem.id, collected)
             }
         }
+
+        auxiliaryContainers.forEach {
+            if (it.garbageLoad == it.getGarbageCapacity()) {
+                unloading = true
+            }
+        }
     }
 
     private fun collectPlasticGarbage(
