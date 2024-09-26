@@ -29,6 +29,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpNoMove1
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpNoMove2Test
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpVisibilityRangeTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorporationProfessionalObserverTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.ExploringPacific
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorporationWhereShip
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
@@ -126,7 +127,8 @@ object SystemTestRegistration {
         AvengersAssemble(),
         OilBillionaire(),
         DriftToMe(),
-        MultiTasking()
+        MultiTasking(),
+        ExploringPacific()
     )
 
     private val testsForMutants = listOf(
