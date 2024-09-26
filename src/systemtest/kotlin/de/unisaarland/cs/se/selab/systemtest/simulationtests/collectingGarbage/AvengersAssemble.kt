@@ -32,6 +32,5 @@ class AvengersAssemble : ExampleSystemTestExtension() {
         assertNextLine("Ship Movement: Ship 2 moved with speed 25 to tile 1.")
         assertNextLine("Ship Movement: Ship 3 moved with speed 10 to tile 7.")
         assertNextLine("Ship Movement: Ship 4 moved with speed 10 to tile 7.")
-
     }
 }

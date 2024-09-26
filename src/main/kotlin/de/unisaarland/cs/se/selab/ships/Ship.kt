@@ -34,6 +34,7 @@ open class Ship(
     open var isInWayToRefuelOrUnload: Boolean = false
     var movedThisTick: MovementTuple = MovementTuple(false, -1, -1, -1)
     var unloading = false
+
     /**
      * Call: when the ship is on the harbor
      * Logic: the ship has to max its fuelCapacity

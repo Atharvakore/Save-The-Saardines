@@ -1,5 +1,4 @@
 package de.unisaarland.cs.se.selab.systemtest
-
 import de.unisaarland.cs.se.selab.systemtest.basictests.ExampleSystemTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25CorporationTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25ParsingTest
@@ -29,7 +28,6 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpVisibil
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorporationProfessionalObserverTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorporationWhereShip
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.TasksTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.HarborNoCorp
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectEventIds
@@ -177,11 +175,9 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
-      //  testsForReferenceImpl.forEach {
-       //     manager.registerTest(it)
-       // }
-          manager.registerTest(TasksTest())
-        // manager.registerTest(CollectAndRefuelTest())
+        testsForReferenceImpl.forEach {
+            manager.registerTest(it)
+        }
     }
 
     /**
