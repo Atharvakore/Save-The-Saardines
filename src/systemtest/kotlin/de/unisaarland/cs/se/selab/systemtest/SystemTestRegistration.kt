@@ -173,7 +173,8 @@ object SystemTestRegistration {
         CooperateOnceTest(),
         CoordinatingShipDefaultTest(),
         CollectAndRefuelTest(),
-        GodVision()
+        GodVision(),
+        MultiTasking()
     )
 
     /**
