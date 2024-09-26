@@ -1,4 +1,4 @@
-package de.unisaarland.cs.se.selab.systemtest.simulationtests
+package de.unisaarland.cs.se.selab.systemtest.simulationtests.drifting
 
 import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 /** */
@@ -14,7 +14,7 @@ class DriftToMe : ExampleSystemTestExtension() {
         assertNextLine("Initialization Info: corporationDriftToMe.json successfully parsed and validated.")
         assertNextLine("Initialization Info: scenarioDriftToMe.json successfully parsed and validated.")
         assertNextLine("Simulation Info: Simulation started.")
-        skipUntilString("Garbage Collection: Ship 1 collected 150 of garbage OIL with 3.")
+        skipUntilString("Garbage Collection: Ship 1 collected 150 of garbage OIL with 4.")
         skipUntilString("Current Drift: OIL 1 with amount 50 drifted from tile 9 to tile 1.")
         skipLines(4)
         assertNextLine("Garbage Collection: Ship 1 collected 50 of garbage OIL with 1.")

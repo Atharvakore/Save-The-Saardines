@@ -124,13 +124,15 @@ class Corporation(
         // Should we insert knownGarbage into partnerGarbage and then clear knownGarbage
         // to reset the knowledge? I think that this would solve some things.
         // The code to do that would go here, but I am not sure if this is spec behaviour
+        partnerGarbage.putAll(knownGarbage)
+        knownGarbage.clear()
         this.sea = sea
         getActiveTasks(tick)
         logger.logCorporationStartMoveShips(id)
         moveShips(otherShips)
         tryAttachTrackers()
         logger.logCorporationStartCollectGarbage(id)
-        collectGarbage(otherShips)
+        collectGarbage(otherShips.union(ownedShips).toList())
         logger.logCorporationCooperationStart(id)
         cooperate(otherShips)
         logger.logCorporationRefueling(id)
@@ -303,6 +305,7 @@ class Corporation(
             if (ship.isCapacitySufficient(garbage)) {
                 result = true
                 ship.currentVelocity = 0
+                doStuff(ship, ship.position, collectorTarget)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
@@ -437,6 +440,9 @@ class Corporation(
             if (ship.isFuelSufficient(path.size, this.ownedHarbors, targetTile)) {
                 ship.moveUninterrupted(path.reversed(), true, false)
                 availableShips.remove(ship)
+            } else if (ship.hasCollectingCapability() && ship.needsToUnload()) {
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath, false, true)
             } else {
                 // WE SHOULD ADD A REFUELING HERE
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
@@ -516,12 +522,13 @@ class Corporation(
      * Filters the ships to get only the ships that have the CollectingShip capability, then collects garbage from the
      * current tile of each ship
      */
-    private fun collectGarbage(otherShips: List<Ship>) {
+    private fun collectGarbage(allShips: List<Ship>) {
         val collectingShips: List<Ship> = Helper().filterCollectingCapabilities(this).sortedBy { it.id }
         for (ship in collectingShips) {
             val capability = ship.capabilities.filterIsInstance<CollectingShip>()
             for (cap in capability) {
-                cap.collectGarbageFromCurrentTile(ship, otherShips, ownedShips)
+                val x = allShips.filter { it.position == ship.position && it.id != ship.id }
+                cap.collectGarbageFromCurrentTile(ship, x)
             }
         }
     }

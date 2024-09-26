@@ -33,6 +33,7 @@ open class Ship(
     var arrivedToHarborThisTick = false
     open var isInWayToRefuelOrUnload: Boolean = false
     var movedThisTick: MovementTuple = MovementTuple(false, -1, -1, -1)
+    var unloading = false
 
     /**
      * Call: when the ship is on the harbor
@@ -128,11 +129,6 @@ open class Ship(
      * @return if the ship can complete this path
      */
     fun isFuelSufficient(pathLength: Int, ownedHarbors: List<Shore>, targetTile: Tile): Boolean {
-        /**
-         * we are we only checking weitheir it has fuel sufficient to go to the target,
-         * but are we not checking if it can to target + go to harbor after that ????
-         */
-
         val shortestPathToHarbor: List<Tile> = Helper().findClosestHarbor(targetTile, ownedHarbors)
         val fullPath = pathLength + shortestPathToHarbor.size
         val neededFuel = fuelConsumption * fullPath * SPEED_LENGTH
@@ -178,6 +174,8 @@ open class Ship(
             destinationPath = emptyList()
             if (this.owner.ownedHarbors.contains(this.position)) {
                 arrivedToHarborThisTick = true
+                this.refueling = isRefuel
+                this.unloading = isRefuel
                 currentVelocity = 0
             }
         } else {
@@ -188,54 +186,72 @@ open class Ship(
     }
 
     /**
-     * Checks its default garbage type and returns true if it can collect depending on the type
-     * if plastic then true if it can collect whole amount
-     * if oil then true if it can collect some of the amount
+     * Checks its garbage types and returns true if it can collect depending on the type
      * */
     fun isCapacitySufficient(garbage: List<Garbage>): Boolean {
-        // this code is completely fucked, why does it consider only the first capability?
-        // it throws a classcast if collecting ship is a secondary capability.
-        val result: Boolean
-        val capability = this.capabilities.first() as CollectingShip
+        var result = false
+        val capabilities = this.capabilities.filterIsInstance<CollectingShip>()
 
-        val oil = garbage.filter { it.type == GarbageType.OIL }
-        val plastic = garbage.filter { it.type == GarbageType.PLASTIC }
-        val chemicals = garbage.filter { it.type == GarbageType.CHEMICALS }
-        val defaultType = capability.auxiliaryContainers.first().garbageType
-
-        if (defaultType == GarbageType.OIL && oil.isNotEmpty()) {
-            result = capability.hasOilCapacity()
-        } else if (defaultType == GarbageType.PLASTIC && plastic.isNotEmpty()) {
-            result = true
-        } else if (defaultType == GarbageType.CHEMICALS && chemicals.isNotEmpty()) {
-            result = capability.hasChemicalsCapacity()
-        } else {
-            val listOfTypes = capability.garbageTypes()
-            val garbageList = garbage.filter { listOfTypes.contains(it.type) }
-            if (garbageList.isNotEmpty()) {
-                result = handleSecondaryContainers(garbageList, capability)
-            } else {
-                result = false
-            }
+        if (capabilities.isEmpty() || checkContainerFull()) {
+            return false
         }
-        if (!result) {
-            capability.unloading = true
+
+        val oilContainers: MutableList<Container> = mutableListOf()
+        val plasticContainers: MutableList<Container> = mutableListOf()
+        val chemicalsContainers: MutableList<Container> = mutableListOf()
+
+        capabilities.forEach { cap ->
+            oilContainers.addAll(cap.auxiliaryContainers.filter { it.garbageType == GarbageType.OIL })
+            plasticContainers.addAll(cap.auxiliaryContainers.filter { it.garbageType == GarbageType.PLASTIC })
+            chemicalsContainers.addAll(cap.auxiliaryContainers.filter { it.garbageType == GarbageType.CHEMICALS })
+        }
+
+        val collectableOil = oilContainers.sumOf { it.getGarbageCapacity() - it.garbageLoad }
+        val collectablePlastic = plasticContainers.sumOf { it.getGarbageCapacity() - it.garbageLoad }
+        val collectableChemicals = chemicalsContainers.sumOf { it.getGarbageCapacity() - it.garbageLoad }
+
+        for (g in garbage) {
+            if (g.type == GarbageType.OIL && collectableOil > 0 && g.amount > 0) {
+                result = true
+            } else if (g.type == GarbageType.PLASTIC && collectablePlastic > 0 && g.amount > 0) {
+                result = true
+            } else if (g.type == GarbageType.CHEMICALS && collectableChemicals > 0 && g.amount > 0) {
+                result = true
+            }
         }
         return result
     }
 
-    private fun handleSecondaryContainers(garbage: List<Garbage>, capability: CollectingShip): Boolean {
-        val result: Boolean
-        val oilGarbage = garbage.filter { it.type == GarbageType.OIL }
-        val plasticGarbage = garbage.filter { it.type == GarbageType.PLASTIC }
-        val chemicalsGarbage = garbage.filter { it.type == GarbageType.CHEMICALS }
-        result = if (oilGarbage.isNotEmpty()) {
-            capability.hasOilCapacity()
-        } else if (chemicalsGarbage.isNotEmpty()) {
-            capability.hasChemicalsCapacity()
-        } else {
-            capability.hasPlasticCapacity() >= plasticGarbage.sumOf { it.amount }
+    /**
+     * returns true if any container in the ship is full
+     * */
+    private fun checkContainerFull(): Boolean {
+        val collectingShip = capabilities.filterIsInstance<CollectingShip>()
+
+        for (cap in collectingShip) {
+            val containers = cap.auxiliaryContainers
+            for (container in containers) {
+                if (container.garbageLoad == container.getGarbageCapacity()) {
+                    return true
+                }
+            }
         }
-        return result
+
+        return false
+    }
+
+    /**
+     * returns if the ship can collect
+     */
+    fun hasCollectingCapability(): Boolean {
+        return capabilities.filterIsInstance<CollectingShip>().isNotEmpty()
+    }
+
+    /**
+     * returns weither the ship needs to unload garbage
+     */
+    fun needsToUnload(): Boolean {
+        return capabilities.filterIsInstance<CollectingShip>().map { it.auxiliaryContainers }.flatten()
+            .any { it.garbageLoad == it.getGarbageCapacity() }
     }
 }

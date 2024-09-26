@@ -1,4 +1,4 @@
-package de.unisaarland.cs.se.selab.systemtest.simulationtests
+package de.unisaarland.cs.se.selab.systemtest.simulationtests.drifting
 
 import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 /** */

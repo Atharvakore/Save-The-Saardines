@@ -21,7 +21,9 @@ class Restriction(
         if (currentTick == fireTick) {
             location.pos.tilesInRadius(radius).forEach {
                 val tile = map.getTileByPos(it)
-                tile?.restrictions = tile?.restrictions?.plus(1) ?: error("No Tile")
+                if (tile != null) {
+                    tile.restrictions += 1
+                }
             }
             LoggerEventsAndTasks.logEventStart(id, this)
             return true
