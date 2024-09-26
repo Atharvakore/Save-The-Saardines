@@ -130,7 +130,7 @@ class Corporation(
         moveShips(otherShips)
         tryAttachTrackers()
         logger.logCorporationStartCollectGarbage(id)
-        collectGarbage(otherShips)
+        collectGarbage(otherShips.union(ownedShips).toList())
         logger.logCorporationCooperationStart(id)
         cooperate(otherShips)
         logger.logCorporationRefueling(id)
@@ -516,12 +516,13 @@ class Corporation(
      * Filters the ships to get only the ships that have the CollectingShip capability, then collects garbage from the
      * current tile of each ship
      */
-    private fun collectGarbage(otherShips: List<Ship>) {
+    private fun collectGarbage(allShips: List<Ship>) {
         val collectingShips: List<Ship> = Helper().filterCollectingCapabilities(this).sortedBy { it.id }
         for (ship in collectingShips) {
             val capability = ship.capabilities.filterIsInstance<CollectingShip>()
             for (cap in capability) {
-                cap.collectGarbageFromCurrentTile(ship, otherShips, ownedShips)
+                val x = allShips.filter { it.position == ship.position && it.id != ship.id }
+                cap.collectGarbageFromCurrentTile(ship, x)
             }
         }
     }

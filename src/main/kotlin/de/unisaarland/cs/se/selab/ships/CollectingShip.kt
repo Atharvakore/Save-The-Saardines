@@ -101,14 +101,14 @@ class CollectingShip(
      * Call: when the corporation is calling on its ships to collect the garbage
      * Logic: checks the garbage of its tile, collects it if it can
      */
-    fun collectGarbageFromCurrentTile(ship: Ship, otherShips: List<Ship>, corpShips: List<Ship>) {
+    fun collectGarbageFromCurrentTile(ship: Ship, shipsOnTheTile: List<Ship>) {
         val currentTile: Tile = ship.position
         val plasticGarbage = currentTile.garbage.filter { it.type == GarbageType.PLASTIC }.sortedBy { it.id }
         val oilGarbage = currentTile.garbage.filter { it.type == GarbageType.OIL }.sortedBy { it.id }
         val chemicalsGarbage = currentTile.garbage.filter { it.type == GarbageType.CHEMICALS }.sortedBy { it.id }
 
         if (garbageTypes().contains(GarbageType.PLASTIC) && plasticGarbage.isNotEmpty()) {
-            collectPlasticGarbage(ship, plasticGarbage, otherShips, corpShips)
+            collectPlasticGarbage(ship, plasticGarbage, shipsOnTheTile)
         }
 
         for (oil in oilGarbage) {
@@ -145,21 +145,13 @@ class CollectingShip(
     private fun collectPlasticGarbage(
         ship: Ship,
         plastic: List<Garbage>,
-        otherShips: List<Ship>,
-        corpShips: List<Ship>
+        shipsOnTheTile: List<Ship>
     ) {
         val sumOfPlastic = plastic.sumOf { it.amount }
         val capability: MutableList<CollectingShip> = mutableListOf()
 
-        otherShips.forEach { other ->
+        shipsOnTheTile.forEach { other ->
             val cap = other.capabilities.filterIsInstance<CollectingShip>()
-            if (cap.isNotEmpty()) {
-                capability.addAll(cap)
-            }
-        }
-
-        corpShips.forEach { corp ->
-            val cap = corp.capabilities.filterIsInstance<CollectingShip>()
             if (cap.isNotEmpty()) {
                 capability.addAll(cap)
             }
