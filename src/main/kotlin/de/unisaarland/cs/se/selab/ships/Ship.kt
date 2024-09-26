@@ -128,11 +128,6 @@ open class Ship(
      * @return if the ship can complete this path
      */
     fun isFuelSufficient(pathLength: Int, ownedHarbors: List<Shore>, targetTile: Tile): Boolean {
-        /**
-         * we are we only checking weitheir it has fuel sufficient to go to the target,
-         * but are we not checking if it can to target + go to harbor after that ????
-         */
-
         val shortestPathToHarbor: List<Tile> = Helper().findClosestHarbor(targetTile, ownedHarbors)
         val fullPath = pathLength + shortestPathToHarbor.size
         val neededFuel = fuelConsumption * fullPath * SPEED_LENGTH
