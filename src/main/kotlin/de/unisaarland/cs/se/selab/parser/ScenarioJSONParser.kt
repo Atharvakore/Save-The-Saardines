@@ -108,7 +108,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
                     val restriction: Event =
                         Restriction(id, tick, accumulator.map, requireNotNull(tile), radius)
                     val endRestriction: Event =
-                        EndRestriction(dummyId, tick + eventDuration, accumulator.map, tile, eventDuration)
+                        EndRestriction(dummyId, tick + eventDuration, accumulator.map, tile, radius)
                     accumulator.addEvent(id, restriction)
                     accumulator.addEvent(dummyId--, endRestriction)
                 } else {
