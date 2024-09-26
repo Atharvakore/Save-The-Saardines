@@ -35,8 +35,10 @@ class Corporation(
 
     val trackedGarbage: MutableList<Garbage> = mutableListOf()
     // Garbage that we know of.
+
     val partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
     // Garbage that we see explicitly.
+
     val knownGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
     val logger: LoggerCorporationAction = LoggerCorporationAction

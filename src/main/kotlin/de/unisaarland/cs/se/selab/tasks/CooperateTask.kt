@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.tasks
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.ships.Ship
+import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Tile
 /** Class for Cooperating Task*/
 /** Task regarding cooperation between companies. */
@@ -22,13 +23,17 @@ class CooperateTask(
         return "COOPERATE"
     }
 
+    private fun putGarbage(x: List<Garbage>, it: Tile) {
+        x.forEach { garbage ->
+            otherCorp.forEach { other -> other.partnerGarbage[garbage.id] = it }
+        }
+    }
     override fun checkCondition(): Boolean {
         if (taskShip.position.pos == destinationHomeHarbor.pos && taskShipArrived == null) {
             val myCorpTiles = myCorp.ownedShips.map { it.position }.filter { it.garbage.isNotEmpty() }
             myCorpTiles.forEach {
-                otherCorp.forEach { other ->
-                    other.partnerGarbage[it.id] = it
-                }
+                val x = it.garbage
+                putGarbage(x, it)
             }
             taskShip.isInWayToRefuelOrUnload = true
             taskShipArrived = -1
