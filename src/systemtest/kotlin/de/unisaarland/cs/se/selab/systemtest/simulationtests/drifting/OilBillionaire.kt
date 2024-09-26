@@ -15,12 +15,12 @@ class OilBillionaire : ExampleSystemTestExtension() {
     override suspend fun run() {
         skipUntilString("Corporation Action: Corporation 1 is starting to refuel.")
         skipLines(1)
-        assertNextLine("Current Drift: OIL 6 with amount 300 drifted from tile 9 to tile 9.")
+        assertNextLine("Current Drift: OIL 8 with amount 300 drifted from tile 9 to tile 9.")
         skipUntilString("Corporation Action: Corporation 1 finished its actions.")
-        assertNextLine("Current Drift: OIL 7 with amount 300 drifted from tile 9 to tile 9.")
+        assertNextLine("Current Drift: OIL 9 with amount 300 drifted from tile 9 to tile 9.")
 
         skipUntilString("Corporation Action: Corporation 1 finished its actions.")
         assertNextLine("Current Drift: OIL 1 with amount 200 drifted from tile 9 to tile 1.")
-        assertNextLine("Current Drift: PLASTIC 8 with amount 100 drifted from tile 9 to tile 1.")
+        assertNextLine("Current Drift: PLASTIC 10 with amount 100 drifted from tile 9 to tile 1.")
     }
 }
