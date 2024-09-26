@@ -210,7 +210,7 @@ class Corporation(
                 scoutTarget.add(closestGarbagePatch.id)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                ship.moveUninterrupted(closestHarborPath, false, true)
+                ship.moveUninterrupted(closestHarborPath, false, true, false)
             }
             result = true
         } else if (closestGarbagePatch != ship.position) {
@@ -222,7 +222,7 @@ class Corporation(
                 ship.move(path, false)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                ship.moveUninterrupted(closestHarborPath, false, true)
+                ship.moveUninterrupted(closestHarborPath, false, true, false)
             }
             result = true
         }
@@ -302,7 +302,7 @@ class Corporation(
                 doStuff(ship, ship.position, collectorTarget)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                ship.moveUninterrupted(closestHarborPath, false, true)
+                ship.moveUninterrupted(closestHarborPath, false, false, true)
                 result = true
             }
         } else {
@@ -320,21 +320,23 @@ class Corporation(
             // attainableGarbage is a set of tiles that have garbage that the ship can collect
             // and requires extra ships to be dispatched. Just take the first one:
             val closestGarbagePatch = attainableGarbage.firstOrNull()
-            if (closestGarbagePatch != null) {
-                val path = paths[closestGarbagePatch] ?: return false
-                if (ship.isFuelSufficient(path.size, ownedHarbors, closestGarbagePatch) &&
-                    ship.isCapacitySufficient(closestGarbagePatch.garbage)
-                ) {
-                    ship.move(path, true)
-                    doStuff(ship, closestGarbagePatch, collectorTarget)
-                } else {
-                    val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                    ship.moveUninterrupted(closestHarborPath, false, true)
-                }
-                result = true
-            } else {
-                result = false
+            if (closestGarbagePatch == null) {
+                return false
             }
+            val path = paths[closestGarbagePatch] ?: return false
+            if (ship.isFuelSufficient(path.size, ownedHarbors, closestGarbagePatch) &&
+                ship.isCapacitySufficient(closestGarbagePatch.garbage)
+            ) {
+                ship.move(path, true)
+                doStuff(ship, closestGarbagePatch, collectorTarget)
+            } else if (ship.isFuelSufficient(path.size, ownedHarbors, closestGarbagePatch)) {
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath, false, false, true)
+            } else {
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath, false, true, false)
+            }
+            result = true
         }
         return result
     }
@@ -368,8 +370,8 @@ class Corporation(
         // val unload: Boolean = true
         val x = availableShips.sortedBy { it.id }.toMutableSet()
         x.removeIf {
-            if (it.hasTaskAssigned || it.isInWayToRefuelOrUnload) {
-                it.tickTask(it.hasTaskAssigned, it.isInWayToRefuelOrUnload)
+            if (it.hasTaskAssigned || it.refueling || it.unloading) {
+                it.tickTask(it.hasTaskAssigned, it.refueling, it.unloading)
                 return@removeIf true
             }
             return@removeIf false
@@ -410,7 +412,7 @@ class Corporation(
              * This is my fix so far for this, hasTaskAssigned is false if the ship is doing a task, hence can be
              * overwritten, if it's going to refuel or unload this will be set to false
              */
-            if (!ship.isInWayToRefuelOrUnload) {
+            if (!ship.refueling || !ship.unloading) {
                 makeMovement(task, ship, availableShips)
             } else {
                 // Task failed, ship is going to refuel/unload
@@ -440,15 +442,15 @@ class Corporation(
         val targetTile: Tile = task.getGoal()
         Dijkstra(targetTile).allPaths()[ship.position]?.let { path ->
             if (ship.isFuelSufficient(path.size, this.ownedHarbors, targetTile)) {
-                ship.moveUninterrupted(path.reversed(), true, false)
+                ship.moveUninterrupted(path.reversed(), true, false, false)
                 availableShips.remove(ship)
             } else if (ship.hasCollectingCapability() && ship.needsToUnload()) {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                ship.moveUninterrupted(closestHarborPath, false, true)
+                ship.moveUninterrupted(closestHarborPath, false, false, true)
             } else {
                 // WE SHOULD ADD A REFUELING HERE
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                ship.moveUninterrupted(closestHarborPath, false, true)
+                ship.moveUninterrupted(closestHarborPath, false, true, false)
                 // Task failed, not enough fuel.
                 tasks.remove(task)
             }
@@ -501,7 +503,7 @@ class Corporation(
                 ship.move(closestShipPath, true)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                ship.moveUninterrupted(closestHarborPath, false, true)
+                ship.moveUninterrupted(closestHarborPath, false, true, false)
             }
         } else {
             // Explore: Navigate to the furthest tile
@@ -513,7 +515,7 @@ class Corporation(
                 ship.move(path, true)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                ship.moveUninterrupted(closestHarborPath, false, true)
+                ship.moveUninterrupted(closestHarborPath, false, true, false)
             }
         }
         return true
@@ -550,18 +552,16 @@ class Corporation(
          */
         val collectingShips: List<Ship> = Helper().filterCollectingCapabilities(this).sortedBy { it.id }
         val shipsOnHarbor: List<Ship> = Helper().getShipsOnHarbor(this)
-        if (shipsOnHarbor.isNotEmpty()) {
-            for (ship in shipsOnHarbor) {
-                var capability: CollectingShip? = null
-                if (collectingShips.contains(ship)) {
-                    capability = ship.capabilities.filterIsInstance<CollectingShip>().first()
-                }
-                if (ship.refueling) {
-                    ship.refuel()
-                    // ship.currentVelocity = 0
-                }
-                if (capability != null && capability.unloading) {
-                    ship.isInWayToRefuelOrUnload = !capability.unload(ship)
+        if (shipsOnHarbor.isEmpty()) {
+            return
+        }
+        for (ship in shipsOnHarbor) {
+            if (ship.refueling) {
+                ship.refuel()
+            } else {
+                if (collectingShips.contains(ship) && ship.unloading) {
+                    val capability = ship.capabilities.filterIsInstance<CollectingShip>().first()
+                    capability.unload(ship)
                 }
             }
         }
