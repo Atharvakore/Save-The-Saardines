@@ -14,7 +14,7 @@ class FindGarbageTaskTest : ExampleSystemTestExtension() {
     override val maxTicks = 5
 
     override suspend fun run() {
-        skipUntilString("Event: Event 18 of type RESTRICTION happened.")
+        skipUntilString("Event: Event 17 of type RESTRICTION happened.")
         assertNextLine("Task: Task 3 of type FIND with ship 3 is added with destination 64.")
     }
 }

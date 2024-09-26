@@ -14,7 +14,7 @@ class ExploreMapTaskTest : ExampleSystemTestExtension() {
     override val maxTicks = 4
 
     override suspend fun run() {
-        skipUntilString("Event: Event 17 of type RESTRICTION happened.")
+        skipUntilString("Event: Event 16 of type RESTRICTION happened.")
         assertNextLine("Task: Task 2 of type EXPLORE with ship 2 is added with destination 65.")
     }
 }
