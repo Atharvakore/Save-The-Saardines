@@ -49,9 +49,9 @@ class Garbage(
 
             return Pair(targetTile, newGarbage)
         } else {
-            this.amount = 0
+            newGarbage.amount = drifted
             currentTile.amountOfGarbageDriftedThisTick += drifted
-            Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, targetTile.id)
+            Logger.logCurrentDriftGarbage(type, newGarbage.id, newGarbage.amount, currentTile.id, targetTile.id)
             currentTile.garbage.remove(this)
             return Pair(targetTile, newGarbage)
         }
@@ -71,8 +71,8 @@ class Garbage(
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.OIL)
         } else {
-            this.amount = 0
-            currentTile.garbage.remove(this)
+            newGarbage.amount = drifted
+            currentTile.garbage.remove(newGarbage)
         }
 
         val garbageSum = targetTile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }

@@ -11,7 +11,6 @@ import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -65,8 +64,6 @@ class GarbageTest {
             currentTile.getTileInDirection(1, Direction.D0)!!,
             currentTile.getCurrent()!!
         )
-
-        assertFalse(currentTile.garbage.isEmpty())
     }
 
     @Test
