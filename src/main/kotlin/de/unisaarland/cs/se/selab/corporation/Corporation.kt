@@ -196,7 +196,10 @@ class Corporation(
         )
         val closestGarbagePatch = sorted
             .map { it.first }
-            .intersect(knownGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) }).union(partnerGarbage.values).toSet())
+            .intersect(
+                knownGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) })
+                    .union(partnerGarbage.values).toSet()
+            )
             .filter { !scoutTarget.contains(it.id) }
             .firstOrNull { tile ->
                 tile.garbage
@@ -207,7 +210,7 @@ class Corporation(
         if (closestGarbagePatch != null && closestGarbagePatch != ship.position) {
             val path = paths[closestGarbagePatch] ?: return false
             if (ship.isFuelSufficient(path.size, ownedHarbors, closestGarbagePatch)) {
-                ship.move(path)
+                ship.move(path, true)
                 scoutTarget.add(closestGarbagePatch.id)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
@@ -220,7 +223,7 @@ class Corporation(
                 .first { it.second.size <= ship.speed() + 1 }.first
             val path = paths[dest] ?: return false
             if (ship.isFuelSufficient(path.size, ownedHarbors, dest)) {
-                ship.move(path)
+                ship.move(path, false)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
@@ -272,7 +275,7 @@ class Corporation(
                 if (ship.isFuelSufficient(path.size, ownedHarbors, closestGarbagePatch) &&
                     ship.isCapacitySufficient(closestGarbagePatch.garbage)
                 ) {
-                    ship.move(path)
+                    ship.move(path, true)
                 } else {
                     val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                     ship.moveUninterrupted(closestHarborPath, false, true)
@@ -330,7 +333,7 @@ class Corporation(
                 .sortedWith(compareBy({ x -> x.second.size }, { x -> x.first.id }))
                 .map { x -> x.first }.firstOrNull { x -> x.restrictions == 0 }
             if (destination != null) {
-                it.move(path[destination] ?: error("There should be a path..."))
+                it.move(path[destination] ?: error("There should be a path..."), false)
                 availableShips.remove(it)
             }
         }
@@ -425,7 +428,7 @@ class Corporation(
         val closestShipPath = Helper().findClosestShip(ship.position, otherShips)
         if (closestShipPath.isNotEmpty()) {
             if (ship.isFuelSufficient(closestShipPath.size, ownedHarbors, closestShipPath.last())) {
-                ship.move(closestShipPath)
+                ship.move(closestShipPath, true)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
@@ -437,7 +440,7 @@ class Corporation(
                 .first { it.second.size <= ship.speed() + 1 }.first
             val path = paths[dest] ?: return false
             if (ship.isFuelSufficient(path.size, ownedHarbors, dest)) {
-                ship.move(path)
+                ship.move(path, true)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)

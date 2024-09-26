@@ -93,7 +93,7 @@ open class Ship(
      * Logic: the ship gets a path (a list of tiles from destination to ship), has to reverse path and move along it
      * the ship moves along the path as long as it can
      */
-    fun move(path: List<Tile>) {
+    fun move(path: List<Tile>, shouldDecelerate: Boolean) {
         // acceleration
         currentVelocity = minOf(currentVelocity + acceleration, maxVelocity)
 
@@ -114,6 +114,7 @@ open class Ship(
                 this.movedThisTick = MovementTuple(true, id, currentVelocity, desTile.id)
                 // LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
             }
+            if (shouldDecelerate) currentVelocity = 0
         }
         this.position = desTile
     }
@@ -170,7 +171,7 @@ open class Ship(
         if (pathToHarbor.isEmpty() || this.position == pathToHarbor.last()) {
             return
         }
-        move(pathToHarbor)
+        move(pathToHarbor, false)
         if (this.position == pathToHarbor.last()) {
             hasTaskAssigned = false
             isInWayToRefuelOrUnload = false
