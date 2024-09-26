@@ -13,4 +13,8 @@
 - ship moving on same tick as task
 - moving ships is not behaving correctly
 - conccurent modification in process events (dont cut the line -- AFTER LOGGING)
-- coordinating ships can see the garbage in its visibility range
+
+
+tests failing on our impl but passing on reference:
+- UnloadingPlasticTest
+- CollectingMutliplePlasticTest

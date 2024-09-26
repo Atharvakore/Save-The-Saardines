@@ -11,10 +11,10 @@ class TelescopeRewardTest : ExampleSystemTestExtension() {
     override val scenario = "tasksAndRewardsJsons/taskScenario.Json"
     override val map = "mapFiles/map_medium_01.json"
     override val name = "TelescopeRewardTest"
-    override val maxTicks = 6
+    override val maxTicks = 4
 
     override suspend fun run() {
-        skipUntilString("Task: Task 3 of type FIND with ship 1 is added with destination 64.")
-        assertNextLine("Reward: Task 2: Ship 1 received reward of type TELESCOPE.")
+        skipUntilString("Task: Task 3 of type FIND with ship 3 is added with destination 64.")
+        assertNextLine("Reward: Task 2: Ship 2 received reward of type TELESCOPE.")
     }
 }
