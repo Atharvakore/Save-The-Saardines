@@ -125,8 +125,7 @@ object SystemTestRegistration {
         GodVision(),
         AvengersAssemble(),
         OilBillionaire(),
-        DriftToMe()
-        GodVision(),
+        DriftToMe(),
         MultiTasking()
     )
 
