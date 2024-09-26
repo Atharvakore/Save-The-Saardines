@@ -303,6 +303,7 @@ class Corporation(
             if (ship.isCapacitySufficient(garbage)) {
                 result = true
                 ship.currentVelocity = 0
+                doStuff(ship, ship.position, collectorTarget)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
