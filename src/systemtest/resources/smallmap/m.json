@@ -1,0 +1,210 @@
+{
+  "tiles": [
+    {
+      "id": 0,
+      "coordinates": {
+        "x": 0,
+        "y": 1
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 1,
+      "coordinates": {
+        "x": 1,
+        "y": 1
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 2,
+      "coordinates": {
+        "x": 0,
+        "y": 0
+      },
+      "category": "SHORE",
+      "harbor": true
+    },
+    {
+      "id": 3,
+      "coordinates": {
+        "x": 1,
+        "y": 0
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 4,
+      "coordinates": {
+        "x": 0,
+        "y": 2
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 5,
+      "coordinates": {
+        "x": 0,
+        "y": 3
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 6,
+      "coordinates": {
+        "x": 0,
+        "y": 4
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 7,
+      "coordinates": {
+        "x": 1,
+        "y": 4
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 8,
+      "coordinates": {
+        "x": 2,
+        "y": 4
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 9,
+      "coordinates": {
+        "x": 3,
+        "y": 4
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 10,
+      "coordinates": {
+        "x": 4,
+        "y": 4
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 11,
+      "coordinates": {
+        "x": 4,
+        "y": 3
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 12,
+      "coordinates": {
+        "x": 4,
+        "y": 2
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 13,
+      "coordinates": {
+        "x": 4,
+        "y": 1
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 14,
+      "coordinates": {
+        "x": 4,
+        "y": 0
+      },
+      "category": "SHORE",
+      "harbor": true
+    },
+    {
+      "id": 15,
+      "coordinates": {
+        "x": 3,
+        "y": 0
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 16,
+      "coordinates": {
+        "x": 2,
+        "y": 0
+      },
+      "category": "SHORE"
+    },
+    {
+      "id": 17,
+      "coordinates": {
+        "x": 2,
+        "y": 1
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 18,
+      "coordinates": {
+        "x": 3,
+        "y": 1
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 19,
+      "coordinates": {
+        "x": 3,
+        "y": 2
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 20,
+      "coordinates": {
+        "x": 3,
+        "y": 3
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 21,
+      "coordinates": {
+        "x": 2,
+        "y": 3
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 22,
+      "coordinates": {
+        "x": 1,
+        "y": 3
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 23,
+      "coordinates": {
+        "x": 1,
+        "y": 2
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 24,
+      "coordinates": {
+        "x": 2,
+        "y": 2
+      },
+      "category": "DEEP_OCEAN",
+      "current": true,
+      "direction": 60,
+      "speed": 16,
+      "intensity": 4
+    }
+  ]
+}

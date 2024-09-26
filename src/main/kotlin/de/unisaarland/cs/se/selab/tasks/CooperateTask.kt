@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.tasks
 
+import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -14,12 +15,31 @@ class CooperateTask(
     val destinationHomeHarbor: Tile
 ) : Task(tick, id, taskShip, reward, rewardShip) {
 
+    lateinit var myCorp: Corporation
+    lateinit var otherCorp: List<Corporation>
+    var taskShipArrived: Int? = null
     override fun toString(): String {
         return "COOPERATE"
     }
 
     override fun checkCondition(): Boolean {
-        return taskShip.position.pos == destinationHomeHarbor.pos
+        if (taskShip.position.pos == destinationHomeHarbor.pos && taskShipArrived == null) {
+            val myCorpTiles = myCorp.ownedShips.map { it.position }.filter { it.garbage.isNotEmpty() }
+            myCorpTiles.forEach {
+                otherCorp.forEach { other ->
+                    other.partnerGarbage[it.id] = it
+                }
+            }
+            taskShip.isInWayToRefuelOrUnload = true
+            taskShipArrived = -1
+            return false
+        }
+//        if (taskShip.position.pos == destinationHomeHarbor.pos && taskShipArrived == -1) {
+//            taskShip.isInWayToRefuelOrUnload = false
+//            taskShipArrived = 1
+//            return false
+//        }
+        return taskShipArrived == -1
     }
 
     override fun actUponTick(currentTick: Int): Boolean {
