@@ -45,7 +45,6 @@ fun main(args: Array<String>) {
     Logger.setOutBuffer(file)
     val acc: Accumulator? = parse(listOf(mapFile, corporationsFile, scenarioFile), maxTicks)
     if (acc != null && maxTicks != null) {
-        LoggerStatistics.garbageOnMap = acc.map.garbageOnMap
         val sim = Simulation(acc.corporations.values.toList(), acc.events.values.toList(), maxTicks, acc.map)
         sim.start()
     }

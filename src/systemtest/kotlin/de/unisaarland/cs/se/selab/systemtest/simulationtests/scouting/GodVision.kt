@@ -9,7 +9,7 @@ class GodVision : ExampleSystemTestExtension() {
     override val scenario = "godVision/scenario.json"
     override val map = "godVision/map.json"
     override val name = "God Vision"
-    override val maxTicks = 10
+    override val maxTicks = 15
     override suspend fun run() {
         skipUntilString("Simulation Info: Tick 0 started.")
     }

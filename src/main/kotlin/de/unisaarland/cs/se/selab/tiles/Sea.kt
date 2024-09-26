@@ -31,4 +31,13 @@ class Sea {
         }
         return null
     }
+
+    /** Calculate the amount of garbage still in ocean; Needed only for Statistics*/
+    fun calculateGarbageOnMap(): Int {
+        var result = 0
+        for (tile in tiles) {
+            result += tile.garbage.sumOf { it.amount }
+        }
+        return result
+    }
 }
