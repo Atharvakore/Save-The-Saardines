@@ -33,6 +33,9 @@ class Container(
         if (type == this.garbageType) {
             collected = updateGarbageLoad(amount)
         }
+        if (garbageLoad == garbageCapacity) {
+            return collected
+        }
         return collected
     }
 

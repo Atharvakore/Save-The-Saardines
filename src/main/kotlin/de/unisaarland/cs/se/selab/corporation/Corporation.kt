@@ -563,7 +563,8 @@ class Corporation(
                 if (ship.refueling) {
                     ship.refuel()
                     // ship.currentVelocity = 0
-                } else if (capability != null && capability.unloading) {
+                }
+                if (capability != null && capability.unloading) {
                     ship.isInWayToRefuelOrUnload = !capability.unload(ship)
                 }
             }

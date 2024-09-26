@@ -10,7 +10,7 @@
         52, 59 , 14
       ],
       "garbageTypes": [
-        "PLASTIC"
+        "CHEMICALS"
       ]
     }
   ],
@@ -20,20 +20,20 @@
       "name": "Collecter",
       "type": "COLLECTING",
       "corporation": 1,
-      "location": 23,
+      "location": 74,
       "maxVelocity": 50,
       "acceleration": 10,
       "fuelCapacity": 3000,
       "fuelConsumption": 9,
       "capacity": 5000,
-      "garbageType": "PLASTIC"
+      "garbageType": "CHEMICALS"
     } ,
     {
       "id": 2,
       "name": "Scouting",
       "type": "SCOUTING",
       "corporation": 1,
-      "location": 24,
+      "location": 74 ,
       "maxVelocity": 50,
       "acceleration": 10,
       "fuelCapacity": 4000,
