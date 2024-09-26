@@ -203,9 +203,7 @@ open class Ship(
         if (defaultType == GarbageType.OIL && oil.isNotEmpty()) {
             result = capability.hasOilCapacity()
         } else if (defaultType == GarbageType.PLASTIC && plastic.isNotEmpty()) {
-            val amount = plastic.sumOf { it.amount }
-            val collectable = capability.hasPlasticCapacity()
-            result = amount <= collectable
+            result = true
         } else if (defaultType == GarbageType.CHEMICALS && chemicals.isNotEmpty()) {
             result = capability.hasChemicalsCapacity()
         } else {
