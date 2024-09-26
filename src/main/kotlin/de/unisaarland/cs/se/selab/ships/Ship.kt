@@ -187,41 +187,6 @@ open class Ship(
         }
     }
 
-    /**
-     * Checks its default garbage type and returns true if it can collect depending on the type
-     * if plastic then true if it can collect whole amount
-     * if oil then true if it can collect some of the amount
-     * */
-    fun isCapacitySufficient(garbage: List<Garbage>): Boolean {
-        val result: Boolean
-        val capability = this.capabilities.first() as CollectingShip
-
-        val oil = garbage.filter { it.type == GarbageType.OIL }
-        val plastic = garbage.filter { it.type == GarbageType.PLASTIC }
-        val chemicals = garbage.filter { it.type == GarbageType.CHEMICALS }
-        val defaultType = capability.auxiliaryContainers.first().garbageType
-
-        if (defaultType == GarbageType.OIL && oil.isNotEmpty()) {
-            result = capability.hasOilCapacity()
-        } else if (defaultType == GarbageType.PLASTIC && plastic.isNotEmpty()) {
-            result = true
-        } else if (defaultType == GarbageType.CHEMICALS && chemicals.isNotEmpty()) {
-            result = capability.hasChemicalsCapacity()
-        } else {
-            val listOfTypes = capability.garbageTypes()
-            val garbageList = garbage.filter { listOfTypes.contains(it.type) }
-            if (garbageList.isNotEmpty()) {
-                result = handleSecondaryContainers(garbageList, capability)
-            } else {
-                result = false
-            }
-        }
-        if (!result) {
-            capability.unloading = true
-        }
-        return result
-    }
-
     private fun handleSecondaryContainers(garbage: List<Garbage>, capability: CollectingShip): Boolean {
         val result: Boolean
         val oilGarbage = garbage.filter { it.type == GarbageType.OIL }
@@ -235,5 +200,63 @@ open class Ship(
             capability.hasPlasticCapacity() >= plasticGarbage.sumOf { it.amount }
         }
         return result
+    }
+
+    /**
+     * Checks its garbage types and returns true if it can collect depending on the type
+     * */
+    fun isCapacitySufficient(garbage: List<Garbage>): Boolean {
+        val capabilities = this.capabilities.filterIsInstance<CollectingShip>()
+
+        if (capabilities.isEmpty()) {
+            return false
+        }
+
+        if (checkContainerFull()) {
+            return false
+        }
+
+        val oilContainers: MutableList<Container> = mutableListOf()
+        val plasticContainers: MutableList<Container> = mutableListOf()
+        val chemicalsContainers: MutableList<Container> = mutableListOf()
+
+        capabilities.forEach { cap ->
+            oilContainers.addAll(cap.auxiliaryContainers.filter { it.garbageType == GarbageType.OIL })
+            plasticContainers.addAll(cap.auxiliaryContainers.filter { it.garbageType == GarbageType.PLASTIC })
+            chemicalsContainers.addAll(cap.auxiliaryContainers.filter { it.garbageType == GarbageType.CHEMICALS })
+        }
+
+        val collectableOil = oilContainers.sumOf { it.getGarbageCapacity() - it.garbageLoad }
+        val collectablePlastic = plasticContainers.sumOf { it.getGarbageCapacity() - it.garbageLoad }
+        val collectableChemicals = chemicalsContainers.sumOf { it.getGarbageCapacity() - it.garbageLoad }
+
+        for (g in garbage) {
+            if (g.type == GarbageType.OIL && collectableOil > 0 && g.amount > 0) {
+                return true
+            } else if (g.type == GarbageType.PLASTIC && collectablePlastic > 0 && g.amount > 0) {
+                return true
+            } else if (g.type == GarbageType.CHEMICALS && collectableChemicals > 0 && g.amount > 0) {
+                return true
+            }
+        }
+        return false
+    }
+
+    /**
+     * returns true if any container in the ship is full
+     * */
+    private fun checkContainerFull(): Boolean {
+        val collectingShip = capabilities.filterIsInstance<CollectingShip>()
+
+        for (cap in collectingShip) {
+            val containers = cap.auxiliaryContainers
+            for (container in containers) {
+                if (container.garbageLoad == container.getGarbageCapacity()) {
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 }
