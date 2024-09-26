@@ -11,6 +11,12 @@ class AvengersAssemble : ExampleSystemTestExtension() {
     override val name = "Avengers Assemble!"
     override val scenario = "AvengersAssemble/scenario.json"
     override suspend fun run() {
-        assertNextLine("Initialization Info: map.json successfully parsed and validated.")
+        skipUntilString("Corporation Action: Corporation 1 is starting to move its ships.")
+        assertNextLine("Ship Movement: Ship 2 moved with speed 25 to tile 5.")
+        assertNextLine("Ship Movement: Ship 3 moved with speed 10 to tile 5.")
+        assertNextLine("Ship Movement: Ship 5 moved with speed 10 to tile 5.")
+        skipUntilString("Simulation Info: Tick 1 started.")
+        skipLines(1)
+        assertNextLine("Ship Movement: Ship 4 moved with speed 10 to tile 4.")
     }
 }
