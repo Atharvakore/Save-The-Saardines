@@ -5,7 +5,6 @@ import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Direction
 import de.unisaarland.cs.se.selab.tiles.Garbage
@@ -24,7 +23,6 @@ class Simulation(
     private val sea: Sea,
 ) {
     private var tick: Int = 0
-    val activeTasks: MutableMap<Task, Boolean> = mutableMapOf()
 
     /**
      * starts the whole simulation and enters a loop that runs tick() until maxTick is reached
@@ -64,7 +62,7 @@ class Simulation(
 
         for (corporation in corporations.sortedBy { it.id }) {
             val otherShips = allShips.filter { it.owner != corporation }
-            corporation.run(sea, otherShips, activeTasks)
+            corporation.run(tick, sea, otherShips)
         }
 
         for (ship in allShips) {
@@ -185,13 +183,8 @@ class Simulation(
      */
     private fun processTasks() {
         val tasks = corporations.map { it.tasks }.flatten().sortedBy { it.id }
-        val tasksToBeAdded = tasks.filter { it.tick == tick }
 
-        tasksToBeAdded.forEach { task ->
-            activeTasks.putIfAbsent(task, true)
-        }
-
-        for (task in tasksToBeAdded) {
+        for (task in tasks) {
             task.actUponTick(tick)
         }
     }
