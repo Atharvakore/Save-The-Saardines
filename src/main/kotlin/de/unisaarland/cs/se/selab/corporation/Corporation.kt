@@ -376,6 +376,8 @@ class Corporation(
                 availableShips.remove(ship)
             } else {
                 // WE SHOULD ADD A REFUELING HERE
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath, false, true)
                 // Task failed, not enough fuel.
                 tasks.remove(task)
             }
