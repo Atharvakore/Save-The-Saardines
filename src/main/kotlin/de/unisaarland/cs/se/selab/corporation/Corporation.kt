@@ -370,15 +370,17 @@ class Corporation(
         return result
     }
 
-    private fun tickTasksInMoveShips(availableShips: MutableSet<Ship>) {
+    private fun tickTasksInMoveShips(availableShips: MutableSet<Ship>): MutableSet<Ship> {
         // val unload: Boolean = true
-        availableShips.sortedBy { it.id }.toMutableSet().removeIf {
+        val x = availableShips.sortedBy { it.id }.toMutableSet()
+        x.removeIf {
             if (it.hasTaskAssigned || it.isInWayToRefuelOrUnload) {
                 it.tickTask(it.hasTaskAssigned, it.isInWayToRefuelOrUnload)
                 return@removeIf true
             }
             return@removeIf false
         }
+        return x
     }
 
     private fun moveShipsOutOfRestriction(availableShips: MutableSet<Ship>) {
@@ -421,7 +423,10 @@ class Corporation(
         }
         // 0. For each ship that has an assigned destination, tick the
         // ship and remove the ship from the available ships
-        tickTasksInMoveShips(availableShips)
+        // Detekt workaround
+        val afterTasks = tickTasksInMoveShips(availableShips).toMutableSet()
+        availableShips.clear()
+        availableShips.addAll(afterTasks)
         val usedShips = helpermoveShips(availableShips, otherShips)
         availableShips.removeAll { usedShips.contains(it.id) }
         ownedShips.filter { it.movedThisTick.moved }.sortedBy { it.id }.forEach {
@@ -463,10 +468,11 @@ class Corporation(
                     updateScoutFOV(it, ship)
                 }
             }
+        }
+        for (ship in availableShips.sortedBy { it.id }) {
             if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
                 usedShips.add(ship.id)
             }
-            // May be wrong or may not.
             ship.capabilities.forEach {
                 if (it is ScoutingShip) {
                     updateScoutFOV(it, ship)
