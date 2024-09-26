@@ -71,7 +71,7 @@
       "id": 2,
       "type": "EXPLORE",
       "tick": 1,
-      "shipID": 1,
+      "shipID": 2,
       "targetTile": 65,
       "rewardID": 6,
       "rewardShipID": 2
@@ -79,8 +79,8 @@
     {
       "id": 3,
       "type": "FIND",
-      "tick": 2,
-      "shipID": 1,
+      "tick": 3,
+      "shipID": 3,
       "targetTile": 64,
       "rewardID": 7,
       "rewardShipID": 3
@@ -88,7 +88,7 @@
     {
       "id": 4,
       "type": "COOPERATE",
-      "tick": 3,
+      "tick": 4,
       "shipID": 1,
       "targetTile": 52,
       "rewardID": 8,
