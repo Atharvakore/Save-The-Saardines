@@ -157,7 +157,12 @@ object SystemTestRegistration {
         // DAY 2:
         HarborNoCorp(),
         MoreMorePlastic(),
-        CollectingMutliplePlasticTest()
+        CollectingMutliplePlasticTest(),
+        CorpNoMove2Test(),
+        CorpVisibilityRangeTest(),
+        CorporationProfessionalObserverTest(),
+        CooperateOnceTest(),
+        CoordinatingShipDefaultTest()
     )
 
     /**
