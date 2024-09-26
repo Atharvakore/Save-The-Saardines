@@ -557,7 +557,7 @@ class Corporation(
             if (cap.auxiliaryContainers
                     .any { container ->
                         container.garbageType == garbage.value.garbage
-                            .find { it.id == garbage.key }!!.type
+                            .find { it.id == garbage.key }?.type
                     }
             ) {
                 if (tryMove(ship, scoutTarget, collectorTarget, otherShips, garbageAssignment)) {
