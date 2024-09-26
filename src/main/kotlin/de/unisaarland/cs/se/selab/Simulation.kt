@@ -104,7 +104,7 @@ class Simulation(
         for (garbage in garbageList) {
             val current = currentTile.getCurrent()
             if (current == null) {
-                continue
+                return
             } else {
                 val targetTile = getValidTile(currentTile, current.speed / TEN, current.direction)
                 var garbageTile: Pair<Tile, Garbage>? = null
