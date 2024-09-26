@@ -291,7 +291,7 @@ class Corporation(
             handleMoveCoordinating(ship, capability, otherShips)
         } else {
             // Tracker, ignore.
-            result = false
+            false
         }
         if (!result && capabilityIndex + 1 < ship.capabilities.size) {
             return tryMove(ship, scoutTarget, collectorTarget, otherShips, capabilityIndex + 1)
