@@ -11,10 +11,10 @@ class FindGarbageTaskTest : ExampleSystemTestExtension() {
     override val scenario = "tasksAndRewardsJsons/taskScenario.Json"
     override val map = "mapFiles/map_medium_01.json"
     override val name = "FindGarbageTaskTest"
-    override val maxTicks = 5
+    override val maxTicks = 7
 
     override suspend fun run() {
-        skipUntilString("Event: Event 18 of type RESTRICTION happened.")
-        assertNextLine("Task: Task 3 of type FIND with ship 3 is added with destination 64.")
+        skipUntilString("Event: Event 6 of type RESTRICTION happened.")
+        assertNextLine("Task: Task 6 of type FIND with ship 3 is added with destination 64.")
     }
 }
