@@ -26,8 +26,9 @@ class CooperateTask(
         if (taskShip.position.pos == destinationHomeHarbor.pos && taskShipArrived == null) {
             val myCorpTiles = myCorp.ownedShips.map { it.position }.filter { it.garbage.isNotEmpty() }
             myCorpTiles.forEach {
-                val x = it.garbage
-                x.forEach { garbage -> otherCorp.forEach { other -> other.partnerGarbage[garbage.id] = it }}
+                otherCorp.forEach { other ->
+                    other.partnerGarbage[it.id] = it
+                }
             }
             taskShip.isInWayToRefuelOrUnload = true
             taskShipArrived = -1
