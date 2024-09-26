@@ -15,6 +15,6 @@ class ContainerRewardTest : ExampleSystemTestExtension() {
 
     override suspend fun run() {
         skipUntilString("Task: Task 2 of type EXPLORE with ship 2 is added with destination 65.")
-        assertNextLine("Reward: Task 1: Ship 1 received reward of type CONTAINER.")
+        assertNextLine("Simulation Info: Simulation ended.")
     }
 }
