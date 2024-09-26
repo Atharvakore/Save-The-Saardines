@@ -6,6 +6,7 @@ import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceT
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.CollectAndRefuelTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageMultipleCurrents
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftMeBaby
@@ -118,7 +119,8 @@ object SystemTestRegistration {
         CooperateOnceTest(),
         CoordinatingShipDefaultTest(),
         CoordinatingTest(),
-        EventSchedulingTest()
+        EventSchedulingTest(),
+        CollectAndRefuelTest()
     )
 
     private val testsForMutants = listOf(
