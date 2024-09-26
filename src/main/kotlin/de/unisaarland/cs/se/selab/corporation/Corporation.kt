@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.corporation
 
+import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
@@ -66,8 +67,7 @@ class Corporation(
 
             val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.owner }.distinct().sortedBy { it.id }
 
-            otherCorporations.forEach {
-                    corporation ->
+            otherCorporations.forEach { corporation ->
                 val toCooperateWith = corporation.ownedShips.filter { otherShipsOnTile.contains(it) }
                     .sortedBy { it.id }.first()
                 getInfoFromShip(toCooperateWith, coordinatingShip)
@@ -276,10 +276,12 @@ class Corporation(
                     collectorTarget[g.id] = minOf(g.amount, plastic)
                     plastic -= collectorTarget[g.id] ?: error("egSvd")
                 }
+
                 GarbageType.OIL -> {
                     collectorTarget[g.id] = minOf(g.amount, oil)
                     oil -= collectorTarget[g.id] ?: error("ueslngrv")
                 }
+
                 GarbageType.CHEMICALS -> {
                     collectorTarget[g.id] = minOf(g.amount, chemicals)
                     chemicals -= collectorTarget[g.id] ?: error("grvhjdshj")
@@ -459,6 +461,7 @@ class Corporation(
             }
         }
     }
+
     private fun helpermoveShips(availableShips: MutableSet<Ship>, otherShips: List<Ship>): MutableList<Int> {
         // 2. Iterate over available ships in increasing ID order
         val usedShips: MutableList<Int> = mutableListOf()
@@ -471,7 +474,11 @@ class Corporation(
                 }
             }
         }
-        for (ship in availableShips.sortedBy { it.id }) {
+        val collectingShips = Helper().filterCollectingShip(this)
+
+        val otherShipsTwo = availableShips.filter { !collectingShips.contains(it) }
+
+        for (ship in otherShipsTwo.sortedBy { it.id }) {
             if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
                 usedShips.add(ship.id)
             }
@@ -481,8 +488,41 @@ class Corporation(
                 }
             }
         }
+
+        knownGarbage.forEach { garbage ->
+
+            val distances = Dijkstra(garbage.value)
+            val shipsByIncDistance = collectingShips.sortedBy { distances.allPaths()[it.position]?.size }
+            for (ship in shipsByIncDistance) {
+                moveCollectingShipNew(ship, garbage, scoutTarget, collectorTarget, otherShips, usedShips)
+            }
+        }
         return usedShips
     }
+
+    private fun moveCollectingShipNew(
+        ship: Ship,
+        garbage: Map.Entry<Int, Tile>,
+        scoutTarget: MutableSet<Int>,
+        collectorTarget: MutableMap<Int, Int>,
+        otherShips: List<Ship>,
+        usedShips: MutableList<Int>
+    ) {
+        val collectingCap = ship.capabilities.filterIsInstance<CollectingShip>()
+        collectingCap.forEach { cap ->
+            if (cap.auxiliaryContainers
+                    .any { container ->
+                        container.garbageType == garbage.value.garbage
+                            .find { it.id == garbage.key }!!.type
+                    }
+            ) {
+                if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
+                    usedShips.add(ship.id)
+                }
+            }
+        }
+    }
+
     private fun handleMoveCoordinating(ship: Ship, capability: CoordinatingShip, otherShips: List<Ship>): Boolean {
         val result: Boolean
         // 1. Get information about which ships are in field of view
@@ -498,6 +538,7 @@ class Corporation(
         }
         return result
     }
+
     private fun helperMoveCoordinating(ship: Ship, otherShips: List<Ship>): Boolean {
         // 3. Navigate to the closest ship
         val closestShipPath = Helper().findClosestShip(ship.position, otherShips)
