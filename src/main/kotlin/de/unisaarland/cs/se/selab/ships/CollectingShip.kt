@@ -107,7 +107,7 @@ class CollectingShip(
         val oilGarbage = currentTile.garbage.filter { it.type == GarbageType.OIL }.sortedBy { it.id }
         val chemicalsGarbage = currentTile.garbage.filter { it.type == GarbageType.CHEMICALS }.sortedBy { it.id }
 
-        if (garbageTypes().contains(GarbageType.PLASTIC)) {
+        if (garbageTypes().contains(GarbageType.PLASTIC) && plasticGarbage.isNotEmpty()) {
             collectPlasticGarbage(ship, plasticGarbage, otherShips, corpShips)
         }
 
@@ -115,7 +115,6 @@ class CollectingShip(
             val collected = collectGarbage(oil.amount, GarbageType.OIL)
             if (collected > 0) {
                 currentTile.removeGarbageOfType(GarbageType.OIL, collected)
-                ship.currentVelocity = 0
                 LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.OIL, oil.id, collected)
             }
         }
@@ -124,7 +123,6 @@ class CollectingShip(
             val collected = collectGarbage(chem.amount, GarbageType.CHEMICALS)
             if (collected > 0) {
                 currentTile.removeGarbageOfType(GarbageType.CHEMICALS, collected)
-                ship.currentVelocity = 0
                 LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.CHEMICALS, chem.id, collected)
             }
         }
