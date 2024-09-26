@@ -11,7 +11,7 @@ class EventSchedulingTest : ExampleSystemTestExtension() {
     override val scenario = "tasksAndRewardsJsons/taskScenario.Json"
     override val map = "mapFiles/map_medium_01.json"
     override val name = "EventSchedulingTest"
-    override val maxTicks = 6
+    override val maxTicks = 12
 
     override suspend fun run() {
         skipUntilString("Event: Event 15 of type RESTRICTION happened.")
@@ -25,8 +25,6 @@ class EventSchedulingTest : ExampleSystemTestExtension() {
         skipUntilString("Event: Event 19 of type RESTRICTION happened.")
 
         skipUntilString("Event: Event 20 of type RESTRICTION happened.")
-
-        skipUntilString("Simulation Info: Simulation ended.")
-        assertNextLine("Simulation Info: Simulation statistics are calculated.")
+        assertNextLine("Simulation Info: Tick 11 started.")
     }
 }
