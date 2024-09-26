@@ -5,8 +5,8 @@ import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
+import de.unisaarland.cs.se.selab.tiles.Direction
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.TEN
@@ -105,7 +105,7 @@ class Simulation(
             if (current == null) {
                 continue
             } else {
-                val targetTile = getValidTile(currentTile, current)
+                val targetTile = getValidTile(currentTile, current.speed / TEN, current.direction)
                 var garbageTile: Pair<Tile, Garbage>? = null
                 if (targetTile != null && targetTile != currentTile) {
                     garbageTile = garbage.drift(currentTile, targetTile, current)
@@ -121,9 +121,7 @@ class Simulation(
         }
     }
 
-    private fun getValidTile(currentTile: DeepOcean, current: Current): Tile? {
-        val distance = current.speed / TEN
-        val direction = current.direction
+    private fun getValidTile(currentTile: DeepOcean, distance: Int, direction: Direction): Tile? {
         var targetTile = currentTile.getTileInDirection(distance, direction)
 
         if (distance == 0) {
@@ -131,7 +129,7 @@ class Simulation(
         } else {
             for (i in 1..distance) {
                 currentTile.getTileInDirection(i, direction)
-                    ?: return currentTile.getTileInDirection(i - 1, current.direction)
+                    ?: return currentTile.getTileInDirection(i - 1, direction)
             }
         }
         return targetTile

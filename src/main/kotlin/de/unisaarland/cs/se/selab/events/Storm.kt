@@ -48,7 +48,7 @@ class Storm(
             }
             garbageToAdd.forEach { (tile, garbageList) -> tile.garbage.addAll(garbageList) }
             garbageToRemove.forEach { (tile, garbageList) -> tile.garbage.removeAll(garbageList) }
-            // corporations will update their knowledge about which garbage was drifted but not where
+
             result = true
         } else {
             result = false
