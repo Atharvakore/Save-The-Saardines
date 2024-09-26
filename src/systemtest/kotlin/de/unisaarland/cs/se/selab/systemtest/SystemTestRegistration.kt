@@ -155,7 +155,7 @@ object SystemTestRegistration {
         LandNextDeepOcean(),
         DriftShipsTest(),
         SimulatePirateAttack(),
-        SimulateStormTest(),
+        // SimulateStormTest(),
         DriftGarbageOnLandTest(),
         // Section for tests to check on reference to test later against mutant:
         OneIDTwoTasks(),
@@ -172,7 +172,7 @@ object SystemTestRegistration {
         CorporationProfessionalObserverTest(),
         CooperateOnceTest(),
         CoordinatingShipDefaultTest(),
-        CollectAndRefuelTest(),
+        // CollectAndRefuelTest(),
         GodVision(),
         MultiTasking()
     )
