@@ -121,6 +121,9 @@ class Corporation(
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
     fun run(tick: Int, sea: Sea, otherShips: List<Ship>) {
+        // Should we insert knownGarbage into partnerGarbage and then clear knownGarbage
+        // to reset the knowledge? I think that this would solve some things.
+        // The code to do that would go here, but I am not sure if this is spec behaviour
         this.sea = sea
         getActiveTasks(tick)
         logger.logCorporationStartMoveShips(id)
