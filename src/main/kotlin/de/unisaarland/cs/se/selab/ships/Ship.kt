@@ -33,7 +33,7 @@ open class Ship(
     var arrivedToHarborThisTick = false
     open var isInWayToRefuelOrUnload: Boolean = false
     var movedThisTick: MovementTuple = MovementTuple(false, -1, -1, -1)
-
+    var unloading = false
     /**
      * Call: when the ship is on the harbor
      * Logic: the ship has to max its fuelCapacity
@@ -173,6 +173,8 @@ open class Ship(
             destinationPath = emptyList()
             if (this.owner.ownedHarbors.contains(this.position)) {
                 arrivedToHarborThisTick = true
+                this.refueling = isRefuel
+                this.unloading = isRefuel
                 currentVelocity = 0
             }
         } else {
@@ -235,5 +237,20 @@ open class Ship(
         }
 
         return false
+    }
+
+    /**
+     * returns if the ship can collect
+     */
+    fun hasCollectingCapability(): Boolean {
+        return capabilities.filterIsInstance<CollectingShip>().isNotEmpty()
+    }
+
+    /**
+     * returns weither the ship needs to unload garbage
+     */
+    fun needsToUnload(): Boolean {
+        return capabilities.filterIsInstance<CollectingShip>().map { it.auxiliaryContainers }.flatten()
+            .any { it.garbageLoad == it.getGarbageCapacity() }
     }
 }

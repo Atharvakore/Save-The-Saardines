@@ -437,6 +437,9 @@ class Corporation(
             if (ship.isFuelSufficient(path.size, this.ownedHarbors, targetTile)) {
                 ship.moveUninterrupted(path.reversed(), true, false)
                 availableShips.remove(ship)
+            } else if (ship.hasCollectingCapability() && ship.needsToUnload()) {
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath, false, true)
             } else {
                 // WE SHOULD ADD A REFUELING HERE
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
