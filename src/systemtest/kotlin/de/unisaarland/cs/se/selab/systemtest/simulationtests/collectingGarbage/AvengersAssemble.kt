@@ -18,5 +18,16 @@ class AvengersAssemble : ExampleSystemTestExtension() {
         skipUntilString("Simulation Info: Tick 1 started.")
         skipLines(1)
         assertNextLine("Ship Movement: Ship 4 moved with speed 10 to tile 4.")
+        skipUntilString("Corporation Action: Corporation 1 is starting to collect garbage.")
+        assertNextLine("Garbage Collection: Ship 1 collected 2000 of garbage PLASTIC with 2.")
+        assertNextLine("Garbage Collection: Ship 3 collected 1000 of garbage PLASTIC with 2.")
+        assertNextLine("Garbage Collection: Ship 4 collected 2000 of garbage PLASTIC with 2.")
+        skipUntilString("Simulation Info: Tick 3 started.")
+        skipLines(1)
+        assertNextLine("Ship Movement: Ship 1 moved with speed 10 to tile 7.")
+        assertNextLine("Ship Movement: Ship 2 moved with speed 25 to tile 1.")
+        assertNextLine("Ship Movement: Ship 3 moved with speed 10 to tile 7.")
+        assertNextLine("Ship Movement: Ship 4 moved with speed 10 to tile 7.")
+
     }
 }
