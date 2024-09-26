@@ -125,6 +125,8 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
                         rShip,
                         tile
                     )
+                    taskObj.myCorp = requireNotNull(ship).owner
+                    taskObj.otherCorp = accumulator.corporations.values.filter { it.ownedHarbors.contains(tile) }
                     accumulator.addTask(id, taskObj)
                     taskObj.taskShip.owner.tasks.add(taskObj)
                     returnCond = true

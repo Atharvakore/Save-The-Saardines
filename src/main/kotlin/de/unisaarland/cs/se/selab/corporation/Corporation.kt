@@ -235,6 +235,7 @@ class Corporation(
             }
             if (ship.isCapacitySufficient(garbage)) {
                 result = true
+                ship.currentVelocity = 0
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
@@ -476,4 +477,11 @@ class Corporation(
             }
         }
     }
+
+    /**
+     * private fun getGarbageInfo(): List<Garbage> {
+     *         // WE NEED A METHOD THAT RETURNS ALL THE GARBAGE THE CORPORATION KNOWS ABOUT HERE
+     *         return mutableListOf<Garbage>()
+     *     }
+     */
 }
