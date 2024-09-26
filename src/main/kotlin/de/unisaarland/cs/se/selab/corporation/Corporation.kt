@@ -368,7 +368,8 @@ class Corporation(
     }
 
     private fun tickTasksInMoveShips(availableShips: MutableSet<Ship>) {
-        availableShips.removeIf {
+        // val unload: Boolean = true
+        availableShips.sortedBy { it.id }.toMutableSet().removeIf {
             if (it.hasTaskAssigned || it.isInWayToRefuelOrUnload) {
                 it.tickTask(it.hasTaskAssigned, it.isInWayToRefuelOrUnload)
                 return@removeIf true
