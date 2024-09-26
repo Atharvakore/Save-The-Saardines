@@ -194,7 +194,7 @@ class Corporation(
         )
         val closestGarbagePatch = sorted
             .map { it.first }
-            .intersect(knownGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) }).toSet())
+            .intersect(knownGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) }).union(partnerGarbage.values).toSet())
             .filter { !scoutTarget.contains(it.id) }
             .firstOrNull { tile ->
                 tile.garbage
