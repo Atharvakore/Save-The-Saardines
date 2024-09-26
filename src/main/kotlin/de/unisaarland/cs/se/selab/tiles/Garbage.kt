@@ -17,25 +17,14 @@ class Garbage(
     /**
      * drifts garbage
      */
-    fun drift(tile: DeepOcean, targetTile: Tile, current: Current): Pair<Tile, Garbage> {
-        return if (tile.id != targetTile.id && targetTile !is Land) {
-            driftHelper(tile, targetTile, current)
-        } else {
-            Pair(tile, this)
-        }
-    }
-
-    /**
-     * helps drifting
-     */
-    private fun driftHelper(currentTile: DeepOcean, targetTile: Tile, localCurrent: Current): Pair<Tile, Garbage> {
-        val result: Pair<Tile, Garbage>
+    fun drift(currentTile: DeepOcean, targetTile: Tile, localCurrent: Current): Pair<Tile, Garbage>? {
+        val result: Pair<Tile, Garbage>?
         val toBeDrifted: Int
         val driftAmount = localCurrent.intensity * DRIFTAMOUNTPERPOINTINTENSITY
         if (currentTile.amountOfGarbageDriftedThisTick < driftAmount) {
             toBeDrifted = driftAmount - currentTile.amountOfGarbageDriftedThisTick
         } else {
-            return Pair(currentTile, this)
+            return null
         }
 
         result = when (this.type) {
@@ -49,30 +38,35 @@ class Garbage(
         return result
     }
 
-    private fun handlePlasticGarbage(currentTile: Tile, targetTile: Tile, toBeDrifted: Int): Pair<Tile, Garbage> {
+    private fun handlePlasticGarbage(currentTile: Tile, targetTile: Tile, toBeDrifted: Int): Pair<Tile, Garbage>? {
         var newGarbage = this
         val drifted = minOf(this.amount, toBeDrifted)
-        this.amount -= drifted
+        this.amount = minOf(this.amount - drifted, 0)
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.PLASTIC)
-        } else {
-            currentTile.garbage.remove(this)
-        }
-        currentTile.amountOfGarbageDriftedThisTick += drifted
-        Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, targetTile.id)
+            currentTile.amountOfGarbageDriftedThisTick += drifted
+            Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, targetTile.id)
 
-        return Pair(targetTile, newGarbage)
+            return Pair(targetTile, newGarbage)
+        } else {
+            currentTile.amountOfGarbageDriftedThisTick += drifted
+            Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, targetTile.id)
+            currentTile.garbage.remove(this)
+            return Pair(targetTile, newGarbage)
+        }
     }
+
     private fun handleOilGarbage(
         currentTile: DeepOcean,
         targetTile: Tile,
         toBeDrifted: Int,
         localCurrent: Current
-    ): Pair<Tile, Garbage> {
+    ): Pair<Tile, Garbage>? {
         var target = targetTile
         val drifted = minOf(this.amount, toBeDrifted)
-        this.amount -= drifted
+        this.amount -= minOf(this.amount - drifted, 0)
         var newGarbage: Garbage = this
+
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.OIL)
         } else {
@@ -92,13 +86,16 @@ class Garbage(
                 target = tile
                 currentTile.amountOfGarbageDriftedThisTick += drifted
                 Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
+                return Pair(target, newGarbage)
+            } else {
+                return null
             }
             // THE CASE WHERE TILE==NULL SHOULD BE HANDLED HERE, OTHERWISE WE ARE USING TARGETTILE
         } else {
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
+            return Pair(target, newGarbage)
         }
-        return Pair(target, newGarbage)
     }
 
     private fun checkOilCap(path: List<Tile?>, amount: Int): Tile? {
@@ -108,7 +105,7 @@ class Garbage(
         for (tile in listOfTiles) {
             if (tile != null) {
                 val garbageSum = tile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }
-                if (garbageSum + amount < MAXOILCAP) {
+                if (garbageSum + amount <= MAXOILCAP) {
                     return tile
                 }
             }

@@ -99,18 +99,23 @@ class Simulation(
         currentTile: DeepOcean,
         garbageToList: MutableMap<Tile, MutableList<Garbage?>>,
     ) {
-        val garbageList = currentTile.garbage
-        for (garbage in garbageList.sortedBy { it.id }) {
+        val garbageList = currentTile.garbage.sortedBy { it.id }
+        for (garbage in garbageList) {
             val current = currentTile.getCurrent()
-            if (current != null) {
+            if (current == null) {
+                continue
+            } else {
                 val targetTile = getValidTile(currentTile, current)
-                if (targetTile != null) {
-                    val garbageTile: Pair<Tile, Garbage> = garbage.drift(currentTile, targetTile, current)
-                    garbageToList.getOrPut(garbageTile.first) { mutableListOf() }.add(garbageTile.second)
+                var garbageTile: Pair<Tile, Garbage>? = null
+                if (targetTile != null && targetTile != currentTile) {
+                    garbageTile = garbage.drift(currentTile, targetTile, current)
                     /**
                      * I GUESS THIS SHOULD BE ADDED HERE
                      *currentTile.garbage.remove(garbageTile.second)
                      */
+                }
+                if (garbageTile != null) {
+                    garbageToList.getOrPut(garbageTile.first) { mutableListOf() }.add(garbageTile.second)
                 }
             }
         }
@@ -122,7 +127,7 @@ class Simulation(
         var targetTile = currentTile.getTileInDirection(distance, direction)
 
         if (distance == 0) {
-            targetTile = currentTile.getTileInDirection(distance, direction)
+            targetTile = currentTile
         } else {
             for (i in 1..distance) {
                 currentTile.getTileInDirection(i, direction)
