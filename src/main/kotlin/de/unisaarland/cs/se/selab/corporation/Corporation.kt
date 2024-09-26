@@ -55,6 +55,7 @@ class Corporation(
      * @param otherShips List of all ships in the simulation
      */
     fun cooperate(otherShips: List<Ship>) {
+        // chinese whispers: give the other corporation the contents of our own partnerGarbage.
         val myCoordinatingShips: List<Ship> = Helper().filterCoordinatingShips(this).sortedBy { it.id }
 
         myCoordinatingShips.forEach { coordinatingShip ->
