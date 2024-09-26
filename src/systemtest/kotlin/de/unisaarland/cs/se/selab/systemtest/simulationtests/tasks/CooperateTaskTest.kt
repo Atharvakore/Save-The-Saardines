@@ -11,7 +11,7 @@ class CooperateTaskTest : ExampleSystemTestExtension() {
     override val scenario = "tasksAndRewardsJsons/taskScenario.Json"
     override val map = "mapFiles/map_medium_01.json"
     override val name = "CooperateTaskTest"
-    override val maxTicks = 11
+    override val maxTicks = 15
 
     override suspend fun run() {
         skipUntilString("Event: Event 9 of type RESTRICTION happened.")
