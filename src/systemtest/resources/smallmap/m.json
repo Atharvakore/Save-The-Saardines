@@ -203,8 +203,8 @@
       "category": "DEEP_OCEAN",
       "current": true,
       "direction": 60,
-      "speed": "16",
-      "intensity": "4"
+      "speed": 16,
+      "intensity": 4
     }
   ]
 }
