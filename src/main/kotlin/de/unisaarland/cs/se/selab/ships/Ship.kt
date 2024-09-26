@@ -31,7 +31,6 @@ open class Ship(
     var currentVelocity = 0
     var refueling = false
     var arrivedToHarborThisTick = false
-    open var isInWayToRefuelOrUnload: Boolean = false
     var movedThisTick: MovementTuple = MovementTuple(false, -1, -1, -1)
     var unloading = false
 
@@ -40,13 +39,10 @@ open class Ship(
      * Logic: the ship has to max its fuelCapacity
      */
     fun refuel() {
-        if (!arrivedToHarborThisTick) {
-            isInWayToRefuelOrUnload = false
-            refueling = false
-            currentVelocity = 0
-            this.consumedFuel = 0
-            LoggerCorporationAction.logRefuelingShip(id, position.id)
-        }
+        refueling = false
+        currentVelocity = 0
+        this.consumedFuel = 0
+        LoggerCorporationAction.logRefuelingShip(id, position.id)
     }
 
     /**
@@ -153,16 +149,17 @@ open class Ship(
      * complete the movement of the ship along the destination path
      * if it has an assigned task
      * */
-    fun tickTask(isTask: Boolean, isRefuel: Boolean) {
-        moveUninterrupted(destinationPath, isTask, isRefuel)
+    fun tickTask(isTask: Boolean, isRefuel: Boolean, isUnload: Boolean) {
+        moveUninterrupted(destinationPath, isTask, isRefuel, isUnload)
     }
 
     /**
      * set destination for the ship
      * and store the path until its completed
      * */
-    fun moveUninterrupted(pathToHarbor: List<Tile>, isTask: Boolean, isRefuel: Boolean) {
-        isInWayToRefuelOrUnload = isRefuel
+    fun moveUninterrupted(pathToHarbor: List<Tile>, isTask: Boolean, isRefuel: Boolean, isUnload: Boolean) {
+        this.refueling = isRefuel
+        this.unloading = isUnload
         hasTaskAssigned = isTask
         if (pathToHarbor.isEmpty() || this.position == pathToHarbor.last()) {
             return
@@ -170,7 +167,6 @@ open class Ship(
         move(pathToHarbor, false)
         if (this.position == pathToHarbor.last()) {
             hasTaskAssigned = false
-            isInWayToRefuelOrUnload = false
             destinationPath = emptyList()
             if (this.owner.ownedHarbors.contains(this.position)) {
                 arrivedToHarborThisTick = true

@@ -21,6 +21,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
+import kotlin.math.max
 
 private val logger = KotlinLogging.logger {}
 private val garbageTypes: List<String> = listOf("PLASTIC", "OIL", "CHEMICALS")
@@ -107,7 +108,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
                     val restriction: Event =
                         Restriction(id, tick, accumulator.map, requireNotNull(tile), radius)
                     val endRestriction: Event =
-                        EndRestriction(dummyId, tick + eventDuration, accumulator.map, tile, eventDuration)
+                        EndRestriction(dummyId, tick + eventDuration, accumulator.map, tile, radius)
                     accumulator.addEvent(id, restriction)
                     accumulator.addEvent(dummyId--, endRestriction)
                 } else {
@@ -191,7 +192,7 @@ class ScenarioJSONParser(override val accumulator: Accumulator) : JSONParser {
         accumulator.addGarbage(garbageId, g)
         garbageLocation.addGarbage(g)
         accumulator.map.garbageOnMap += amount
-        maxId = garbageId
+        maxId = max(maxId, garbageId)
         return true
     }
 
