@@ -124,8 +124,8 @@ class Corporation(
         // Should we insert knownGarbage into partnerGarbage and then clear knownGarbage
         // to reset the knowledge? I think that this would solve some things.
         // The code to do that would go here, but I am not sure if this is spec behaviour
-        partnerGarbage.putAll(knownGarbage)
-        knownGarbage.clear()
+        // partnerGarbage.putAll(knownGarbage)
+        // knownGarbage.clear()
         this.sea = sea
         getActiveTasks(tick)
         logger.logCorporationStartMoveShips(id)
