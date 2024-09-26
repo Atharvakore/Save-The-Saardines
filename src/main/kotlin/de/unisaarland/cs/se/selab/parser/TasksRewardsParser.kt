@@ -179,7 +179,7 @@ class TasksRewardsParser(override val accumulator: Accumulator) : JSONParser {
         when (rewardType) {
             "TELESCOPE" -> {
                 val visibility: Int = reward.getInt(VISIBILITYRANGE)
-                accumulator.addReward(rewardId, TelescopeReward(rewardId, ScoutingShip(visibility), visibility))
+                accumulator.addReward(rewardId, TelescopeReward(rewardId, ScoutingShip(0), visibility))
             }
 
             "RADIO" -> {
