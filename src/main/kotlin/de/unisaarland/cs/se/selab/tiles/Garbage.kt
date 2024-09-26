@@ -41,7 +41,7 @@ class Garbage(
     private fun handlePlasticGarbage(currentTile: Tile, targetTile: Tile, toBeDrifted: Int): Pair<Tile, Garbage>? {
         var newGarbage = this
         val drifted = minOf(this.amount, toBeDrifted)
-        this.amount = minOf(this.amount - drifted, 0)
+        this.amount -= drifted
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.PLASTIC)
             currentTile.amountOfGarbageDriftedThisTick += drifted
@@ -49,6 +49,7 @@ class Garbage(
 
             return Pair(targetTile, newGarbage)
         } else {
+            this.amount = 0
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, targetTile.id)
             currentTile.garbage.remove(this)
@@ -64,12 +65,13 @@ class Garbage(
     ): Pair<Tile, Garbage>? {
         var target = targetTile
         val drifted = minOf(this.amount, toBeDrifted)
-        this.amount -= minOf(this.amount - drifted, 0)
+        this.amount -= drifted
         var newGarbage: Garbage = this
 
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.OIL)
         } else {
+            this.amount = 0
             currentTile.garbage.remove(this)
         }
 
@@ -80,7 +82,8 @@ class Garbage(
          */
         // THIS COULD BE FURTHER OPTIMIZED, WILL DO IT LATER IF ENOUGH TIME
         if (garbageSum + drifted > MAXOILCAP) {
-            val targetsList = getTilesPath(currentTile, localCurrent)
+            val distance = localCurrent.speed / TEN
+            val targetsList = getTilesPath(currentTile, distance, localCurrent.direction)
             val tile = checkOilCap(targetsList, newGarbage.amount)
             if (tile != null) {
                 target = tile
@@ -113,9 +116,7 @@ class Garbage(
         return null
     }
 
-    private fun getTilesPath(currentTile: DeepOcean, current: Current): List<Tile?> {
-        val distance = current.speed / TEN
-        val dir = current.direction
+    private fun getTilesPath(currentTile: Tile, distance: Int, dir: Direction): List<Tile?> {
         val tilesPath = mutableListOf<Tile?>()
 
         if (distance == 0) {
@@ -131,7 +132,7 @@ class Garbage(
     /**
      * Drift function for storm. A drift that sweeps away all the garbage
      * */
-    fun stormDrift(
+    fun stormDrift (
         speed: Int,
         direction: Direction,
         currentTile: Tile,
@@ -139,8 +140,7 @@ class Garbage(
         garbageToAdd: MutableMap<Tile, MutableList<Garbage>>,
         garbageToRemove: MutableMap<Tile, MutableList<Garbage>>,
     ) {
-        val targetTile = currentTile.getTileInDirection(speed / TEN, direction) ?: return
-        var newGarbage = this
+        val targetTile = getValidTile(currentTile, speed / TEN, direction) ?: return
 
         when (this.type) {
             GarbageType.OIL -> {
@@ -148,56 +148,61 @@ class Garbage(
                     .filter { it.type == GarbageType.OIL }
                     .sumOf { it.amount }
 
-                if (totalOilAmount < MAXOILCAP) {
-                    val driftableAmount = MAXOILCAP - totalOilAmount
-                    if (this.amount <= driftableAmount) {
-                        newGarbage = createGarbage(amount, GarbageType.OIL)
-                        garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(
-                            newGarbage
-                        )
-                        // targetTile.addGarbage(newGarbage)
-                        this.amount = 0
-                    } else {
-                        newGarbage = createGarbage(driftableAmount, GarbageType.OIL)
-                        garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(
-                            newGarbage
-                        )
-                        // targetTile.addGarbage(newGarbage)
-                        this.amount -= driftableAmount
+                if (totalOilAmount + this.amount <= MAXOILCAP) {
+                    garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(this)
+                    corporations.forEach { corporation ->
+                        corporation.partnerGarbage.remove(this.id)
+                        corporation.partnerGarbage.putIfAbsent(this.id, targetTile)
+                    }
+                } else {
+                    val distance = speed / TEN
+                    val tilesInPath = getTilesPath(targetTile, distance, direction)
+                    val newTarget = checkOilCap(tilesInPath, this.amount) ?: return
+                    garbageToAdd.getOrPut(newTarget) { mutableListOf() }.add(this)
+                    garbageToRemove.getOrPut(currentTile) { mutableListOf() }.add(this)
+                    corporations.forEach { corporation ->
+                        corporation.partnerGarbage.remove(this.id)
+                        corporation.partnerGarbage.putIfAbsent(this.id, newTarget)
                     }
                 }
             }
-
             GarbageType.PLASTIC -> {
-                garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(
-                    createGarbage(this.amount, GarbageType.PLASTIC)
-                )
-                // targetTile.addGarbage(createGarbage(this.amount, GarbageType.PLASTIC))
-                this.amount = 0
+                garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(this)
+                garbageToRemove.getOrPut(currentTile) { mutableListOf() }.add(this)
+                corporations.forEach { corporation ->
+                    corporation.partnerGarbage.remove(this.id)
+                    corporation.partnerGarbage.putIfAbsent(this.id, targetTile)
+                }
             }
-
             else -> {
                 if (targetTile is DeepOcean) {
-                    this.amount = 0
-                    currentTile.garbage = currentTile.garbage.filter { it.id == this.id }.toMutableList()
+                    garbageToRemove.getOrPut(currentTile) { mutableListOf() }.add(this)
+                    corporations.forEach { corporation ->
+                        corporation.partnerGarbage.remove(this.id)
+                    }
                 } else {
-                    garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(
-                        createGarbage(this.amount, GarbageType.CHEMICALS)
-                    )
-                    // targetTile.addGarbage(createGarbage(this.amount, GarbageType.CHEMICALS))
-                    this.amount = 0
+                    garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(this)
+                    garbageToRemove.getOrPut(currentTile) { mutableListOf() }.add(this)
+                    corporations.forEach { corporation ->
+                        corporation.partnerGarbage.remove(this.id)
+                        corporation.partnerGarbage.putIfAbsent(this.id, targetTile)
+                    }
                 }
             }
         }
+    }
 
-        corporations.forEach { corporation ->
-            corporation.partnerGarbage.remove(newGarbage.id)
-            corporation.partnerGarbage.putIfAbsent(newGarbage.id, targetTile)
-        }
+    private fun getValidTile(currentTile: Tile, distance: Int, direction: Direction): Tile? {
+        var targetTile = currentTile.getTileInDirection(distance, direction)
 
-        if (this.amount == 0) {
-            garbageToRemove.getOrPut(currentTile) { mutableListOf() }.add(this)
-            // currentTile.garbage.remove(this)
+        if (distance == 0) {
+            targetTile = currentTile
+        } else {
+            for (i in 1..distance) {
+                currentTile.getTileInDirection(i, direction)
+                    ?: return currentTile.getTileInDirection(i - 1, direction)
+            }
         }
+        return targetTile
     }
 }
