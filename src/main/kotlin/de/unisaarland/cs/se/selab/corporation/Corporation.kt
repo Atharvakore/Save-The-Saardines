@@ -290,7 +290,8 @@ class Corporation(
         } else if (capability is CoordinatingShip) {
             handleMoveCoordinating(ship, capability, otherShips)
         } else {
-            error("Unknown ship capability")
+            // Tracker, ignore.
+            result = false
         }
         if (!result && capabilityIndex + 1 < ship.capabilities.size) {
             return tryMove(ship, scoutTarget, collectorTarget, otherShips, capabilityIndex + 1)
