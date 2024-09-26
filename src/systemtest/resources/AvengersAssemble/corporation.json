@@ -20,7 +20,7 @@
   ],
   "ships": [
     {
-      "id": 2,
+      "id": 1,
       "name": "Collecting1",
       "type": "COLLECTING",
       "corporation": 1,
@@ -33,7 +33,7 @@
       "garbageType": "PLASTIC"
     },
     {
-      "id": 1,
+      "id": 2,
       "name": "ExplorerA",
       "type": "SCOUTING",
       "corporation": 1,
