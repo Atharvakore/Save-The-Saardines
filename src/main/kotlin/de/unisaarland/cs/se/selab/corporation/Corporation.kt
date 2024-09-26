@@ -290,7 +290,8 @@ class Corporation(
         } else if (capability is CoordinatingShip) {
             handleMoveCoordinating(ship, capability, otherShips)
         } else {
-            error("Unknown ship capability")
+            // Tracker, ignore.
+            false
         }
         if (!result && capabilityIndex + 1 < ship.capabilities.size) {
             return tryMove(ship, scoutTarget, collectorTarget, otherShips, capabilityIndex + 1)
@@ -369,6 +370,8 @@ class Corporation(
                 availableShips.remove(ship)
             } else {
                 // WE SHOULD ADD A REFUELING HERE
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath, false, true)
                 // Task failed, not enough fuel.
                 tasks.remove(task)
             }
