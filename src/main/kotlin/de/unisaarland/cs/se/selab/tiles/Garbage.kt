@@ -132,7 +132,7 @@ class Garbage(
     /**
      * Drift function for storm. A drift that sweeps away all the garbage
      * */
-    fun stormDrift (
+    fun stormDrift(
         speed: Int,
         direction: Direction,
         currentTile: Tile,

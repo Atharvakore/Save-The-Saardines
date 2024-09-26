@@ -4,7 +4,6 @@ import com.github.erosb.jsonsKema.Schema
 import com.github.erosb.jsonsKema.SchemaLoader
 import com.github.erosb.jsonsKema.Validator
 import de.unisaarland.cs.se.selab.logger.Logger
-import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.parser.Accumulator
 import de.unisaarland.cs.se.selab.parser.CorporationJSONParser
 import de.unisaarland.cs.se.selab.parser.MapJSONParser
