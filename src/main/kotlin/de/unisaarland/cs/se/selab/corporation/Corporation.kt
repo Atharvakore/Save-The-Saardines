@@ -370,12 +370,7 @@ class Corporation(
     private fun tickTasksInMoveShips(availableShips: MutableSet<Ship>) {
         var unload: Boolean = true
         availableShips.sortedBy { it.id }.toMutableSet().removeIf {
-            if (it.capabilities.first() is CollectingShip) {
-                unload = (it.capabilities.first() as CollectingShip).hasOilCapacity() &&
-                        (it.capabilities.first() as CollectingShip).hasChemicalsCapacity()
-                        && (it.capabilities.first() as CollectingShip).hasPlasticCapacity() > 0
-            }
-            if ((it.hasTaskAssigned || it.isInWayToRefuelOrUnload) && () ) {
+            if (it.hasTaskAssigned || it.isInWayToRefuelOrUnload) {
                 it.tickTask(it.hasTaskAssigned, it.isInWayToRefuelOrUnload)
                 return@removeIf true
             }
