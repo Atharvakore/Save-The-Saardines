@@ -22,18 +22,7 @@ class Dijkstra(start: Tile) {
                         continue
                     }
                     val newDistance = currentDistance + 1 // all edges have weight 1
-                    if (newDistance == distances.getOrDefault(
-                            neighbour,
-                            Int.MAX_VALUE
-                        ) && predecessor[neighbour] != null && hasBetterPath(
-                            requireNotNull(predecessor[neighbour]),
-                            current
-                        )
-                    ) {
-                        distances[neighbour] = newDistance
-                        predecessor[neighbour] = current
-                        queue.add(Pair(neighbour, newDistance))
-                    } else if (newDistance < distances.getOrDefault(neighbour, Int.MAX_VALUE)) {
+                    if (newDistance < distances.getOrDefault(neighbour, Int.MAX_VALUE)) {
                         distances[neighbour] = newDistance
                         predecessor[neighbour] = current
                         queue.add(Pair(neighbour, newDistance))
@@ -41,28 +30,6 @@ class Dijkstra(start: Tile) {
                 }
             }
         }
-    }
-    private fun hasBetterPath(before: Tile, current: Tile): Boolean {
-        val ls1: MutableList<Int> = mutableListOf(before.id)
-        var x = predecessor[before]
-        while (x != null) {
-            ls1.add(0, x.id)
-            x = predecessor[x]
-        }
-        val ls2: MutableList<Int> = mutableListOf(current.id)
-        x = predecessor[current]
-        while (x != null) {
-            ls2.add(0, x.id)
-            x = predecessor[x]
-        }
-        for (i in 0..<ls1.size) {
-            if (ls2[i] < ls1[i]) {
-                return true
-            } else if (ls1[i] < ls2[i]) {
-                return false
-            }
-        }
-        return current.id < before.id
     }
 
     /**
