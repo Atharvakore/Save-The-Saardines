@@ -8,7 +8,7 @@ class ExploringPacific : ExampleSystemTestExtension() {
     override val scenario = "ExploringPacific/scenario.json"
     override val map = "ExploringPacific/map.json"
     override val name = "ExploringPacific"
-    override val maxTicks = 15
+    override val maxTicks = 17
 
     override suspend fun run() {
         skipUntilString("Simulation Info: Simulation started.")
@@ -25,9 +25,11 @@ class ExploringPacific : ExampleSystemTestExtension() {
         skipLines(6)
         moveScoutingShip()
         skipLines(6)
-        assertNextLine("Ship Movement: Ship 1 moved with speed 20 to tile 3.")
+        moveScoutingShip()
         skipLines(6)
-        assertNextLine("Ship Movement: Ship 1 moved with speed 20 to tile 32.")
+        assertNextLine("Ship Movement: Ship 1 moved with speed 20 to tile 13.")
+        skipLines(6)
+        assertNextLine("Ship Movement: Ship 1 moved with speed 20 to tile 16.")
         skipLines(6)
         assertNextLine("Ship Movement: Ship 1 moved with speed 20 to tile 9.")
         skipLines(2)

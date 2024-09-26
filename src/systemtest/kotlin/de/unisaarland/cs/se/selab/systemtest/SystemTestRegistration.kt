@@ -49,6 +49,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.ContainerRe
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.RadioRewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TelescopeRewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TrackerRewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.AdventureTime
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.GodVision
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CollectGarbageTaskTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CooperateTaskTest
@@ -128,7 +129,8 @@ object SystemTestRegistration {
         OilBillionaire(),
         DriftToMe(),
         MultiTasking(),
-        ExploringPacific()
+        ExploringPacific(),
+        AdventureTime()
     )
 
     private val testsForMutants = listOf(
