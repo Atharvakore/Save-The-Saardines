@@ -394,8 +394,8 @@ class Corporation(
                 .map { x -> x.first }.firstOrNull { x -> x.restrictions == 0 }
             if (destination != null) {
                 it.move(path[destination] ?: error("There should be a path..."), true)
-                availableShips.remove(it)
             }
+            availableShips.remove(it)
         }
     }
 
