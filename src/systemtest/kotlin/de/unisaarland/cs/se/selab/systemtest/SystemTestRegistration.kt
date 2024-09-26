@@ -163,11 +163,14 @@ object SystemTestRegistration {
         HarborNoCorp(),
         MoreMorePlastic(),
         CollectingMutliplePlasticTest(),
+        CorpNoMove1Test(),
         CorpNoMove2Test(),
         CorpVisibilityRangeTest(),
         CorporationProfessionalObserverTest(),
         CooperateOnceTest(),
-        CoordinatingShipDefaultTest()
+        CoordinatingShipDefaultTest(),
+        CollectAndRefuelTest(),
+        GodVision()
     )
 
     /**
