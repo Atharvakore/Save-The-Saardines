@@ -15,6 +15,6 @@ class CooperateTaskTest : ExampleSystemTestExtension() {
 
     override suspend fun run() {
         skipUntilString("Event: Event 19 of type RESTRICTION happened.")
-        assertNextLine("Task: Task 4 of type COOPERATE with ship 4 is added with destination 52.")
+        assertNextLine("Task: Task 4 of type COOPERATE with ship 1 is added with destination 52.")
     }
 }

@@ -1,0 +1,37 @@
+{
+  "garbage": [
+    {
+      "id": 0,
+      "type": "OIL",
+      "location": 19,
+      "amount": 500
+    }
+  ],
+  "events": [
+    {
+      "id": 0,
+      "type": "RESTRICTION",
+      "tick": 0,
+      "duration": 1,
+      "location": 19,
+      "radius": 2
+    }
+  ],
+  "tasks": [
+    {
+      "id": 0,
+      "type": "FIND",
+      "tick": 1,
+      "shipID": 0,
+      "targetTile": 19,
+      "rewardID": 0,
+      "rewardShipID": 0
+    }
+  ],
+  "rewards": [
+    {
+      "id": 0,
+      "type": "TRACKER"
+    }
+  ]
+}

@@ -11,10 +11,10 @@ class TrackerRewardTest : ExampleSystemTestExtension() {
     override val scenario = "tasksAndRewardsJsons/taskScenario.Json"
     override val map = "mapFiles/map_medium_01.json"
     override val name = "TrackerRewardTest"
-    override val maxTicks = 5
+    override val maxTicks = 6
 
     override suspend fun run() {
         skipUntilString("Event: Event 20 of type RESTRICTION happened.")
-        assertNextLine("Reward: Task 3: Ship 3 received reward of type TRACKER.")
+        assertNextLine("Reward: Task 4: Ship 5 received reward of type RADIO.")
     }
 }

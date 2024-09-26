@@ -117,7 +117,8 @@ object SystemTestRegistration {
         CorporationProfessionalObserverTest(),
         CooperateOnceTest(),
         CoordinatingShipDefaultTest(),
-        CoordinatingTest()
+        CoordinatingTest(),
+        EventSchedulingTest()
     )
 
     private val testsForMutants = listOf(
@@ -157,7 +158,12 @@ object SystemTestRegistration {
         // DAY 2:
         HarborNoCorp(),
         MoreMorePlastic(),
-        CollectingMutliplePlasticTest()
+        CollectingMutliplePlasticTest(),
+        CorpNoMove2Test(),
+        CorpVisibilityRangeTest(),
+        CorporationProfessionalObserverTest(),
+        CooperateOnceTest(),
+        CoordinatingShipDefaultTest()
     )
 
     /**

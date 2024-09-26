@@ -5,6 +5,12 @@
       "type": "OIL",
       "location": 67,
       "amount": 1000
+    },
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 68,
+      "amount": 1000
     }
   ],
   "events": [],
