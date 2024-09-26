@@ -21,11 +21,17 @@
     {
       "id": 4,
       "type": "OIL",
-      "location": 1,
-      "amount": 800
+    "location": 1,
+    "amount": 400
     },
     {
-      "id": 5,
+      "id": 7,
+      "type": "OIL",
+      "location": 1,
+      "amount": 400
+    },
+    {
+    "id": 5,
       "type": "OIL",
       "location": 6,
       "amount": 800

@@ -182,32 +182,14 @@ open class Ship(
         }
     }
 
-    private fun handleSecondaryContainers(garbage: List<Garbage>, capability: CollectingShip): Boolean {
-        val result: Boolean
-        val oilGarbage = garbage.filter { it.type == GarbageType.OIL }
-        val plasticGarbage = garbage.filter { it.type == GarbageType.PLASTIC }
-        val chemicalsGarbage = garbage.filter { it.type == GarbageType.CHEMICALS }
-        result = if (oilGarbage.isNotEmpty()) {
-            capability.hasOilCapacity()
-        } else if (chemicalsGarbage.isNotEmpty()) {
-            capability.hasChemicalsCapacity()
-        } else {
-            capability.hasPlasticCapacity() >= plasticGarbage.sumOf { it.amount }
-        }
-        return result
-    }
-
     /**
      * Checks its garbage types and returns true if it can collect depending on the type
      * */
     fun isCapacitySufficient(garbage: List<Garbage>): Boolean {
+        var result = false
         val capabilities = this.capabilities.filterIsInstance<CollectingShip>()
 
-        if (capabilities.isEmpty()) {
-            return false
-        }
-
-        if (checkContainerFull()) {
+        if (capabilities.isEmpty() || checkContainerFull()) {
             return false
         }
 
@@ -227,14 +209,14 @@ open class Ship(
 
         for (g in garbage) {
             if (g.type == GarbageType.OIL && collectableOil > 0 && g.amount > 0) {
-                return true
+                result = true
             } else if (g.type == GarbageType.PLASTIC && collectablePlastic > 0 && g.amount > 0) {
-                return true
+                result = true
             } else if (g.type == GarbageType.CHEMICALS && collectableChemicals > 0 && g.amount > 0) {
-                return true
+                result = true
             }
         }
-        return false
+        return result
     }
 
     /**
