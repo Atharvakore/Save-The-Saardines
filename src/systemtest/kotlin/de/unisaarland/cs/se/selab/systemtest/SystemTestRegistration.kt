@@ -1,5 +1,4 @@
 package de.unisaarland.cs.se.selab.systemtest
-
 import de.unisaarland.cs.se.selab.systemtest.basictests.ExampleSystemTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25CorporationTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25ParsingTest
@@ -96,6 +95,9 @@ object SystemTestRegistration {
         OneTileNoHarbor(),
         // DAY 2:
         HarborNoCorp(),
+        // DriftMeBaby(),
+        // DriftToMe(),
+        // MoreMorePlastic(),
         CollectingMutliplePlasticTest(),
         ContainerRewardTest(),
         RadioRewardTest(),
@@ -173,7 +175,9 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
-        manager.registerTest(CollectAndRefuelTest())
+        testsForReferenceImpl.forEach {
+            manager.registerTest(it)
+        }
     }
 
     /**
