@@ -150,13 +150,14 @@ class CollectingShip(
         val sumOfPlastic = plastic.sumOf { it.amount }
         val capability: MutableList<CollectingShip> = mutableListOf()
 
-        shipsOnTheTile.forEach { other ->
+        shipsOnTheTile.plus(ship).forEach { other ->
             val cap = other.capabilities.filterIsInstance<CollectingShip>()
             if (cap.isNotEmpty()) {
                 capability.addAll(cap)
             }
         }
 
+        // This needs fixed: we can collect only one garbage patch at the time.
         val sumOfContainers = capability.sumOf { it.hasPlasticCapacity() }
         if (sumOfContainers < sumOfPlastic) {
             return
