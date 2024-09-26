@@ -14,7 +14,6 @@ class CollectAndRefuelTest : ExampleSystemTestExtension() {
     override val maxTicks = 2
 
     override suspend fun run() {
-
         assertNextLine("Initialization Info: map_medium_01.json successfully parsed and validated.")
         assertNextLine("Initialization Info: corporation.json successfully parsed and validated.")
         assertNextLine("Initialization Info: scenario.json successfully parsed and validated.")
