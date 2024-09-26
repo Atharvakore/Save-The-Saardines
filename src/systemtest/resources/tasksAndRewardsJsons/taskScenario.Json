@@ -9,7 +9,7 @@
   ],
   "events": [
     {
-      "id": 15,
+      "id": 0,
       "type": "RESTRICTION",
       "tick": 0,
       "duration": 1,
@@ -17,23 +17,15 @@
       "radius": 0
     },
     {
-      "id": 16,
+      "id": 3,
       "type": "RESTRICTION",
-      "tick": 2,
+      "tick": 3,
       "duration": 1,
       "location": 36,
       "radius": 0
     },
     {
-      "id": 17,
-      "type": "RESTRICTION",
-      "tick": 4,
-      "duration": 1,
-      "location": 36,
-      "radius": 0
-    },
-    {
-      "id": 18,
+      "id": 6,
       "type": "RESTRICTION",
       "tick": 6,
       "duration": 1,
@@ -41,17 +33,25 @@
       "radius": 0
     },
     {
-      "id": 19,
+      "id": 9,
       "type": "RESTRICTION",
-      "tick": 8,
+      "tick": 9,
       "duration": 1,
       "location": 36,
       "radius": 0
     },
     {
-      "id": 20,
+      "id": 12,
       "type": "RESTRICTION",
-      "tick": 10,
+      "tick": 12,
+      "duration": 1,
+      "location": 36,
+      "radius": 0
+    },
+    {
+      "id": 15,
+      "type": "RESTRICTION",
+      "tick": 15,
       "duration": 1,
       "location": 36,
       "radius": 0
@@ -59,7 +59,7 @@
   ],
   "tasks": [
     {
-      "id": 1,
+      "id": 0,
       "type": "COLLECT",
       "tick": 0,
       "shipID": 1,
@@ -68,27 +68,27 @@
       "rewardShipID": 1
     },
     {
-      "id": 2,
+      "id": 3,
       "type": "EXPLORE",
-      "tick": 1,
+      "tick": 3,
       "shipID": 2,
       "targetTile": 65,
       "rewardID": 6,
       "rewardShipID": 2
     },
     {
-      "id": 3,
+      "id": 6,
       "type": "FIND",
-      "tick": 3,
+      "tick": 6,
       "shipID": 3,
       "targetTile": 64,
       "rewardID": 7,
       "rewardShipID": 3
     },
     {
-      "id": 4,
+      "id": 9,
       "type": "COOPERATE",
-      "tick": 4,
+      "tick": 9,
       "shipID": 1,
       "targetTile": 52,
       "rewardID": 8,
