@@ -34,7 +34,10 @@ class Corporation(
     }
 
     val trackedGarbage: MutableList<Garbage> = mutableListOf()
+    // Garbage that we know of.
     val partnerGarbage: MutableMap<Int, Tile> = mutableMapOf()
+    // Garbage that we see explicitly.
+    val knownGarbage: MutableMap<Int, Tile> = mutableMapOf()
     var lastCoordinatingCorporation: Corporation? = null
     val logger: LoggerCorporationAction = LoggerCorporationAction
     lateinit var sea: Sea
@@ -164,10 +167,13 @@ class Corporation(
             tile.garbage
                 .asSequence()
                 .filter { acceptedGarbageType.contains(it.type) }
-                .forEach { garbage -> partnerGarbage[garbage.id] = tile }
+                .forEach { garbage -> knownGarbage[garbage.id] = tile }
             tile.garbage.forEach {
                 if (partnerGarbage[it.id] != tile) {
                     partnerGarbage.remove(it.id) // Remove if the garbage is on a different tile...
+                }
+                if (knownGarbage[it.id] != tile) {
+                    knownGarbage.remove(it.id) // Remove if the garbage is on a different tile...
                 }
             }
         }
@@ -185,7 +191,7 @@ class Corporation(
         )
         val closestGarbagePatch = sorted
             .map { it.first }
-            .intersect(partnerGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) }).toSet())
+            .intersect(knownGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) }).toSet())
             .filter { !scoutTarget.contains(it.id) }
             .firstOrNull { tile ->
                 tile.garbage
@@ -231,7 +237,7 @@ class Corporation(
         if (garbage.isNotEmpty()) {
             // Don't move. Add info about the garbage on this tile to corp knowledge.
             ship.position.garbage.forEach {
-                partnerGarbage[it.id] = ship.position
+                knownGarbage[it.id] = ship.position
             }
             if (ship.isCapacitySufficient(garbage)) {
                 result = true
@@ -248,7 +254,7 @@ class Corporation(
             // if two paths have equal length, then the garbage with lowest id
             val attainableGarbage = sorted
                 .map { it.first }
-                .intersect(partnerGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) }).toSet())
+                .intersect(knownGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) }).toSet())
                 .filter { tile ->
                     findUncollectedGarbage(tile, cap, collectorTarget) != null
                 }.sortedWith(compareBy({ paths[it]?.size }, { it.garbage.first().id }))
