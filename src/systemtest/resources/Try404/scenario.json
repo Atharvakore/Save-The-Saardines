@@ -3,7 +3,7 @@
     {
       "id": 2,
       "type": "OIL",
-      "location": 14,
+      "location": 50,
       "amount": 1000
     }
   ],
@@ -13,7 +13,7 @@
       "type": "RESTRICTION",
       "tick": 4,
       "duration": 2,
-      "location": 22,
+      "location": 50,
       "radius": 1
     }
   ],
