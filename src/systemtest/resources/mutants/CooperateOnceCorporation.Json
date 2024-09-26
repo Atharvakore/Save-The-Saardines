@@ -1,0 +1,70 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Scouters Inc.",
+      "ships": [
+        1, 5
+      ],
+      "homeHarbors": [
+        14, 52
+      ],
+      "garbageTypes": [
+        "OIL"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Ocean Scouters Inc.2",
+      "ships": [
+        7
+      ],
+      "homeHarbors": [
+        59
+      ],
+      "garbageTypes": [
+        "OIL"
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "Collecter1",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 89,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 9,
+      "capacity": 80000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 5,
+      "name": "coordinator",
+      "type": "COORDINATING",
+      "corporation": 1,
+      "location": 36,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 7,
+      "visibilityRange": 1
+    },
+    {
+      "id": 7,
+      "name": "Collecter01",
+      "type": "COLLECTING",
+      "corporation": 2,
+      "location": 25,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 9,
+      "capacity": 80000,
+      "garbageType": "OIL"
+    }
+  ]
+}

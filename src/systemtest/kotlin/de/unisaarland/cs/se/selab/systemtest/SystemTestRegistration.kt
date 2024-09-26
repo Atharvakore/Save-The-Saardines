@@ -22,6 +22,13 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.C
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingPlasticTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.MoveNearHome
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.ReturnToHomeWater
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CooperateOnceTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CoordinatingShipDefaultTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CoordinatingTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpNoMove1Test
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpNoMove2Test
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpVisibilityRangeTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorporationProfessionalObserverTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorporationWhereShip
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
@@ -42,8 +49,10 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TelescopeRe
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TrackerRewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CollectGarbageTaskTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CooperateTaskTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.EventSchedulingTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.ExploreMapTaskTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.FindGarbageTaskTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.HardChoice
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingPlasticTest
 
@@ -100,7 +109,15 @@ object SystemTestRegistration {
         CooperateTaskTest(),
         ExploreMapTaskTest(),
         FindGarbageTaskTest(),
-        HardChoice()
+        HardChoice(),
+        EventSchedulingTest(),
+        CorpNoMove1Test(),
+        CorpNoMove2Test(),
+        CorpVisibilityRangeTest(),
+        CorporationProfessionalObserverTest(),
+        CooperateOnceTest(),
+        CoordinatingShipDefaultTest(),
+        CoordinatingTest()
     )
 
     private val testsForMutants = listOf(
