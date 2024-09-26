@@ -41,7 +41,7 @@ class Garbage(
     private fun handlePlasticGarbage(currentTile: Tile, targetTile: Tile, toBeDrifted: Int): Pair<Tile, Garbage>? {
         var newGarbage = this
         val drifted = minOf(this.amount, toBeDrifted)
-        this.amount = minOf(this.amount - drifted, 0)
+        this.amount -= drifted
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.PLASTIC)
             currentTile.amountOfGarbageDriftedThisTick += drifted
@@ -49,6 +49,7 @@ class Garbage(
 
             return Pair(targetTile, newGarbage)
         } else {
+            this.amount = 0
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, targetTile.id)
             currentTile.garbage.remove(this)
@@ -64,12 +65,13 @@ class Garbage(
     ): Pair<Tile, Garbage>? {
         var target = targetTile
         val drifted = minOf(this.amount, toBeDrifted)
-        this.amount -= minOf(this.amount - drifted, 0)
+        this.amount -= drifted
         var newGarbage: Garbage = this
 
         if (this.amount > 0) {
             newGarbage = createGarbage(drifted, GarbageType.OIL)
         } else {
+            this.amount = 0
             currentTile.garbage.remove(this)
         }
 
@@ -130,7 +132,7 @@ class Garbage(
     /**
      * Drift function for storm. A drift that sweeps away all the garbage
      * */
-    fun stormDrift(
+    fun stormDrift (
         speed: Int,
         direction: Direction,
         currentTile: Tile,
