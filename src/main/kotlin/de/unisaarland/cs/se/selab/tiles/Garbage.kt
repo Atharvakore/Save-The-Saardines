@@ -42,11 +42,6 @@ class Garbage(
             GarbageType.OIL -> {
                 handleOilGarbage(currentTile, targetTile, toBeDrifted, localCurrent)
             }
-
-            GarbageType.CHEMICALS -> {
-                handleChemicalsGarbage(currentTile, targetTile, toBeDrifted)
-            }
-
             else -> {
                 handlePlasticGarbage(currentTile, targetTile, toBeDrifted)
             }
@@ -62,37 +57,11 @@ class Garbage(
             newGarbage = createGarbage(drifted, GarbageType.PLASTIC)
         } else {
             currentTile.garbage.remove(this)
-            this.trackedBy.forEach { corporation ->
-                corporation.trackedGarbage.remove(this)
-            }
         }
         currentTile.amountOfGarbageDriftedThisTick += drifted
         Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, targetTile.id)
 
         return Pair(targetTile, newGarbage)
-    }
-
-    private fun handleChemicalsGarbage(currentTile: DeepOcean, target: Tile, toBeDrifted: Int): Pair<Tile, Garbage> {
-        val drifted = minOf(this.amount, toBeDrifted)
-        this.amount -= drifted
-        var newGarbage: Garbage = this
-        if (this.amount > 0) {
-            newGarbage = createGarbage(drifted, GarbageType.CHEMICALS)
-            // WHY IS THIS IF STATEMENT HERE WITH SAME BLOCKS OF CODE ??
-            if (target is DeepOcean) {
-                currentTile.amountOfGarbageDriftedThisTick += drifted
-                Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
-            } else {
-                currentTile.amountOfGarbageDriftedThisTick += drifted
-                Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
-            }
-        } else {
-            currentTile.garbage.remove(this)
-            this.trackedBy.forEach { corporation ->
-                corporation.trackedGarbage.remove(this)
-            }
-        }
-        return Pair(target, newGarbage)
     }
     private fun handleOilGarbage(
         currentTile: DeepOcean,
@@ -108,9 +77,6 @@ class Garbage(
             newGarbage = createGarbage(drifted, GarbageType.OIL)
         } else {
             currentTile.garbage.remove(this)
-            this.trackedBy.forEach { corporation ->
-                corporation.trackedGarbage.remove(this)
-            }
         }
 
         val garbageSum = targetTile.garbage.filter { it.type == GarbageType.OIL }.sumOf { it.amount }

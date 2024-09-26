@@ -26,6 +26,7 @@ class EventSchedulingTest : ExampleSystemTestExtension() {
 
         skipUntilString("Event: Event 20 of type RESTRICTION happened.")
 
-        assertNextLine("Simulation Info: Simulation ended.")
+        skipUntilString("Simulation Info: Simulation ended.")
+        assertNextLine("Simulation Info: Simulation statistics are calculated.")
     }
 }
