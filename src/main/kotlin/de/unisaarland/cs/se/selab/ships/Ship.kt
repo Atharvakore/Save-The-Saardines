@@ -193,6 +193,8 @@ open class Ship(
      * if oil then true if it can collect some of the amount
      * */
     fun isCapacitySufficient(garbage: List<Garbage>): Boolean {
+        // this code is completely fucked, why does it consider only the first capability?
+        // it throws a classcast if collecting ship is a secondary capability.
         val result: Boolean
         val capability = this.capabilities.first() as CollectingShip
 
