@@ -12,6 +12,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.StormOverMultipleTiles
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.AvengersAssemble
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingMutliplePlasticTest
@@ -19,6 +20,8 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.C
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingPlasticTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.MoveNearHome
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.ReturnToHomeWater
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.drifting.DriftToMe
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.drifting.OilBillionaire
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CooperateOnceTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CoordinatingShipDefaultTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CoordinatingTest
@@ -118,7 +121,10 @@ object SystemTestRegistration {
         CoordinatingTest(),
         EventSchedulingTest(),
         CollectAndRefuelTest(),
-        GodVision()
+        GodVision(),
+        AvengersAssemble(),
+        OilBillionaire(),
+        DriftToMe()
     )
 
     private val testsForMutants = listOf(
