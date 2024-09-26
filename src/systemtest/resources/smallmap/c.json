@@ -1,0 +1,34 @@
+{
+  "corporations": [
+    {
+      "id": 0,
+      "name": "Neptune’s_Net_Solutions",
+      "ships": [
+        0
+      ],
+      "homeHarbors": [
+        2,
+        14
+      ],
+      "garbageTypes": [
+        "PLASTIC",
+        "OIL",
+        "CHEMICALS"
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 0,
+      "name": "Seaventure",
+      "corporation": 0,
+      "type": "SCOUTING",
+      "location": 0,
+      "maxVelocity": 10,
+      "acceleration": 5,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 7,
+      "visibilityRange": 2
+    }
+  ]
+}
