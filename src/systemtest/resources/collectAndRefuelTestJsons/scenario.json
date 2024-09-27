@@ -2,20 +2,20 @@
   "garbage": [
     {
       "id": 3,
-      "type": "PLASTIC",
-      "location": 63,
+      "type": "OIL",
+      "location": 64,
       "amount": 300
     },
     {
       "id": 4,
-        "type": "PLASTIC",
-        "location": 63,
+        "type": "OIL",
+        "location": 64,
         "amount": 300
     },
     {
       "id": 5,
-      "type": "PLASTIC",
-        "location": 63,
+      "type": "OIL",
+        "location": 64,
         "amount": 400
     }
   ],

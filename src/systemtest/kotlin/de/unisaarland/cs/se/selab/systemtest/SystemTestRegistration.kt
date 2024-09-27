@@ -47,6 +47,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShoreNo
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.AdventureTime
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.GodVision
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.EventSchedulingTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.FindGarbageTaskTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingPlasticTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.WhereDoWeUnloadThis
@@ -119,7 +120,8 @@ object SystemTestRegistration {
         CollaborationTest(),
         WhereDoWeUnloadThis(),
         Blyat(),
-        FindNoGarbageTest()
+        FindNoGarbageTest(),
+        FindGarbageTaskTest()
     )
 
     private val testsForMutants = listOf(
@@ -177,7 +179,8 @@ object SystemTestRegistration {
         MultiTaskingTest(),
         WeExistByOurselves(),
         WhereDoWeUnloadThis(),
-        Blyat()
+        Blyat(),
+        //  FindGarbageTaskTest()
     )
 
     /**
@@ -187,9 +190,10 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
-        testsForReferenceImpl.forEach {
-            manager.registerTest(it)
-        }
+        // testsForReferenceImpl.forEach {
+        //  manager.registerTest(it)
+        // }
+        manager.registerTest(FindGarbageTaskTest())
     }
 
     /**
