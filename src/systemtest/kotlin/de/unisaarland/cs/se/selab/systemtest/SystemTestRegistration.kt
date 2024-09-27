@@ -48,6 +48,8 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.ContainerRe
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.RadioRewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TelescopeRewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TrackerRewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.AdventureTime
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.ExploringPacific
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.GodVision
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CollectGarbageTaskTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CooperateTaskTest
@@ -173,8 +175,13 @@ object SystemTestRegistration {
         CooperateOnceTest(),
         CoordinatingShipDefaultTest(),
         CollectAndRefuelTest(),
-        GodVision()
-    )
+        GodVision(),
+        ExploringPacific(),
+        AdventureTime(),
+        AvengersAssemble(),
+        OilBillionaire(),
+
+        )
 
     /**
      * Register your tests to run against the reference implementation!
