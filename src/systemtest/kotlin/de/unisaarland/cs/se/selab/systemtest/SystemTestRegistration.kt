@@ -195,18 +195,12 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
 
-    fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
-        //testsForReferenceImpl.forEach {
-          //  manager.registerTest(it)
-        //}
-        manager.registerTest(ContainerTest())
 
     fun registerSystemTestsReferenceImpl(
         manager: SystemTestManager) {
-        //testsForReferenceImpl.forEach {
-          //  manager.registerTest(it)
-        //}
-        manager.registerTest(ContainerTest())
+        testsForReferenceImpl.forEach {
+            manager.registerTest(it)
+        }
     }
 
     /**
@@ -230,4 +224,4 @@ object SystemTestRegistration {
             manager.registerTest(it)
         }
     }
-}}
+}
