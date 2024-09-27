@@ -131,6 +131,7 @@ class Corporation(
         }
         partnerGarbage.putAll(knownGarbage)
         knownGarbage.clear()
+        partnerGarbage.keys.removeAll(trackedGarbage.map { it.id }.toSet())
         this.sea = sea
         getActiveTasks(tick)
         logger.logCorporationStartMoveShips(id)
