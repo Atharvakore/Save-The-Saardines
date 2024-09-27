@@ -577,9 +577,11 @@ class Corporation(
                 )
             }
         }
-        collectingShips.forEach {
-            if (it.shouldUnload()) {
-                it.unloading = true
+        collectingShips.map { it.capabilities }.flatten().filterIsInstance<CollectingShip>().forEach {
+            it.auxiliaryContainers.forEach { container ->
+                if (container.garbageLoad == container.getGarbageCapacity()) {
+                    it.unloading = true
+                }
             }
         }
     }
