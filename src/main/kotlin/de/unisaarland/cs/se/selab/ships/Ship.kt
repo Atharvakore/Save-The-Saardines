@@ -36,14 +36,6 @@ open class Ship(
     var unloading = false
 
     /**
-     * ship has at least on full container
-     */
-    fun shouldUnload(): Boolean {
-        return this.capabilities.filterIsInstance<CollectingShip>()
-            .any { it.auxiliaryContainers.any { container -> container.shouldUnload() } }
-    }
-
-    /**
      * Call: when the ship is on the harbor
      * Logic: the ship has to max its fuelCapacity
      */

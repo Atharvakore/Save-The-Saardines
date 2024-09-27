@@ -15,50 +15,6 @@ class CollectingShip(
     var unloading: Boolean = false
 
     /**
-     * reduces chemicals capacity by x
-     */
-    fun reduceChemicalsCapacity(x: Int) {
-        var i: Int = 0
-        var xx = x
-        val chemicalsContainer = auxiliaryContainers.filter { it.garbageType == GarbageType.CHEMICALS }
-        while (xx > 0) {
-            val container = chemicalsContainer[i]
-            if (container.getGarbageCapacity() - container.garbageLoad > x) {
-                container.garbageLoad += xx
-                xx -= container.getGarbageCapacity() - container.garbageLoad
-            } else {
-                i += 1
-            }
-        }
-    }
-
-    /**
-     * reduces oil capacity by x
-     */
-    fun reduceOilCapacity(x: Int) {
-        var i: Int = 0
-        var xx = x
-        val oilContainer = auxiliaryContainers.filter { it.garbageType == GarbageType.OIL }
-        while (xx > 0) {
-            val container = oilContainer[i]
-            if (container.getGarbageCapacity() - container.garbageLoad > x) {
-                container.garbageLoad += xx
-                xx -= container.getGarbageCapacity() - container.garbageLoad
-            } else {
-                i += 1
-            }
-        }
-    }
-
-    /**
-     * returns how much plastic can this ship still collect (not sure, should validate with the spec)
-     */
-    fun getPlasticCapability(): Int {
-        return auxiliaryContainers.filter { it.garbageType == GarbageType.PLASTIC }
-            .sumOf { it.getGarbageCapacity() - it.garbageLoad }
-    }
-
-    /**
      * unloads all the containers of the ship
      */
     fun unload(ship: Ship): Boolean {
@@ -95,16 +51,16 @@ class CollectingShip(
      *
      * checks if the ship can collect any amount of oil
      * */
-    fun hasOilCapacity(): Int {
+    fun hasOilCapacity(): Boolean {
         val oilContainers = auxiliaryContainers.filter { it.garbageType == GarbageType.OIL }
         if (oilContainers.isEmpty()) {
-            return 0
+            return false
         } else {
             var oilCapacity = 0
             for (container in oilContainers) {
                 oilCapacity += container.getGarbageCapacity() - container.garbageLoad
             }
-            return oilCapacity
+            return oilCapacity > 0
         }
     }
 
@@ -112,16 +68,16 @@ class CollectingShip(
      *
      * checks if the ship can collect any amount of chemicals
      * */
-    fun hasChemicalsCapacity(): Int {
+    fun hasChemicalsCapacity(): Boolean {
         val chemicalsContainers = auxiliaryContainers.filter { it.garbageType == GarbageType.CHEMICALS }
         if (chemicalsContainers.isEmpty()) {
-            return 0
+            return false
         } else {
             var chemicalsCapacity = 0
             for (container in chemicalsContainers) {
                 chemicalsCapacity += container.getGarbageCapacity() - container.garbageLoad
             }
-            return chemicalsCapacity
+            return chemicalsCapacity > 0
         }
     }
 

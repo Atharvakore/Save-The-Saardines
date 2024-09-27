@@ -39,6 +39,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.Incorre
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectShipsGarbages
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.IncorrectShipsIds
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.LandNextDeepOcean
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.MultiTasking
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.OneIDTwoTasks
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.OneTileNoHarbor
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShipAmongUs
@@ -124,7 +125,8 @@ object SystemTestRegistration {
         GodVision(),
         AvengersAssemble(),
         OilBillionaire(),
-        DriftToMe()
+        DriftToMe(),
+        MultiTasking()
     )
 
     private val testsForMutants = listOf(

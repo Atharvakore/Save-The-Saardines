@@ -12,13 +12,6 @@ class Container(
     var garbageLoad: Int = 0
 
     /**
-     * return if container is full
-     */
-    fun shouldUnload(): Boolean {
-        return garbageLoad == garbageCapacity
-    }
-
-    /**
      * return max garbage capacity
      * */
     fun getGarbageCapacity(): Int {

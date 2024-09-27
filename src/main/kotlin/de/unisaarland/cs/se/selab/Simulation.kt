@@ -64,7 +64,7 @@ class Simulation(
 
         for (corporation in corporations.sortedBy { it.id }) {
             val otherShips = allShips.filter { it.owner != corporation }
-            corporation.run(tick, sea, otherShips)
+            corporation.run(sea, otherShips, activeTasks)
         }
 
         for (ship in allShips) {
@@ -186,9 +186,11 @@ class Simulation(
     private fun processTasks() {
         val tasks = corporations.map { it.tasks }.flatten().sortedBy { it.id }
         val tasksToBeAdded = tasks.filter { it.tick == tick }
+
         tasksToBeAdded.forEach { task ->
             activeTasks.putIfAbsent(task, true)
         }
+
         for (task in tasksToBeAdded) {
             task.actUponTick(tick)
         }
