@@ -571,6 +571,11 @@ class Corporation(
                 )
             }
         }
+        collectingShips.forEach {
+            if (it.shouldUnload()) {
+                it.unloading = true
+            }
+        }
     }
 
     private fun collectChemicalsFromCurrentTile(ships: List<Ship>, gar: Garbage) {
