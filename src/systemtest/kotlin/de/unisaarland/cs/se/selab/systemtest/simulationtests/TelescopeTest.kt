@@ -5,10 +5,10 @@ import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 /**
  * tests general garabge collecting
  * */
-class TaskAndRewardsTest : ExampleSystemTestExtension() {
+class TelescopeTest : ExampleSystemTestExtension() {
     override val description = "tests tasks and rewards"
-    override val corporations = "tasksAndRewardsTestJsons/corporation.json"
-    override val scenario = "tasksAndRewardsTestJsons/scenario.json"
+    override val corporations = "telescopeTestJsons/corporation.json"
+    override val scenario = "telescopeTestJsons/scenario.json"
     override val map = "mapFiles/map_medium_01.json"
     override val name = "TaskAndRewardsTest"
     override val maxTicks = 5
