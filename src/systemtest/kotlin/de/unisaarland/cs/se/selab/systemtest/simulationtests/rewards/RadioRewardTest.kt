@@ -11,9 +11,9 @@ class RadioRewardTest : ExampleSystemTestExtension() {
     override val scenario = "tasksAndRewardsJsons/taskScenario.Json"
     override val map = "mapFiles/map_medium_01.json"
     override val name = "RadioRewardTest"
-    override val maxTicks = 14
+    override val maxTicks = 6
     override suspend fun run() {
-        skipUntilString("Reward: Task 9: Ship 5 received reward of type RADIO.")
-        assertNextLine("Simulation Info: Tick 13 started.")
+        skipUntilString("Event: Event 20 of type RESTRICTION happened.")
+        assertNextLine("Reward: Task 4: Ship 5 received reward of type RADIO.")
     }
 }

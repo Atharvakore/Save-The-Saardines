@@ -108,9 +108,8 @@ class Helper {
      * @return List of tiles representing the shortest path to the closest harbor
      */
     fun findClosestHarbor(tile: Tile, harbors: List<Shore>): List<Tile> {
-        val x = Dijkstra(tile).allPaths().toList() // (KS: Simplify)
+        return Dijkstra(tile).allPaths().toList() // (KS: Simplify)
             .sortedWith(compareBy({ it.second.size }, { it.first.id }))
-            .first { harbors.contains(it.first) }
-        return x.second
+            .first { harbors.contains(it.first) }.second
     }
 }

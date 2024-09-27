@@ -43,7 +43,6 @@ class Corporation(
     var lastCoordinatingCorporation: Corporation? = null
     val logger: LoggerCorporationAction = LoggerCorporationAction
     lateinit var sea: Sea
-    private var activeTasks: List<Task> = emptyList()
 
     /**
      * Cooperation between ships
@@ -55,7 +54,6 @@ class Corporation(
      * @param otherShips List of all ships in the simulation
      */
     fun cooperate(otherShips: List<Ship>) {
-        // chinese whispers: give the other corporation the contents of our own partnerGarbage.
         val myCoordinatingShips: List<Ship> = Helper().filterCoordinatingShips(this).sortedBy { it.id }
 
         myCoordinatingShips.forEach { coordinatingShip ->
@@ -121,16 +119,15 @@ class Corporation(
      *
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
-    fun run(tick: Int, sea: Sea, otherShips: List<Ship>) {
+    fun run(sea: Sea, otherShips: List<Ship>, activeTasks: MutableMap<Task, Boolean>) {
         // Should we insert knownGarbage into partnerGarbage and then clear knownGarbage
         // to reset the knowledge? I think that this would solve some things.
         // The code to do that would go here, but I am not sure if this is spec behaviour
         partnerGarbage.putAll(knownGarbage)
         knownGarbage.clear()
         this.sea = sea
-        getActiveTasks(tick)
         logger.logCorporationStartMoveShips(id)
-        moveShips(otherShips)
+        moveShips(otherShips, activeTasks)
         tryAttachTrackers()
         logger.logCorporationStartCollectGarbage(id)
         collectGarbage(otherShips.union(ownedShips).toList())
@@ -139,11 +136,6 @@ class Corporation(
         logger.logCorporationRefueling(id)
         refuelAndUnloadShips()
         logger.logCorporationFinishedActions(id)
-    }
-
-    private fun getActiveTasks(tick: Int): List<Task> {
-        activeTasks = tasks.filter { tick == it.tick + 1 }
-        return activeTasks
     }
 
     private fun findUncollectedGarbage(tile: Tile, cap: CollectingShip, target: MutableMap<Int, Int>): Garbage? {
@@ -401,7 +393,7 @@ class Corporation(
     }
 
     /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
-    private fun moveShips(otherShips: List<Ship>) {
+    private fun moveShips(otherShips: List<Ship>, activeTasks: MutableMap<Task, Boolean>) {
         ownedShips.forEach { it.movedThisTick = MovementTuple(false, -1, -1, -1) }
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
         for (ship in ownedShips) {
@@ -415,8 +407,10 @@ class Corporation(
         moveShipsOutOfRestriction(availableShips)
         // 1. Process tasks. For each active task, assign the ship from the task to
         // go to the target tile.
-        // val activeTasks: List<Task> = getActiveTasks()
-        activeTasks.forEach { task ->
+
+        val corpActiveTasks = tasks.filter { activeTasks.contains(it) && activeTasks[it] == true }
+
+        corpActiveTasks.forEach { task ->
             val ship: Ship = task.taskShip
             /**
              * This is my fix so far for this, hasTaskAssigned is false if the ship is doing a task, hence can be
@@ -427,6 +421,7 @@ class Corporation(
             } else {
                 // Task failed, ship is going to refuel/unload
                 tasks.remove(task)
+                activeTasks[task] = false
             }
         }
         // 0. For each ship that has an assigned destination, tick the
@@ -480,42 +475,8 @@ class Corporation(
                 }
             }
         }
-
-        knownGarbage.forEach { garbage ->
-
-            val distances = Dijkstra(garbage.value)
-            val shipsByIncDistance = collectingShips.sortedBy { distances.allPaths()[it.position]?.size }
-            for (ship in shipsByIncDistance) {
-                moveCollectingShipNew(ship, garbage, scoutTarget, collectorTarget, otherShips, usedShips)
-            }
-        }
-
         return usedShips
     }
-
-    private fun moveCollectingShipNew(
-        ship: Ship,
-        garbage: Map.Entry<Int, Tile>,
-        scoutTarget: MutableSet<Int>,
-        collectorTarget: MutableMap<Int, Int>,
-        otherShips: List<Ship>,
-        usedShips: MutableList<Int>
-    ) {
-        val collectingCap = ship.capabilities.filterIsInstance<CollectingShip>()
-        collectingCap.forEach { cap ->
-            if (cap.auxiliaryContainers
-                    .any { container ->
-                        container.garbageType == garbage.value.garbage
-                            .find { it.id == garbage.key }?.type
-                    }
-            ) {
-                if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
-                    usedShips.add(ship.id)
-                }
-            }
-        }
-    }
-
     private fun handleMoveCoordinating(ship: Ship, capability: CoordinatingShip, otherShips: List<Ship>): Boolean {
         val result: Boolean
         // 1. Get information about which ships are in field of view

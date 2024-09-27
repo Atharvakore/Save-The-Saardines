@@ -5,7 +5,7 @@ import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 class LandNextDeepOcean : ExampleSystemTestExtension() {
     override val map = "mapFiles/LandNextDeepMap.json"
     override val corporations = "corporationJsons/corporationCorrect.json"
-    override val scenario = "Try404/scenario.json"
+    override val scenario = "scenarioJsons/scenario.json"
     override val description = "Checks when a land tile is near a deep ocean tile"
     override val maxTicks = 0
     override val name = "LandNextDeep"
