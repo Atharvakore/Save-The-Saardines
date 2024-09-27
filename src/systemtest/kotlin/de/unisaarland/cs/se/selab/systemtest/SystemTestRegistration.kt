@@ -181,7 +181,8 @@ object SystemTestRegistration {
         WeExistByOurselves(),
         WhereDoWeUnloadThis(),
         Blyat(),
-        Stuff()
+        Stuff(),
+        Coropro()
     )
 
     /**
