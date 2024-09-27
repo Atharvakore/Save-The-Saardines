@@ -466,6 +466,12 @@ class Corporation(
         val scoutTarget: MutableSet<Int> = mutableSetOf()
         val collectorTarget: MutableMap<Int, Int> = mutableMapOf()
         for (ship in availableShips.sortedBy { it.id }) {
+            // if it's a collecting ship and it's full then send it to a harbor:
+            if (ship.hasCollectingCapability() && ship.needsToUnload()) {
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath, false, true)
+                continue
+            }
             if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
                 usedShips.add(ship.id)
             }
