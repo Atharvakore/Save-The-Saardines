@@ -219,10 +219,7 @@ class Corporation(
             )
             .filter { !scoutTarget.contains(it.id) }
             .firstOrNull { tile ->
-                tile.garbage
-                    .asSequence()
-                    .filter { acceptedGarbageType.contains(it.type) }
-                    .any()
+                tile.garbage.any()
             }
         if (closestGarbagePatch != null && closestGarbagePatch != ship.position) {
             val path = paths[closestGarbagePatch] ?: return false
