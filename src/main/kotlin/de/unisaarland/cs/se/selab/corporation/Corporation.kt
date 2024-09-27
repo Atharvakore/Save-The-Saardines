@@ -527,7 +527,7 @@ class Corporation(
         result = if (onPos != null) {
             true
         } else {
-            helperMoveCoordinating(ship, otherShips)
+            helperMoveCoordinating(ship, shipFov)
         }
         return result
     }
