@@ -141,7 +141,10 @@ open class Ship(
      * @return if the ship can complete this path
      */
     fun isFuelSufficient(pathLength: Int, ownedHarbors: List<Shore>, targetTile: Tile): Boolean {
-        val shortestPathToHarbor: List<Tile> = Helper().findClosestHarbor(targetTile, ownedHarbors)
+        var shortestPathToHarbor: List<Tile>? = Helper().findClosestHarbor(targetTile, ownedHarbors)
+        if (shortestPathToHarbor == null) {
+            shortestPathToHarbor = mutableListOf()
+        }
         val fullPath = pathLength + shortestPathToHarbor.size
         val neededFuel = fuelConsumption * fullPath * SPEED_LENGTH
         val result = neededFuel <= fuelCapacity - consumedFuel
@@ -173,10 +176,10 @@ open class Ship(
      * set destination for the ship
      * and store the path until its completed
      * */
-    fun moveUninterrupted(pathToHarbor: List<Tile>, isTask: Boolean, isRefuel: Boolean) {
+    fun moveUninterrupted(pathToHarbor: List<Tile>?, isTask: Boolean, isRefuel: Boolean) {
         isInWayToRefuelOrUnload = isRefuel
         hasTaskAssigned = isTask
-        if (pathToHarbor.isEmpty() || this.position == pathToHarbor.last()) {
+        if (pathToHarbor.isNullOrEmpty() || this.position == pathToHarbor.last()) {
             return
         }
         move(pathToHarbor, false)

@@ -186,7 +186,6 @@ class Corporation(
         capability.getTilesWithGarbageInFoV(sea, ship.position).forEach { tile ->
             tile.garbage
                 .asSequence()
-                .filter { acceptedGarbageType.contains(it.type) }
                 .forEach { garbage -> knownGarbage[garbage.id] = tile }
             tile.garbage.forEach {
                 if (partnerGarbage[it.id] != tile) {

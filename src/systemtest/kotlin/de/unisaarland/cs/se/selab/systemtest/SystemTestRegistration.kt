@@ -64,6 +64,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.FindGarbageTa
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.HardChoice
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingPlasticTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.WhereDoWeUnloadThis
 
 /** The class which will register the tests for Testing on Course Implementation */
 object SystemTestRegistration {
@@ -141,7 +142,8 @@ object SystemTestRegistration {
         MultiTaskingTest(),
         WeExistByOurselves(),
         FindGarbageTaskTest(),
-        CollaborationTest()
+        CollaborationTest(),
+        WhereDoWeUnloadThis()
     )
 
     private val testsForMutants = listOf(
