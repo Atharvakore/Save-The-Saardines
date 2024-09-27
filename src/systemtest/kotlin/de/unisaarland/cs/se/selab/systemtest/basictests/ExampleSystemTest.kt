@@ -10,7 +10,7 @@ import de.unisaarland.cs.se.selab.systemtest.utils.Logs
 class ExampleSystemTest : ExampleSystemTestExtension() {
     override val description = "tests statistics after 0 ticks"
     override val corporations = "corporationJsons/corporations.json"
-    override val scenario = "Try404/scenario.json"
+    override val scenario = "scenarioJsons/scenario.json"
     override val map = "mapFiles/smallMap1.json"
     override val name = "ExampleTest"
     override val maxTicks = 0
