@@ -123,10 +123,10 @@ open class Ship(
             if (desTile != this.position && consumedFuel <= fuelCapacity) {
                 this.movedThisTick = MovementTuple(true, id, currentVelocity, desTile.id)
                 this.position = desTile
+                currentVelocity = 0
             } else {
                 consumedFuel = oldFuel
             }
-            currentVelocity = 0
         }
     }
 
