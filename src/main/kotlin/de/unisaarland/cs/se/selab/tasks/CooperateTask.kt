@@ -34,6 +34,7 @@ class CooperateTask(
             myCorpTiles.forEach {
                 val x = it.garbage
                 putGarbage(x, it)
+                taskShip.currentVelocity = 0
             }
             taskShipArrived = -1
             return false
