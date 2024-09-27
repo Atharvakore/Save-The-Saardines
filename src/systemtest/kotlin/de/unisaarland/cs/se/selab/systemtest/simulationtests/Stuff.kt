@@ -11,6 +11,7 @@ class Stuff : ExampleSystemTestExtension() {
     override val name = "stuff"
     override val maxTicks = 2
     override suspend fun run() {
+        skipLines(3)
         assertNextLine("Simulation Info: Simulation started.")
         assertNextLine("Simulation Info: Tick 0 started.")
         assertNextLine("Corporation Action: Corporation 0 is starting to move its ships.")
