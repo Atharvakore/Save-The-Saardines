@@ -93,10 +93,14 @@ class Corporation(
          */
 
         corp.partnerGarbage.forEach {
-            coordinatingShip.owner.partnerGarbage[it.key] = it.value
+            if (!(it.key in knownGarbage.keys)) {
+                coordinatingShip.owner.partnerGarbage[it.key] = it.value
+            }
         }
         corp.knownGarbage.forEach {
-            coordinatingShip.owner.partnerGarbage[it.key] = it.value
+            if (!(it.key in knownGarbage.keys)) {
+                coordinatingShip.owner.partnerGarbage[it.key] = it.value
+            }
         }
         /**
          *  val telescopes: List<ScoutingShip> = otherShip.capabilities
