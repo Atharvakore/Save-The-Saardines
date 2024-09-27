@@ -2,6 +2,9 @@ package de.unisaarland.cs.se.selab.systemtest.simulationtests
 
 import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 
+/**
+ * test for container
+ */
 class ContainerTest : ExampleSystemTestExtension() {
     override val description = "tests for containers"
     override val corporations = "containerTestJsons/corporation.json"
