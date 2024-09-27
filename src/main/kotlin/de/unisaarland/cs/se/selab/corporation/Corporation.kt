@@ -603,6 +603,7 @@ class Corporation(
                 gar.amount -= x
                 val ship = requireNotNull(mapContainersToShips[container])
                 check(gar, ship)
+                ship.currentVelocity = 0
                 container.reduceChemicalsCapacity(x)
                 LoggerCorporationAction.logGarbageCollectionByShip(
                     requireNotNull(mapContainersToShips[container]),
@@ -620,6 +621,7 @@ class Corporation(
         val totalShipsCap = allContainers.sumOf { it.getPlasticCapability() }
         val mapContainersToShips: MutableMap<Container, Ship> = helperHelp(ships, GarbageType.PLASTIC)
         if (totalShipsCap >= amount) {
+
             // var shipsS = ships.sortedBy { it.id }.toMutableSet()
             val shipCapabilities = allContainers.map { it.auxiliaryContainers }.flatten().toMutableList()
             while (gar.amount > 0) {
@@ -632,6 +634,7 @@ class Corporation(
                     val ship = requireNotNull(mapContainersToShips[myShip])
                     check(gar, ship)
                     myShip.garbageLoad += canTake
+                    ship.currentVelocity = 0
                     LoggerCorporationAction.logGarbageCollectionByShip(
                         requireNotNull(mapContainersToShips[myShip]),
                         GarbageType.PLASTIC,
@@ -667,6 +670,7 @@ class Corporation(
                 val ship = requireNotNull(mapContainersToShips[container])
                 check(gar, ship)
                 container.reduceOilCapacity(x)
+                ship.currentVelocity = 0
                 LoggerCorporationAction.logGarbageCollectionByShip(
                     requireNotNull(mapContainersToShips[container]),
                     GarbageType.OIL,
