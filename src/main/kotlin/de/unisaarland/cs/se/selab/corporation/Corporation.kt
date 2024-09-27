@@ -564,9 +564,10 @@ class Corporation(
             } else if (garbage.type == GarbageType.OIL) {
                 collectOilFromCurrentTile(collectingShips.filter { it.position.garbage.contains(garbage) }, garbage)
             } else if (garbage.type == GarbageType.CHEMICALS) {
+                val x = collectingShips
+                    .filter { it.position.garbage.contains(garbage) }
                 collectChemicalsFromCurrentTile(
-                    collectingShips
-                        .filter { it.position.garbage.contains(garbage) },
+                    x,
                     garbage
                 )
             }
@@ -584,7 +585,7 @@ class Corporation(
         val oilContainers: MutableList<Container> = mutableListOf()
         val mapContainersToShips: MutableMap<CollectingShip, Ship> = helperHelpOil(ships)
         allContainers.forEach { container ->
-            oilContainers.addAll(container.auxiliaryContainers.filter { it.garbageType == GarbageType.PLASTIC })
+            oilContainers.addAll(container.auxiliaryContainers.filter { it.garbageType == GarbageType.CHEMICALS })
         }
         allContainers.forEach { container ->
             if (gar.amount > 0 && container.hasChemicalsCapacity() > 0) {
@@ -592,7 +593,7 @@ class Corporation(
                 gar.amount -= x
                 val ship = requireNotNull(mapContainersToShips[container])
                 check(gar, ship)
-                container.reduceOilCapacity(x)
+                container.reduceChemicalsCapacity(x)
                 LoggerCorporationAction.logGarbageCollectionByShip(
                     requireNotNull(mapContainersToShips[container]),
                     GarbageType.CHEMICALS,
