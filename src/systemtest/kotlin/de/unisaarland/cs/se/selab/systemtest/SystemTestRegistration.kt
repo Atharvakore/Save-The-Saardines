@@ -50,6 +50,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.EventScheduli
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingPlasticTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.WhereDoWeUnloadThis
+import de.unisaarland.cs.se.selab.systemtest.taskTests.Coropro
 
 /** The class which will register the tests for Testing on Course Implementation */
 object SystemTestRegistration {
@@ -120,7 +121,8 @@ object SystemTestRegistration {
         WhereDoWeUnloadThis(),
         Blyat(),
         FindNoGarbageTest(),
-        Stuff()
+        Stuff(),
+        Coropro()
     )
 
     private val testsForMutants = listOf(
