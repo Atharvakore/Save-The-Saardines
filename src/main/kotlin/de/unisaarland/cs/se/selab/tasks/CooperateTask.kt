@@ -35,7 +35,6 @@ class CooperateTask(
                 val x = it.garbage
                 putGarbage(x, it)
             }
-            taskShip.isInWayToRefuelOrUnload = true
             taskShipArrived = -1
             return false
         }

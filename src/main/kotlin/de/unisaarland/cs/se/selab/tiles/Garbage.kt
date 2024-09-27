@@ -46,7 +46,6 @@ class Garbage(
             newGarbage = createGarbage(drifted, GarbageType.PLASTIC)
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, targetTile.id)
-
             return Pair(targetTile, newGarbage)
         } else {
             newGarbage.amount = drifted

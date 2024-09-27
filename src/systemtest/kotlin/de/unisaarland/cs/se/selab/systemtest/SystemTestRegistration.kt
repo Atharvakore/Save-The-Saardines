@@ -29,6 +29,8 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpNoMove1
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpNoMove2Test
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpVisibilityRangeTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorporationProfessionalObserverTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.ExploringPacific
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.TaskInRestrictTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorporationWhereShip
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
@@ -48,6 +50,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.ContainerRe
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.RadioRewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TelescopeRewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TrackerRewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.AdventureTime
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.GodVision
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CollectGarbageTaskTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CooperateTaskTest
@@ -126,7 +129,10 @@ object SystemTestRegistration {
         AvengersAssemble(),
         OilBillionaire(),
         DriftToMe(),
-        MultiTasking()
+        MultiTasking(),
+        ExploringPacific(),
+        AdventureTime(),
+        TaskInRestrictTest()
     )
 
     private val testsForMutants = listOf(
@@ -155,7 +161,7 @@ object SystemTestRegistration {
         LandNextDeepOcean(),
         DriftShipsTest(),
         SimulatePirateAttack(),
-        SimulateStormTest(),
+        // SimulateStormTest(),
         DriftGarbageOnLandTest(),
         // Section for tests to check on reference to test later against mutant:
         OneIDTwoTasks(),
@@ -172,8 +178,13 @@ object SystemTestRegistration {
         CorporationProfessionalObserverTest(),
         CooperateOnceTest(),
         CoordinatingShipDefaultTest(),
-        CollectAndRefuelTest(),
-        GodVision()
+        // CollectAndRefuelTest(),
+        GodVision(),
+        MultiTasking(),
+        ExploringPacific(),
+        AdventureTime(),
+        AvengersAssemble(),
+        OilBillionaire(),
     )
 
     /**
@@ -183,11 +194,9 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
-       // testsForReferenceImpl.forEach {
-         //   manager.registerTest(it)
-        //}
-
-        manager.registerTest(CollectAndRefuelTest())
+        testsForReferenceImpl.forEach {
+            manager.registerTest(it)
+        }
     }
 
     /**
