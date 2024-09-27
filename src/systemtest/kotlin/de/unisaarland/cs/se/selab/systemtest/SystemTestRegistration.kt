@@ -119,7 +119,8 @@ object SystemTestRegistration {
         CollaborationTest(),
         WhereDoWeUnloadThis(),
         Blyat(),
-        FindNoGarbageTest()
+        FindNoGarbageTest(),
+        Stuff()
     )
 
     private val testsForMutants = listOf(
@@ -177,7 +178,8 @@ object SystemTestRegistration {
         MultiTaskingTest(),
         WeExistByOurselves(),
         WhereDoWeUnloadThis(),
-        Blyat()
+        Blyat(),
+        Stuff()
     )
 
     /**
