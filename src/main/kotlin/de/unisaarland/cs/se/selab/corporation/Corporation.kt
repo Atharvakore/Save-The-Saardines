@@ -396,6 +396,13 @@ class Corporation(
     private fun moveShips(otherShips: List<Ship>, activeTasks: MutableMap<Task, Boolean>) {
         ownedShips.forEach { it.movedThisTick = MovementTuple(false, -1, -1, -1) }
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
+        for (ship in ownedShips) {
+            ship.capabilities.forEach {
+                if (it is ScoutingShip) {
+                    updateScoutFOV(it, ship)
+                }
+            }
+        }
         // -1. Move ships that are inside a restriction out of a restriction
         moveShipsOutOfRestriction(availableShips)
         // 1. Process tasks. For each active task, assign the ship from the task to
@@ -458,13 +465,6 @@ class Corporation(
         val usedShips: MutableList<Int> = mutableListOf()
         val scoutTarget: MutableSet<Int> = mutableSetOf()
         val collectorTarget: MutableMap<Int, Int> = mutableMapOf()
-        for (ship in availableShips.sortedBy { it.id }) {
-            ship.capabilities.forEach {
-                if (it is ScoutingShip) {
-                    updateScoutFOV(it, ship)
-                }
-            }
-        }
         for (ship in availableShips.sortedBy { it.id }) {
             if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
                 usedShips.add(ship.id)
