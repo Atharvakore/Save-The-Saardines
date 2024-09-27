@@ -5,7 +5,6 @@ import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Direction
 import de.unisaarland.cs.se.selab.tiles.Garbage
@@ -63,16 +62,12 @@ class Simulation(
 
         for (corporation in corporations.sortedBy { it.id }) {
             val otherShips = allShips.filter { it.owner != corporation }
-            corporation.run(tick, sea, otherShips, getActive())
+            corporation.run(tick, sea, otherShips)
         }
 
         for (ship in allShips) {
             ship.arrivedToHarborThisTick = false
         }
-    }
-
-    private fun getActive(): List<Task> {
-        return corporations.map { it.tasks }.flatten().filter { it.tick + 1 == tick }
     }
 
     /**
@@ -188,7 +183,6 @@ class Simulation(
      */
     private fun processTasks() {
         val tasks = corporations.map { it.tasks }.flatten().sortedBy { it.id }
-
         for (task in tasks) {
             task.actUponTick(tick)
         }
