@@ -146,7 +146,7 @@ class Corporation(
     }
 
     private fun getActiveTasks(tick: Int): List<Task> {
-        activeTasks = tasks.filter { tick == it.tick + 1 }
+        activeTasks = tasks.filter { tick == it.tick + 1 }.sortedBy { it.id }
         return activeTasks
     }
 
@@ -349,19 +349,7 @@ class Corporation(
             val closestGarbagePatch = attainableGarbage.firstOrNull()
             if (closestGarbagePatch != null) {
                 val path = paths[closestGarbagePatch] ?: return false
-                if (ship.isFuelSufficient(path.size, ownedHarbors, closestGarbagePatch) &&
-                    ship.isCapacitySufficient(closestGarbagePatch.garbage)
-                ) {
-                    ship.move(path)
-                    doStuff(ship, closestGarbagePatch, garbageAssignment)
-                } else if (ship.isFuelSufficient(path.size, ownedHarbors, closestGarbagePatch)) {
-                    val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                    ship.moveUninterrupted(closestHarborPath, false, false, true)
-                } else {
-                    val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
-                    ship.moveUninterrupted(closestHarborPath, false, true, false)
-                }
-                result = true
+                result = goToClosestGarbage(path, closestGarbagePatch, garbageAssignment, ship)
             } else {
                 result = false
             }
@@ -369,6 +357,26 @@ class Corporation(
         return result
     }
 
+    private fun goToClosestGarbage(
+        path: List<Tile>,
+        closestGarbagePatch: Tile,
+        garbageAssignment: MutableMap<Garbage, Pair<Int, Boolean>>,
+        ship: Ship
+    ): Boolean {
+        if (ship.isFuelSufficient(path.size, ownedHarbors, closestGarbagePatch) &&
+            ship.isCapacitySufficient(closestGarbagePatch.garbage)
+        ) {
+            ship.move(path)
+            doStuff(ship, closestGarbagePatch, garbageAssignment)
+        } else if (ship.isFuelSufficient(path.size, ownedHarbors, closestGarbagePatch)) {
+            val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+            ship.moveUninterrupted(closestHarborPath, false, false, true)
+        } else {
+            val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+            ship.moveUninterrupted(closestHarborPath, false, true, false)
+        }
+        return true
+    }
     private fun tryMove(
         ship: Ship,
         scoutTarget: MutableSet<Int>,
@@ -432,7 +440,7 @@ class Corporation(
              * This is my fix so far for this, hasTaskAssigned is false if the ship is doing a task, hence can be
              * overwritten, if it's going to refuel or unload this will be set to false
              */
-            if (!ship.isInWayToRefuelOrUnload) {
+            if (!(ship.unloading || ship.refueling || ship.hasTaskAssigned)) {
                 makeMovement(task, ship, availableShips)
             } else {
                 // Task failed, ship is going to refuel/unload
@@ -718,7 +726,7 @@ class Corporation(
                     // ship.currentVelocity = 0
                 }
                 if (capability != null && capability.unloading) {
-                    ship.isInWayToRefuelOrUnload = !capability.unload(ship)
+                    ship.unloading = !capability.unload(ship)
                 }
             }
         }

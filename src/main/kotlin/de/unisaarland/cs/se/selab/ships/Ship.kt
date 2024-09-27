@@ -49,7 +49,6 @@ open class Ship(
      */
     fun refuel() {
         if (!arrivedToHarborThisTick) {
-            isInWayToRefuelOrUnload = false
             refueling = false
             currentVelocity = 0
             this.consumedFuel = 0
@@ -168,7 +167,7 @@ open class Ship(
      * complete the movement of the ship along the destination path
      * if it has an assigned task
      * */
-    fun tickTask(isTask: Boolean ) {
+    fun tickTask(isTask: Boolean) {
         moveUninterrupted(destinationPath, isTask, this.refueling, this.unloading)
     }
 

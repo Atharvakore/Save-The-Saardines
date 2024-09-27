@@ -15,6 +15,13 @@ class CollectingShip(
     var unloading: Boolean = false
 
     /**
+     * returns if ship needs to unload
+     */
+    fun shouldUnload(): List<Container> {
+        return auxiliaryContainers.filter { it.shouldUnload() }
+    }
+
+    /**
      * reduces chemicals capacity by x
      */
     fun reduceChemicalsCapacity(x: Int) {
@@ -227,7 +234,7 @@ class CollectingShip(
             }
         }
         if (this.auxiliaryContainers.any { it.garbageLoad == it.getGarbageCapacity() }) {
-            ship.isInWayToRefuelOrUnload = true
+            ship.unloading = true
             val pathToHarbor = Helper().findClosestHarbor(ship.position, ship.owner.ownedHarbors) ?: return
             ship.destinationPath = pathToHarbor
         }
