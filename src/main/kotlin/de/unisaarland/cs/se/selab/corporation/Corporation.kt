@@ -475,7 +475,6 @@ class Corporation(
         val otherShipsTwo = availableShips.filter { !collectingShips.contains(it) }
 
         for (ship in otherShipsTwo.sortedBy { it.id }) {
-
             if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
                 usedShips.add(ship.id)
             }
@@ -511,7 +510,7 @@ class Corporation(
             if (cap.auxiliaryContainers
                     .any { container ->
                         container.garbageType == garbage.value.garbage
-                            .find { it.id == garbage.key }!!.type
+                            .find { it.id == garbage.key }?.type
                     }
             ) {
                 if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
@@ -520,7 +519,6 @@ class Corporation(
             }
         }
     }
-
 
     private fun handleMoveCoordinating(ship: Ship, capability: CoordinatingShip, otherShips: List<Ship>): Boolean {
         val result: Boolean
