@@ -1,0 +1,21 @@
+{
+  "garbage": [],
+  "tasks": [
+    {
+      "id": 2,
+      "type": "FIND",
+      "tick": 0,
+      "shipID": 1,
+      "targetTile": 13,
+      "rewardID": 6,
+      "rewardShipID": 2
+    }
+  ],
+  "events": [],
+  "rewards": [
+    {
+      "id": 6,
+      "type": "TRACKER"
+    }
+  ]
+}
