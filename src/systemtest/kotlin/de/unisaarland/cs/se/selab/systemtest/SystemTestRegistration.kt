@@ -22,6 +22,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.M
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.ReturnToHomeWater
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.drifting.DriftToMe
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.drifting.OilBillionaire
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CollaborationTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CooperateOnceTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CoordinatingShipDefaultTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CoordinatingTest
@@ -137,7 +138,8 @@ object SystemTestRegistration {
         TaskInRestrictTest(),
         Error404Test(),
         MultiTaskingTest(),
-        FindGarbageTaskTest()
+        FindGarbageTaskTest(),
+        CollaborationTest()
     )
 
     private val testsForMutants = listOf(
