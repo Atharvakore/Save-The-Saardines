@@ -25,6 +25,7 @@ class ExploreMapTask(
             LoggerEventsAndTasks.logTaskStart(id, "EXPLORE", taskShip.id, targetTile.id)
         }
         if (checkCondition() && currentTick > tick) {
+            taskShip.currentVelocity = 0
             LoggerEventsAndTasks.logRewardReceived(id, rewardShip.id, reward)
             reward.applyReward(rewardShip)
             taskShip.owner.tasks.remove(this)
