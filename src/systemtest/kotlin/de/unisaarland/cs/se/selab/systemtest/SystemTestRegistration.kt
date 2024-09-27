@@ -33,6 +33,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpVisibil
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorporationProfessionalObserverTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.Error404Test
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.ExploringPacific
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.FindNoGarbageTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.MultiTaskingTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.TaskInRestrictTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
@@ -131,9 +132,9 @@ object SystemTestRegistration {
         Error404Test(),
         MultiTaskingTest(),
         WeExistByOurselves(),
-        FindGarbageTaskTest(),
         CollaborationTest(),
-        WhereDoWeUnloadThis()
+        WhereDoWeUnloadThis(),
+        FindNoGarbageTest()
     )
 
     private val testsForMutants = listOf(
