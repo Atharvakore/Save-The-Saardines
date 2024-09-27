@@ -5,7 +5,7 @@ import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 /**
  * test for mutants
  * */
-class FindNoGarbageTest :  ExampleSystemTestExtension() {
+class FindNoGarbageTest : ExampleSystemTestExtension() {
     override val description = "tests the mutant"
     override val corporations = "mutants/FindNoGarbageCorporation.json"
     override val scenario = "mutants/FindNoGarbageScenario.json"

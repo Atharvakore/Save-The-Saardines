@@ -13,9 +13,9 @@ class Blyat : ExampleSystemTestExtension() {
     override val name = "blablabla"
     override val maxTicks = 5
     override suspend fun run() {
-        skipUntilString("Simulation Statistics: Corporation 0 collected 1000 of garbage.");
-        skipUntilString("Simulation Statistics: Total amount of oil collected: 1000.");
-        skipLines(1);
-        assertNextLine("Simulation Statistics: Total amount of garbage still in the ocean: 0.");
+        skipUntilString("Simulation Statistics: Corporation 0 collected 1000 of garbage.")
+        skipUntilString("Simulation Statistics: Total amount of oil collected: 1000.")
+        skipLines(1)
+        assertNextLine("Simulation Statistics: Total amount of garbage still in the ocean: 0.")
     }
 }
