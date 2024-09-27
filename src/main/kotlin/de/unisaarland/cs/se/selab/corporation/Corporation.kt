@@ -295,11 +295,11 @@ class Corporation(
                 }
                 GarbageType.OIL -> {
                     val x = garbageAssignment.getOrDefault(g, Pair(0, false))
-                    garbageAssignment[g] = Pair(x.first + plastic, x.first + plastic >= g.amount)
+                    garbageAssignment[g] = Pair(x.first + oil, x.first + oil >= g.amount)
                 }
                 GarbageType.CHEMICALS -> {
                     val x = garbageAssignment.getOrDefault(g, Pair(0, false))
-                    garbageAssignment[g] = Pair(x.first + plastic, x.first + plastic >= g.amount)
+                    garbageAssignment[g] = Pair(x.first + chemicals, x.first + chemicals >= g.amount)
                 }
             }
         }
