@@ -1,5 +1,4 @@
 package de.unisaarland.cs.se.selab.systemtest
-
 import de.unisaarland.cs.se.selab.systemtest.basictests.ExampleSystemTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25CorporationTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25ParsingTest
@@ -7,6 +6,7 @@ import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceT
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.CollectAndRefuelTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageMultipleCurrents
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
@@ -67,6 +67,7 @@ object SystemTestRegistration {
     // Seperated tests because of Detekt
     private val testsForReferenceImpl = listOf(
         StormOverMultipleTiles(),
+        DriftGarbageMultipleCurrents(),
         ExampleSystemTest(),
         ExampleSystemTest(),
         MoveNearHome(),
@@ -136,6 +137,7 @@ object SystemTestRegistration {
 
     private val testsForMutants = listOf(
         StormOverMultipleTiles(),
+        DriftGarbageMultipleCurrents(),
         ExampleSystemTest(),
         MoveNearHome(),
         ReturnToHomeWater(),
@@ -191,10 +193,7 @@ object SystemTestRegistration {
      * understood something correctly or not (everything should work
      * the same as their reference implementation)
      */
-
-    fun registerSystemTestsReferenceImpl(
-        manager: SystemTestManager
-    ) {
+    fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
         testsForReferenceImpl.forEach {
             manager.registerTest(it)
         }
