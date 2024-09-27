@@ -179,6 +179,7 @@ class CollectingShip(
                     }
             }
             if (collected > 0) {
+
                 LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.PLASTIC, garbage.id, collected)
             }
         }

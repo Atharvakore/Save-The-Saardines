@@ -194,11 +194,19 @@ object SystemTestRegistration {
      * understood something correctly or not (everything should work
      * the same as their reference implementation)
      */
+<<<<<<< Updated upstream
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
         //testsForReferenceImpl.forEach {
           //  manager.registerTest(it)
         //}
         manager.registerTest(ContainerTest())
+=======
+    fun registerSystemTestsReferenceImpl(
+        manager: SystemTestManager) {
+        testsForReferenceImpl.forEach {
+            manager.registerTest(TaskAndRewardsTest())
+        }
+>>>>>>> Stashed changes
     }
 
     /**
