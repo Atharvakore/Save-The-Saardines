@@ -18,6 +18,6 @@ class CoordinatingTest : ExampleSystemTestExtension() {
         assertNextLine("Ship Movement: Ship 5 moved with speed 10 to tile 25.")
 
         skipUntilString("Corporation Action: Corporation 1 is starting to move its ships.")
-        assertNextLine("Ship Movement: Ship 5 moved with speed 20 to tile 26.")
+        assertNextLine("Ship Movement: Ship 2 moved with speed 10 to tile 67.")
     }
 }

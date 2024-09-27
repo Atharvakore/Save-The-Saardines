@@ -14,7 +14,7 @@ class TelescopeRewardTest : ExampleSystemTestExtension() {
     override val maxTicks = 6
 
     override suspend fun run() {
-        skipUntilString("Task: Task 3 of type FIND with ship 3 is added with destination 64.")
-        assertNextLine("Simulation Info: Tick 4 started.")
+        skipUntilString("Reward: Task 3: Ship 2 received reward of type TELESCOPE.")
+        assertNextLine("Simulation Info: Simulation ended.")
     }
 }

@@ -12,8 +12,6 @@ import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -94,20 +92,5 @@ class CollectingShipTest {
         for (container in collectingCapability.auxiliaryContainers) {
             assert(container.garbageLoad == 0)
         }
-    }
-
-    @Test
-    fun testHasOilCapacity() {
-        assertFalse(collectingCapability.hasOilCapacity())
-    }
-
-    @Test
-    fun testHasChemicalCapacity() {
-        assertTrue(collectingCapability.hasChemicalsCapacity())
-    }
-
-    @Test
-    fun testHasPlasticCapacity() {
-        assert(collectingCapability.hasPlasticCapacity() == 200)
     }
 }

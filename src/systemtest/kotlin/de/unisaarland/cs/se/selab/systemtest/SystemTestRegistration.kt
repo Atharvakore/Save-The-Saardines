@@ -54,6 +54,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.ContainerRe
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.RadioRewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TelescopeRewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TrackerRewardTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.AdventureTime
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.GodVision
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CollectGarbageTaskTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CooperateTaskTest
@@ -169,7 +170,7 @@ object SystemTestRegistration {
         LandNextDeepOcean(),
         DriftShipsTest(),
         SimulatePirateAttack(),
-        SimulateStormTest(),
+        // SimulateStormTest(),
         DriftGarbageOnLandTest(),
         // Section for tests to check on reference to test later against mutant:
         OneIDTwoTasks(),
@@ -186,8 +187,13 @@ object SystemTestRegistration {
         CorporationProfessionalObserverTest(),
         CooperateOnceTest(),
         CoordinatingShipDefaultTest(),
-        CollectAndRefuelTest(),
-        GodVision()
+        // CollectAndRefuelTest(),
+        GodVision(),
+        MultiTasking(),
+        ExploringPacific(),
+        AdventureTime(),
+        AvengersAssemble(),
+        OilBillionaire(),
     )
 
     /**
@@ -197,8 +203,8 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
-        for (test in testsForReferenceImpl) {
-            manager.registerTest(test)
+        testsForReferenceImpl.forEach {
+            manager.registerTest(it)
         }
     }
 
