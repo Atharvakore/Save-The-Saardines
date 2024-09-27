@@ -470,7 +470,12 @@ class Corporation(
                 }
             }
         }
-        for (ship in availableShips.sortedBy { it.id }) {
+        val collectingShips = Helper().filterCollectingShip(this)
+
+        val otherShipsTwo = availableShips.filter { !collectingShips.contains(it) }
+
+        for (ship in otherShipsTwo.sortedBy { it.id }) {
+
             if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
                 usedShips.add(ship.id)
             }
@@ -480,8 +485,43 @@ class Corporation(
                 }
             }
         }
+
+        knownGarbage.forEach { garbage ->
+
+            val distances = Dijkstra(garbage.value)
+            val shipsByIncDistance = collectingShips.sortedBy { distances.allPaths()[it.position]?.size }
+            for (ship in shipsByIncDistance) {
+                moveCollectingShipNew(ship, garbage, scoutTarget, collectorTarget, otherShips, usedShips)
+            }
+        }
+
         return usedShips
     }
+
+    private fun moveCollectingShipNew(
+        ship: Ship,
+        garbage: Map.Entry<Int, Tile>,
+        scoutTarget: MutableSet<Int>,
+        collectorTarget: MutableMap<Int, Int>,
+        otherShips: List<Ship>,
+        usedShips: MutableList<Int>
+    ) {
+        val collectingCap = ship.capabilities.filterIsInstance<CollectingShip>()
+        collectingCap.forEach { cap ->
+            if (cap.auxiliaryContainers
+                    .any { container ->
+                        container.garbageType == garbage.value.garbage
+                            .find { it.id == garbage.key }!!.type
+                    }
+            ) {
+                if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
+                    usedShips.add(ship.id)
+                }
+            }
+        }
+    }
+
+
     private fun handleMoveCoordinating(ship: Ship, capability: CoordinatingShip, otherShips: List<Ship>): Boolean {
         val result: Boolean
         // 1. Get information about which ships are in field of view
