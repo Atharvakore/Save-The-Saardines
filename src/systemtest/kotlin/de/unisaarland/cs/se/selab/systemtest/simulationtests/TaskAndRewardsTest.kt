@@ -11,7 +11,7 @@ class TaskAndRewardsTest : ExampleSystemTestExtension() {
     override val scenario = "tasksAndRewardsTestJsons/scenario.json"
     override val map = "mapFiles/map_medium_01.json"
     override val name = "TaskAndRewardsTest"
-    override val maxTicks = 1
+    override val maxTicks = 5
 
     override suspend fun run() {
         assertNextLine("Initialization Info: map_medium_01.json successfully parsed and validated.")
