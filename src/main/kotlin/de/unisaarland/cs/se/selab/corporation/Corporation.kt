@@ -120,10 +120,13 @@ class Corporation(
      *
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
-    fun run(sea: Sea, otherShips: List<Ship>, activeTasks: MutableMap<Task, Boolean>) {
+    fun run(tick: Int, sea: Sea, otherShips: List<Ship>, activeTasks: List<Task>) {
         // Should we insert knownGarbage into partnerGarbage and then clear knownGarbage
         // to reset the knowledge? I think that this would solve some things.
         // The code to do that would go here, but I am not sure if this is spec behaviour
+        if (tick == -1) {
+            return
+        }
         partnerGarbage.putAll(knownGarbage)
         knownGarbage.clear()
         this.sea = sea
@@ -131,7 +134,7 @@ class Corporation(
         moveShips(otherShips, activeTasks)
         tryAttachTrackers()
         logger.logCorporationStartCollectGarbage(id)
-        collectGarbage(otherShips.union(ownedShips).toList())
+        collectGarbage()
         logger.logCorporationCooperationStart(id)
         cooperate(otherShips)
         logger.logCorporationRefueling(id)
@@ -412,7 +415,7 @@ class Corporation(
     }
 
     /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
-    private fun moveShips(otherShips: List<Ship>, activeTasks: MutableMap<Task, Boolean>) {
+    private fun moveShips(otherShips: List<Ship>, activeTasks: List<Task>) {
         ownedShips.forEach { it.movedThisTick = MovementTuple(false, -1, -1, -1) }
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
         for (ship in ownedShips) {
@@ -427,7 +430,7 @@ class Corporation(
         // 1. Process tasks. For each active task, assign the ship from the task to
         // go to the target tile.
 
-        val corpActiveTasks = tasks.filter { activeTasks.contains(it) && activeTasks[it] == true }
+        val corpActiveTasks = tasks.filter { activeTasks.contains(it) }
 
         corpActiveTasks.forEach { task ->
             val ship: Ship = task.taskShip
@@ -440,7 +443,7 @@ class Corporation(
             } else {
                 // Task failed, ship is going to refuel/unload
                 tasks.remove(task)
-                activeTasks[task] = false
+                // activeTasks[task] = false
             }
         }
         // 0. For each ship that has an assigned destination, tick the
@@ -548,7 +551,7 @@ class Corporation(
      * Filters the ships to get only the ships that have the CollectingShip capability, then collects garbage from the
      * current tile of each ship
      */
-    private fun collectGarbage(allShips: List<Ship>) {
+    private fun collectGarbage() {
         val collectingShips: List<Ship> = Helper().filterCollectingCapabilities(this).sortedBy { it.id }
         val allGarbage = collectingShips.map { it.position.garbage }.flatten().sortedBy { it.id }
         for (garbage in allGarbage) {
@@ -577,13 +580,7 @@ class Corporation(
                     val canTake = minOf(gar.amount, myShip.getGarbageCapacity() - myShip.garbageLoad)
                     gar.amount -= canTake
                     val ship = requireNotNull(mapContainersToShips[myShip])
-                    if (gar.amount == 0) {
-                        ship.position.garbage.remove(gar)
-                        gar.trackedBy
-                            .forEach { corp ->
-                                corp.trackedGarbage.remove(gar)
-                            }
-                    }
+                    check(gar, ship)
                     myShip.garbageLoad += canTake
                     LoggerCorporationAction.logGarbageCollectionByShip(
                         requireNotNull(mapContainersToShips[myShip]),
@@ -593,6 +590,16 @@ class Corporation(
                     )
                 }
             }
+        }
+    }
+
+    private fun check(gar: Garbage, ship: Ship) {
+        if (gar.amount == 0) {
+            ship.position.garbage.remove(gar)
+            gar.trackedBy
+                .forEach { corp ->
+                    corp.trackedGarbage.remove(gar)
+                }
         }
     }
     private fun collectOilFromCurrentTile(ships: List<Ship>, gar: Garbage) {
@@ -608,13 +615,7 @@ class Corporation(
                 val x = minOf(gar.amount, container.hasOilCapacity())
                 gar.amount -= x
                 val ship = requireNotNull(mapContainersToShips[container])
-                if (gar.amount == 0) {
-                    ship.position.garbage.remove(gar)
-                    gar.trackedBy
-                        .forEach { corp ->
-                            corp.trackedGarbage.remove(gar)
-                        }
-                }
+                check(gar, ship)
                 container.reduceOilCapacity(x)
                 LoggerCorporationAction.logGarbageCollectionByShip(
                     requireNotNull(mapContainersToShips[container]),

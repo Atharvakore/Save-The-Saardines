@@ -15,6 +15,18 @@
 - conccurent modification in process events (dont cut the line -- AFTER LOGGING)
 
 
-tests failing on our impl but passing on reference:
-- UnloadingPlasticTest
-- CollectingMutliplePlasticTest
+- oil drifting wrong id (new id is drifted and then we are splitting)
+- return to harbor to unload for secondary containers and capabilites is not done
+- ships move to harbor even without enough fuel (should be fixed)
+- speed should return to 0 after cooperating
+- scouting ship visibility range is not added when it has task
+- storm event should update the knowledge of corporation
+- unload only in the next tick
+- scouting ships should go to scout the information they get from cooperate task
+
+
+hints for mutant
+- erorr404: event tile id should exist
+- multitasking: there shouldn't be tasks with same reward
+- free gift: if you don't find any garbage you recieve no rewards
+- microscopic: telescopes reward should be recieved after task

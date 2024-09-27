@@ -97,27 +97,31 @@ open class Ship(
     fun move(path: List<Tile>, shouldDecelerate: Boolean) {
         // acceleration
         currentVelocity = minOf(currentVelocity + acceleration, maxVelocity)
+        val oldFuel = consumedFuel
 
         // the distance the ship can traverse
         val distanceLength = currentVelocity / SPEED_LENGTH
         val desTile: Tile
         if (path.size > distanceLength) {
             desTile = path[distanceLength]
-            if (desTile != this.position) {
-                consumedFuel += distanceLength * SPEED_LENGTH * fuelConsumption
+            consumedFuel += distanceLength * SPEED_LENGTH * fuelConsumption
+            if (desTile != this.position && consumedFuel <= fuelCapacity) {
                 this.movedThisTick = MovementTuple(true, id, currentVelocity, desTile.id)
-                // LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
+                this.position = desTile
+            } else {
+                consumedFuel = oldFuel
             }
         } else {
             desTile = path.last()
-            if (desTile != this.position) {
-                consumedFuel += (path.size - 1) * SPEED_LENGTH * fuelConsumption
+            consumedFuel += (path.size - 1) * SPEED_LENGTH * fuelConsumption
+            if (desTile != this.position && consumedFuel <= fuelCapacity) {
                 this.movedThisTick = MovementTuple(true, id, currentVelocity, desTile.id)
-                // LoggerCorporationAction.logShipMovement(id, currentVelocity, desTile.id)
+                this.position = desTile
+            } else {
+                consumedFuel = oldFuel
             }
             if (shouldDecelerate) currentVelocity = 0
         }
-        this.position = desTile
     }
 
     /**
