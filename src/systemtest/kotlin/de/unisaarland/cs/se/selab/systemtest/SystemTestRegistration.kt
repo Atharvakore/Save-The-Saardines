@@ -203,10 +203,10 @@ object SystemTestRegistration {
 
     fun registerSystemTestsReferenceImpl(
         manager: SystemTestManager) {
-        testsForReferenceImpl.forEach {
-            manager.registerTest(TaskAndRewardsTest())
-        }
->>>>>>> Stashed changes
+        //testsForReferenceImpl.forEach {
+          //  manager.registerTest(it)
+        //}
+        manager.registerTest(ContainerTest())
     }
 
     /**
@@ -230,4 +230,4 @@ object SystemTestRegistration {
             manager.registerTest(it)
         }
     }
-}
+}}
