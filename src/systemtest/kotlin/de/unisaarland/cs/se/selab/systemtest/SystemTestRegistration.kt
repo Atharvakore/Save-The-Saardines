@@ -51,7 +51,6 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.RadioReward
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TelescopeRewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TrackerRewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.AdventureTime
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.ExploringPacific
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.GodVision
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CollectGarbageTaskTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CooperateTaskTest
