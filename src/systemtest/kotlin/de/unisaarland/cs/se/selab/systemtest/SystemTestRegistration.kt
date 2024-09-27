@@ -5,13 +5,7 @@ import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceT
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.CollectAndRefuelTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageMultipleCurrents
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.StormOverMultipleTiles
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.*
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.AvengersAssemble
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
@@ -134,7 +128,8 @@ object SystemTestRegistration {
         ExploringPacific(),
         AdventureTime(),
         TaskInRestrictTest(),
-        Error404Test()
+        Error404Test(),
+        Blyat()
     )
 
     private val testsForMutants = listOf(
@@ -187,6 +182,7 @@ object SystemTestRegistration {
         AdventureTime(),
         AvengersAssemble(),
         OilBillionaire(),
+        Blyat()
     )
 
     /**
