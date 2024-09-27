@@ -1,0 +1,48 @@
+{
+  "tiles": [
+    {
+      "id": 1,
+      "coordinates": {
+        "x": 0,
+        "y": 0
+      },
+      "category": "SHORE",
+      "harbor" : true
+    },
+    {
+      "id": 12,
+      "coordinates": {
+        "x": 1,
+        "y": 1
+      },
+      "category": "SHORE",
+      "harbor" : false
+    },
+    {
+      "id": 22,
+      "coordinates": {
+        "x": 1,
+        "y": 2
+      },
+      "category": "SHORE",
+      "harbor" : false
+    }
+  ,
+    {
+      "id": 33,
+      "coordinates": {
+        "x": 2,
+        "y": 3
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 43,
+      "coordinates": {
+        "x": 2,
+        "y": 4
+      },
+      "category": "SHALLOW_OCEAN"
+    }
+  ]
+}

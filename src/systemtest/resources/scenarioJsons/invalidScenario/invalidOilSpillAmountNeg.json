@@ -1,0 +1,15 @@
+{
+  "garbage": [],
+  "events": [
+    {
+      "id": 1,
+      "type": "OIL_SPILL",
+      "tick": 2,
+      "location": 12,
+      "radius": 1,
+      "amount": -2
+    }
+  ],
+  "tasks": [],
+  "rewards": []
+}

@@ -1,0 +1,41 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "OIL",
+      "location": 1,
+      "amount": 500
+    },
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 3,
+      "amount": 600
+    },
+    {
+      "id": 3,
+      "type": "OIL",
+      "location": 5,
+      "amount": 1000
+    },
+    {
+      "id": 4,
+      "type": "PLASTIC",
+      "location": 8,
+      "amount": 250
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "type": "STORM",
+      "tick": 0,
+      "location": 6,
+      "radius": 1,
+      "speed": 30,
+      "direction": 0
+    }
+  ],
+  "tasks": [],
+  "rewards": []
+}

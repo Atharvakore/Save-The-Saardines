@@ -1,0 +1,79 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "OIL",
+      "location": 27,
+      "amount": 1000
+    },
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 26,
+      "amount": 1000
+    },
+    {
+      "id": 3,
+      "type": "PLASTIC",
+      "location": 29,
+      "amount": 2000
+    },
+    {
+      "id": 4,
+      "type": "PLASTIC",
+      "location": 16,
+      "amount": 300
+    },
+    {
+      "id": 5,
+      "type": "CHEMICALS",
+      "location": 26,
+      "amount": 1000
+    },
+    {
+      "id": 6,
+      "type": "PLASTIC",
+      "location": 16,
+      "amount": 700
+    },
+    {
+      "id": 7,
+      "type": "PLASTIC",
+      "location": 21,
+      "amount": 2000
+    },
+    {
+      "id": 8,
+      "type": "OIL",
+      "location": 15,
+      "amount": 1000
+    },
+    {
+      "id": 9,
+      "type": "OIL",
+      "location": 14,
+      "amount": 1000
+    },
+    {
+      "id": 10,
+      "type": "OIL",
+      "location": 18,
+      "amount": 1000
+    },
+    {
+      "id": 11,
+      "type": "CHEMICALS",
+      "location": 14,
+      "amount": 1000
+    },
+    {
+      "id": 12,
+      "type": "CHEMICALS",
+      "location": 19,
+      "amount": 1000
+    }
+  ],
+  "events": [],
+  "tasks": [],
+  "rewards": []
+}

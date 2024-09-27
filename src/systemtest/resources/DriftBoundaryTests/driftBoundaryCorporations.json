@@ -1,0 +1,32 @@
+{
+  "corporations": [
+    {
+      "id": 2,
+      "name": "Ocean Cleaners Inc.",
+      "ships": [
+        2
+      ],
+      "homeHarbors": [
+        1
+      ],
+      "garbageTypes": [
+        "PLASTIC"
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 2,
+      "name": "Collector",
+      "type": "COLLECTING",
+      "corporation": 2,
+      "location": 5,
+      "maxVelocity": 10,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 5,
+      "capacity": 1000,
+      "garbageType": "PLASTIC"
+    }
+  ]
+}

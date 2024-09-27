@@ -1,0 +1,37 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "OIL",
+      "location": 14,
+      "amount": 1000
+    },
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 15,
+      "amount": 250
+    },
+    {
+      "id": 3,
+      "type": "PLASTIC",
+      "location": 16,
+      "amount": 250
+    },
+    {
+      "id": 4,
+      "type": "PLASTIC",
+      "location": 16,
+      "amount": 250
+    },
+    {
+      "id": 5,
+      "type": "CHEMICALS",
+      "location": 14,
+      "amount": 250
+    }
+  ],
+  "events": [],
+  "tasks": [],
+  "rewards": []
+}

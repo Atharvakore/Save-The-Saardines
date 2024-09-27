@@ -1,0 +1,80 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Dummy Inc.",
+      "ships": [
+        1, 2, 3
+      ],
+      "homeHarbors": [
+        7, 9
+      ],
+      "garbageTypes": [
+        "PLASTIC"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Ocean Cleaners Inc.",
+      "ships": [
+        4
+      ],
+      "homeHarbors": [
+        9
+      ],
+      "garbageTypes": [
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "Explorer",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 4,
+      "maxVelocity": 50,
+      "acceleration": 15,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 10,
+      "visibilityRange": 2
+    },
+    {
+      "id": 2,
+      "name": "Dummy Ship",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 4,
+      "maxVelocity": 20,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 5,
+      "capacity": 1000,
+      "garbageType": "PLASTIC"
+    },
+    {
+      "id": 3,
+      "name": "Coordinator1",
+      "type": "COORDINATING",
+      "corporation": 1,
+      "location": 29,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 5,
+      "visibilityRange": 1
+    },
+    {
+      "id": 4,
+      "name": "Coordinator12",
+      "type": "COORDINATING",
+      "corporation": 2,
+      "location": 27,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 5,
+      "visibilityRange": 1
+    }
+  ]
+}

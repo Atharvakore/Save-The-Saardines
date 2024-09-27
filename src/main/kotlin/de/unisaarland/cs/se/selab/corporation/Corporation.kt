@@ -565,8 +565,8 @@ class Corporation(
      */
     private fun collectGarbage() {
         val collectingShips: List<Ship> = Helper().filterCollectingCapabilities(this).sortedBy { it.id }
-        val allGarbage = collectingShips.map { it.position.garbage }.flatten().sortedBy { it.id }
-        for (garbage in allGarbage) {
+        val allGarbage = collectingShips.map { it.position.garbage }.flatten().sortedBy { it.id }.toSet()
+        for (garbage in allGarbage.sortedBy { it.id }) {
             if (garbage.type == GarbageType.PLASTIC) {
                 collectPlasticFromCurrentTile(collectingShips.filter { it.position.garbage.contains(garbage) }, garbage)
             } else if (garbage.type == GarbageType.OIL) {

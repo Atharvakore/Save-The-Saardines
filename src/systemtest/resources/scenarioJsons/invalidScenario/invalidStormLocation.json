@@ -1,0 +1,16 @@
+{
+  "garbage": [],
+  "events": [
+    {
+      "id": 1,
+      "type": "STORM",
+      "tick": 1,
+      "location": 37,
+      "radius": 1,
+      "speed": 30,
+      "direction": 60
+    }
+  ],
+  "tasks": [],
+  "rewards": []
+}

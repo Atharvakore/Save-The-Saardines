@@ -1,0 +1,32 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Dummy Inc.",
+      "ships": [
+        1
+      ],
+      "homeHarbors": [
+        4, 9
+      ],
+      "garbageTypes": [
+        "PLASTIC"
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "Dummy Ship",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 5,
+      "maxVelocity": 20,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 5,
+      "capacity": 1000,
+      "garbageType": "PLASTIC"
+    }
+  ]
+}

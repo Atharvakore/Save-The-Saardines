@@ -1,0 +1,37 @@
+{
+  "garbage": [],
+  "events": [],
+  "tasks": [
+    {
+      "id": 1,
+      "type": "EXPLORE",
+      "tick": 0,
+      "shipID": 1,
+      "targetTile": 14,
+      "rewardID": 1,
+      "rewardShipID": 2
+    },
+    {
+      "id": 2,
+      "type": "COLLECT",
+      "tick": 1,
+      "shipID": 1,
+      "targetTile": 10,
+      "rewardID": 2,
+      "rewardShipID": 1
+    }
+  ],
+  "rewards": [
+    {
+      "id": 1,
+      "type": "TELESCOPE",
+      "visibilityRange": 4
+    },
+    {
+      "id": 2,
+      "type": "CONTAINER",
+      "capacity": 1000,
+      "garbageType": "PLASTIC"
+    }
+  ]
+}

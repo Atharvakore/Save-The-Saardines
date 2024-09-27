@@ -1,0 +1,12 @@
+{
+  "garbage": [],
+  "events": [],
+  "tasks": [],
+  "rewards": [
+    {
+      "id": 1,
+      "type": "TELESCOPES",
+      "visibilityRange": 1
+    }
+  ]
+}

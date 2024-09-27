@@ -1,0 +1,36 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "CHEMICALS",
+      "location": 9,
+      "amount": 1000
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "type": "PIRATE_ATTACK",
+      "tick": 3,
+      "shipID": 2
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "type": "EXPLORE",
+      "tick": 0,
+      "shipID": 2,
+      "targetTile": 17,
+      "rewardID": 1,
+      "rewardShipID": 1
+    }
+  ],
+  "rewards": [
+    {
+      "id": 1,
+      "type": "TELESCOPE",
+      "visibilityRange": 1
+    }
+  ]
+}
