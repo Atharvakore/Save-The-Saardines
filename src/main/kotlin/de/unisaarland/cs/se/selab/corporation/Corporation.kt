@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.corporation
 
 import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.ships.CollectingShip
+import de.unisaarland.cs.se.selab.ships.Container
 import de.unisaarland.cs.se.selab.ships.CoordinatingShip
 import de.unisaarland.cs.se.selab.ships.MovementTuple
 import de.unisaarland.cs.se.selab.ships.ScoutingShip
@@ -43,7 +44,6 @@ class Corporation(
     var lastCoordinatingCorporation: Corporation? = null
     val logger: LoggerCorporationAction = LoggerCorporationAction
     lateinit var sea: Sea
-    private var activeTasks: List<Task> = emptyList()
 
     /**
      * Cooperation between ships
@@ -55,7 +55,6 @@ class Corporation(
      * @param otherShips List of all ships in the simulation
      */
     fun cooperate(otherShips: List<Ship>) {
-        // chinese whispers: give the other corporation the contents of our own partnerGarbage.
         val myCoordinatingShips: List<Ship> = Helper().filterCoordinatingShips(this).sortedBy { it.id }
 
         myCoordinatingShips.forEach { coordinatingShip ->
@@ -121,16 +120,15 @@ class Corporation(
      *
      * @param otherShips List of all ships in the simulation other than the current corporation's ships
      */
-    fun run(tick: Int, sea: Sea, otherShips: List<Ship>) {
+    fun run(sea: Sea, otherShips: List<Ship>, activeTasks: MutableMap<Task, Boolean>) {
         // Should we insert knownGarbage into partnerGarbage and then clear knownGarbage
         // to reset the knowledge? I think that this would solve some things.
         // The code to do that would go here, but I am not sure if this is spec behaviour
         partnerGarbage.putAll(knownGarbage)
         knownGarbage.clear()
         this.sea = sea
-        getActiveTasks(tick)
         logger.logCorporationStartMoveShips(id)
-        moveShips(otherShips)
+        moveShips(otherShips, activeTasks)
         tryAttachTrackers()
         logger.logCorporationStartCollectGarbage(id)
         collectGarbage(otherShips.union(ownedShips).toList())
@@ -141,15 +139,18 @@ class Corporation(
         logger.logCorporationFinishedActions(id)
     }
 
-    private fun getActiveTasks(tick: Int): List<Task> {
-        activeTasks = tasks.filter { tick == it.tick + 1 }
-        return activeTasks
-    }
-
-    private fun findUncollectedGarbage(tile: Tile, cap: CollectingShip, target: MutableMap<Int, Int>): Garbage? {
+    private fun findUncollectedGarbage(
+        tile: Tile,
+        cap: CollectingShip,
+        target: MutableMap<Int, Int>,
+        garbageAssignment: MutableMap<Garbage, Pair<Int, Boolean>>
+    ): Garbage? {
         return tile.garbage
             .asSequence()
-            .filter { cap.garbageTypes().contains(it.type) }
+            .filter {
+                cap.garbageTypes().contains(it.type) &&
+                    !garbageAssignment.getOrDefault(it, Pair(0, false)).second
+            }
             .filter {
                 if (target.contains(it.id)) {
                     return@filter (target[it.id] ?: error("ajdfidsvbkhkhfv")) < it.amount
@@ -266,7 +267,11 @@ class Corporation(
         return tup
     }
 
-    private fun doStuff(ship: Ship, closestGarbagePatch: Tile, collectorTarget: MutableMap<Int, Int>) {
+    private fun doStuff(
+        ship: Ship,
+        closestGarbagePatch: Tile,
+        garbageAssignment: MutableMap<Garbage, Pair<Int, Boolean>>
+    ) {
         // Put all the garbage that this ship will be able to collect once on the tile closestGarbagePatch
         // into the collectorTarget map.
         var (plastic, oil, chemicals) = howMuchCanItTake(ship)
@@ -274,23 +279,28 @@ class Corporation(
         for (g in closestGarbagePatch.garbage) {
             when (g.type) {
                 GarbageType.PLASTIC -> {
-                    collectorTarget[g.id] = minOf(g.amount, plastic)
-                    plastic -= collectorTarget[g.id] ?: error("egSvd")
+                    val x = garbageAssignment.getOrDefault(g, Pair(0, false))
+                    garbageAssignment[g] = Pair(x.first + plastic, x.first + plastic >= g.amount)
                 }
                 GarbageType.OIL -> {
-                    collectorTarget[g.id] = minOf(g.amount, oil)
-                    oil -= collectorTarget[g.id] ?: error("ueslngrv")
+                    val x = garbageAssignment.getOrDefault(g, Pair(0, false))
+                    garbageAssignment[g] = Pair(x.first + plastic, x.first + plastic >= g.amount)
                 }
                 GarbageType.CHEMICALS -> {
-                    collectorTarget[g.id] = minOf(g.amount, chemicals)
-                    chemicals -= collectorTarget[g.id] ?: error("grvhjdshj")
+                    val x = garbageAssignment.getOrDefault(g, Pair(0, false))
+                    garbageAssignment[g] = Pair(x.first + plastic, x.first + plastic >= g.amount)
                 }
             }
         }
     }
 
     // ships move in the wrong order if they taskAssigned = true
-    private fun moveCollectingShip(ship: Ship, cap: CollectingShip, collectorTarget: MutableMap<Int, Int>): Boolean {
+    private fun moveCollectingShip(
+        ship: Ship,
+        cap: CollectingShip,
+        collectorTarget: MutableMap<Int, Int>,
+        garbageAssignment: MutableMap<Garbage, Pair<Int, Boolean>>
+    ): Boolean {
         val result: Boolean
         // May not handle the fact that plastic needs collected all at once
         // 1. Determine if we're on a garbage tile that we can collect
@@ -306,7 +316,7 @@ class Corporation(
             if (ship.isCapacitySufficient(garbage)) {
                 result = true
                 ship.currentVelocity = 0
-                doStuff(ship, ship.position, collectorTarget)
+                doStuff(ship, ship.position, garbageAssignment)
             } else {
                 val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                 ship.moveUninterrupted(closestHarborPath, false, true)
@@ -321,7 +331,7 @@ class Corporation(
                 .map { it.first }
                 .intersect(knownGarbage.values.toSet().union(trackedGarbage.map { getPosOfGarbage(it) }).toSet())
                 .filter { tile ->
-                    findUncollectedGarbage(tile, cap, collectorTarget) != null
+                    findUncollectedGarbage(tile, cap, collectorTarget, garbageAssignment) != null
                 }.sortedWith(compareBy({ paths[it]?.size }, { it.garbage.first().id }))
 
             // attainableGarbage is a set of tiles that have garbage that the ship can collect
@@ -333,7 +343,7 @@ class Corporation(
                     ship.isCapacitySufficient(closestGarbagePatch.garbage)
                 ) {
                     ship.move(path, true)
-                    doStuff(ship, closestGarbagePatch, collectorTarget)
+                    doStuff(ship, closestGarbagePatch, garbageAssignment)
                 } else {
                     val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
                     ship.moveUninterrupted(closestHarborPath, false, true)
@@ -351,6 +361,7 @@ class Corporation(
         scoutTarget: MutableSet<Int>,
         collectorTarget: MutableMap<Int, Int>,
         otherShips: List<Ship>,
+        garbageAssignment: MutableMap<Garbage, Pair<Int, Boolean>>,
         capabilityIndex: Int = 0
     ): Boolean {
         val result: Boolean
@@ -358,7 +369,7 @@ class Corporation(
         result = if (capability is ScoutingShip) {
             moveScoutingShip(ship, scoutTarget)
         } else if (capability is CollectingShip) {
-            moveCollectingShip(ship, capability, collectorTarget)
+            moveCollectingShip(ship, capability, collectorTarget, garbageAssignment)
         } else if (capability is CoordinatingShip) {
             handleMoveCoordinating(ship, capability, otherShips)
         } else {
@@ -366,7 +377,7 @@ class Corporation(
             false
         }
         if (!result && capabilityIndex + 1 < ship.capabilities.size) {
-            return tryMove(ship, scoutTarget, collectorTarget, otherShips, capabilityIndex + 1)
+            return tryMove(ship, scoutTarget, collectorTarget, otherShips, garbageAssignment, capabilityIndex + 1)
         }
         return result
     }
@@ -401,15 +412,24 @@ class Corporation(
     }
 
     /** Documentation for getShipsOnHarbor Function && removed sea:Sea from moveShips Signature **/
-    private fun moveShips(otherShips: List<Ship>) {
+    private fun moveShips(otherShips: List<Ship>, activeTasks: MutableMap<Task, Boolean>) {
         ownedShips.forEach { it.movedThisTick = MovementTuple(false, -1, -1, -1) }
         val availableShips: MutableSet<Ship> = ownedShips.toMutableSet()
+        for (ship in ownedShips) {
+            ship.capabilities.forEach {
+                if (it is ScoutingShip) {
+                    updateScoutFOV(it, ship)
+                }
+            }
+        }
         // -1. Move ships that are inside a restriction out of a restriction
         moveShipsOutOfRestriction(availableShips)
         // 1. Process tasks. For each active task, assign the ship from the task to
         // go to the target tile.
-        // val activeTasks: List<Task> = getActiveTasks()
-        activeTasks.forEach { task ->
+
+        val corpActiveTasks = tasks.filter { activeTasks.contains(it) && activeTasks[it] == true }
+
+        corpActiveTasks.forEach { task ->
             val ship: Ship = task.taskShip
             /**
              * This is my fix so far for this, hasTaskAssigned is false if the ship is doing a task, hence can be
@@ -420,6 +440,7 @@ class Corporation(
             } else {
                 // Task failed, ship is going to refuel/unload
                 tasks.remove(task)
+                activeTasks[task] = false
             }
         }
         // 0. For each ship that has an assigned destination, tick the
@@ -428,7 +449,8 @@ class Corporation(
         val afterTasks = tickTasksInMoveShips(availableShips).toMutableSet()
         availableShips.clear()
         availableShips.addAll(afterTasks)
-        val usedShips = helpermoveShips(availableShips, otherShips)
+        val garbageAssignment: MutableMap<Garbage, Pair<Int, Boolean>> = mutableMapOf()
+        val usedShips = helpermoveShips(availableShips, otherShips, garbageAssignment)
         availableShips.removeAll { usedShips.contains(it.id) }
         ownedShips.filter { it.movedThisTick.moved }.sortedBy { it.id }.forEach {
             LoggerCorporationAction.logShipMovement(
@@ -458,24 +480,17 @@ class Corporation(
             }
         }
     }
-    private fun helpermoveShips(availableShips: MutableSet<Ship>, otherShips: List<Ship>): MutableList<Int> {
+    private fun helpermoveShips(
+        availableShips: MutableSet<Ship>,
+        otherShips: List<Ship>,
+        garbageAssignment: MutableMap<Garbage, Pair<Int, Boolean>>
+    ): MutableList<Int> {
         // 2. Iterate over available ships in increasing ID order
         val usedShips: MutableList<Int> = mutableListOf()
         val scoutTarget: MutableSet<Int> = mutableSetOf()
         val collectorTarget: MutableMap<Int, Int> = mutableMapOf()
         for (ship in availableShips.sortedBy { it.id }) {
-            ship.capabilities.forEach {
-                if (it is ScoutingShip) {
-                    updateScoutFOV(it, ship)
-                }
-            }
-        }
-        val collectingShips = Helper().filterCollectingShip(this)
-
-        val otherShipsTwo = availableShips.filter { !collectingShips.contains(it) }
-
-        for (ship in otherShipsTwo.sortedBy { it.id }) {
-            if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
+            if (tryMove(ship, scoutTarget, collectorTarget, otherShips, garbageAssignment)) {
                 usedShips.add(ship.id)
             }
             ship.capabilities.forEach {
@@ -484,42 +499,8 @@ class Corporation(
                 }
             }
         }
-
-        knownGarbage.forEach { garbage ->
-
-            val distances = Dijkstra(garbage.value)
-            val shipsByIncDistance = collectingShips.sortedBy { distances.allPaths()[it.position]?.size }
-            for (ship in shipsByIncDistance) {
-                moveCollectingShipNew(ship, garbage, scoutTarget, collectorTarget, otherShips, usedShips)
-            }
-        }
-
         return usedShips
     }
-
-    private fun moveCollectingShipNew(
-        ship: Ship,
-        garbage: Map.Entry<Int, Tile>,
-        scoutTarget: MutableSet<Int>,
-        collectorTarget: MutableMap<Int, Int>,
-        otherShips: List<Ship>,
-        usedShips: MutableList<Int>
-    ) {
-        val collectingCap = ship.capabilities.filterIsInstance<CollectingShip>()
-        collectingCap.forEach { cap ->
-            if (cap.auxiliaryContainers
-                    .any { container ->
-                        container.garbageType == garbage.value.garbage
-                            .find { it.id == garbage.key }?.type
-                    }
-            ) {
-                if (tryMove(ship, scoutTarget, collectorTarget, otherShips)) {
-                    usedShips.add(ship.id)
-                }
-            }
-        }
-    }
-
     private fun handleMoveCoordinating(ship: Ship, capability: CoordinatingShip, otherShips: List<Ship>): Boolean {
         val result: Boolean
         // 1. Get information about which ships are in field of view
@@ -569,13 +550,105 @@ class Corporation(
      */
     private fun collectGarbage(allShips: List<Ship>) {
         val collectingShips: List<Ship> = Helper().filterCollectingCapabilities(this).sortedBy { it.id }
-        for (ship in collectingShips) {
-            val capability = ship.capabilities.filterIsInstance<CollectingShip>()
-            for (cap in capability) {
-                val x = allShips.filter { it.position == ship.position && it.id != ship.id }
-                cap.collectGarbageFromCurrentTile(ship, x)
+        val allGarbage = collectingShips.map { it.position.garbage }.flatten().sortedBy { it.id }
+        for (garbage in allGarbage) {
+            if (garbage.type == GarbageType.PLASTIC) {
+                collectPlasticFromCurrentTile(collectingShips.filter { it.position.garbage.contains(garbage) }, garbage)
+            } else if (garbage.type == GarbageType.OIL) {
+                collectOilFromCurrentTile(collectingShips.filter { it.position.garbage.contains(garbage) }, garbage)
             }
         }
+    }
+
+    private fun collectPlasticFromCurrentTile(ships: List<Ship>, gar: Garbage) {
+        val amount = gar.amount
+        val allContainers = ships.sortedBy { it.id }.map { it.capabilities.filterIsInstance<CollectingShip>() }
+            .flatten()
+        val totalShipsCap = allContainers.sumOf { it.getPlasticCapability() }
+        val mapContainersToShips: MutableMap<Container, Ship> = helperHelp(ships, GarbageType.PLASTIC)
+        if (totalShipsCap >= amount) {
+            // var shipsS = ships.sortedBy { it.id }.toMutableSet()
+            val shipCapabilities = allContainers.map { it.auxiliaryContainers }.flatten().toMutableList()
+            while (gar.amount > 0) {
+                val myShip = shipCapabilities.first()
+                if (myShip.getGarbageCapacity() == myShip.garbageLoad) {
+                    shipCapabilities.remove(myShip)
+                } else {
+                    val canTake = minOf(gar.amount, myShip.getGarbageCapacity() - myShip.garbageLoad)
+                    gar.amount -= canTake
+                    val ship = requireNotNull(mapContainersToShips[myShip])
+                    if (gar.amount == 0) {
+                        ship.position.garbage.remove(gar)
+                        gar.trackedBy
+                            .forEach { corp ->
+                                corp.trackedGarbage.remove(gar)
+                            }
+                    }
+                    myShip.garbageLoad += canTake
+                    LoggerCorporationAction.logGarbageCollectionByShip(
+                        requireNotNull(mapContainersToShips[myShip]),
+                        GarbageType.PLASTIC,
+                        gar.id,
+                        canTake
+                    )
+                }
+            }
+        }
+    }
+    private fun collectOilFromCurrentTile(ships: List<Ship>, gar: Garbage) {
+        val allContainers = ships.sortedBy { it.id }.map { it.capabilities.filterIsInstance<CollectingShip>() }
+            .flatten()
+        val oilContainers: MutableList<Container> = mutableListOf()
+        val mapContainersToShips: MutableMap<CollectingShip, Ship> = helperHelpOil(ships)
+        allContainers.forEach { container ->
+            oilContainers.addAll(container.auxiliaryContainers.filter { it.garbageType == GarbageType.OIL })
+        }
+        allContainers.forEach { container ->
+            if (gar.amount > 0 && container.hasOilCapacity() > 0) {
+                val x = minOf(gar.amount, container.hasOilCapacity())
+                gar.amount -= x
+                val ship = requireNotNull(mapContainersToShips[container])
+                if (gar.amount == 0) {
+                    ship.position.garbage.remove(gar)
+                    gar.trackedBy
+                        .forEach { corp ->
+                            corp.trackedGarbage.remove(gar)
+                        }
+                }
+                container.reduceOilCapacity(x)
+                LoggerCorporationAction.logGarbageCollectionByShip(
+                    requireNotNull(mapContainersToShips[container]),
+                    GarbageType.PLASTIC,
+                    gar.id,
+                    x
+                )
+            }
+        }
+    }
+
+    private fun helperHelpOil(ships: List<Ship>): MutableMap<CollectingShip, Ship> {
+        val mapContainersToShips: MutableMap<CollectingShip, Ship> = mutableMapOf()
+        ships.forEach {
+            it.capabilities.filterIsInstance<CollectingShip>().forEach { ship ->
+                mapContainersToShips[ship] = it
+            }
+        }
+        return mapContainersToShips
+    }
+
+    private fun helperHelp(ships: List<Ship>, garbageType: GarbageType): MutableMap<Container, Ship> {
+        val mapContainersToShips: MutableMap<Container, Ship> = mutableMapOf()
+        ships.forEach {
+            it.capabilities.filterIsInstance<CollectingShip>().map { colShip -> colShip.auxiliaryContainers }.flatten()
+                .forEach {
+                        container ->
+                    // doTheJob(container, garbageType, mapContainersToShips)
+                    if (container.garbageType == garbageType) {
+                        mapContainersToShips[container] = it
+                    }
+                }
+        }
+        return mapContainersToShips
     }
 
     /**
@@ -608,11 +681,4 @@ class Corporation(
             }
         }
     }
-
-    /**
-     * private fun getGarbageInfo(): List<Garbage> {
-     *         // WE NEED A METHOD THAT RETURNS ALL THE GARBAGE THE CORPORATION KNOWS ABOUT HERE
-     *         return mutableListOf<Garbage>()
-     *     }
-     */
 }
