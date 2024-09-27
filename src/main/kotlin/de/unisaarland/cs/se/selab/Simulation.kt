@@ -183,7 +183,6 @@ class Simulation(
      */
     private fun processTasks() {
         val tasks = corporations.map { it.tasks }.flatten().sortedBy { it.id }
-
         for (task in tasks) {
             task.actUponTick(tick)
         }

@@ -1,0 +1,15 @@
+{
+  "garbage": [],
+  "events": [
+    {
+      "id": 1,
+      "type": "RESTRICTION",
+      "tick": 0,
+      "duration": 2,
+      "location": 10,
+      "radius": 0
+    }
+  ],
+  "tasks": [],
+  "rewards": []
+}
