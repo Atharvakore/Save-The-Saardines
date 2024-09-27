@@ -395,19 +395,6 @@ class Corporation(
         return result
     }
 
-    private fun tickTasksInMoveShips(availableShips: MutableSet<Ship>): MutableSet<Ship> {
-        // val unload: Boolean = true
-        val x = availableShips.sortedBy { it.id }.toMutableSet()
-        x.removeIf {
-            if (it.hasTaskAssigned || it.isInWayToRefuelOrUnload) {
-                it.tickTask(it.hasTaskAssigned)
-                return@removeIf true
-            }
-            return@removeIf false
-        }
-        return x
-    }
-
     private fun moveShipsOutOfRestriction(availableShips: MutableSet<Ship>) {
         // BUG POTENTIAL
         availableShips.filter {
@@ -455,9 +442,13 @@ class Corporation(
         // 0. For each ship that has an assigned destination, tick the
         // ship and remove the ship from the available ships
         // Detekt workaround
-        val afterTasks = tickTasksInMoveShips(availableShips).toMutableSet()
-        availableShips.clear()
-        availableShips.addAll(afterTasks)
+        availableShips.removeIf {
+            if (it.hasTaskAssigned || it.isInWayToRefuelOrUnload) {
+                it.tickTask(it.hasTaskAssigned)
+                return@removeIf true
+            }
+            return@removeIf false
+        }
         val garbageAssignment: MutableMap<Garbage, Pair<Int, Boolean>> = mutableMapOf()
         val usedShips = helpermoveShips(availableShips, otherShips, garbageAssignment)
         availableShips.removeAll { usedShips.contains(it.id) }
