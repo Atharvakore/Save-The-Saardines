@@ -104,25 +104,21 @@ open class Ship(
         val desTile: Tile
         if (path.size > distanceLength) {
             desTile = path[distanceLength]
-            if (desTile != this.position) {
-                consumedFuel += distanceLength * SPEED_LENGTH * fuelConsumption
-                if (consumedFuel <= fuelCapacity) {
-                    this.movedThisTick = MovementTuple(true, id, currentVelocity, desTile.id)
-                    this.position = desTile
-                } else {
-                  consumedFuel = oldFuel
-                }
+            consumedFuel += distanceLength * SPEED_LENGTH * fuelConsumption
+            if (desTile != this.position && consumedFuel <= fuelCapacity) {
+                this.movedThisTick = MovementTuple(true, id, currentVelocity, desTile.id)
+                this.position = desTile
+            } else {
+                consumedFuel = oldFuel
             }
         } else {
             desTile = path.last()
-            if (desTile != this.position) {
-                consumedFuel += (path.size - 1) * SPEED_LENGTH * fuelConsumption
-                if (consumedFuel <= fuelCapacity) {
-                    this.movedThisTick = MovementTuple(true, id, currentVelocity, desTile.id)
-                    this.position = desTile
-                } else {
-                    consumedFuel = oldFuel
-                }
+            consumedFuel += (path.size - 1) * SPEED_LENGTH * fuelConsumption
+            if (desTile != this.position && consumedFuel <= fuelCapacity) {
+                this.movedThisTick = MovementTuple(true, id, currentVelocity, desTile.id)
+                this.position = desTile
+            } else {
+                consumedFuel = oldFuel
             }
             if (shouldDecelerate) currentVelocity = 0
         }

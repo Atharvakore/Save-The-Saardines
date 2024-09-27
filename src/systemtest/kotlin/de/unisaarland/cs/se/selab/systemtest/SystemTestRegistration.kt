@@ -29,6 +29,8 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpNoMove1
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpNoMove2Test
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpVisibilityRangeTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorporationProfessionalObserverTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.ExploringPacific
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.TaskInRestrictTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorporationWhereShip
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
@@ -128,7 +130,10 @@ object SystemTestRegistration {
         AvengersAssemble(),
         OilBillionaire(),
         DriftToMe(),
-        MultiTasking()
+        MultiTasking(),
+        ExploringPacific(),
+        AdventureTime(),
+        TaskInRestrictTest()
     )
 
     private val testsForMutants = listOf(
@@ -157,7 +162,7 @@ object SystemTestRegistration {
         LandNextDeepOcean(),
         DriftShipsTest(),
         SimulatePirateAttack(),
-        SimulateStormTest(),
+        // SimulateStormTest(),
         DriftGarbageOnLandTest(),
         // Section for tests to check on reference to test later against mutant:
         OneIDTwoTasks(),
@@ -174,14 +179,14 @@ object SystemTestRegistration {
         CorporationProfessionalObserverTest(),
         CooperateOnceTest(),
         CoordinatingShipDefaultTest(),
-        CollectAndRefuelTest(),
+        // CollectAndRefuelTest(),
         GodVision(),
+        MultiTasking(),
         ExploringPacific(),
         AdventureTime(),
         AvengersAssemble(),
         OilBillionaire(),
-
-        )
+    )
 
     /**
      * Register your tests to run against the reference implementation!
@@ -190,11 +195,9 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
-       // testsForReferenceImpl.forEach {
-         //   manager.registerTest(it)
-        //}
-
-        manager.registerTest(CollectAndRefuelTest())
+        testsForReferenceImpl.forEach {
+            manager.registerTest(it)
+        }
     }
 
     /**

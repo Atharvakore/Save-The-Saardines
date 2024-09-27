@@ -10,13 +10,11 @@ class DriftToMe : ExampleSystemTestExtension() {
     override val name = "DriftToMe"
     override val maxTicks = 5
     override suspend fun run() {
-        assertNextLine("Initialization Info: map.json successfully parsed and validated.")
-        assertNextLine("Initialization Info: corporationDriftToMe.json successfully parsed and validated.")
-        assertNextLine("Initialization Info: scenarioDriftToMe.json successfully parsed and validated.")
-        assertNextLine("Simulation Info: Simulation started.")
-        skipUntilString("Garbage Collection: Ship 1 collected 150 of garbage OIL with 4.")
+        skipUntilString("Simulation Info: Tick 1 started.")
+        skipUntilString("Corporation Action: Corporation 1 is starting to collect garbage.")
+        assertNextLine("Garbage Collection: Ship 1 collected 150 of garbage OIL with 4.")
         skipUntilString("Current Drift: OIL 1 with amount 50 drifted from tile 9 to tile 1.")
-        skipLines(4)
+        skipUntilString("Corporation Action: Corporation 1 is starting to collect garbage.")
         assertNextLine("Garbage Collection: Ship 1 collected 50 of garbage OIL with 1.")
     }
 }

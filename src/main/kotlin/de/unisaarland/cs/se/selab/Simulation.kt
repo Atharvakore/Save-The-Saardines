@@ -24,7 +24,6 @@ class Simulation(
     private val sea: Sea,
 ) {
     private var tick: Int = 0
-    val activeTasks: MutableMap<Task, Boolean> = mutableMapOf()
 
     /**
      * starts the whole simulation and enters a loop that runs tick() until maxTick is reached
@@ -64,12 +63,16 @@ class Simulation(
 
         for (corporation in corporations.sortedBy { it.id }) {
             val otherShips = allShips.filter { it.owner != corporation }
-            corporation.run(sea, otherShips, activeTasks)
+            corporation.run(tick, sea, otherShips, getActive())
         }
 
         for (ship in allShips) {
             ship.arrivedToHarborThisTick = false
         }
+    }
+
+    private fun getActive(): List<Task> {
+        return corporations.map { it.tasks }.flatten().filter { it.tick + 1 == tick }
     }
 
     /**
@@ -185,13 +188,8 @@ class Simulation(
      */
     private fun processTasks() {
         val tasks = corporations.map { it.tasks }.flatten().sortedBy { it.id }
-        val tasksToBeAdded = tasks.filter { it.tick == tick }
 
-        tasksToBeAdded.forEach { task ->
-            activeTasks.putIfAbsent(task, true)
-        }
-
-        for (task in tasksToBeAdded) {
+        for (task in tasks) {
             task.actUponTick(tick)
         }
     }

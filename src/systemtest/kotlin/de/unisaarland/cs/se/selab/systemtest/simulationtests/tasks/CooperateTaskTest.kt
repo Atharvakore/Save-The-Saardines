@@ -11,10 +11,10 @@ class CooperateTaskTest : ExampleSystemTestExtension() {
     override val scenario = "tasksAndRewardsJsons/taskScenario.Json"
     override val map = "mapFiles/map_medium_01.json"
     override val name = "CooperateTaskTest"
-    override val maxTicks = 6
+    override val maxTicks = 15
 
     override suspend fun run() {
-        skipUntilString("Event: Event 19 of type RESTRICTION happened.")
-        assertNextLine("Task: Task 4 of type COOPERATE with ship 1 is added with destination 52.")
+        skipUntilString("Event: Event 9 of type RESTRICTION happened.")
+        assertNextLine("Task: Task 9 of type COOPERATE with ship 1 is added with destination 52.")
     }
 }
