@@ -34,7 +34,5 @@ class FindGarbageTaskTest : ExampleSystemTestExtension() {
         assertNextLine("Corporation Action: Corporation 2 finished its actions.")
         assertNextLine("Current Drift: Ship 5 drifted from tile 66 to tile 67.")
         assertNextLine("Current Drift: Ship 3 drifted from tile 67 to tile 68.")
-
-
     }
 }
