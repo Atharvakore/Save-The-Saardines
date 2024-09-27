@@ -61,11 +61,11 @@ open class Ship(
             handleCurrentDrift(deepOcean, current)
         }
     }
-    val threeSixty = 360
+
 
     private fun handleCurrentDrift(tile: DeepOcean, current: Current) {
         val speed = current.speed
-        var direction = threeSixty - current.direction)
+        var direction = current.direction
         val intensity = current.intensity
         if (intensity > tile.amountOfShipsDriftedThisTick) {
             var i = 0
