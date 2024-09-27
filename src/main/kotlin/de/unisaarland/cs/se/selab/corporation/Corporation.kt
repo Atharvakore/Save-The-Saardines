@@ -608,11 +608,4 @@ class Corporation(
             }
         }
     }
-
-    /**
-     * private fun getGarbageInfo(): List<Garbage> {
-     *         // WE NEED A METHOD THAT RETURNS ALL THE GARBAGE THE CORPORATION KNOWS ABOUT HERE
-     *         return mutableListOf<Garbage>()
-     *     }
-     */
 }
