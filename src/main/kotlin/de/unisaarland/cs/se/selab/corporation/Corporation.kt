@@ -541,6 +541,119 @@ class Corporation(
         }
     }
 
+    private fun collectChemicalsFromCurrentTile(ships: List<Ship>, gar: Garbage) {
+        val allContainers = ships.sortedBy { it.id }.map { it.capabilities.filterIsInstance<CollectingShip>() }
+            .flatten()
+        val oilContainers: MutableList<Container> = mutableListOf()
+        val mapContainersToShips: MutableMap<CollectingShip, Ship> = helperHelpOil(ships)
+        allContainers.forEach { container ->
+            oilContainers.addAll(container.auxiliaryContainers.filter { it.garbageType == GarbageType.PLASTIC })
+        }
+        allContainers.forEach { container ->
+            if (gar.amount > 0 && container.hasChemicalsCapacity() > 0) {
+                val x = minOf(gar.amount, container.hasChemicalsCapacity())
+                gar.amount -= x
+                val ship = requireNotNull(mapContainersToShips[container])
+                check(gar, ship)
+                container.reduceOilCapacity(x)
+                LoggerCorporationAction.logGarbageCollectionByShip(
+                    requireNotNull(mapContainersToShips[container]),
+                    GarbageType.CHEMICALS,
+                    gar.id,
+                    x
+                )
+            }
+        }
+    }
+    private fun collectPlasticFromCurrentTile(ships: List<Ship>, gar: Garbage) {
+        val amount = gar.amount
+        val allContainers = ships.sortedBy { it.id }.map { it.capabilities.filterIsInstance<CollectingShip>() }
+            .flatten()
+        val totalShipsCap = allContainers.sumOf { it.getPlasticCapability() }
+        val mapContainersToShips: MutableMap<Container, Ship> = helperHelp(ships, GarbageType.PLASTIC)
+        if (totalShipsCap >= amount) {
+            // var shipsS = ships.sortedBy { it.id }.toMutableSet()
+            val shipCapabilities = allContainers.map { it.auxiliaryContainers }.flatten().toMutableList()
+            while (gar.amount > 0) {
+                val myShip = shipCapabilities.first()
+                if (myShip.getGarbageCapacity() == myShip.garbageLoad) {
+                    shipCapabilities.remove(myShip)
+                } else {
+                    val canTake = minOf(gar.amount, myShip.getGarbageCapacity() - myShip.garbageLoad)
+                    gar.amount -= canTake
+                    val ship = requireNotNull(mapContainersToShips[myShip])
+                    check(gar, ship)
+                    myShip.garbageLoad += canTake
+                    LoggerCorporationAction.logGarbageCollectionByShip(
+                        requireNotNull(mapContainersToShips[myShip]),
+                        GarbageType.PLASTIC,
+                        gar.id,
+                        canTake
+                    )
+                }
+            }
+        }
+    }
+
+    private fun check(gar: Garbage, ship: Ship) {
+        if (gar.amount == 0) {
+            ship.position.garbage.remove(gar)
+            gar.trackedBy
+                .forEach { corp ->
+                    corp.trackedGarbage.remove(gar)
+                }
+        }
+    }
+    private fun collectOilFromCurrentTile(ships: List<Ship>, gar: Garbage) {
+        val allContainers = ships.sortedBy { it.id }.map { it.capabilities.filterIsInstance<CollectingShip>() }
+            .flatten()
+        val oilContainers: MutableList<Container> = mutableListOf()
+        val mapContainersToShips: MutableMap<CollectingShip, Ship> = helperHelpOil(ships)
+        allContainers.forEach { container ->
+            oilContainers.addAll(container.auxiliaryContainers.filter { it.garbageType == GarbageType.OIL })
+        }
+        allContainers.forEach { container ->
+            if (gar.amount > 0 && container.hasOilCapacity() > 0) {
+                val x = minOf(gar.amount, container.hasOilCapacity())
+                gar.amount -= x
+                val ship = requireNotNull(mapContainersToShips[container])
+                check(gar, ship)
+                container.reduceOilCapacity(x)
+                LoggerCorporationAction.logGarbageCollectionByShip(
+                    requireNotNull(mapContainersToShips[container]),
+                    GarbageType.OIL,
+                    gar.id,
+                    x
+                )
+            }
+        }
+    }
+
+    private fun helperHelpOil(ships: List<Ship>): MutableMap<CollectingShip, Ship> {
+        val mapContainersToShips: MutableMap<CollectingShip, Ship> = mutableMapOf()
+        ships.forEach {
+            it.capabilities.filterIsInstance<CollectingShip>().forEach { ship ->
+                mapContainersToShips[ship] = it
+            }
+        }
+        return mapContainersToShips
+    }
+
+    private fun helperHelp(ships: List<Ship>, garbageType: GarbageType): MutableMap<Container, Ship> {
+        val mapContainersToShips: MutableMap<Container, Ship> = mutableMapOf()
+        ships.forEach {
+            it.capabilities.filterIsInstance<CollectingShip>().map { colShip -> colShip.auxiliaryContainers }.flatten()
+                .forEach {
+                        container ->
+                    // doTheJob(container, garbageType, mapContainersToShips)
+                    if (container.garbageType == garbageType) {
+                        mapContainersToShips[container] = it
+                    }
+                }
+        }
+        return mapContainersToShips
+    }
+
     /**
      * Refuels and unloads ships
      *

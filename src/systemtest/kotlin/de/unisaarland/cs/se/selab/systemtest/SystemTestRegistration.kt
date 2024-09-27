@@ -12,6 +12,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.StormOverMultipleTiles
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.WeExistByOurselves
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.AvengersAssemble
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
@@ -22,6 +23,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.M
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.ReturnToHomeWater
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.drifting.DriftToMe
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.drifting.OilBillionaire
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CollaborationTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CooperateOnceTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CoordinatingShipDefaultTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CoordinatingTest
@@ -29,6 +31,10 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpNoMove1
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpNoMove2Test
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpVisibilityRangeTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorporationProfessionalObserverTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.Error404Test
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.ExploringPacific
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.MultiTaskingTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.TaskInRestrictTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorporationWhereShip
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.EverythingInOne
@@ -126,7 +132,15 @@ object SystemTestRegistration {
         AvengersAssemble(),
         OilBillionaire(),
         DriftToMe(),
-        MultiTasking()
+        MultiTasking(),
+        ExploringPacific(),
+        AdventureTime(),
+        TaskInRestrictTest(),
+        Error404Test(),
+        MultiTaskingTest(),
+        WeExistByOurselves(),
+        FindGarbageTaskTest(),
+        CollaborationTest()
     )
 
     private val testsForMutants = listOf(
