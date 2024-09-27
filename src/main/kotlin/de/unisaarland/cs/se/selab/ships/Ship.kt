@@ -102,7 +102,7 @@ open class Ship(
      * Logic: the ship gets a path (a list of tiles from destination to ship), has to reverse path and move along it
      * the ship moves along the path as long as it can
      */
-    fun move(path: List<Tile>, shouldDecelerate: Boolean) {
+    fun move(path: List<Tile>) {
         // acceleration
         currentVelocity = minOf(currentVelocity + acceleration, maxVelocity)
         val oldFuel = consumedFuel
@@ -128,7 +128,7 @@ open class Ship(
             } else {
                 consumedFuel = oldFuel
             }
-            if (shouldDecelerate) currentVelocity = 0
+            currentVelocity = 0
         }
     }
 
@@ -168,31 +168,28 @@ open class Ship(
      * complete the movement of the ship along the destination path
      * if it has an assigned task
      * */
-    fun tickTask(isTask: Boolean, isRefuel: Boolean) {
-        moveUninterrupted(destinationPath, isTask, isRefuel)
+    fun tickTask(isTask: Boolean ) {
+        moveUninterrupted(destinationPath, isTask, this.refueling, this.unloading)
     }
 
     /**
      * set destination for the ship
      * and store the path until its completed
      * */
-    fun moveUninterrupted(pathToHarbor: List<Tile>?, isTask: Boolean, isRefuel: Boolean) {
-        isInWayToRefuelOrUnload = isRefuel
+    fun moveUninterrupted(pathToHarbor: List<Tile>?, isTask: Boolean, isRefuel: Boolean, isUnloading: Boolean) {
+        this.refueling = isRefuel
+        this.unloading = isUnloading
         hasTaskAssigned = isTask
         if (pathToHarbor.isNullOrEmpty() || this.position == pathToHarbor.last()) {
             return
         }
-        move(pathToHarbor, false)
+        move(pathToHarbor)
         if (this.position == pathToHarbor.last()) {
             hasTaskAssigned = false
-            isInWayToRefuelOrUnload = false
             destinationPath = emptyList()
             if (this.owner.ownedHarbors.contains(this.position)) {
                 arrivedToHarborThisTick = true
-                this.refueling = isRefuel
-                this.unloading = isRefuel
             }
-            currentVelocity = 0
         } else {
             val startIndex = pathToHarbor.indexOf(this.position)
             val lastIndex = pathToHarbor.size
