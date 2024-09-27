@@ -42,11 +42,12 @@ class OilSpill(
                     val garbageTiles = tile.garbage.filter { garbage -> garbage.type == GarbageType.OIL }
                     val oilGarbageAmount = OIL_TILE_MAX - garbageTiles.sumOf { garbage -> garbage.amount }
                     val newGarbageAmount = min(amount, oilGarbageAmount)
-                    val newGarbage = createGarbage(newGarbageAmount, GarbageType.OIL)
-                    tile.garbage.add(newGarbage)
-
-                    corporations.forEach { corporation ->
-                        corporation.partnerGarbage.putIfAbsent(newGarbage.id, tile)
+                    if (newGarbageAmount != 0) {
+                        val newGarbage = createGarbage(newGarbageAmount, GarbageType.OIL)
+                        tile.garbage.add(newGarbage)
+                        corporations.forEach { corporation ->
+                            corporation.partnerGarbage.putIfAbsent(newGarbage.id, tile)
+                        }
                     }
                 }
 

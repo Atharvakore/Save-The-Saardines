@@ -595,7 +595,7 @@ class Corporation(
                 container.reduceOilCapacity(x)
                 LoggerCorporationAction.logGarbageCollectionByShip(
                     requireNotNull(mapContainersToShips[container]),
-                    GarbageType.PLASTIC,
+                    GarbageType.CHEMICALS,
                     gar.id,
                     x
                 )
@@ -658,7 +658,7 @@ class Corporation(
                 container.reduceOilCapacity(x)
                 LoggerCorporationAction.logGarbageCollectionByShip(
                     requireNotNull(mapContainersToShips[container]),
-                    GarbageType.PLASTIC,
+                    GarbageType.OIL,
                     gar.id,
                     x
                 )
