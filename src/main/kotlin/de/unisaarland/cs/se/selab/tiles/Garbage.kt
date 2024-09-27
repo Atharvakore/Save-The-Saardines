@@ -17,8 +17,8 @@ class Garbage(
     /**
      * drifts garbage
      */
-    fun drift(currentTile: DeepOcean, targetTile: Tile, localCurrent: Current): Pair<Tile, Garbage>? {
-        val result: Pair<Tile, Garbage>?
+    fun drift(currentTile: DeepOcean, targetTile: Tile, localCurrent: Current): Pair<Pair<Tile, Tile>, Garbage>? {
+        val result: Pair<Pair<Tile, Tile>, Garbage>?
         val toBeDrifted: Int
         val driftAmount = localCurrent.intensity * DRIFTAMOUNTPERPOINTINTENSITY
         if (currentTile.amountOfGarbageDriftedThisTick < driftAmount) {
@@ -38,7 +38,11 @@ class Garbage(
         return result
     }
 
-    private fun handlePlasticGarbage(currentTile: Tile, targetTile: Tile, toBeDrifted: Int): Pair<Tile, Garbage>? {
+    private fun handlePlasticGarbage(
+        currentTile: Tile,
+        targetTile: Tile,
+        toBeDrifted: Int
+    ): Pair<Pair<Tile, Tile>, Garbage> {
         var newGarbage = this
         val drifted = minOf(this.amount, toBeDrifted)
         this.amount -= drifted
@@ -46,13 +50,13 @@ class Garbage(
             newGarbage = createGarbage(drifted, GarbageType.PLASTIC)
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, targetTile.id)
-            return Pair(targetTile, newGarbage)
+            return Pair(Pair(targetTile, currentTile), newGarbage)
         } else {
             newGarbage.amount = drifted
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, newGarbage.id, newGarbage.amount, currentTile.id, targetTile.id)
             currentTile.garbage.remove(this)
-            return Pair(targetTile, newGarbage)
+            return Pair(Pair(targetTile, currentTile), newGarbage)
         }
     }
 
@@ -61,7 +65,7 @@ class Garbage(
         targetTile: Tile,
         toBeDrifted: Int,
         localCurrent: Current
-    ): Pair<Tile, Garbage>? {
+    ): Pair<Pair<Tile, Tile>, Garbage>? {
         var target = targetTile
         val drifted = minOf(this.amount, toBeDrifted)
         this.amount -= drifted
@@ -88,7 +92,7 @@ class Garbage(
                 target = tile
                 currentTile.amountOfGarbageDriftedThisTick += drifted
                 Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
-                return Pair(target, newGarbage)
+                return Pair(Pair(target, currentTile), newGarbage)
             } else {
                 return null
             }
@@ -96,7 +100,7 @@ class Garbage(
         } else {
             currentTile.amountOfGarbageDriftedThisTick += drifted
             Logger.logCurrentDriftGarbage(type, newGarbage.id, drifted, currentTile.id, target.id)
-            return Pair(target, newGarbage)
+            return Pair(Pair(target, currentTile), newGarbage)
         }
     }
 
