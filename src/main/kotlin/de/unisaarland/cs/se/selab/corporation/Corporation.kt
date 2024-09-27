@@ -508,11 +508,6 @@ class Corporation(
             if (tryMove(ship, scoutTarget, collectorTarget, otherShips, garbageAssignment)) {
                 usedShips.add(ship.id)
             }
-            ship.capabilities.forEach {
-                if (it is ScoutingShip) {
-                    updateScoutFOV(it, ship)
-                }
-            }
         }
         return usedShips
     }
