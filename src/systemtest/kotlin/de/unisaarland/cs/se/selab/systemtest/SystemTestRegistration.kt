@@ -195,7 +195,7 @@ object SystemTestRegistration {
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
         testsForReferenceImpl.forEach {
-            manager.registerTest(ExampleSystemTest())
+            manager.registerTest(it)
         }
     }
 
