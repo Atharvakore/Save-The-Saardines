@@ -40,7 +40,6 @@ class Storm(
                         speed,
                         direction,
                         tile,
-                        corporations,
                         garbageToAdd,
                         garbageToRemove
                     )
@@ -49,10 +48,22 @@ class Storm(
             garbageToAdd.forEach { (tile, garbageList) -> tile.garbage.addAll(garbageList) }
             garbageToRemove.forEach { (tile, garbageList) -> tile.garbage.removeAll(garbageList) }
 
+            garbageToAdd.forEach { (tile, garbageList) ->
+                garbageList.forEach { garbage ->
+                    updateCorporations(corporations, garbage.id, tile)
+                }
+            }
+
             result = true
         } else {
             result = false
         }
         return result
+    }
+
+    private fun updateCorporations(corporations: List<Corporation>, garbageId: Int, tile: Tile) {
+        corporations.forEach { corp ->
+            corp.partnerGarbage.replace(garbageId, tile)
+        }
     }
 }

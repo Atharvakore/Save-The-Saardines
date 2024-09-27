@@ -5,14 +5,7 @@ import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceT
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25StatisticsTest
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.CollectAndRefuelTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageMultipleCurrents
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.StormOverMultipleTiles
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.WeExistByOurselves
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.*
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.AvengersAssemble
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
@@ -33,6 +26,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorpVisibil
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.CorporationProfessionalObserverTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.Error404Test
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.ExploringPacific
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.FindNoGarbageTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.MultiTaskingTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.mutants.TaskInRestrictTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.CorpNoShips
@@ -50,20 +44,12 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.OneIDTw
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.OneTileNoHarbor
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShipAmongUs
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShoreNoHarbor
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.ContainerRewardTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.RadioRewardTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TelescopeRewardTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.rewards.TrackerRewardTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.AdventureTime
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.GodVision
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CollectGarbageTaskTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.CooperateTaskTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.EventSchedulingTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.ExploreMapTaskTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.FindGarbageTaskTest
-import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.HardChoice
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingPlasticTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.WhereDoWeUnloadThis
 
 /** The class which will register the tests for Testing on Course Implementation */
 object SystemTestRegistration {
@@ -110,16 +96,6 @@ object SystemTestRegistration {
         // DriftToMe(),
         // MoreMorePlastic(),
         CollectingMutliplePlasticTest(),
-        ContainerRewardTest(),
-        RadioRewardTest(),
-        TelescopeRewardTest(),
-        TrackerRewardTest(),
-        CollectGarbageTaskTest(),
-        CooperateTaskTest(),
-        ExploreMapTaskTest(),
-        FindGarbageTaskTest(),
-        HardChoice(),
-        EventSchedulingTest(),
         CorpNoMove1Test(),
         CorpNoMove2Test(),
         CorpVisibilityRangeTest(),
@@ -140,8 +116,10 @@ object SystemTestRegistration {
         Error404Test(),
         MultiTaskingTest(),
         WeExistByOurselves(),
-        FindGarbageTaskTest(),
-        CollaborationTest()
+        CollaborationTest(),
+        WhereDoWeUnloadThis(),
+        Blyat(),
+        FindNoGarbageTest()
     )
 
     private val testsForMutants = listOf(
@@ -194,6 +172,11 @@ object SystemTestRegistration {
         AdventureTime(),
         AvengersAssemble(),
         OilBillionaire(),
+        CollaborationTest(),
+        Error404Test(),
+        MultiTaskingTest(),
+        WeExistByOurselves(),
+        Blyat(),
     )
 
     /**

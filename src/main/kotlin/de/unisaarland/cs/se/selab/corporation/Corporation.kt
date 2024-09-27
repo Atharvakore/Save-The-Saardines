@@ -186,7 +186,6 @@ class Corporation(
         capability.getTilesWithGarbageInFoV(sea, ship.position).forEach { tile ->
             tile.garbage
                 .asSequence()
-                .filter { acceptedGarbageType.contains(it.type) }
                 .forEach { garbage -> knownGarbage[garbage.id] = tile }
             tile.garbage.forEach {
                 if (partnerGarbage[it.id] != tile) {
@@ -497,6 +496,12 @@ class Corporation(
         val scoutTarget: MutableSet<Int> = mutableSetOf()
         val collectorTarget: MutableMap<Int, Int> = mutableMapOf()
         for (ship in availableShips.sortedBy { it.id }) {
+            // if it's a collecting ship and it's full then send it to a harbor:
+            if (ship.hasCollectingCapability() && ship.needsToUnload()) {
+                val closestHarborPath = Helper().findClosestHarbor(ship.position, ownedHarbors)
+                ship.moveUninterrupted(closestHarborPath, false, true)
+                continue
+            }
             if (tryMove(ship, scoutTarget, collectorTarget, otherShips, garbageAssignment)) {
                 usedShips.add(ship.id)
             }
@@ -572,9 +577,11 @@ class Corporation(
                 )
             }
         }
-        collectingShips.forEach {
-            if (it.shouldUnload()) {
-                it.unloading = true
+        collectingShips.map { it.capabilities }.flatten().filterIsInstance<CollectingShip>().forEach {
+            it.auxiliaryContainers.forEach { container ->
+                if (container.garbageLoad == container.getGarbageCapacity()) {
+                    it.unloading = true
+                }
             }
         }
     }

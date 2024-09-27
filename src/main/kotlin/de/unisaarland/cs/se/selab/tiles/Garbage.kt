@@ -135,7 +135,6 @@ class Garbage(
         speed: Int,
         direction: Direction,
         currentTile: Tile,
-        corporations: List<Corporation>,
         garbageToAdd: MutableMap<Tile, MutableList<Garbage>>,
         garbageToRemove: MutableMap<Tile, MutableList<Garbage>>,
     ) {
@@ -149,43 +148,24 @@ class Garbage(
 
                 if (totalOilAmount + this.amount <= MAXOILCAP) {
                     garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(this)
-                    corporations.forEach { corporation ->
-                        corporation.partnerGarbage.remove(this.id)
-                        corporation.partnerGarbage.putIfAbsent(this.id, targetTile)
-                    }
                 } else {
                     val distance = speed / TEN
                     val tilesInPath = getTilesPath(targetTile, distance, direction)
                     val newTarget = checkOilCap(tilesInPath, this.amount) ?: return
                     garbageToAdd.getOrPut(newTarget) { mutableListOf() }.add(this)
                     garbageToRemove.getOrPut(currentTile) { mutableListOf() }.add(this)
-                    corporations.forEach { corporation ->
-                        corporation.partnerGarbage.remove(this.id)
-                        corporation.partnerGarbage.putIfAbsent(this.id, newTarget)
-                    }
                 }
             }
             GarbageType.PLASTIC -> {
                 garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(this)
                 garbageToRemove.getOrPut(currentTile) { mutableListOf() }.add(this)
-                corporations.forEach { corporation ->
-                    corporation.partnerGarbage.remove(this.id)
-                    corporation.partnerGarbage.putIfAbsent(this.id, targetTile)
-                }
             }
             else -> {
                 if (targetTile is DeepOcean) {
                     garbageToRemove.getOrPut(currentTile) { mutableListOf() }.add(this)
-                    corporations.forEach { corporation ->
-                        corporation.partnerGarbage.remove(this.id)
-                    }
                 } else {
                     garbageToAdd.getOrPut(targetTile) { mutableListOf() }.add(this)
                     garbageToRemove.getOrPut(currentTile) { mutableListOf() }.add(this)
-                    corporations.forEach { corporation ->
-                        corporation.partnerGarbage.remove(this.id)
-                        corporation.partnerGarbage.putIfAbsent(this.id, targetTile)
-                    }
                 }
             }
         }

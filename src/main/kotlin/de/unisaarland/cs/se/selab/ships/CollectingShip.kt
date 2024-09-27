@@ -228,7 +228,7 @@ class CollectingShip(
         }
         if (this.auxiliaryContainers.any { it.garbageLoad == it.getGarbageCapacity() }) {
             ship.isInWayToRefuelOrUnload = true
-            val pathToHarbor = Helper().findClosestHarbor(ship.position, ship.owner.ownedHarbors)
+            val pathToHarbor = Helper().findClosestHarbor(ship.position, ship.owner.ownedHarbors) ?: return
             ship.destinationPath = pathToHarbor
         }
     }
