@@ -559,10 +559,40 @@ class Corporation(
                 collectPlasticFromCurrentTile(collectingShips.filter { it.position.garbage.contains(garbage) }, garbage)
             } else if (garbage.type == GarbageType.OIL) {
                 collectOilFromCurrentTile(collectingShips.filter { it.position.garbage.contains(garbage) }, garbage)
+            } else if (garbage.type == GarbageType.CHEMICALS) {
+                collectChemicalsFromCurrentTile(
+                    collectingShips
+                        .filter { it.position.garbage.contains(garbage) },
+                    garbage
+                )
             }
         }
     }
 
+    private fun collectChemicalsFromCurrentTile(ships: List<Ship>, gar: Garbage) {
+        val allContainers = ships.sortedBy { it.id }.map { it.capabilities.filterIsInstance<CollectingShip>() }
+            .flatten()
+        val oilContainers: MutableList<Container> = mutableListOf()
+        val mapContainersToShips: MutableMap<CollectingShip, Ship> = helperHelpOil(ships)
+        allContainers.forEach { container ->
+            oilContainers.addAll(container.auxiliaryContainers.filter { it.garbageType == GarbageType.PLASTIC })
+        }
+        allContainers.forEach { container ->
+            if (gar.amount > 0 && container.hasChemicalsCapacity() > 0) {
+                val x = minOf(gar.amount, container.hasChemicalsCapacity())
+                gar.amount -= x
+                val ship = requireNotNull(mapContainersToShips[container])
+                check(gar, ship)
+                container.reduceOilCapacity(x)
+                LoggerCorporationAction.logGarbageCollectionByShip(
+                    requireNotNull(mapContainersToShips[container]),
+                    GarbageType.PLASTIC,
+                    gar.id,
+                    x
+                )
+            }
+        }
+    }
     private fun collectPlasticFromCurrentTile(ships: List<Ship>, gar: Garbage) {
         val amount = gar.amount
         val allContainers = ships.sortedBy { it.id }.map { it.capabilities.filterIsInstance<CollectingShip>() }
