@@ -93,12 +93,12 @@ class Corporation(
          */
 
         corp.partnerGarbage.forEach {
-            if (!(it.key in knownGarbage.keys)) {
+            if (it.key !in knownGarbage.keys) {
                 coordinatingShip.owner.partnerGarbage[it.key] = it.value
             }
         }
         corp.knownGarbage.forEach {
-            if (!(it.key in knownGarbage.keys)) {
+            if (it.key !in knownGarbage.keys) {
                 coordinatingShip.owner.partnerGarbage[it.key] = it.value
             }
         }
