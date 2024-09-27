@@ -621,7 +621,6 @@ class Corporation(
         val totalShipsCap = allContainers.sumOf { it.getPlasticCapability() }
         val mapContainersToShips: MutableMap<Container, Ship> = helperHelp(ships, GarbageType.PLASTIC)
         if (totalShipsCap >= amount) {
-
             // var shipsS = ships.sortedBy { it.id }.toMutableSet()
             val shipCapabilities = allContainers.map { it.auxiliaryContainers }.flatten().toMutableList()
             while (gar.amount > 0) {

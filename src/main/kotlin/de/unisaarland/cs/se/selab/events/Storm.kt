@@ -48,6 +48,12 @@ class Storm(
             garbageToAdd.forEach { (tile, garbageList) -> tile.garbage.addAll(garbageList) }
             garbageToRemove.forEach { (tile, garbageList) -> tile.garbage.removeAll(garbageList) }
 
+            garbageToRemove.forEach { (_, garbageList) ->
+                garbageList.forEach { garbage ->
+                    removeFromCorp(corporations, garbage.id)
+                }
+            }
+
             garbageToAdd.forEach { (tile, garbageList) ->
                 garbageList.forEach { garbage ->
                     updateCorporations(corporations, garbage.id, tile)
@@ -61,9 +67,14 @@ class Storm(
         return result
     }
 
+    private fun removeFromCorp(corporations: List<Corporation>, garbageId: Int) {
+        corporations.forEach { corp ->
+            corp.partnerGarbage.remove(garbageId)
+        }
+    }
     private fun updateCorporations(corporations: List<Corporation>, garbageId: Int, tile: Tile) {
         corporations.forEach { corp ->
-            corp.partnerGarbage.replace(garbageId, tile)
+            corp.partnerGarbage.putIfAbsent(garbageId, tile)
         }
     }
 }
