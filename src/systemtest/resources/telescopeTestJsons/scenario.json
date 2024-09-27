@@ -1,0 +1,41 @@
+{
+  "garbage": [
+    {
+      "id": 3,
+      "type": "PLASTIC",
+      "location": 27,
+      "amount": 300
+    },
+    {
+      "id": 4,
+      "type": "PLASTIC",
+      "location": 27,
+      "amount": 300
+    },
+    {
+      "id": 5,
+      "type": "OIL",
+      "location": 27,
+      "amount": 400
+    }
+  ],
+  "events": [],
+  "tasks": [
+    {
+      "id": 3,
+      "type": "EXPLORE",
+      "shipID": 1,
+      "targetTile": 23,
+      "rewardID": 2,
+      "rewardShipID": 2,
+      "tick": 1
+    }
+  ],
+  "rewards": [
+    {
+      "id": 2,
+      "type": "TELESCOPE",
+      "visibilityRange": 2
+    }
+  ]
+}
