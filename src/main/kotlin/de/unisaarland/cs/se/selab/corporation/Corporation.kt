@@ -432,7 +432,7 @@ class Corporation(
              * This is my fix so far for this, hasTaskAssigned is false if the ship is doing a task, hence can be
              * overwritten, if it's going to refuel or unload this will be set to false
              */
-            if (!ship.isInWayToRefuelOrUnload) {
+            if (!ship.hasTaskAssigned) {
                 makeMovement(task, ship, availableShips)
             } else {
                 // Task failed, ship is going to refuel/unload
