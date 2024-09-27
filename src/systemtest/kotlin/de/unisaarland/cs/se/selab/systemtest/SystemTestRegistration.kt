@@ -176,7 +176,8 @@ object SystemTestRegistration {
         Error404Test(),
         MultiTaskingTest(),
         WeExistByOurselves(),
-        Blyat(),
+        WhereDoWeUnloadThis(),
+        Blyat()
     )
 
     /**
