@@ -183,7 +183,9 @@ object SystemTestRegistration {
      * the same as their reference implementation)
      */
     fun registerSystemTestsReferenceImpl(manager: SystemTestManager) {
-        manager.registerTest(CollectAndRefuelTest())
+        for (test in testsForReferenceImpl) {
+            manager.registerTest(test)
+        }
     }
 
     /**
