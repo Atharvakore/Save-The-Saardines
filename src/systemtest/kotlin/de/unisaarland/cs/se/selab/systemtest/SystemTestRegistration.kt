@@ -111,16 +111,6 @@ object SystemTestRegistration {
         // DriftToMe(),
         // MoreMorePlastic(),
         CollectingMutliplePlasticTest(),
-        ContainerRewardTest(),
-        RadioRewardTest(),
-        TelescopeRewardTest(),
-        TrackerRewardTest(),
-        CollectGarbageTaskTest(),
-        CooperateTaskTest(),
-        ExploreMapTaskTest(),
-        FindGarbageTaskTest(),
-        HardChoice(),
-        EventSchedulingTest(),
         CorpNoMove1Test(),
         CorpNoMove2Test(),
         CorpVisibilityRangeTest(),
@@ -196,6 +186,10 @@ object SystemTestRegistration {
         AdventureTime(),
         AvengersAssemble(),
         OilBillionaire(),
+        CollaborationTest(),
+        Error404Test(),
+        MultiTaskingTest(),
+        WeExistByOurselves()
     )
 
     /**

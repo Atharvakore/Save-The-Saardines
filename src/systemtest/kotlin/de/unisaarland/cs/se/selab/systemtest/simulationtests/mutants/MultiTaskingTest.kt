@@ -10,7 +10,7 @@ class MultiTaskingTest : ExampleSystemTestExtension() {
     override val corporations = "mutants/MultiTaskingCorporation.json"
     override val scenario = "mutants/MultiTaskingScenario.json"
     override val map = "mapFiles/smallMap2.json"
-    override val name = "Error404Test"
+    override val name = "MultiTaskingTest"
     override val maxTicks = 1
 
     override suspend fun run() {
