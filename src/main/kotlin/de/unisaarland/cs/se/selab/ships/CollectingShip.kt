@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.ships
 
+import de.unisaarland.cs.se.selab.corporation.Helper
 import de.unisaarland.cs.se.selab.logger.LoggerCorporationAction
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.GarbageType
@@ -12,32 +13,6 @@ class CollectingShip(
     var auxiliaryContainers: MutableList<Container>
 ) : ShipCapability {
     var unloading: Boolean = false
-
-    /**
-     * reduces oil capacity by x
-     */
-    fun reduceOilCapacity(x: Int) {
-        var i: Int = 0
-        var xx = x
-        val oilContainer = auxiliaryContainers.filter { it.garbageType == GarbageType.OIL }
-        while (xx > 0) {
-            val container = oilContainer[i]
-            if (container.getGarbageCapacity() - container.garbageLoad > x) {
-                container.garbageLoad += xx
-                xx -= container.getGarbageCapacity() - container.garbageLoad
-            } else {
-                i += 1
-            }
-        }
-    }
-
-    /**
-     * returns how much plastic can this ship still collect (not sure, should validate with the spec)
-     */
-    fun getPlasticCapability(): Int {
-        return auxiliaryContainers.filter { it.garbageType == GarbageType.PLASTIC }
-            .sumOf { it.getGarbageCapacity() - it.garbageLoad }
-    }
 
     /**
      * unloads all the containers of the ship
@@ -76,16 +51,16 @@ class CollectingShip(
      *
      * checks if the ship can collect any amount of oil
      * */
-    fun hasOilCapacity(): Int {
+    fun hasOilCapacity(): Boolean {
         val oilContainers = auxiliaryContainers.filter { it.garbageType == GarbageType.OIL }
         if (oilContainers.isEmpty()) {
-            return 0
+            return false
         } else {
             var oilCapacity = 0
             for (container in oilContainers) {
                 oilCapacity += container.getGarbageCapacity() - container.garbageLoad
             }
-            return oilCapacity
+            return oilCapacity > 0
         }
     }
 
@@ -165,6 +140,12 @@ class CollectingShip(
                 LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.CHEMICALS, chem.id, collected)
             }
         }
+
+        auxiliaryContainers.forEach {
+            if (it.garbageLoad == it.getGarbageCapacity()) {
+                unloading = true
+            }
+        }
     }
 
     private fun collectPlasticGarbage(
@@ -200,6 +181,11 @@ class CollectingShip(
             if (collected > 0) {
                 LoggerCorporationAction.logGarbageCollectionByShip(ship, GarbageType.PLASTIC, garbage.id, collected)
             }
+        }
+        if (this.auxiliaryContainers.any { it.garbageLoad == it.getGarbageCapacity() }) {
+            ship.isInWayToRefuelOrUnload = true
+            val pathToHarbor = Helper().findClosestHarbor(ship.position, ship.owner.ownedHarbors)
+            ship.destinationPath = pathToHarbor
         }
     }
 
