@@ -30,7 +30,7 @@ open class Ship(
     var destinationPath = emptyList<Tile>()
     var currentVelocity = 0
     var refueling = false
-    var arrivedToHarborThisTick = false
+    var arrivedToHarborThisTick = true
     var movedThisTick: MovementTuple = MovementTuple(false, -1, -1, -1)
     var unloading = false
 
