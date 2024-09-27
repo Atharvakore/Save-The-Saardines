@@ -44,16 +44,13 @@ class ScoutingShipsTest {
         val garbageTile = sea.getTileByPos(Vec2D(6, 6))
         garbageTile?.garbage = mutableListOf(garbage)
 
-        // c1.run(0, sea, emptyList())
-//
+        c1.run(0, sea, emptyList())
         // // test ship moved to garbage tile
-        // assert(scoutingShip.position == garbageTile)
-//
-        // c1.run(0, sea, emptyList())
-//
+        assert(scoutingShip.position == garbageTile)
+        c1.run(0, sea, emptyList())
         // // assure scouting ship didn't leave tile in next tick
-        // assert(scoutingShip.position == garbageTile)
-    } //
+       assert(scoutingShip.position == garbageTile)
+    }
 
     @Test
     fun testMoveToTwoGarbagePiles() {
@@ -86,16 +83,15 @@ class ScoutingShipsTest {
         garbageTile1?.garbage = mutableListOf(garbage1)
         garbageTile2?.garbage = mutableListOf(garbage2)
 
-        // c1.run(0, sea, emptyList())
+        c1.run(0, sea, emptyList())
         // // test same distance of garbage piles
-        // assert(scoutingShip1.position == garbageTile1)
+        assert(scoutingShip1.position == garbageTile1)
         // // test ship moved to tile in FoV of Corporation
-        // assert(scoutingShip2.position != garbageTile2)
-//
-        // c1.run(0, sea, emptyList())
+        assert(scoutingShip2.position != garbageTile2)
+        c1.run(0, sea, emptyList())
         // // test ships remain at tile with garbage
-        // assert(scoutingShip1.position == garbageTile1)
-        // assert(scoutingShip2.position == garbageTile2)
+        assert(scoutingShip1.position == garbageTile1)
+        assert(scoutingShip2.position == garbageTile2)
     }
 
     @Test
@@ -124,13 +120,11 @@ class ScoutingShipsTest {
         garbageTile1?.garbage = mutableListOf(garbage1)
         garbageTile2?.garbage = mutableListOf(garbage2)
 
-        // c1.run(0, sea, emptyList())
+        c1.run(0, sea, emptyList())
         // // test ship move to the closest garbage pile
-        // assert(scoutingShip1.position != garbageTile1)
-//
-        // c1.run(0, sea, emptyList())
-//
+        assert(scoutingShip1.position != garbageTile1)
+        c1.run(0, sea, emptyList())
         // // test ships remain at tile with garbage
-        // assert(scoutingShip1.position == garbageTile1)
+        assert(scoutingShip1.position == garbageTile1)
     }
 }

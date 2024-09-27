@@ -452,7 +452,7 @@ class Corporation(
         // ship and remove the ship from the available ships
         // Detekt workaround
         availableShips.removeIf {
-            if (it.hasTaskAssigned || it.isInWayToRefuelOrUnload) {
+            if (it.hasTaskAssigned || it.refueling || it.unloading) {
                 it.tickTask(it.hasTaskAssigned)
                 return@removeIf true
             }

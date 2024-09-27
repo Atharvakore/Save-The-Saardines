@@ -31,7 +31,6 @@ open class Ship(
     var currentVelocity = 0
     var refueling = false
     var arrivedToHarborThisTick = false
-    open var isInWayToRefuelOrUnload: Boolean = false
     var movedThisTick: MovementTuple = MovementTuple(false, -1, -1, -1)
     var unloading = false
 
