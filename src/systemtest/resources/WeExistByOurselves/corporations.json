@@ -1,0 +1,52 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Scouters Inc.",
+      "ships": [
+        3
+      ],
+      "homeHarbors": [
+        7
+      ],
+      "garbageTypes": []
+    },
+    {
+      "id": 2,
+      "name": "Ocean Cleaners Inc.",
+      "ships": [
+        2
+      ],
+      "homeHarbors": [
+        9
+      ],
+      "garbageTypes": []
+    }
+  ],
+  "ships": [
+    {
+      "id": 3,
+      "name": "Researches",
+      "type": "COORDINATING",
+      "corporation": 1,
+      "location": 2,
+      "maxVelocity": 20,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 5,
+      "visibilityRange": 1
+    },
+    {
+      "id": 2,
+      "name": "Researcher2",
+      "type": "COORDINATING",
+      "corporation": 2,
+      "location": 3,
+      "maxVelocity": 20,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 7,
+      "visibilityRange": 1
+    }
+  ]
+}
