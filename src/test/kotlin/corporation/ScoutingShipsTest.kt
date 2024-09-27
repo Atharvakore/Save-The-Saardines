@@ -49,7 +49,7 @@ class ScoutingShipsTest {
         assert(scoutingShip.position == garbageTile)
         c1.run(0, sea, emptyList())
         // // assure scouting ship didn't leave tile in next tick
-       assert(scoutingShip.position == garbageTile)
+        assert(scoutingShip.position == garbageTile)
     }
 
     @Test
