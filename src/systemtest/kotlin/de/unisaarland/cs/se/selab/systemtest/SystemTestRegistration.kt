@@ -139,8 +139,7 @@ object SystemTestRegistration {
         TaskInRestrictTest(),
         Error404Test(),
         MultiTaskingTest(),
-        WeExistByOurselves()
-        MultiTaskingTest(),
+        WeExistByOurselves(),
         FindGarbageTaskTest(),
         CollaborationTest()
     )
