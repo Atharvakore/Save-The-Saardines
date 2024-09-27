@@ -15,7 +15,7 @@ object LoggerStatistics {
      * will have corporations: List<Corporation> */
     fun logSimulationStatistics(corporations: List<Corporation>) {
         logSimulationStatisticsCalculated()
-        for (corporation in corporations.sortedBy { it.id }) {
+        for (corporation in corporations) {
             if (Logger.map.containsKey(corporation.id)) {
                 Logger.map[corporation.id]?.let { statsForCorporation(corporation.id, it) }
             } else {

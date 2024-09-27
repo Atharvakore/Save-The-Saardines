@@ -8,7 +8,7 @@ import de.unisaarland.cs.se.selab.systemtest.utils.ExampleSystemTestExtension
 class OneTileNoHarbor : ExampleSystemTestExtension() {
     override val description = "map with one tile not harbor"
     override val corporations = "corporationJsons/corpNoHarbor.json"
-    override val scenario = "Try404/scenario.json"
+    override val scenario = "scenarioJsons/scenario.json"
     override val map = "mapFiles/oneTileNotHarbor.json"
     override val name = "MapNoHarbor"
     override val maxTicks = 0

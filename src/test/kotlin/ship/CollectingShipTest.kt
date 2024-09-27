@@ -93,4 +93,9 @@ class CollectingShipTest {
             assert(container.garbageLoad == 0)
         }
     }
+
+    @Test
+    fun testHasPlasticCapacity() {
+        assert(collectingCapability.hasPlasticCapacity() == 200)
+    }
 }

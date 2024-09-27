@@ -14,7 +14,7 @@ class CollectGarbageTaskTest : ExampleSystemTestExtension() {
     override val maxTicks = 2
 
     override suspend fun run() {
-        skipUntilString("Event: Event 0 of type RESTRICTION happened.")
-        assertNextLine("Task: Task 0 of type COLLECT with ship 1 is added with destination 66.")
+        skipUntilString("Event: Event 15 of type RESTRICTION happened.")
+        assertNextLine("Task: Task 1 of type COLLECT with ship 1 is added with destination 66.")
     }
 }

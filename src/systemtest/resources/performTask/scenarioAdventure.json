@@ -1,17 +1,5 @@
 {
   "garbage": [
-    {
-      "id":2,
-      "location": 1,
-      "type": "PLASTIC",
-      "amount": 2000
-    },
-    {
-      "id":1,
-      "location": 4,
-      "type": "PLASTIC",
-      "amount": 3000
-    }
   ],
   "events": [],
   "tasks": [
