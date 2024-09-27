@@ -197,7 +197,6 @@ object SystemTestRegistration {
         testsForReferenceImpl.forEach {
             manager.registerTest(it)
         }
-       // manager.registerTest(CollectAndRefuelTest())
     }
 
     /**
