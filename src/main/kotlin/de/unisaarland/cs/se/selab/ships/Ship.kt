@@ -191,8 +191,8 @@ open class Ship(
                 arrivedToHarborThisTick = true
                 this.refueling = isRefuel
                 this.unloading = isRefuel
-                currentVelocity = 0
             }
+            currentVelocity = 0
         } else {
             val startIndex = pathToHarbor.indexOf(this.position)
             val lastIndex = pathToHarbor.size
