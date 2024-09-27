@@ -377,6 +377,7 @@ class Corporation(
         }
         return true
     }
+
     private fun tryMove(
         ship: Ship,
         scoutTarget: MutableSet<Int>,
