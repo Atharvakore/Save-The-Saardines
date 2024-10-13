@@ -74,7 +74,7 @@ class Storm(
     }
     private fun updateCorporations(corporations: List<Corporation>, garbageId: Int, tile: Tile) {
         corporations.forEach { corp ->
-            corp.partnerGarbage.putIfAbsent(garbageId, tile)
+            corp.partnerGarbage.put(garbageId, tile)
         }
     }
 }

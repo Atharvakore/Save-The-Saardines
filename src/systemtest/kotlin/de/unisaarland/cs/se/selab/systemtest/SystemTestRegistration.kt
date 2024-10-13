@@ -6,6 +6,14 @@ import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceT
 import de.unisaarland.cs.se.selab.systemtest.basictests.sequencetick25.SequenceTick25TickTest
 import de.unisaarland.cs.se.selab.systemtest.runner.SystemTestManager
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.*
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.CollectAndRefuelTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageMultipleCurrents
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftGarbageOnLandTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.DriftShipsTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulatePirateAttack
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.SimulateStormTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.StormOverMultipleTiles
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.WeExistByOurselves
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.AvengersAssemble
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.collectingGarbage.CollectingGarbageTest
@@ -47,6 +55,7 @@ import de.unisaarland.cs.se.selab.systemtest.simulationtests.parserTests.ShoreNo
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.AdventureTime
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.scouting.GodVision
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.EventSchedulingTest
+import de.unisaarland.cs.se.selab.systemtest.simulationtests.tasks.FindGarbageTaskTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingChemicalsTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.UnloadingPlasticTest
 import de.unisaarland.cs.se.selab.systemtest.simulationtests.unloading.WhereDoWeUnloadThis
@@ -121,6 +130,7 @@ object SystemTestRegistration {
         WhereDoWeUnloadThis(),
         Blyat(),
         FindNoGarbageTest(),
+        FindGarbageTaskTest()
         Stuff(),
         Coropro()
     )
@@ -181,6 +191,7 @@ object SystemTestRegistration {
         WeExistByOurselves(),
         WhereDoWeUnloadThis(),
         Blyat(),
+        //  FindGarbageTaskTest()
         Stuff(),
         Coropro()
     )

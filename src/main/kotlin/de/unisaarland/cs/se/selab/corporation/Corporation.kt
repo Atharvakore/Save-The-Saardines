@@ -157,6 +157,9 @@ class Corporation(
         }
         partnerGarbage.putAll(knownGarbage)
         knownGarbage.clear()
+        for (trackedGarbage in trackedGarbage) {
+            partnerGarbage.remove(trackedGarbage.id)
+        }
         this.sea = sea
         getActiveTasks(tick)
         logger.logCorporationStartMoveShips(id)
@@ -242,10 +245,7 @@ class Corporation(
             )
             .filter { !scoutTarget.contains(it.id) }
             .firstOrNull { tile ->
-                tile.garbage
-                    .asSequence()
-                    .filter { acceptedGarbageType.contains(it.type) }
-                    .any()
+                tile.garbage.any()
             }
         if (closestGarbagePatch != null && closestGarbagePatch != ship.position) {
             val path = paths[closestGarbagePatch] ?: return false

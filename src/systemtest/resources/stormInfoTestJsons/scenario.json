@@ -3,13 +3,13 @@
     {
       "id": 1,
       "type": "PLASTIC",
-      "location": 64,
+      "location": 73,
       "amount": 100
     },
     {
       "id": 2,
       "type": "OIL",
-      "location": 65,
+      "location": 73,
       "amount": 200
     }
   ],
@@ -19,9 +19,9 @@
       "type": "STORM",
       "tick": 0,
       "radius":  1,
-      "location": 64,
+      "location": 74,
       "speed": 20,
-      "direction": 240
+      "direction": 180
     }
   ],
   "tasks": [],
