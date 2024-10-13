@@ -1,0 +1,93 @@
+@startuml
+actor "u:User" as u
+participant "s:Simulator" as s
+participant "c1:Corporation" as c1
+participant "s1:ScoutingShip" as scouting
+participant "s2:CollectingShip" as collecting
+participant "m:Map" as m
+participant "t66:DeepOcean" as t66
+participant "oil:Garbage" as oil
+participant "current:Current" as current
+participant "t67:Tile" as t67
+
+
+
+
+activate s
+u -> s: tick()
+activate c1
+s -> c1: moveShips()
+
+activate scouting
+c1 -> scouting: getTilesWithGarbageInFoV()
+scouting --> c1: List<Tile>
+
+c1 -> collecting: getTilesWithGarbageInFoV()
+activate collecting
+
+collecting --> c1: List<Tile>
+deactivate collecting
+
+c1 -> scouting: navigateTo(t66)
+scouting --> c1
+deactivate scouting
+
+
+c1 --> s
+
+s -> c1: collectGarbage()
+c1--> s
+
+s -> c1: refuelShips()
+c1--> s
+
+
+activate m
+s -> m: getTiles()
+m --> s : List<Tile>
+deactivate m
+
+activate t66
+s -> t66: getCurrent()
+t66 --> s: curr
+deactivate t66
+
+' Here the problem is: Current can drift more than 1 tile, but we call drift(t67,curr)
+' without actually computing the destination tile, we just assume it goes there and then
+' query getIntensity() and getSpeed() which makes no sense at this point.
+
+activate oil
+activate current
+s -> oil: drift(t67, curr)
+oil -> current: getIntensity()
+current --> oil: 1
+
+
+
+oil -> current: getSpeed()
+current-> oil: 10
+deactivate current
+
+activate t67
+oil -> t67: isDriftable(50)
+t67 --> oil: true
+oil -> t67: driftGarbage(OIL,50)
+t67 --> oil
+deactivate t67
+
+oil --> s
+deactivate oil
+
+
+s -> c1: getShips()
+c1 --> s: List<Ship>
+deactivate c1
+activate scouting
+s -> scouting: drift(t67)
+scouting --> s
+deactivate scouting
+
+s --> u
+deactivate s
+
+@enduml
