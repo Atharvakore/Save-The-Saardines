@@ -1,7 +1,3 @@
-Here's an updated **README.md** file that explicitly mentions **unit testing**, **integration testing**, and **system testing**, and clearly states that this is a **backend project**.
-
----
-
 # Ocean Cleanup Simulation: Save the Saardines
 
 This project is part of the **Software Engineering Lab** and focuses on simulating efforts to clean up ocean garbage using fleets of ships managed by various corporations. The goal is to model the interaction between ships, garbage, and ocean conditions to simulate a cleanup process in a simplified, yet structured manner.
@@ -203,5 +199,3 @@ These tests are automated and run regularly during development to ensure continu
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
 ---
-
-This README provides detailed documentation for your **Ocean Cleanup Simulation** backend project. Let me know if you'd like any further changes!
