@@ -1,8 +1,9 @@
 package de.unisaarland.cs.se.selab.tiles
 
-import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.corporation.Corporationtests
 import de.unisaarland.cs.se.selab.logger.Logger
 import de.unisaarland.cs.se.selab.tiles.MaxGarbageId.createGarbage
+
 
 /**
  * Garbage class implementing all minor stuff related to Garbage
@@ -60,6 +61,40 @@ class Garbage(
         }
     }
 
+
+    }*/
+    public fun drift(tile: Tile) {
+        if (tile is DeepOcean) {
+            driftHelper(tile)
+        }
+        return
+    }
+
+    /**
+     * helps drifting
+     */
+    public fun driftHelper(currentTile: DeepOcean) {
+        val localCurrent: Current? = currentTile.getCurrent()
+
+        var amountToBeDrifted = (localCurrent?.intensity ?: return) * FIFTY
+        var targetForDriftingTile = currentTile.getTileInDirection(localCurrent.speed / TEN, localCurrent.direction)
+        if (checkTargetTile(currentTile) && currentTile.garbage.isNotEmpty()) {
+            for (g in currentTile.garbage.sortedBy { it.id }) {
+                if (g.type == GarbageType.OIL) {
+                    amountToBeDrifted = handleOilGarbage(
+                        g,
+                        targetForDriftingTile!!,
+                        currentTile,
+                        amountToBeDrifted
+                    )
+                }
+                amountToBeDrifted = driftGarbage(
+                    g,
+                    currentTile,
+                    targetForDriftingTile,
+                    amountToBeDrifted
+                )
+
     private fun handleOilGarbage(
         currentTile: DeepOcean,
         targetTile: Tile,
@@ -95,6 +130,7 @@ class Garbage(
                 return Pair(Pair(target, currentTile), newGarbage)
             } else {
                 return null
+
             }
             // THE CASE WHERE TILE==NULL SHOULD BE HANDLED HERE, OTHERWISE WE ARE USING TARGETTILE
         } else {
@@ -103,6 +139,62 @@ class Garbage(
             return Pair(Pair(target, currentTile), newGarbage)
         }
     }
+
+ tests
+    private fun handleOilGarbage(
+        g: Garbage,
+        targetForDriftingTile: Tile,
+        currentTile: DeepOcean,
+        amountToBeDrifted: Int
+    ): Int {
+        if (targetForDriftingTile.currentOilLevel() + g.amount <= THOUSAND) {
+            currentTile.garbage.minus(g)
+            targetForDriftingTile.garbage.plus(g)
+            return amountToBeDrifted - g.amount
+        } else {
+            createGarbage(THOUSAND - currentTile.currentOilLevel(), GarbageType.OIL)
+            val index = currentTile.garbage.indexOf(g)
+            currentTile.garbage[index].amount -= THOUSAND - currentTile.currentOilLevel()
+            targetForDriftingTile.garbage.plus(createGarbage(THOUSAND - currentTile.currentOilLevel(), GarbageType.OIL))
+            return amountToBeDrifted - (THOUSAND - currentTile.currentOilLevel())
+        }
+    }
+
+    private fun driftGarbage(
+        g: Garbage,
+        currentTile: DeepOcean,
+        targetForDriftingTile: Tile?,
+        amountToBeDrifted: Int
+    ): Int {
+        var remainingAmount = amountToBeDrifted
+
+        if (remainingAmount <= g.amount && remainingAmount > 0) {
+            if (remainingAmount == g.amount) {
+                targetForDriftingTile?.garbage?.plus(g)
+                currentTile.garbage.minusElement(g)
+                remainingAmount = 0
+            } else {
+                currentTile.garbage[0].amount -= remainingAmount
+                targetForDriftingTile?.garbage?.plus(createGarbage(remainingAmount, g.type))
+                remainingAmount = 0
+            }
+        } else {
+            currentTile.garbage.minusElement(g)
+            targetForDriftingTile?.garbage?.plus(g)
+            remainingAmount -= g.amount
+        }
+
+        return remainingAmount
+    }
+
+    /**
+     * checks if given tile is Valid or not
+     */
+    private fun checkTargetTile(tile: Tile?): Boolean {
+        if (tile is Shore || tile == null) {
+            return false
+        }
+        return true
 
     private fun checkOilCap(path: List<Tile?>, amount: Int): Tile? {
         val listOfTiles = path.reversed()
@@ -187,5 +279,6 @@ class Garbage(
             }
         }
         return targetTile
+
     }
 }
