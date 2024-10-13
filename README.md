@@ -197,21 +197,6 @@ These tests are automated and run regularly during development to ensure continu
     ./gradlew test
     ```
 
----
-
-## Contributing
-
-Contributions are welcome! Follow these steps to contribute:
-
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature-name`).
-3. Commit your changes (`git commit -m "Add new feature"`).
-4. Push to the branch (`git push origin feature-name`).
-5. Create a pull request.
-
-Ensure that your code follows the project's code quality standards and passes all tests before submitting.
-
----
 
 ## License
 
