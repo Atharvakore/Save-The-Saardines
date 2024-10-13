@@ -1,0 +1,35 @@
+{
+  "garbage": [
+    {
+      "id":2,
+      "location": 1,
+      "type": "PLASTIC",
+      "amount": 2000
+    },
+    {
+      "id":1,
+      "location": 4,
+      "type": "PLASTIC",
+      "amount": 3000
+    }
+  ],
+  "events": [],
+  "tasks": [
+    {
+      "id": 1,
+      "type": "EXPLORE",
+      "tick": 0,
+      "shipID": 1,
+      "targetTile": 15,
+      "rewardID": 2,
+      "rewardShipID": 1
+    }
+  ],
+  "rewards": [
+    {
+      "id": 2,
+      "type": "TELESCOPE",
+      "visibilityRange":2
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "tiles": [
+    {
+      "id": 42,
+      "coordinates": {
+        "x": 1,
+        "y": 4
+      },
+      "category": "SHORE",
+      "harbor": false
+    },
+    {
+      "id": 43,
+      "coordinates": {
+        "x": 2,
+        "y": 4
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 52,
+      "coordinates": {
+        "x": 1,
+        "y": 5
+      },
+      "category": "SHORE",
+      "harbor": true
+    },
+    {
+      "id": 53,
+      "coordinates": {
+        "x": 2,
+        "y": 5
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 54,
+      "coordinates": {
+        "x": 3,
+        "y": 5
+      },
+      "category": "DEEP_OCEAN",
+      "current": true,
+      "direction": 180,
+      "speed": 10,
+      "intensity": 2
+    },
+    {
+      "id": 62,
+      "coordinates": {
+        "x": 1,
+        "y": 6
+      },
+      "category": "SHORE",
+      "harbor": false
+    },
+    {
+      "id": 63,
+      "coordinates": {
+        "x": 2,
+        "y": 6
+      },
+      "category": "SHALLOW_OCEAN"
+    }
+
+  ]
+}

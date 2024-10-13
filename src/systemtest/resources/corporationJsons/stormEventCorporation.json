@@ -1,0 +1,44 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Scouters Inc.",
+      "ships": [
+        2 ,3
+      ],
+      "homeHarbors": [
+        52, 59 , 14
+      ],
+      "garbageTypes": [
+        "CHEMICALS"
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 3,
+      "name": "Collecter",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 74,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 9,
+      "capacity": 5000,
+      "garbageType": "CHEMICALS"
+    } ,
+    {
+      "id": 2,
+      "name": "Scouting",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 74 ,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 4000,
+      "fuelConsumption": 9,
+      "visibilityRange": 3
+    }
+  ]
+}

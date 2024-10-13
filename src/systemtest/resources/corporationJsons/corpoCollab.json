@@ -1,0 +1,46 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Cleaners Inc.",
+      "ships": [
+        1,
+        2
+      ],
+      "homeHarbors": [
+        1
+      ],
+      "garbageTypes": [
+        "OIL", "PLASTIC"
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "ExplorerA",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 1,
+      "maxVelocity": 10,
+      "acceleration": 5,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 5,
+      "garbageType": "PLASTIC",
+      "capacity": 5000
+    },
+    {
+      "id": 2,
+      "name": "ExplorerB",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 2,
+      "maxVelocity": 10,
+      "acceleration": 5,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 5,
+      "garbageType": "OIL",
+      "capacity": 50000
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Dummy Inc.",
+      "ships": [
+        1, 2, 3, 4, 5, 7
+      ],
+      "homeHarbors": [
+        4, 9
+      ],
+      "garbageTypes": [
+        "OIL"
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "Collector 1",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 2,
+      "maxVelocity": 20,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 5,
+      "capacity": 70000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 2,
+      "name": "Collector 2",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 7,
+      "maxVelocity": 20,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 5,
+      "capacity": 70000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 3,
+      "name": "Collector 3",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 11,
+      "maxVelocity": 20,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 5,
+      "capacity": 70000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 4,
+      "name": "Collector 4",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 8,
+      "maxVelocity": 20,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 5,
+      "capacity": 70000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 5,
+      "name": "Collector 5",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 1,
+      "maxVelocity": 20,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 5,
+      "capacity": 70000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 7,
+      "name": "Collector 7",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 10,
+      "maxVelocity": 20,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 5,
+      "capacity": 70000,
+      "garbageType": "OIL"
+    }
+  ]
+}

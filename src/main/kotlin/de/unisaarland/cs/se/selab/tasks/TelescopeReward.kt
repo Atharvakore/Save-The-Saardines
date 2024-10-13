@@ -6,7 +6,7 @@ import de.unisaarland.cs.se.selab.ships.Ship
 /** Reward that adds a telescope. */
 class TelescopeReward(id: Int, private val capability: ScoutingShip, private val additiveFoV: Int) : Reward(id) {
     override fun toString(): String {
-        return "Telescope"
+        return "TELESCOPE"
     }
 
     override fun applyReward(ship: Ship) {

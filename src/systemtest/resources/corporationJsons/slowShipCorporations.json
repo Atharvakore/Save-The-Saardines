@@ -1,0 +1,29 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Dummy Inc.",
+      "ships": [
+        1
+      ],
+      "homeHarbors": [
+        4, 9
+      ],
+      "garbageTypes": []
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "Dummy Ship",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 4,
+      "maxVelocity": 10,
+      "acceleration": 5,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "tiles": [
+    {
+      "id": 1,
+      "coordinates": {
+        "x": -2,
+        "y": 1
+      },
+      "category": "SHORE",
+      "harbor": true
+    },
+    {
+      "id": 2,
+      "coordinates": {
+        "x": -1,
+        "y": 1
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 3,
+      "coordinates": {
+        "x": 0,
+        "y": 1
+      },
+      "category": "DEEP_OCEAN",
+      "current": true,
+      "direction": 0,
+      "speed": 30,
+      "intensity": 1
+
+    },
+    {
+      "id": 4,
+      "coordinates": {
+        "x": 0,
+        "y": 2
+      },
+      "category": "DEEP_OCEAN",
+      "current": true,
+      "direction": 0,
+      "speed": 30,
+      "intensity": 5
+    },
+    {
+      "id": 5,
+      "coordinates": {
+        "x": 1,
+        "y": 2
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 6,
+      "coordinates": {
+        "x": 2,
+        "y": 2
+      },
+      "category": "SHORE",
+      "harbor": false
+    },
+    {
+      "id": 7,
+      "coordinates": {
+        "x": 3,
+        "y": 2
+      },
+      "category": "LAND"
+    },
+    {
+      "id": 8,
+      "coordinates": {
+        "x": 4,
+        "y": 2
+      },
+      "category": "SHORE",
+      "harbor": false
+    },
+    {
+      "id": 9,
+      "coordinates": {
+        "x": 3,
+        "y": 1
+      },
+      "category": "SHORE",
+      "harbor": false
+    },
+    {
+      "id": 10,
+      "coordinates": {
+        "x": 4,
+        "y": 1
+      },
+      "category": "SHORE",
+      "harbor": false
+    },
+    {
+      "id": 11,
+      "coordinates": {
+        "x": 0,
+        "y": 0
+      },
+      "category": "DEEP_OCEAN",
+      "current": true,
+      "direction": 0,
+      "speed": 20,
+      "intensity": 2
+    },
+    {
+      "id": 12,
+      "coordinates": {
+        "x": 1,
+        "y": 0
+      },
+      "category": "DEEP_OCEAN",
+      "current": true,
+      "direction": 0,
+      "speed": 10,
+      "intensity": 1
+    }
+  ]
+}

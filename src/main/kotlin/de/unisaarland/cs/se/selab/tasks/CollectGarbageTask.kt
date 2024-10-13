@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.tasks
 
+import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.ships.Ship
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -13,7 +14,7 @@ class CollectGarbageTask(
     val targetTile: Tile
 ) : Task(tick, id, taskShip, reward, rewardShip) {
     override fun toString(): String {
-        return "Collect Garbage"
+        return "COLLECT"
     }
 
     override fun checkCondition(): Boolean {
@@ -21,8 +22,14 @@ class CollectGarbageTask(
     }
 
     override fun actUponTick(currentTick: Int): Boolean {
-        if (checkCondition()) {
+        if (currentTick == tick) {
+            LoggerEventsAndTasks.logTaskStart(id, "COLLECT", taskShip.id, targetTile.id)
+        }
+        if (checkCondition() && currentTick > tick) {
+            taskShip.currentVelocity = 0
+            LoggerEventsAndTasks.logRewardReceived(id, rewardShip.id, reward)
             reward.applyReward(rewardShip)
+            taskShip.owner.tasks.remove(this)
             return true
         }
         return false

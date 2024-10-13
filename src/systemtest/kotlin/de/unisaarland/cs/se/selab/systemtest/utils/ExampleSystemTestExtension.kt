@@ -11,7 +11,7 @@ abstract class ExampleSystemTestExtension : SystemTest() {
     /**
      * skips until the given [startString] is found
      */
-    private suspend fun skipUntilString(startString: String): String {
+    suspend fun skipUntilString(startString: String): String {
         val line: String = getNextLine()
             ?: throw SystemTestAssertionError("End of log reached when there should be more.")
         return if (line.startsWith(startString)) {
@@ -35,8 +35,8 @@ abstract class ExampleSystemTestExtension : SystemTest() {
 enum class Logs(private val message: String) {
     INITIALIZATION_INFO("Initialization Info"),
     SIMULATION_INFO("Simulation Info"),
+    EVENT("Event"),
     SIMULATION_STATISTICS("Simulation Statistics");
-
     override fun toString(): String {
         return message
     }

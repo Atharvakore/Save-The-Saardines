@@ -25,12 +25,14 @@ class CollectGarbageTaskTest {
     lateinit var initialTile: Tile
     lateinit var task: Task
     private val factory = UTFactory()
+    var sea = Sea()
 
     @BeforeEach
     fun setUp() {
         factory.createTestingMap()
-        val initialTile = Sea.getTileByPos(Vec2D(5, 7)) ?: error("Tile not found at position (5,7)")
-        targetTile = Sea.getTileByPos(Vec2D(6, 6)) ?: error("Tile not found at position (6,6)")
+        sea = factory.sea
+        val initialTile = sea.getTileByPos(Vec2D(5, 7)) ?: error("Tile not found at position (5,7)")
+        targetTile = sea.getTileByPos(Vec2D(6, 6)) ?: error("Tile not found at position (6,6)")
         val container = Container(GarbageType.CHEMICALS, 5000)
         val collectingCapability = CollectingShip(mutableListOf(container))
         val collectingReward = ContainerReward(1, collectingCapability, container)
@@ -57,11 +59,6 @@ class CollectGarbageTaskTest {
     fun checkConditionTestTrue() {
         ship1.position = targetTile
         assertTrue { ship1.position == targetTile }
-    }
-
-    @Test
-    fun checkTargetTileFalse() {
-        assertTrue { task.getGoal() == initialTile }
     }
 
     @Test

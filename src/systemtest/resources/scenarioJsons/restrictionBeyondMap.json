@@ -1,0 +1,22 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "PLASTIC",
+      "location": 22,
+      "amount": 200
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "type": "RESTRICTION",
+      "tick": 0,
+      "duration": 5,
+      "location": 33,
+      "radius": 10
+    }
+  ],
+  "tasks": [],
+  "rewards": []
+}

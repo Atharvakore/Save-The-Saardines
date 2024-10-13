@@ -1,0 +1,334 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "OIL",
+      "location": 204,
+      "amount": 1000
+    },
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 230,
+      "amount": 1000
+    },
+    {
+      "id": 3,
+      "type": "OIL",
+      "location": 231,
+      "amount": 1000
+    },
+    {
+      "id": 4,
+      "type": "OIL",
+      "location": 308,
+      "amount": 1000
+    },
+    {
+      "id": 5,
+      "type": "OIL",
+      "location": 376,
+      "amount": 1000
+    },
+    {
+      "id": 6,
+      "type": "OIL",
+      "location": 359,
+      "amount": 1000
+    },
+    {
+      "id": 7,
+      "type": "OIL",
+      "location": 339,
+      "amount": 1000
+    },
+    {
+      "id": 8,
+      "type": "OIL",
+      "location": 106,
+      "amount": 1000
+    },
+    {
+      "id": 9,
+      "type": "OIL",
+      "location": 60,
+      "amount": 1000
+    },
+    {
+      "id": 10,
+      "type": "OIL",
+      "location": 86,
+      "amount": 1000
+    },
+    {
+      "id": 11,
+      "type": "OIL",
+      "location": 289,
+      "amount": 1000
+    },
+    {
+      "id": 12,
+      "type": "OIL",
+      "location": 454,
+      "amount": 1000
+    },
+    {
+      "id": 13,
+      "type": "OIL",
+      "location": 508,
+      "amount": 1000
+    },
+    {
+      "id": 14,
+      "type": "OIL",
+      "location": 534,
+      "amount": 1000
+    },
+    {
+      "id": 15,
+      "type": "OIL",
+      "location": 377,
+      "amount": 1000
+    },
+    {
+      "id": 16,
+      "type": "OIL",
+      "location": 435,
+      "amount": 1000
+    },
+    {
+      "id": 17,
+      "type": "OIL",
+      "location": 405,
+      "amount": 1000
+    },
+    {
+      "id": 18,
+      "type": "OIL",
+      "location": 350,
+      "amount": 1000
+    },
+    {
+      "id": 19,
+      "type": "OIL",
+      "location": 208,
+      "amount": 1000
+    },
+    {
+      "id": 20,
+      "type": "OIL",
+      "location": 237,
+      "amount": 1000
+    },
+    {
+      "id": 21,
+      "type": "OIL",
+      "location": 261,
+      "amount": 1000
+    },
+    {
+      "id": 22,
+      "type": "OIL",
+      "location": 9,
+      "amount": 1000
+    },
+    {
+      "id": 23,
+      "type": "OIL",
+      "location": 530,
+      "amount": 1000
+    },
+    {
+      "id": 24,
+      "type": "OIL",
+      "location": 132,
+      "amount": 1000
+    },
+    {
+      "id": 25,
+      "type": "OIL",
+      "location": 153,
+      "amount": 1000
+    },
+    {
+      "id": 26,
+      "type": "OIL",
+      "location": 403,
+      "amount": 1000
+    },
+    {
+      "id": 27,
+      "type": "OIL",
+      "location": 431,
+      "amount": 1000
+    },
+    {
+      "id": 28,
+      "type": "OIL",
+      "location": 313,
+      "amount": 1000
+    },
+    {
+      "id": 29,
+      "type": "OIL",
+      "location": 330,
+      "amount": 1000
+    },
+    {
+      "id": 30,
+      "type": "OIL",
+      "location": 207,
+      "amount": 1000
+    },
+    {
+      "id": 31,
+      "type": "OIL",
+      "location": 410,
+      "amount": 1000
+    },
+    {
+      "id": 32,
+      "type": "OIL",
+      "location": 164,
+      "amount": 1000
+    },
+    {
+      "id": 33,
+      "type": "OIL",
+      "location": 163,
+      "amount": 1000
+    },
+    {
+      "id": 34,
+      "type": "OIL",
+      "location": 101,
+      "amount": 1000
+    },
+    {
+      "id": 35,
+      "type": "OIL",
+      "location": 59,
+      "amount": 1000
+    },
+    {
+      "id": 36,
+      "type": "OIL",
+      "location": 190,
+      "amount": 1000
+    },
+    {
+      "id": 37,
+      "type": "OIL",
+      "location": 88,
+
+      "amount": 1000
+    },
+    {
+      "id": 38,
+      "type": "OIL",
+      "location": 428,
+      "amount": 1000
+    },
+    {
+      "id": 39,
+      "type": "OIL",
+      "location": 460,
+      "amount": 1000
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "type": "OIL_SPILL",
+      "tick": 10,
+      "location": 359,
+      "radius": 1,
+      "amount": 1000
+    },
+    {
+      "id": 2,
+      "type": "OIL_SPILL",
+      "tick": 22 ,
+      "location": 359,
+      "radius": 2,
+      "amount": 1000
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "type": "COLLECT",
+      "tick": 0,
+      "shipID": 1,
+      "targetTile": 107,
+      "rewardID": 10,
+      "rewardShipID": 1
+    },
+    {
+      "id": 2,
+      "type": "COLLECT",
+      "tick": 2,
+      "shipID": 4,
+      "targetTile": 335,
+      "rewardID": 11,
+      "rewardShipID": 4
+    },
+    {
+      "id": 3,
+      "type": "COLLECT",
+      "tick": 3,
+      "shipID": 7,
+      "targetTile": 555,
+      "rewardID": 12,
+      "rewardShipID": 7
+    },
+    {
+      "id": 4,
+      "type": "EXPLORE",
+      "tick": 10,
+      "shipID": 4,
+      "targetTile": 335,
+      "rewardID": 13,
+      "rewardShipID": 4
+    },
+    {
+      "id": 5,
+      "type": "EXPLORE",
+      "tick": 10,
+      "shipID": 1,
+      "targetTile": 106,
+      "rewardID": 14,
+      "rewardShipID": 1
+    }
+  ],
+  "rewards": [
+    {
+      "id": 10,
+      "type": "CONTAINER",
+      "capacity": 10000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 11,
+      "type": "CONTAINER",
+      "capacity": 10000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 12,
+      "type": "CONTAINER",
+      "capacity": 10000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 13,
+      "type": "TELESCOPE",
+      "visibilityRange": 3
+    },
+    {
+      "id": 14,
+      "type": "TELESCOPE",
+      "visibilityRange": 3
+    }
+  ]
+}

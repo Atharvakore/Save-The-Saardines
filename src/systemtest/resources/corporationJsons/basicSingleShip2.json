@@ -1,0 +1,38 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Cleanup Corp",
+      "ships": [1, 63],
+      "homeHarbors": [2],
+      "garbageTypes": ["PLASTIC"]
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "Scout 1",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 3,
+      "maxVelocity": 30,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 8,
+      "visibilityRange": 5
+    },
+    {
+      "id": 63,
+      "name": "Collector 1",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 5,
+      "maxVelocity": 40,
+      "acceleration": 8,
+      "fuelCapacity": 4000,
+      "fuelConsumption": 6,
+      "garbageType": "PLASTIC",
+      "capacity": 3000
+    }
+  ]
+}

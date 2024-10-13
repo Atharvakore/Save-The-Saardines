@@ -1,0 +1,50 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "OIL",
+      "location": 36,
+      "amount": 950
+    },
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 15,
+      "amount": 200
+    },
+    {
+      "id": 3,
+      "type": "OIL",
+      "location": 35,
+      "amount": 400
+    },
+    {
+      "id": 4,
+      "type": "OIL",
+      "location": 38,
+      "amount": 660
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "type": "STORM",
+      "tick": 0,
+      "location": 15,
+      "radius": 1,
+      "speed": 20,
+      "direction": 300
+    },
+    {
+      "id": 2,
+      "type": "STORM",
+      "tick": 0,
+      "location": 35,
+      "radius": 1,
+      "speed": 30,
+      "direction": 60
+    }
+  ],
+  "tasks": [],
+  "rewards": []
+}

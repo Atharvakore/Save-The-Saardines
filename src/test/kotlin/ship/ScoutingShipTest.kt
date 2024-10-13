@@ -18,20 +18,20 @@ class ScoutingShipTest {
 
     private lateinit var scoutingCapability: CoordinatingShip
     private lateinit var scoutingShip: Ship
-    private val sea: Sea = Sea
+    private val sea: Sea = Sea()
 
     @BeforeEach
     fun setUp() {
         scoutingCapability = CoordinatingShip(1)
         scoutingShip = Ship(1, 50, 15, 5000, 7, mutableListOf(scoutingCapability))
 
-        val tile62: Tile = Shore(62, Vec2D(1, 6), listOf(), listOf(), false)
-        val tile72: Tile = Shore(72, Vec2D(1, 7), listOf(), listOf(), false)
-        val tile82: Tile = Shore(82, Vec2D(1, 8), listOf(), listOf(), false)
-        val tile83: Tile = Shore(83, Vec2D(2, 8), listOf(), listOf(), false)
-        val tile74: Tile = ShallowOcean(74, Vec2D(3, 7), listOf(), listOf())
-        val tile63: Tile = ShallowOcean(63, Vec2D(2, 6), listOf(), listOf())
-        val tile73: Tile = ShallowOcean(73, Vec2D(2, 7), listOf(), listOf())
+        val tile62: Tile = Shore(62, Vec2D(1, 6), emptyList(), mutableListOf(), false)
+        val tile72: Tile = Shore(72, Vec2D(1, 7), emptyList(), mutableListOf(), false)
+        val tile82: Tile = Shore(82, Vec2D(1, 8), emptyList(), mutableListOf(), false)
+        val tile83: Tile = Shore(83, Vec2D(2, 8), emptyList(), mutableListOf(), false)
+        val tile74: Tile = ShallowOcean(74, Vec2D(3, 7), emptyList(), mutableListOf())
+        val tile63: Tile = ShallowOcean(63, Vec2D(2, 6), emptyList(), mutableListOf())
+        val tile73: Tile = ShallowOcean(73, Vec2D(2, 7), emptyList(), mutableListOf())
 
         val adjTile62: List<Tile?> = listOf(tile72, tile63, tile73, null, null, null)
 
@@ -55,12 +55,12 @@ class ScoutingShipTest {
         tile63.adjacentTiles = adjTile63
         tile73.adjacentTiles = adjTile73
 
-        val garbage: Garbage = Garbage(1, 500, GarbageType.CHEMICALS, null)
+        val garbage: Garbage = Garbage(1, 500, GarbageType.CHEMICALS, emptySet())
         tile63.addGarbage(garbage)
 
         val tiles: MutableList<Tile> = mutableListOf(tile62, tile72, tile82, tile83, tile74, tile63, tile73)
 
-        sea.tiles = tiles
+        sea.tiles.addAll(tiles)
     }
 
     /** Testing basic functionalities **/

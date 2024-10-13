@@ -3,7 +3,7 @@ package de.unisaarland.cs.se.selab.parser
 import de.unisaarland.cs.se.selab.tiles.Current
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
 import de.unisaarland.cs.se.selab.tiles.Direction
-import de.unisaarland.cs.se.selab.tiles.Sea
+import de.unisaarland.cs.se.selab.tiles.Land
 import de.unisaarland.cs.se.selab.tiles.ShallowOcean
 import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
@@ -27,27 +27,29 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             logger.error(error) { "Failed to parse map" }
             return false
         }
-
-        if (tiles.isEmpty) {
-            return false
-        }
-        if (validateTiles(tiles) && checkAdjacentTiles()) {
+        return if (!tiles.isEmpty && validateTiles(tiles) && checkAdjacentTiles()) {
             createMap()
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 
     /** validating all tiles **/
     private fun validateTiles(objects: JSONArray): Boolean {
         for (elem in objects) {
-            if (validateTile(elem as JSONObject)) {
-                if (elem.getString(CATEGORY) != LAND) {
-                    val tile = this.createTile(elem)
-                    accumulator.addTile(tile.id, tile)
-                    accumulator.addTileByCoordinates(tile.pos, tile)
-                }
+            if (validateTile((elem ?: error("There should be a tile in ValidateTiles")) as JSONObject)) {
+                val element = elem as JSONObject
+                val tile = this.createTile(element)
+                accumulator.addTile(tile.id, tile)
+                accumulator.addTileByCoordinates(tile.pos, tile)
+                /*
+                if (element.getString(CATEGORY) != LAND) {
+                    val tile = this.createTile(element)
+                        accumulator.addTile(tile.id, tile)
+                        accumulator.addTileByCoordinates(tile.pos, tile)
+                    }
+                 */
             } else {
                 return false
             }
@@ -76,11 +78,34 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             validated = false
         }
         if (x == null || y == null) return false
-
+        validated = validated && checkAdditionalProperties(tile)
         validated = validated && checkTileIdAndCoordinates(id, x, y)
         validated = validated && validateTileCategory(tile)
 
         return validated
+    }
+
+    private fun checkAdditionalProperties(tile: JSONObject): Boolean {
+        val category: String = tile.getString(CATEGORY)
+        var valid: Boolean
+        if (category == LAND || category == SHALLOW_OCEAN) {
+            valid = !tile.has(CURRENT) && !tile.has(SPEED) && !tile.has(DIRECTION) && !tile.has(INTENSITY) &&
+                !tile.has(HARBOR)
+        } else if (category == SHORE) {
+            valid = !tile.has(CURRENT) && !tile.has(SPEED) && !tile.has(DIRECTION) && !tile.has(INTENSITY)
+        } else {
+            valid = checkDeepOceanAdditional(tile)
+        }
+        return valid
+    }
+
+    private fun checkDeepOceanAdditional(tile: JSONObject): Boolean {
+        val current: Boolean = tile.getBoolean(CURRENT)
+        var valid: Boolean = !tile.has(HARBOR)
+        if (!current) {
+            valid = valid && !tile.has(SPEED) && !tile.has(DIRECTION) && !tile.has(INTENSITY)
+        }
+        return valid
     }
 
     /** Validate the category of tile **/
@@ -90,7 +115,7 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         if (!Companion.category.contains(category)) validated = false
         when (category) {
             SHORE -> {
-                if (Companion.requiredForCurrent.any { tile.has(it) }) {
+                if (tile.keySet() != requiredKeysShore) {
                     validated = false
                 }
                 val harbor = tile.opt(HARBOR)
@@ -104,60 +129,35 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             }
 
             else -> {
-                if (tile.has(HARBOR)) return false
-                if (Companion.requiredForCurrent.any { tile.has(it) }) {
-                    validated = false
-                }
+                validated = tile.keySet() == requiredKeysDefault
             }
         }
         return validated
     }
 
     private fun validateDeepOcean(tile: JSONObject): Boolean {
-        if (tile.has(HARBOR)) return false
         val current = tile.getBoolean(CURRENT)
         if (current) {
-            if (requiredForCurrent.all { tile.has(it) }) {
-                return validateCurrent(tile)
-            } else {
-                return false
-            }
-        } else if (requiredForCurrent.none { tile.has(it) }) {
-            return true
+            return validateCurrent(tile)
         }
-        return false
+        return tile.keySet() == requiredKeysDeepOcean
     }
 
     /** Validate the id and coordinates of a tile **/
     private fun checkTileIdAndCoordinates(id: Int, x: Int, y: Int): Boolean {
-        if (id < 0) return false
-        if (accumulator.getTileById(id) != null) return false
-
+        if (id < 0 || accumulator.tiles[id] != null) return false
         val coord = Vec2D(x, y)
-        if (accumulator.getTileByCoordinate(coord) != null) return false
-
-        return true
+        return accumulator.getTileByCoordinate(coord) == null
     }
 
     private fun validateCurrent(tile: JSONObject): Boolean {
+        if (tile.keySet() != requiredKeysCurrent) return false
         val intensity = tile.getInt(INTENSITY)
         val speed = tile.getInt(SPEED)
         val direction = tile.getInt(DIRECTION)
-        if (direction < 0 || direction > DIRECTION300 || direction % DIRECTION60 != 0) return false
-        if (speed < 0 || speed > MAX_SPEED) return false
-        if (intensity < 0 || intensity > MAX_INTENSITY) return false
-        return true
-    }
-
-    private fun getDirection(direction: Int): Direction {
-        return when (direction) {
-            DIRECTION0 -> Direction.D0
-            DIRECTION60 -> Direction.D60
-            DIRECTION120 -> Direction.D120
-            DIRECTION180 -> Direction.D180
-            DIRECTION240 -> Direction.D240
-            else -> Direction.D300
-        }
+        var condition = direction < 0 || direction > DIRECTION300 || direction % DIRECTION60 != 0
+        condition = condition || speed < 0 || speed > MAX_SPEED
+        return !(condition || intensity < 0 || intensity > MAX_INTENSITY)
     }
 
     /** Create a tile **/
@@ -167,38 +167,73 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         val coordinateY = tile.getJSONObject(COORDINATES).getInt(Y)
         val coordinates = Vec2D(coordinateX, coordinateY)
         val category = tile.getString(CATEGORY)
-        when (category) {
+        val result = when (category) {
             DEEP_OCEAN -> {
                 val current = tile.getBoolean(CURRENT)
+                var currentObject: Current? = null
                 if (current) {
                     val direction = tile.getInt(DIRECTION)
                     val speed = tile.getInt(SPEED)
                     val intensity = tile.getInt(INTENSITY)
-                    val currentObject = Current(speed, getDirection(direction), intensity)
-                    return DeepOcean(id, coordinates, emptyList(), emptyList(), currentObject)
+                    currentObject = Current(speed, requireNotNull(Direction.getDirection(direction)), intensity)
                 }
-                return DeepOcean(id, coordinates, emptyList(), emptyList(), null)
+                DeepOcean(id, coordinates, emptyList(), mutableListOf(), currentObject)
             }
 
             SHALLOW_OCEAN -> {
-                return ShallowOcean(id, coordinates, emptyList(), emptyList())
+                ShallowOcean(id, coordinates, emptyList(), mutableListOf())
             }
 
             SHORE -> {
                 val harbor = tile.getBoolean(HARBOR)
-                return Shore(id, coordinates, emptyList(), emptyList(), harbor)
+                Shore(id, coordinates, emptyList(), mutableListOf(), harbor)
+            }
+
+            LAND -> {
+                Land(id, coordinates, emptyList())
             }
 
             else -> {
                 throw IllegalArgumentException("There should be an Ocean tile")
             }
         }
+        if (result is Shore && result.harbor) {
+            accumulator.listOfHarbors.add(result)
+        }
+        return result
     }
 
     /** Create Map based on the information from Accumulator **/
     private fun createMap() {
-        for (element in accumulator.tiles.values) {
-            Sea.tiles.add(element)
+        for (element in accumulator.tiles.values.filter { it !is Land }) {
+            val x = element.pos.posX
+            val y = element.pos.posY
+            val nextValue = if (y % 2 == 0) {
+                0
+            } else {
+                -1
+            }
+            val adjacentTile0 = accumulator.getTileByPos(Vec2D(x + 1, y)) // east
+            val adjacentTile60 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y + 1))
+            val adjacentTile120 = accumulator.getTileByPos(Vec2D(x + nextValue, y + 1))
+            val adjacentTile180 = accumulator.getTileByPos(Vec2D(x - 1, y)) // west
+            val adjacentTile240 = accumulator.getTileByPos(Vec2D(x + nextValue, y - 1))
+            val adjacentTile300 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y - 1))
+            val adjacentTiles = mutableListOf(
+                adjacentTile0,
+                adjacentTile60,
+                adjacentTile120,
+                adjacentTile180,
+                adjacentTile240,
+                adjacentTile300
+            )
+            for (tile in adjacentTiles) {
+                if (tile is Land) {
+                    adjacentTiles[adjacentTiles.indexOf(tile)] = null
+                }
+            }
+            element.adjacentTiles = adjacentTiles
+            accumulator.map.tiles.add(element)
         }
     }
 
@@ -208,13 +243,18 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             val tile = it.value
             val x = tile.pos.posX
             val y = tile.pos.posY
-            var correct = true
-            val adjacentTile0 = accumulator.getTileByCoordinate(Vec2D(x - 1, y))
-            val adjacentTile60 = accumulator.getTileByCoordinate(Vec2D(x - 1, y - 1))
-            val adjacentTile120 = accumulator.getTileByCoordinate(Vec2D(x, y - 1))
-            val adjacentTile180 = accumulator.getTileByCoordinate(Vec2D(x + 1, y))
-            val adjacentTile240 = accumulator.getTileByCoordinate(Vec2D(x + 1, y + 1))
-            val adjacentTile300 = accumulator.getTileByCoordinate(Vec2D(x, y + 1))
+            val correct: Boolean
+            val nextValue = if (y % 2 == 0) {
+                0
+            } else {
+                -1
+            }
+            val adjacentTile0 = accumulator.getTileByPos(Vec2D(x + 1, y)) // east
+            val adjacentTile60 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y + 1))
+            val adjacentTile120 = accumulator.getTileByPos(Vec2D(x + nextValue, y + 1))
+            val adjacentTile180 = accumulator.getTileByPos(Vec2D(x - 1, y)) // west
+            val adjacentTile240 = accumulator.getTileByPos(Vec2D(x + nextValue, y - 1))
+            val adjacentTile300 = accumulator.getTileByPos(Vec2D(x + nextValue + 1, y - 1))
             val adjacentTiles = listOf(
                 adjacentTile0,
                 adjacentTile60,
@@ -225,27 +265,34 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
             )
             when (tile) {
                 is Shore -> {
-                    correct =
-                        correct && adjacentTiles.all { t -> t == null || t is Shore || t is ShallowOcean }
+                    correct = true
                 }
+                // adjacentTiles.all { t -> t == null || t is Shore || t is ShallowOcean }
 
                 is DeepOcean -> {
                     correct =
-                        correct && adjacentTiles.all { t -> t == null || t is DeepOcean || t is ShallowOcean }
+                        adjacentTiles.all { t -> t == null || t is DeepOcean || t is ShallowOcean }
                 }
 
                 is ShallowOcean -> {
                     correct =
-                        correct && adjacentTiles.all { t ->
+                        adjacentTiles.all { t ->
                             t == null || t is Shore || t is ShallowOcean || t is DeepOcean
                         }
+                }
+
+                is Land -> {
+                    correct =
+                        adjacentTiles.all { t -> t == null || t is Land || t is Shore }
                 }
 
                 else -> {
                     correct = true
                 }
             }
-            if (!correct) return false
+            if (!correct) {
+                return false
+            }
         }
 
         return true
@@ -267,15 +314,20 @@ class MapJSONParser(override val accumulator: Accumulator) : JSONParser {
         const val SHALLOW_OCEAN = "SHALLOW_OCEAN"
         const val LAND = "LAND"
         const val SHORE = "SHORE"
-        const val DIRECTION0 = 0
+
+        // const val DIRECTION0 = 0
         const val DIRECTION60 = 60
-        const val DIRECTION120 = 120
+        val requiredKeysDefault = setOf(ID, COORDINATES, CATEGORY)
+        val requiredKeysShore = requiredKeysDefault + HARBOR
+        val requiredKeysDeepOcean = requiredKeysDefault + CURRENT
+        val requiredKeysCurrent = requiredKeysDeepOcean + INTENSITY + SPEED + DIRECTION
+
+        /* const val DIRECTION120 = 120
         const val DIRECTION180 = 180
-        const val DIRECTION240 = 240
+        const val DIRECTION240 = 240 */
         const val DIRECTION300 = 300
         const val MAX_SPEED = 30
         const val MAX_INTENSITY = 10
         val category: Array<String> = arrayOf(LAND, SHORE, SHALLOW_OCEAN, DEEP_OCEAN)
-        val requiredForCurrent: Array<String> = arrayOf(DIRECTION, INTENSITY, SPEED)
     }
 }

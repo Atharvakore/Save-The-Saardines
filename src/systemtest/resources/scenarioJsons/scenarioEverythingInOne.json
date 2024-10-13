@@ -1,0 +1,41 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "CHEMICALS",
+      "location": 1,
+      "amount": 100
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "type": "STORM",
+      "tick": 10,
+      "location": 1,
+      "radius": 2,
+      "speed": 10,
+      "direction": 0
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "type": "COLLECT",
+      "tick": 1,
+      "shipID": 1,
+      "targetTile": 2,
+      "rewardID": 1,
+      "rewardShipID": 2
+    }
+  ],
+  "rewards": [
+    {
+      "id": 1,
+      "type": "CONTAINER",
+      "capacity": 1000,
+      "garbageType": "CHEMICALS",
+      "visibilityRange": 3
+    }
+  ]
+}

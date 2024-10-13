@@ -1,0 +1,60 @@
+{
+  "tiles": [
+    {
+      "id": 1,
+      "coordinates": {
+        "x": 0,
+        "y": 0
+      },
+      "category": "LAND"
+    },
+    {
+      "id": 2,
+      "coordinates": {
+        "x": 1,
+        "y": 0
+      },
+      "category": "LAND"
+    },
+    {
+      "id": 3,
+      "coordinates": {
+        "x": 2,
+        "y": 1
+      },
+      "category": "LAND"
+    },
+    {
+      "id": 4,
+      "coordinates": {
+        "x": 1,
+        "y": 2
+      },
+      "category": "LAND"
+    },
+    {
+      "id": 5,
+      "coordinates": {
+        "x": 0,
+        "y": 2
+      },
+      "category": "LAND"
+    },
+    {
+      "id": 6,
+      "coordinates": {
+        "x": 0,
+        "y": 1
+      },
+      "category": "LAND"
+    },
+    {
+      "id": 7,
+      "coordinates": {
+        "x": 1,
+        "y": 1
+      },
+      "category": "SHALLOW_OCEAN"
+    }
+  ]
+}

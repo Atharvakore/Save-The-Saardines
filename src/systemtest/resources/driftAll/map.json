@@ -1,0 +1,81 @@
+{
+  "tiles": [
+    {
+      "id": 1,
+      "coordinates": {
+        "x": 1,
+        "y": 0
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 2,
+      "coordinates": {
+        "x": 2,
+        "y": 0
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 3,
+      "coordinates": {
+        "x": 3,
+        "y": 1
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 4,
+      "coordinates": {
+        "x": 2,
+        "y": 2
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 5,
+      "coordinates": {
+        "x": 1,
+        "y": 2
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 6,
+      "coordinates": {
+        "x": 1,
+        "y": 1
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 7,
+      "coordinates": {
+        "x": 2,
+        "y": 1
+      },
+      "category": "SHORE",
+      "harbor": true
+    },
+    {
+      "id": 8,
+      "coordinates": {
+        "x": 3,
+        "y": 0
+      },
+      "category": "SHALLOW_OCEAN"
+    },
+    {
+      "id": 9,
+      "coordinates": {
+        "x": 0,
+        "y": 2
+      },
+      "category": "DEEP_OCEAN",
+      "current": true,
+      "speed": 30,
+      "intensity": 3,
+      "direction": 300
+    }
+  ]
+}

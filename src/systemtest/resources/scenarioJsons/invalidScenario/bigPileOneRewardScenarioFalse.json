@@ -1,0 +1,63 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "PLASTIC",
+      "location": 1137,
+      "amount": 3000
+    },
+    {
+      "id": 2,
+      "type": "PLASTIC",
+      "location": 36,
+      "amount": 3000
+    }
+  ],
+  "events": [],
+  "tasks": [
+    {
+      "id": 1,
+      "type": "COLLECT",
+      "tick": 0,
+      "shipID": 63,
+      "targetTile": 11,
+      "rewardID": 1,
+      "rewardShipID": 63
+    },
+    {
+      "id": 2,
+      "type": "COLLECT",
+      "tick": 1,
+      "shipID": 63,
+      "targetTile": 11,
+      "rewardID": 2,
+      "rewardShipID": 63
+    },
+    {
+      "id": 5,
+      "type": "COLLECT",
+      "tick": 5,
+      "shipID": 1,
+      "targetTile": 32,
+      "rewardID": 10,
+      "rewardShipID": 63
+    }
+  ],
+  "rewards": [
+    {
+      "id": 1,
+      "type": "TELESCOPE",
+      "visibilityRange": 4
+    },
+    {
+      "id": 2,
+      "type": "TELESCOPE",
+      "visibilityRange": 4
+    },
+    {
+      "id": 10,
+      "type": "CONTAINER",
+      "capacity": 20000,
+      "garbageType": "PLASTIC"
+    }]
+}

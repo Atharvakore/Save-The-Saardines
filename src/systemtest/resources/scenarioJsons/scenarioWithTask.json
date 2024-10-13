@@ -1,0 +1,52 @@
+{
+  "garbage": [
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 36,
+      "amount": 1000
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "type": "RESTRICTION",
+      "tick": 4,
+      "duration": 2,
+      "location": 22,
+      "radius": 1
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "type": "COOPERATE",
+      "tick": 0,
+      "shipID": 2,
+      "targetTile": 9,
+      "rewardID": 1,
+      "rewardShipID": 2
+    },
+    {
+      "id": 2,
+      "type": "COLLECT",
+      "tick": 1,
+      "shipID": 2,
+      "targetTile": 32,
+      "rewardID": 2,
+      "rewardShipID": 2
+    }
+  ],
+  "rewards": [
+    {
+      "id": 1,
+      "type": "RADIO"
+    },
+    {
+      "id": 2,
+      "type": "CONTAINER",
+      "capacity": 2000,
+      "garbageType": "OIL"
+    }
+  ]
+}

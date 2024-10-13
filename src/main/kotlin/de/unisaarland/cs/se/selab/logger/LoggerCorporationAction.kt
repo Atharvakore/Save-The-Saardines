@@ -10,6 +10,16 @@ object LoggerCorporationAction {
         Logger.output.write(message)
     }
 
+    /** Log a call of Corporation.moveShips(). */
+    fun logCorporationStartMoveShips(corporationId: Int) {
+        Logger.log("Corporation Action: Corporation $corporationId is starting to move its ships.")
+    }
+
+    /** Logged whenever a corporation finishes its actions. */
+    fun logCorporationFinishedActions(corporationId: Int) {
+        LoggerCorporationAction.log("Corporation Action: Corporation $corporationId finished its actions.")
+    }
+
     /** Log a call of Ship.move(). */
     fun logShipMovement(shipId: Int, speed: Int, tileId: Int) {
         log("Ship Movement: Ship $shipId moved with speed $speed to tile $tileId.")
@@ -71,5 +81,10 @@ object LoggerCorporationAction {
     /** Logged whenever a ship is unloaded. */
     fun logUnloadShip(shipId: Int, amount: Int, garbageType: GarbageType, tileId: Int) {
         log("Unload: Ship $shipId unloaded $amount of garbage $garbageType at harbor $tileId.")
+    }
+
+    /** Log attachment of a tracker. */
+    fun logAttachTracker(corpId: Int, shipId: Int, trashId: Int) {
+        log("Corporation Action: Corporation $corpId attached tracker to garbage $trashId with ship $shipId.")
     }
 }

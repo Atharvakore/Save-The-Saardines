@@ -1,0 +1,46 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Cleaners Inc.",
+      "ships": [
+        1,
+        2
+      ],
+      "homeHarbors": [
+        1
+      ],
+      "garbageTypes": [
+        "PLASTIC",
+        "OIL"
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "Explorer",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 1,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 8000,
+      "fuelConsumption": 10,
+      "visibilityRange": 4
+    },
+    {
+      "id": 1,
+      "name": "Explorer",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 2,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 8000,
+      "fuelConsumption": 10,
+      "visibilityRange": 4,
+      "pizzaBoy": "Gino"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "PLASTIC",
+      "location": 6,
+      "amount": 1000
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "type": "STORM",
+      "tick": 1,
+      "location": 6,
+      "radius": 1,
+      "speed" : 10,
+      "direction": 120
+    },
+    {
+      "id": 2,
+      "type": "STORM",
+      "tick": 2,
+      "location": 4,
+      "radius": 1,
+      "speed" : 30,
+      "direction": 240
+    }
+  ],
+  "tasks": [],
+  "rewards": []
+}

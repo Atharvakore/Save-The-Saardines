@@ -3,11 +3,11 @@ package de.unisaarland.cs.se.selab.tiles
 /**
  *class tile includes all basic functionality related tiles
  */
-abstract class Tile(
+open class Tile(
     val id: Int,
     val pos: Vec2D,
     var adjacentTiles: List<Tile?>,
-    var garbage: List<Garbage>,
+    var garbage: MutableList<Garbage>,
     var amountOfGarbageDriftedThisTick: Int,
 ) {
     /* private var id: Int = 0
@@ -30,17 +30,17 @@ abstract class Tile(
     /**
      * Get tiles in specified Direction
      */
-    public fun getTileInDirection(
+    fun getTileInDirection(
         distance: Int,
         dir: Direction,
     ): Tile? {
         var tile: Tile? = this
         var i = 0
-        while (i <= distance) {
+        while (i < distance) {
             if (tile?.adjacentTiles?.get(dir.ordinal) == null) {
                 return tile
             }
-            tile = tile.adjacentTiles[dir.ordinal]!!
+            tile = requireNotNull(tile.adjacentTiles[dir.ordinal])
             i++
         }
         return tile
@@ -53,7 +53,7 @@ abstract class Tile(
      * adds given Garbage to the List of already present Garbage
      */
     public fun addGarbage(garbage: Garbage) {
-        this.garbage += garbage
+        this.garbage.add(garbage)
     }
 
     /**
@@ -77,18 +77,20 @@ abstract class Tile(
         amount: Int,
     ) {
         var toBeRemoved = amount
-        var filteredList =
+        val filteredList =
             this.garbage
                 .filter { it.type == type }
                 .sortedBy(Garbage::id)
-        while (toBeRemoved > 0 && filteredList.isNotEmpty()) {
-            if (toBeRemoved >= filteredList[0].amount) {
-                toBeRemoved -= filteredList[0].amount
-                filteredList = filteredList.filterIndexed { index, _ -> index != 0 } // removes element at 0th Index
-            }
-            if (toBeRemoved < filteredList[0].amount) {
-                filteredList[0].amount -= toBeRemoved
-                toBeRemoved = 0
+                .toMutableList()
+        for (garbage in filteredList) {
+            toBeRemoved = minOf(0, toBeRemoved - garbage.amount)
+            garbage.amount = minOf(garbage.amount - toBeRemoved, 0)
+            if (garbage.amount == 0) {
+                this.garbage.remove(garbage)
+                garbage.trackedBy.forEach { corporation ->
+                    corporation.trackedGarbage.remove(garbage)
+                }
+            } else {
                 break
             }
         }

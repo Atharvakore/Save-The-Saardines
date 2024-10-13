@@ -7,7 +7,7 @@ class DeepOcean(
     id: Int,
     pos: Vec2D,
     adjacentTiles: List<Tile?>,
-    garbage: List<Garbage>,
+    garbage: MutableList<Garbage>,
     private var current: Current?
 ) : Tile(
     id,
@@ -16,6 +16,8 @@ class DeepOcean(
     garbage,
     0
 ) {
+    var amountOfShipsDriftedThisTick = 0
+
     /**
      * gives current
      */

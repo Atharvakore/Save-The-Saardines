@@ -1,0 +1,94 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Scouters Inc.",
+      "ships": [
+        1, 2, 3, 4, 5, 6
+      ],
+      "homeHarbors": [
+        14, 52, 59
+      ],
+      "garbageTypes": [
+        "OIL", "PLASTIC", "CHEMICALS"
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "Explorer1",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 53,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 10000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    },
+    {
+      "id": 2,
+      "name": "Explorer2",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 58,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 10000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    },
+    {
+      "id": 3,
+      "name": "Explorer3",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 24,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 10000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    },
+    {
+      "id": 4,
+      "name": "Collecter1",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 53,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 9,
+      "capacity": 80000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 5,
+      "name": "Collecter2",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 58,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 9,
+      "capacity": 1000,
+      "garbageType": "CHEMICALS"
+    },
+    {
+      "id": 6,
+      "name": "Collecter3",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 24,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 9,
+      "capacity": 1000,
+      "garbageType": "PLASTIC"
+    }
+  ]
+}

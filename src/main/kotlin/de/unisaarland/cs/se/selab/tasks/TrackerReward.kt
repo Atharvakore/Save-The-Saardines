@@ -6,7 +6,7 @@ import de.unisaarland.cs.se.selab.ships.ShipWithTracker
 /** Reward that adds a tracker. */
 class TrackerReward(id: Int, private val capability: ShipWithTracker) : Reward(id) {
     override fun toString(): String {
-        return "Tracker"
+        return "TRACKER"
     }
 
     override fun applyReward(ship: Ship) {

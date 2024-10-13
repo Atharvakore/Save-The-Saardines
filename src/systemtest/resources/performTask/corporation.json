@@ -1,0 +1,44 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Scouters Inc.",
+      "ships": [
+        1, 2
+      ],
+      "homeHarbors": [
+        8, 13
+      ],
+      "garbageTypes": [
+        "OIL"
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "Explorer",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 1,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 10,
+      "visibilityRange": 2
+    },
+    {
+      "id": 2,
+      "name": "Collecter",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 8,
+      "maxVelocity": 10,
+      "acceleration": 5,
+      "fuelCapacity": 3000,
+      "fuelConsumption": 9,
+      "capacity": 50000,
+      "garbageType": "OIL"
+    }
+  ]
+}

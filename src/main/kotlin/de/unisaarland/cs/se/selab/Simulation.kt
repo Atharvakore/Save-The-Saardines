@@ -3,10 +3,15 @@ package de.unisaarland.cs.se.selab
 import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.events.Event
 import de.unisaarland.cs.se.selab.logger.Logger
+import de.unisaarland.cs.se.selab.logger.LoggerStatistics
 import de.unisaarland.cs.se.selab.ships.Ship
-import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.DeepOcean
+import de.unisaarland.cs.se.selab.tiles.Direction
+import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Sea
+import de.unisaarland.cs.se.selab.tiles.TEN
+import de.unisaarland.cs.se.selab.tiles.Tile
+import java.util.PriorityQueue
 
 /**
  * class that represents and handles the simulation
@@ -30,6 +35,8 @@ class Simulation(
             tick++
         }
         Logger.logSimulationEnded()
+        LoggerStatistics.garbageOnMap = sea.calculateGarbageOnMap()
+        LoggerStatistics.logSimulationStatistics(corporations)
     }
 
     /**
@@ -53,9 +60,13 @@ class Simulation(
             allShips.addAll(corporation.ownedShips)
         }
 
-        for (corporation in corporations) {
+        for (corporation in corporations.sortedBy { it.id }) {
             val otherShips = allShips.filter { it.owner != corporation }
-            corporation.run(otherShips)
+            corporation.run(tick, sea, otherShips)
+        }
+
+        for (ship in allShips) {
+            ship.arrivedToHarborThisTick = false
         }
     }
 
@@ -63,31 +74,101 @@ class Simulation(
      * handles the drift garbage logic
      */
     private fun driftGarbage() {
-        val tiles = sea.tiles
-        val deepOceanTiles = tiles.filterIsInstance<DeepOcean>()
+        val garbageToList: MutableMap<Pair<Tile, Tile>, MutableList<Garbage?>> = mutableMapOf()
+        val garbageToRemove: MutableMap<Pair<Tile, Tile>, MutableList<Garbage?>> = mutableMapOf()
+        sea.tiles
+            .filterIsInstance<DeepOcean>().sortedBy { it.id }
+            .forEach { tile ->
+                garbageDriftHelper(tile, garbageToList, garbageToRemove)
+            }
 
-        for (tile in deepOceanTiles) {
-            val garbageList = tile.garbage
-            for (garbage in garbageList) {
-                garbage.drift(tile)
+        garbageToList.forEach { (tile, garbageList) ->
+            garbageList.toList().forEach { garbage ->
+                if (garbage != null) {
+                    tile.first.addGarbage(garbage)
+                    tile.second.garbage.remove(garbage)
+                }
             }
         }
+
+        sea.tiles.filterIsInstance<DeepOcean>().forEach {
+                tile ->
+            tile.amountOfGarbageDriftedThisTick = 0
+        }
+    }
+
+    private fun garbageDriftHelper(
+        currentTile: DeepOcean,
+        garbageToList: MutableMap<Pair<Tile, Tile>, MutableList<Garbage?>>,
+        garbageToRemove: MutableMap<Pair<Tile, Tile>, MutableList<Garbage?>>
+    ) {
+        val garbageList = currentTile.garbage.sortedBy { it.id }
+        for (garbage in garbageList) {
+            val current = currentTile.getCurrent()
+            if (current == null) {
+                return
+            } else {
+                val targetTile = getValidTile(currentTile, current.speed / TEN, current.direction)
+                var garbageTile: Pair<Pair<Tile, Tile>, Garbage>? = null
+                if (targetTile != null && targetTile != currentTile) {
+                    garbageTile = garbage.drift(currentTile, targetTile, current)
+                    /**
+                     * I GUESS THIS SHOULD BE ADDED HERE
+                     *currentTile.garbage.remove(garbageTile.second)
+                     */
+                }
+                if (garbageTile != null) {
+                    garbageToList.getOrPut(garbageTile.first) { mutableListOf() }.add(garbageTile.second)
+                    garbageToRemove.getOrPut(garbageTile.first) { mutableListOf() }.add(garbageTile.second)
+                }
+            }
+        }
+    }
+
+    private fun getValidTile(currentTile: DeepOcean, distance: Int, direction: Direction): Tile? {
+        var targetTile = currentTile.getTileInDirection(distance, direction)
+
+        if (distance == 0) {
+            targetTile = currentTile
+        } else {
+            for (i in 1..distance) {
+                currentTile.getTileInDirection(i, direction)
+                    ?: return currentTile.getTileInDirection(i - 1, direction)
+            }
+        }
+        return targetTile
     }
 
     /**
      * handles the drift ships logic
      */
     private fun driftShips() {
+        /**
+         * This is wrong, drifts should be logged from the lowest tile id to the highest*/
         val tiles = sea.tiles
-        val deepOceanTiles = tiles.filterIsInstance<DeepOcean>()
-
-        val shipsOnDOTiles = mutableListOf<Ship>()
+        val deepOceanTiles = tiles.filterIsInstance<DeepOcean>().filter { it.getCurrent() != null }
+        val deepOceanTilesHavingShips: PriorityQueue<DeepOcean> = PriorityQueue<DeepOcean>(compareBy { it.id })
+        val shipsInDeepOcean: MutableSet<Ship> = mutableSetOf()
         for (corporation in corporations) {
-            shipsOnDOTiles.addAll(corporation.ownedShips.filter { deepOceanTiles.contains(it.position) })
+            deepOceanTiles
+                .filter { tile -> corporation.ownedShips.any { it.position == tile } }
+                .sortedBy { it.id }.forEach {
+                        deepOcean ->
+                    deepOceanTilesHavingShips.add(deepOcean)
+                }
+            corporation.ownedShips.forEach { ship ->
+                if (ship.position in deepOceanTilesHavingShips) {
+                    shipsInDeepOcean.add(ship)
+                }
+            }
         }
-
-        for (ship in shipsOnDOTiles) {
-            ship.drift()
+        for (tile in deepOceanTilesHavingShips) {
+            shipsInDeepOcean.filter { ship -> ship.position == tile }.sortedBy { it.id }.forEach {
+                it.drift()
+            }
+        }
+        for (tile in deepOceanTiles) {
+            tile.amountOfShipsDriftedThisTick = 0
         }
     }
 
@@ -95,8 +176,8 @@ class Simulation(
      * iterates over all events and call actUponTick on them
      */
     private fun processEvents() {
-        for (event in allEvents) {
-            event.actUponTick(tick)
+        for (event in allEvents.sortedBy { it.id }) {
+            event.actUponTick(tick, corporations)
         }
     }
 
@@ -104,18 +185,9 @@ class Simulation(
      * starts new tasks and updates active tasks
      */
     private fun processTasks() {
-        val tasks = collectActiveTasks()
-
+        val tasks = corporations.map { it.tasks }.flatten().sortedBy { it.id }
         for (task in tasks) {
             task.actUponTick(tick)
         }
-    }
-
-    private fun collectActiveTasks(): List<Task> {
-        val allTasks = mutableListOf<Task>()
-        for (corporation in corporations) {
-            allTasks.addAll(corporation.getActiveTasks())
-        }
-        return allTasks
     }
 }

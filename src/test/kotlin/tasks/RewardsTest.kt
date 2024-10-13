@@ -1,6 +1,7 @@
 package tasks
 
 import corporation.UTFactory
+import de.unisaarland.cs.se.selab.corporation.Corporation
 import de.unisaarland.cs.se.selab.ships.CollectingShip
 import de.unisaarland.cs.se.selab.ships.Container
 import de.unisaarland.cs.se.selab.ships.Ship
@@ -21,12 +22,32 @@ import kotlin.test.assertTrue
 class RewardsTest {
     lateinit var ship1: Ship
     lateinit var ship2: Ship
+    var sea = Sea()
+    var container: Container = Container(
+        GarbageType.CHEMICALS,
+        1000
+    )
+    var collectingCapability: CollectingShip = CollectingShip(
+        mutableListOf(container)
+    )
+    var ship1 = Ship(1, 50, 10, 1000, 15, mutableListOf())
+    var ship2: Ship = Ship(2, 50, 10, 100, 20, mutableListOf())
     lateinit var targetTile: Tile
     lateinit var initialTile: Tile
     lateinit var task: Task
     lateinit var collectingReward: Reward
     lateinit var container: Container
     lateinit var collectingCapability: CollectingShip
+
+
+    val corporation = Corporation(
+        5,
+        "sa",
+        mutableListOf(ship1, ship2),
+        mutableListOf(),
+        mutableListOf(GarbageType.CHEMICALS),
+        mutableListOf()
+    )
     private val factory = UTFactory()
 
     @BeforeEach
@@ -40,6 +61,14 @@ class RewardsTest {
         ship1 = Ship(1, 50, 15, 5000, 7, mutableListOf())
         ship2 = Ship(2, 50, 15, 5000, 7, mutableListOf(collectingCapability))
         ship1.position = initialTile
+        sea = factory.sea
+        val initialTile = sea.getTileByPos(Vec2D(5, 7)) ?: error("Tile not found at position (5,7)")
+        targetTile = sea.getTileByPos(Vec2D(6, 6)) ?: error("Tile not found at position (6,6)")
+        container = Container(GarbageType.CHEMICALS, 5000)
+        collectingReward = ContainerReward(1, collectingCapability, container)
+        ship2.owner = corporation
+        ship1.position = initialTile
+        ship1.owner = corporation
         task = CollectGarbageTask(
             5,
             1,
@@ -66,5 +95,8 @@ class RewardsTest {
     fun checkApplyRewardForShipWithCapabilitiesTrue() {
         collectingReward.applyReward(ship2)
         assertTrue(ship1.capabilities.contains(collectingCapability))
+    fun checkApplyRewardForShipWithNoCapabilitiesTrue() {
+        collectingReward.applyReward(ship2)
+        assertTrue(ship2.capabilities.contains(collectingCapability))
     }
 }

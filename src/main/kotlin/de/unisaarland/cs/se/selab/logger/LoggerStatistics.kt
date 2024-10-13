@@ -1,8 +1,11 @@
 package de.unisaarland.cs.se.selab.logger
 
 import de.unisaarland.cs.se.selab.corporation.Corporation
+
 /** Logger Statistics class*/
 object LoggerStatistics {
+    var garbageOnMap: Int = 0
+
     /** Logged whenever statistics are calculated. */
     fun logSimulationStatisticsCalculated() {
         Logger.log("Simulation Info: Simulation statistics are calculated.")
@@ -10,19 +13,19 @@ object LoggerStatistics {
 
     /** Log the statistics of the simulation.
      * will have corporations: List<Corporation> */
-    fun logSimulationStatistics(corporations: MutableList<Corporation>) {
+    fun logSimulationStatistics(corporations: List<Corporation>) {
         logSimulationStatisticsCalculated()
-        for (corporation in corporations) {
+        for (corporation in corporations.sortedBy { it.id }) {
             if (Logger.map.containsKey(corporation.id)) {
-                statsForCorporation(corporation.id, Logger.map[corporation.id]!!)
+                Logger.map[corporation.id]?.let { statsForCorporation(corporation.id, it) }
             } else {
                 statsForCorporation(corporation.id, 0)
             }
         }
         totalPlastic(Logger.totalPlasticCollected)
-        totalChemicals(Logger.totalChemicalsCollected)
         totalOil(Logger.totalOilCollected)
-        totalGarbageInOcean(Logger.totalOilCollected + Logger.totalChemicalsCollected + Logger.totalOilCollected)
+        totalChemicals(Logger.totalChemicalsCollected)
+        totalGarbageInOcean(garbageOnMap)
     }
 
     /** Statistics for corporation */
@@ -32,7 +35,7 @@ object LoggerStatistics {
 
     /** Statistics for Plastic*/
     private fun totalPlastic(amount: Int) {
-        Logger.log("Simulation Statistics: Total amount of plastic collected: $amount")
+        Logger.log("Simulation Statistics: Total amount of plastic collected: $amount.")
     }
 
     /** Statistics for Oil*/

@@ -6,7 +6,7 @@ import de.unisaarland.cs.se.selab.ships.Ship
 /** Reward that adds a radio. */
 class RadioReward(id: Int, private val capability: CoordinatingShip) : Reward(id) {
     override fun toString(): String {
-        return "Radio"
+        return "RADIO"
     }
 
     override fun applyReward(ship: Ship) {

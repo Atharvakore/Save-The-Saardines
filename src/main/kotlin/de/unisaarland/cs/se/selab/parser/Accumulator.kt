@@ -7,12 +7,13 @@ import de.unisaarland.cs.se.selab.tasks.Reward
 import de.unisaarland.cs.se.selab.tasks.Task
 import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Sea
+import de.unisaarland.cs.se.selab.tiles.Shore
 import de.unisaarland.cs.se.selab.tiles.Tile
 import de.unisaarland.cs.se.selab.tiles.Vec2D
 
 /** The dataclass which will collect all the data from Parsing */
 class Accumulator {
-    var map: Sea? = null
+    val map: Sea = Sea()
     val corporations: MutableMap<Int, Corporation> = mutableMapOf()
     val ships: MutableMap<Int, Ship> = mutableMapOf()
     val events: MutableMap<Int, Event> = mutableMapOf()
@@ -20,14 +21,10 @@ class Accumulator {
     val tasks: MutableMap<Int, Task> = mutableMapOf()
     val rewards: MutableMap<Int, Reward> = mutableMapOf()
     val mapCorporationToHarbor: Map<Int, MutableList<Tile>> = mutableMapOf()
-    val mapCorporationToShips: Map<Int, MutableList<Int>> = mutableMapOf()
+    val mapCorporationToShips: MutableMap<Int, MutableList<Int>> = mutableMapOf()
     val tiles: MutableMap<Int, Tile> = mutableMapOf()
     val tilesByCoordinate: MutableMap<Vec2D, Tile> = mutableMapOf()
-
-    /** Getter for tile based on its ID */
-    public fun getTileById(tileId: Int): Tile? {
-        return tiles[tileId]
-    }
+    val listOfHarbors: MutableList<Shore> = mutableListOf()
 
     /** Setter for a reward into accumulator*/
     public fun addReward(rewardId: Int, reward: Reward) {
@@ -41,7 +38,19 @@ class Accumulator {
 
     /** Getter for tile based on its Coordinates */
     public fun getTileByCoordinate(tileCoordinates: Vec2D): Tile? {
-        return map?.getTileByPos(tileCoordinates)
+        // return map.getTileByPos(tileCoordinates)
+        for (tile in tiles.values) {
+            if (tile.pos == tileCoordinates) return tile
+        }
+        return null
+    }
+
+    /** return tile by position*/
+    fun getTileByPos(coordinate: Vec2D): Tile? {
+        for ((pos, tile) in tilesByCoordinate) {
+            if (pos == coordinate) return tile
+        }
+        return null
     }
 
     /** Setter for a tile into accumulator*/

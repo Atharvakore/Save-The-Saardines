@@ -1,0 +1,21 @@
+{
+  "tiles": [
+    {
+      "id": 1,
+      "coordinates": {
+        "x": 0,
+        "y": 2
+      },
+      "category": "DEEP_OCEAN",
+      "current": false
+    },
+    {
+      "id": 2,
+      "coordinates": {
+        "x": 0,
+        "y": 3
+      },
+      "category": "LAND"
+    }
+  ]
+}

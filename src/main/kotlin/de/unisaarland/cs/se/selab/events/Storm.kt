@@ -1,6 +1,9 @@
 package de.unisaarland.cs.se.selab.events
 
+import de.unisaarland.cs.se.selab.corporation.Corporation
+import de.unisaarland.cs.se.selab.logger.LoggerEventsAndTasks
 import de.unisaarland.cs.se.selab.tiles.Direction
+import de.unisaarland.cs.se.selab.tiles.Garbage
 import de.unisaarland.cs.se.selab.tiles.Sea
 import de.unisaarland.cs.se.selab.tiles.Tile
 
@@ -8,21 +11,70 @@ import de.unisaarland.cs.se.selab.tiles.Tile
 class Storm(
     override val id: Int,
     override val fireTick: Int,
-    override val map: Sea?,
-    override val location: Tile?,
+    override val map: Sea,
+    override val location: Tile,
     override val radius: Int,
     val speed: Int,
 ) : LocalEvent(id, fireTick, map, location, radius) {
     lateinit var direction: Direction
+
     override fun toString(): String {
-        return "Storm"
+        return "STORM"
     }
 
-    override fun actUponTick(currentTick: Int): Boolean {
+    override fun actUponTick(currentTick: Int, corporations: List<Corporation>): Boolean {
+        val result: Boolean
         if (currentTick == fireTick) {
-            // TODO.
-            return true
+            LoggerEventsAndTasks.logEventStart(id, this)
+            val radiusVec2D = location.pos.tilesInRadius(radius)
+            val tiles: MutableList<Tile> = mutableListOf()
+            for (pos in radiusVec2D) {
+                map.getTileByPos(pos)?.let { tiles.add(it) }
+            }
+            val tilesWithGarbage = tiles.filter { it.garbage.isNotEmpty() }
+            val garbageToAdd: MutableMap<Tile, MutableList<Garbage>> = mutableMapOf()
+            val garbageToRemove: MutableMap<Tile, MutableList<Garbage>> = mutableMapOf()
+            for (tile in tilesWithGarbage) {
+                tile.garbage.forEach { gar ->
+                    gar.stormDrift(
+                        speed,
+                        direction,
+                        tile,
+                        garbageToAdd,
+                        garbageToRemove
+                    )
+                }
+            }
+            garbageToAdd.forEach { (tile, garbageList) -> tile.garbage.addAll(garbageList) }
+            garbageToRemove.forEach { (tile, garbageList) -> tile.garbage.removeAll(garbageList) }
+
+            garbageToRemove.forEach { (_, garbageList) ->
+                garbageList.forEach { garbage ->
+                    removeFromCorp(corporations, garbage.id)
+                }
+            }
+
+            garbageToAdd.forEach { (tile, garbageList) ->
+                garbageList.forEach { garbage ->
+                    updateCorporations(corporations, garbage.id, tile)
+                }
+            }
+
+            result = true
+        } else {
+            result = false
         }
-        return false
+        return result
+    }
+
+    private fun removeFromCorp(corporations: List<Corporation>, garbageId: Int) {
+        corporations.forEach { corp ->
+            corp.partnerGarbage.remove(garbageId)
+        }
+    }
+    private fun updateCorporations(corporations: List<Corporation>, garbageId: Int, tile: Tile) {
+        corporations.forEach { corp ->
+            corp.partnerGarbage.putIfAbsent(garbageId, tile)
+        }
     }
 }
