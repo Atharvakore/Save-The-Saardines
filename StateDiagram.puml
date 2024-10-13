@@ -1,0 +1,49 @@
+@startuml
+[*] --> MapParsed: parseMapJSON() [parseSuccessful]
+MapParsed --> MapValidated: validateMapJSON()[validationSuccessful]
+MapParsed --> [*] : validateMapJSON()[validationFailed]
+[*] --> [*] : parseMapJSON()[parseFailed]
+
+MapValidated --> CorporationParsed : parseCorporationsJSON()[parseSuccessful]
+MapValidated --> [*] : parseCorporationsJSON()[parseFailed]
+CorporationParsed -->CorporationValidated : validateCorporation()[validationSuccessful]
+CorporationParsed -->[*] : validateCorporation()[validationFailed]
+CorporationValidated --> ScenarioParsed : parseScenarioJSON [parseSuccessful]
+ScenarioParsed --> ScenarioValidated : validateScenario()[validationSuccessful]
+ScenarioParsed --> [*] : validateScenario()[validationFailed]
+CorporationValidated --> [*] : parseScenarioJSON()[parseFailed]
+
+ScenarioValidated--> SimulationStarted : startSimulation()
+
+SimulationStarted --> TickStarted : tick()
+
+TickStarted --> CorporationPresent : checkCorporations()
+CorporationPresent --> ShipsMoved : moveShips() [corporationsPresent]
+ShipsMoved --> GarbageCollected : collectGarbage()
+GarbageCollected --> CorporationsCooperated : cooperate()
+CorporationsCooperated --> ShipsUnloaded : unloadShips()
+ShipsUnloaded --> ShipsRefueled : refuelShips()
+ShipsRefueled --> CorporationPresent : checkCorporations()[True]
+CorporationPresent --> GarbageDrifted : driftGarbage() [corporationsAbsent]
+GarbageDrifted --> ShipsDrifted : driftShips()
+ShipsDrifted --> EventsProcessed : processEvents()
+
+
+
+EventsProcessed --> EventsStarted: startEvent()[currentTick=eventTick]
+EventsStarted --> EventsProcessed : processEvent()
+EventsProcessed --> EventsProcessed : processEvent()
+EventsStarted --> TasksProcessed : processTasks()
+TasksProcessed --> TasksProcessed : processTask()
+TasksProcessed --> TaskStarted : startTask()[ currentTick = taskTick]
+TaskStarted --> TasksProcessed : processTask()
+TasksProcessed --> RewardsGiven: giveRewards()
+RewardsGiven --> TickStarted : tick() [currentTick!=eventTick]
+
+
+TickStarted --> SimulationStatistics : [CurrentTick=max_ticks]
+SimulationStatistics --> SimulationSuccessful : logStatistics()
+
+SimulationSuccessful --> [*]
+@enduml
+

@@ -1,93 +1,452 @@
 @startuml
-actor "u:User" as u
-participant "s:Simulator" as s
+participant "sim:Simulator" as s
 participant "c1:Corporation" as c1
-participant "s1:ScoutingShip" as scouting
-participant "s2:CollectingShip" as collecting
+participant "scouting:Ship" as scouting
+participant "collecting:Ship" as collecting
 participant "m:Map" as m
+participant "t65:DeepOcean" as t65
 participant "t66:DeepOcean" as t66
-participant "oil:Garbage" as oil
+participant "t67:DeepOcean" as t67
 participant "current:Current" as current
-participant "t67:Tile" as t67
-
-
-
+participant "oil:Garbage" as oil
+participant "newOil:Garbage" as newOil
+participant "d: Dijkstra" as d
 
 activate s
-u -> s: tick()
+note left of s
+log Tick
+end note
+
+s -> s: tick()
+activate s
+
+s -> s: runCorporations()
+activate s
+
+loop for corporation in {c1}
+
+s -> c1: getOwnedShips()
 activate c1
-s -> c1: moveShips()
 
-activate scouting
+c1 --> s: listOfShips = {s1,s2}
+deactivate c1
+
+end
+
+note left of s
+log Corporation Ship Movement
+end note
+loop for corporation in {c1}
+s -> c1: run(sea,listOfShips)
+activate c1
+
+
+c1 -> c1: moveShips(sea)
+activate c1
+c1 -> c1: filterCollectingShips()
+activate c1
+
+c1 --> c1: {s2}
+deactivate c1
+
+c1 -> c1: filterScoutingShips()
+activate c1
+
+c1 --> c1: {s1}
+deactivate c1
+c1 -> c1: getActiveTasks()
+activate c1
+
+c1 --> c1: {}
+deactivate c1
+
+loop for ship in {s1}
+
 c1 -> scouting: getTilesWithGarbageInFoV()
-scouting --> c1: List<Tile>
+activate scouting
 
-c1 -> collecting: getTilesWithGarbageInFoV()
-activate collecting
+scouting --> c1: {t66}
+deactivate scouting
+end
 
-collecting --> c1: List<Tile>
-deactivate collecting
+loop for tile in {t66}
 
-c1 -> scouting: navigateTo(t66)
-scouting --> c1
+c1 -> t66: getAmountOfType(OIL)
+activate t66
+
+t66 -> c1: 800
+deactivate t66
+end
+
+c1 -> d: execute(t66)
+activate d
+
+d --> c1: MapTilesToPath
+deactivate d
+
+loop for scoutingShip in {s1}
+c1 -> c1: findClosestShip(MapTilesToPath, {s1})
+activate c1
+
+c1 --> c1: pathToShip
+deactivate c1
+
+c1 -> c1: findClosestHarbor(MapTilesToPath, ownedHarbors)
+activate c1
+
+c1 --> c1: pathToHarbor
+deactivate c1
+
+
+c1 -> scouting: isFuelSufficient(pathToShip.length + pathToHarbor.length)
+activate scouting
+
+scouting --> c1: true
 deactivate scouting
 
 
+
+c1 -> scouting: move(pathToShip)
+activate scouting
+note left of s
+log Ship Move
+end note
+
+note left of scouting
+reverse pathToShip
+end note
+
+loop for tile in pathToTile
+scouting -> scouting: setTile(t66)
+activate scouting
+
+scouting --> scouting:
+deactivate scouting
+end
+scouting --> c1
+deactivate scouting
+end
+
+loop for collectingShip in {s2}
+
+c1 -> c1: findClosestShip(MapTilesToPath, {s2})
+activate c1
+
+c1 --> c1: pathToShip
+deactivate c1
+
+c1 -> c1: findClosestHarbor(MapTilesToPath, ownedHarbors)
+activate c1
+
+c1 --> c1: pathToHarbor
+deactivate c1
+
+
+c1 -> collecting: isFuelSufficient(pathToShip.length + pathToHarbor.length)
+activate collecting
+
+collecting --> c1: true
+deactivate collecting
+
+c1 -> collecting: hasGarbageCapacity({oil})
+activate collecting
+
+collecting --> c1: true
+deactivate collecting
+
+
+c1 -> collecting: move(pathToShip)
+activate collecting
+
+note left of collecting
+reverse pathToShip
+end note
+
+loop for tile in pathToTile
+
+collecting -> collecting: setTile(t65)
+activate collecting
+
+collecting --> collecting:
+deactivate collecting
+end
+collecting --> c1
+deactivate collecting
+end
+
+c1 -> c1: collectGarbage(sea)
+activate c1
+note left of s
+log Corporation Collect Garbage
+end note
+loop for ship in listOfCollectingShips
+
+c1 -> collecting: collectGarbageOnCurrentTile()
+activate collecting
+
+collecting -> t65: getAmountOfType(OIL)
+activate t65
+note left of c1
+log CollectingGarbage
+end note
+t65 --> collecting: 0
+deactivate t65
+
+collecting --> c1:
+deactivate collecting
+end
+
+
+
+c1--> c1
+deactivate c1
+
+note left of s
+log Corporation Cooperate Start
+end note
+c1 -> c1: cooperate(listOfShips)
+activate c1
+c1 -> c1 : filterCooperatingShips()
+activate c1
+c1 --> c1: {}
+deactivate c1
+c1 --> c1
+deactivate c1
+
+
+note left of c1
+Trying to process ships which are on harbor
+end note
+
+c1 -> c1: refillAndUnloadShips()
+activate c1
+
+c1 -> c1:getShipsFromHarbors()
+activate c1
+c1 --> c1: {}
+deactivate c1
+c1 --> c1
+deactivate c1
+
+c1 --> c1
+deactivate c1
+
 c1 --> s
+deactivate c1
+end
+note left of s
+log Corporation Action End
+end note
+s --> s
+deactivate s
 
-s -> c1: collectGarbage()
-c1--> s
-
-s -> c1: refuelShips()
-c1--> s
 
 
-activate m
+
+
+s -> s: driftGarbage()
+
+activate s
 s -> m: getTiles()
-m --> s : List<Tile>
-deactivate m
+activate m
 
+m --> s : listOfTiles
+deactivate m
+note left of s
+Filter DeepOcean tiles
+end note
+
+loop for tile in listOfDeepOceanTiles
+
+
+
+s -> t66: getGarbage()
 activate t66
-s -> t66: getCurrent()
-t66 --> s: curr
+
+t66 --> s: L= {oil}
 deactivate t66
 
-' Here the problem is: Current can drift more than 1 tile, but we call drift(t67,curr)
-' without actually computing the destination tile, we just assume it goes there and then
-' query getIntensity() and getSpeed() which makes no sense at this point.
-
+loop for garbage in L
+s -> oil: drift(t66)
 activate oil
-activate current
-s -> oil: drift(t67, curr)
-oil -> current: getIntensity()
-current --> oil: 1
+
+oil -> t66: getCurrent()
+activate t66
+
+t66 --> oil: current
+deactivate t66
+
+
 
 
 
 oil -> current: getSpeed()
+activate current
+
 current-> oil: 10
+
+oil -> current: getDirection()
+current --> oil: D0
+deactivate current
+oil -> t66: getTileInDirection(D0,1)
+activate t66
+
+t66 --> oil: t67
+deactivate t66
+
+oil -> t66: amountToBeDrifted()
+activate t66
+
+t66 -> current: getIntensity()
+activate current
+
+current --> t66: 1
 deactivate current
 
+t66 --> oil: 50
+deactivate t66
+
+
+oil -> oil: removeAmount(50)
+activate oil
+
+oil --> oil
+deactivate oil
+
+'need loop to check other tiles if space is not availabel
+oil -> t67: isSpaceAvailable(OIL,50)
 activate t67
-oil -> t67: isDriftable(50)
+
 t67 --> oil: true
-oil -> t67: driftGarbage(OIL,50)
-t67 --> oil
 deactivate t67
+
+oil -> oil: getNextId()
+activate oil
+
+oil --> oil: 2
+deactivate oil
+
+oil -> oil: createGarbage(2, OIL,50)
+activate oil
+
+oil --> oil: newOil
+deactivate oil
+note left of s
+log Current Drift Garbage
+end note
+' Here the problem is: Current can drift more than 1 tile, but we call drift(t67,curr)
+' without actually computing the destination tile, we just assume it goes there and then
+' query getIntensity() and getSpeed() which makes no sense at this point.
+
 
 oil --> s
 deactivate oil
+end
 
+end
 
+note right of s
+add all drifted garbage to tiles
+end note
+
+s --> s
+deactivate s
+
+s -> s: driftShips()
+activate s
+
+loop for corporation in {c1}
 s -> c1: getShips()
-c1 --> s: List<Ship>
-deactivate c1
-activate scouting
-s -> scouting: drift(t67)
-scouting --> s
-deactivate scouting
+activate c1
 
-s --> u
+c1 --> s: {s1,s2}
+deactivate c1
+end
+
+loop for ship in {s1,s2}
+
+s -> scouting: getTile()
+activate scouting
+
+scouting --> s: t66
+
+s -> s: listOfDeepOceanTiles.contains(t66)
+activate s
+s --> s: true
+deactivate s
+
+
+s -> scouting: drift()
+
+
+
+
+scouting -> t66: getCurrent()
+activate t66
+
+
+t66 --> scouting: current
+deactivate t66
+
+
+scouting -> current: getIntensity()
+activate current
+
+current --> scouting: 1
+
+scouting -> current: getSpeed()
+current --> scouting: 10
+
+scouting -> current: getDirection()
+current --> scouting: D0
+deactivate current
+
+scouting -> t66: getTileInDirection(D0,1)
+activate t66
+
+t66 -> scouting: t67
+deactivate t66
+
+scouting -> scouting: setTile(t67)
+activate scouting
+
+scouting --> scouting
+deactivate
+
+
+scouting --> s
+note left of s
+log Current Drift Ship
+end note
+deactivate scouting
+end
+
+s --> s
+deactivate s
+s -> s: processEvents()
+activate s
+
+s -> s: getActiveEvents()
+activate s
+
+s --> s: {}
+deactivate s
+
+s --> s
+deactivate s
+
+s -> s: processTasks()
+activate s
+loop for corporation in {c1}
+s -> c1: getActiveTasks()
+activate c1
+
+c1 -> s: {}
+deactivate c1
+end
+s --> s
+deactivate s
+s --> s
 deactivate s
 
 @enduml
