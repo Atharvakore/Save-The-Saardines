@@ -1,0 +1,46 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "OIL",
+      "location": 17,
+      "amount": 1000
+    },
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 22,
+      "amount": 250
+    },
+    {
+      "id": 3,
+      "type": "OIL",
+      "location": 32,
+      "amount": 150
+    },
+    {
+      "id": 4,
+      "type": "OIL",
+      "location": 32,
+      "amount": 100
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "type": "OIL_SPILL",
+      "tick": 0,
+      "location": 22,
+      "radius": 1,
+      "amount": 400
+    },
+    {
+      "id": 3,
+      "type": "PIRATE_ATTACK",
+      "tick": 2,
+      "shipID": 1
+    }
+  ],
+  "tasks": [],
+  "rewards": []
+}

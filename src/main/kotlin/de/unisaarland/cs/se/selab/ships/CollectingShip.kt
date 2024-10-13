@@ -30,7 +30,7 @@ class CollectingShip(
         val chemicalsContainer = auxiliaryContainers.filter { it.garbageType == GarbageType.CHEMICALS }
         while (xx > 0 && i < chemicalsContainer.size) {
             val container = chemicalsContainer[i]
-            if (container.getGarbageCapacity() - container.garbageLoad > x) {
+            if (container.getGarbageCapacity() - container.garbageLoad >= x) {
                 container.garbageLoad += xx
                 xx -= container.getGarbageCapacity() - container.garbageLoad
             } else {
@@ -46,9 +46,9 @@ class CollectingShip(
         var i: Int = 0
         var xx = x
         val oilContainer = auxiliaryContainers.filter { it.garbageType == GarbageType.OIL }
-        while (xx > 0) {
+        while (xx > 0 && i < oilContainer.size) {
             val container = oilContainer[i]
-            if (container.getGarbageCapacity() - container.garbageLoad > x) {
+            if (container.getGarbageCapacity() - container.garbageLoad >= x) {
                 container.garbageLoad += xx
                 xx -= container.getGarbageCapacity() - container.garbageLoad
             } else {

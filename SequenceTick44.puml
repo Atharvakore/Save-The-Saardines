@@ -1,0 +1,527 @@
+@startuml
+participant "sim:Simulator" as sim
+participant "c1:Corporation" as c1
+participant "task: CollectGarbageTask" as task
+participant "s1:Ship" as s1
+participant "s2:Ship" as s2
+participant "reward:ContainerReward" as reward
+participant "m:Sea" as m
+participant "t23:ShallowOcean" as t23
+participant "t66:DeepOcean" as t66
+participant "t67:DeepOcean" as t67
+participant "current:Current" as current
+participant "oil:Garbage" as oil
+participant "d: Dijkstra" as d
+
+
+activate sim
+
+note left of sim
+    The simulation of tick 44 is done before
+end note
+
+sim -> sim: tick ()
+activate sim
+
+sim -> sim : processTasks()
+activate sim
+
+loop for corporation in {c1}
+sim -> c1: getActiveTasks()
+activate c1
+
+c1 --> sim: {task}
+deactivate c1
+end
+
+loop for task in {task}
+
+sim -> task: actUponTick(44)
+activate task
+
+task -> task: checkCondition()
+activate task
+
+task -> s2: getPos()
+activate s2
+
+s2 --> task: t23
+deactivate s2
+
+task --> task: true
+deactivate task
+
+task -> reward: applyReward(s1)
+activate reward
+
+reward -> s1: addCapability (capability)
+activate s1
+
+s1 --> reward
+deactivate
+
+reward --> task
+deactivate reward
+
+task --> sim: true
+deactivate task
+
+sim -> c1: removeTask(task)
+activate c1
+
+note left of sim
+log Reward given
+end note
+c1 --> sim
+deactivate c1
+end
+sim --> sim
+deactivate sim
+sim --> sim
+deactivate sim
+
+note left of sim
+Log tick
+end note
+
+note left of sim
+Start of tick 45
+end note
+sim --> sim: tick()
+activate sim
+
+sim -> sim: runCorporations()
+activate sim
+
+loop for corporation in {c1}
+
+sim -> c1: getOwnedShips()
+activate c1
+
+c1 --> sim: listOfShips = {s1,s2}
+deactivate c1
+
+end
+
+note left of sim
+Log Corporation Ship Movement
+end note
+loop for corporation in {c1}
+sim -> c1: run(sea, listOfShips)
+activate c1
+
+c1 -> c1: moveShips(sea)
+activate c1
+
+c1 -> c1: filterCollectingShips()
+activate c1
+
+c1 --> c1: {s1,s2}
+deactivate c1
+
+c1 -> c1: filterScoutingShips()
+activate c1
+
+c1 --> c1: {s1}
+deactivate c1
+
+c1 -> c1: getActiveTasks()
+activate c1
+
+c1-->c1: {}
+deactivate c1
+
+loop for ship in {s1}
+
+c1 -> s1: getTilesWithGarbageInFoV()
+activate s1
+
+s1 --> c1: {t66}
+deactivate s1
+end
+
+loop for tile in {t66}
+
+c1 -> t66: getAmountOfType(OIL)
+activate t66
+
+t66 --> c1: 800
+deactivate t66
+end
+
+c1 -> d: execute(t66)
+activate d
+
+d --> c1: MapTilesToPath
+deactivate d
+loop for scoutingShip in {s1}
+
+
+c1 -> c1: findClosestShip(MapTilesToPath, {s1})
+activate c1
+
+c1 --> c1: pathToShipS1
+deactivate c1
+
+c1 -> c1: findClosestHarbor(MapTilesToPath, ownedHarbors)
+activate c1
+
+c1 --> c1: pathToHarbor
+deactivate c1
+
+note left of c1
+Moving the scoutingShips
+end note
+
+
+c1 -> s1: isFuelSufficient(pathToShipS1.length + pathToHarbor.length)
+activate s1
+
+s1 --> c1: true
+deactivate s1
+
+c1 -> s1: move(pathToShipS1)
+note left of sim
+Log ship movement
+end note
+activate s1
+loop for tile in pathToShipS1
+
+s1 -> s1: setTile(t66)
+activate s1
+
+s1 --> s1:
+deactivate s1
+end
+s1 --> c1
+deactivate s1
+end
+
+
+
+note left of c1
+Proceed to move collectingShips to Garbages
+end note
+
+loop for collectingShip in {s1,s2}
+
+c1 -> c1: findClosestShip(MapTilesToPath, {s1,s2})
+activate c1
+
+c1 --> c1: pathToShipS1
+deactivate c1
+
+c1 -> c1: findClosestHarbor(MapTilesToPath, ownedHarbors)
+activate c1
+
+c1 --> c1: pathToHarbor
+deactivate c1
+
+
+c1 -> s1: isFuelSufficient(pathToShipS1.length + pathToHarbor.length)
+activate s1
+
+s1 --> c1: true
+deactivate s1
+
+c1 -> s1: hasGarbageCapacity({oil})
+activate s1
+
+s1 --> c1: true
+deactivate s1
+
+
+note left of sim
+log Corporation Ship Movement
+end note
+c1 -> s1: move(pathToShipS1)
+activate s1
+loop for tile in pathToShipS1
+
+s1 -> s1: setTile(t66)
+activate s1
+
+s1 --> s1:
+deactivate s1
+end
+s1 --> c1
+deactivate s1
+end
+
+c1 --> c1
+deactivate c1
+c1 -> c1: collectGarbage()
+activate c1
+
+note left of sim
+log Corporation Garbage Collection Start
+end note
+note left of c1
+Collecting all garbage possible
+end note
+
+loop for ship in {s1,s2}
+c1 -> s1: collectGarbageFromCurrentTile()
+activate s1
+s1-> t66:getAmountOfType(OIL)
+activate t66
+t66--> s1: 800
+s1 -> t66: removeGarbageOfType(OIL, 800)
+t66 --> s1:
+deactivate t66
+s1 --> c1:
+deactivate s1
+end
+Main -- 
+c1 -->c1
+deactivate c1
+note left of c1
+Trying to cooperate with other Corporations
+end note
+
+
+
+
+note left of sim
+log Corporation Cooperation Start
+end note
+c1 -> c1: cooperate(listOfShips)
+
+activate c1
+c1 -> c1 : filterCoordinatingShips()
+activate c1
+c1 --> c1: {}
+deactivate c1
+c1 --> c1
+deactivate c1
+
+
+note left of c1
+Trying to process ships which are on harbor
+end note
+
+c1 -> c1: refillAndUnloadShips()
+activate c1
+
+c1 -> c1:getShipsFromHarbors()
+activate c1
+c1 --> c1: {}
+deactivate c1
+c1 --> c1
+deactivate c1
+
+c1 --> sim
+deactivate c1
+
+end
+sim --> sim
+deactivate sim
+
+sim -> sim: driftGarbage()
+activate sim
+
+sim -> m: getTiles()
+activate m
+
+m --> sim: listOfTiles
+deactivate m
+
+note left of sim
+Filter DeepOcean tiles
+end note
+
+loop for tile in listOfDeepOceanTiles
+
+sim -> t66: getGarbage()
+activate t66
+
+t66 --> sim: {oil}
+deactivate t66
+
+loop for garbage in {oil}
+
+sim -> oil: drift (t66)
+activate oil
+
+oil -> t66: getCurrent()
+activate t66
+
+t66 --> oil: current
+deactivate t66
+
+oil -> current: getSpeed()
+activate current
+
+current --> oil: 10
+
+oil -> current: getDirection()
+
+current --> oil: D0
+deactivate current
+
+oil -> t66: getTileInDirection(D0,1)
+activate t66
+
+t66 --> oil: t67
+deactivate t66
+
+oil -> t66: amountToBeDrifted()
+activate t66
+
+t66 -> current: getIntensity()
+activate current
+
+current --> t66: 1
+deactivate current
+
+t66 --> oil: 50
+deactivate t66
+
+oil -> oil: removeAmount(50)
+activate oil
+
+oil --> oil:
+deactivate oil
+
+
+
+oil -> oil: getNextId()
+activate oil
+
+oil --> oil: 2
+deactivate oil
+
+oil -> oil: createGarbage(2,OIL,50)
+activate oil
+
+oil --> oil:
+deactivate oil
+
+oil -> t67: isSpaceAvailable(OIL,50)
+activate t67
+
+t67 --> oil: true
+deactivate t67
+
+
+
+end
+
+end
+note right of sim
+add all drifted garbage to tiles
+end note
+
+sim --> sim
+deactivate sim
+
+sim -> sim: driftShips()
+activate sim
+
+loop for corporation in {c1}
+
+sim -> c1: getOwnedShips()
+activate c1
+
+
+c1 -> sim: {s1,s2}
+deactivate c1
+
+end
+
+
+loop for ship in {s1,s2}
+
+sim -> s1: getTile()
+activate s1
+
+s1 --> sim: t66
+deactivate s1
+
+sim -> sim:listOfDeepOceanTiles.contains(t66)
+activate sim
+
+sim --> sim: true
+deactivate sim
+
+sim -> s1: drift()
+activate s1
+
+s1 -> t66: getCurrent()
+activate t66
+
+t66 --> s1: current
+deactivate t66
+
+s1 -> current: getIntensity()
+activate current
+
+current --> s1: 1
+
+s1 -> current: getSpeed()
+
+current --> s1: 10
+
+s1 -> current: getDirection()
+
+current --> s1: D0
+deactivate current
+
+s1 -> t66: getTileInDirection(D0,1)
+activate t66
+
+t66 --> s1: t67
+deactivate t66
+
+s1 -> s1: setTile(t67)
+activate s1
+
+s1 --> s1:
+deactivate s1
+
+s1 --> sim
+deactivate s1
+
+end
+sim --> sim
+deactivate sim
+
+sim -> sim: processEvents()
+activate sim
+
+sim -> sim: getActiveEvents()
+activate sim
+
+sim --> sim: {}
+deactivate sim
+
+sim --> sim
+deactivate sim
+
+sim -> sim : processTasks()
+activate sim
+
+loop for corporation in {c1}
+sim-> c1: getActiveTasks()
+activate c1
+
+c1 -> sim: {}
+deactivate c1
+sim --> sim
+end
+sim --> sim
+deactivate sim
+
+
+
+
+
+sim --> sim
+
+
+note left of sim
+End of simulation tick 45
+end note
+deactivate sim
+
+@enduml

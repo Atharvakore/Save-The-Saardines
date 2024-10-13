@@ -74,18 +74,19 @@ class Simulation(
      * handles the drift garbage logic
      */
     private fun driftGarbage() {
-        val garbageToList: MutableMap<Tile, MutableList<Garbage?>> = mutableMapOf()
-
+        val garbageToList: MutableMap<Pair<Tile, Tile>, MutableList<Garbage?>> = mutableMapOf()
+        val garbageToRemove: MutableMap<Pair<Tile, Tile>, MutableList<Garbage?>> = mutableMapOf()
         sea.tiles
             .filterIsInstance<DeepOcean>().sortedBy { it.id }
             .forEach { tile ->
-                garbageDriftHelper(tile, garbageToList)
+                garbageDriftHelper(tile, garbageToList, garbageToRemove)
             }
 
         garbageToList.forEach { (tile, garbageList) ->
             garbageList.toList().forEach { garbage ->
                 if (garbage != null) {
-                    tile.addGarbage(garbage)
+                    tile.first.addGarbage(garbage)
+                    tile.second.garbage.remove(garbage)
                 }
             }
         }
@@ -98,7 +99,8 @@ class Simulation(
 
     private fun garbageDriftHelper(
         currentTile: DeepOcean,
-        garbageToList: MutableMap<Tile, MutableList<Garbage?>>,
+        garbageToList: MutableMap<Pair<Tile, Tile>, MutableList<Garbage?>>,
+        garbageToRemove: MutableMap<Pair<Tile, Tile>, MutableList<Garbage?>>
     ) {
         val garbageList = currentTile.garbage.sortedBy { it.id }
         for (garbage in garbageList) {
@@ -107,7 +109,7 @@ class Simulation(
                 return
             } else {
                 val targetTile = getValidTile(currentTile, current.speed / TEN, current.direction)
-                var garbageTile: Pair<Tile, Garbage>? = null
+                var garbageTile: Pair<Pair<Tile, Tile>, Garbage>? = null
                 if (targetTile != null && targetTile != currentTile) {
                     garbageTile = garbage.drift(currentTile, targetTile, current)
                     /**
@@ -117,6 +119,7 @@ class Simulation(
                 }
                 if (garbageTile != null) {
                     garbageToList.getOrPut(garbageTile.first) { mutableListOf() }.add(garbageTile.second)
+                    garbageToRemove.getOrPut(garbageTile.first) { mutableListOf() }.add(garbageTile.second)
                 }
             }
         }

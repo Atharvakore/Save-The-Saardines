@@ -1,0 +1,63 @@
+{
+  "garbage": [
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 14,
+      "amount": 1000
+    },
+    {
+      "id": 4,
+      "type": "PLASTIC",
+      "location": 14,
+      "amount": 6000
+    },
+    {
+      "id": 3,
+      "type": "CHEMICALS",
+      "location": 18,
+      "amount": 1000
+    },
+    {
+      "id": 1,
+      "type": "PLASTIC",
+      "location": 15,
+      "amount": 1000
+    }
+  ],
+  "events": [],
+  "tasks": [
+    {
+      "id": 1,
+      "type": "COLLECT",
+      "tick": 0,
+      "shipID": 3,
+      "targetTile": 33,
+      "rewardID": 1,
+      "rewardShipID": 2
+    },
+    {
+      "id": 2,
+      "type": "COLLECT",
+      "tick": 0,
+      "shipID": 1,
+      "targetTile": 18,
+      "rewardID": 1,
+      "rewardShipID": 4
+    }
+  ],
+  "rewards": [
+    {
+      "id": 1,
+      "type": "CONTAINER",
+      "capacity": 1000,
+      "garbageType": "PLASTIC"
+    },
+    {
+      "id": 2,
+      "type": "CONTAINER",
+      "capacity": 1000,
+      "garbageType": "PLASTIC"
+    }
+  ]
+}

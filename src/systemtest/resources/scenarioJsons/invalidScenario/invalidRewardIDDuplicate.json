@@ -1,0 +1,17 @@
+{
+  "garbage": [],
+  "events": [],
+  "tasks": [],
+  "rewards": [
+    {
+      "id": 1,
+      "type": "TELESCOPE",
+      "visibilityRange": 1
+    },
+    {
+      "id": 1,
+      "type": "TELESCOPE",
+      "visibilityRange": 1
+    }
+  ]
+}

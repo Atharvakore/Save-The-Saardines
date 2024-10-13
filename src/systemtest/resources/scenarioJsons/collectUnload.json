@@ -1,0 +1,37 @@
+{
+  "garbage": [
+    {
+      "id": 1,
+      "type": "PLASTIC",
+      "location": 15,
+      "amount": 900
+    },
+    {
+      "id": 2,
+      "type": "OIL",
+      "location": 16,
+      "amount": 900
+    }
+  ],
+  "events": [],
+  "tasks": [
+    {
+      "id": 1,
+      "type": "EXPLORE",
+      "tick": 0,
+      "shipID": 2,
+      "targetTile": 14,
+      "rewardID": 1,
+      "rewardShipID": 1
+    }
+  ],
+  "rewards": [
+    {
+      "id": 1,
+      "type": "CONTAINER",
+      "capacity": 900,
+      "garbageType": "OIL"
+    }
+
+  ]
+}

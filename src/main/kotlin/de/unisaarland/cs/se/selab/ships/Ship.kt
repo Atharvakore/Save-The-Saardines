@@ -30,7 +30,7 @@ open class Ship(
     var destinationPath = emptyList<Tile>()
     var currentVelocity = 0
     var refueling = false
-    var arrivedToHarborThisTick = false
+    var arrivedToHarborThisTick = true
     var movedThisTick: MovementTuple = MovementTuple(false, -1, -1, -1)
     var unloading = false
 
@@ -143,7 +143,7 @@ open class Ship(
         if (shortestPathToHarbor == null) {
             shortestPathToHarbor = mutableListOf()
         }
-        val fullPath = pathLength + shortestPathToHarbor.size
+        val fullPath = minOf(pathLength, speed()) + shortestPathToHarbor.size
         val neededFuel = fuelConsumption * fullPath * SPEED_LENGTH
         val result = neededFuel <= fuelCapacity - consumedFuel
         if (!result) {

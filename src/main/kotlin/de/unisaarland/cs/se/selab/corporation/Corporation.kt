@@ -66,32 +66,58 @@ class Corporation(
                 }.sortedBy { it.id }
 
             val otherCorporations: List<Corporation> = otherShipsOnTile.map { it.owner }.distinct().sortedBy { it.id }
-
-            otherCorporations.forEach {
-                    corporation ->
-                val toCooperateWith = corporation.ownedShips.filter { otherShipsOnTile.contains(it) }
-                    .sortedBy { it.id }.first()
-                getInfoFromShip(toCooperateWith, coordinatingShip)
-                lastCoordinatingCorporation = otherCorporations.maxByOrNull { it.id }
-                otherCorporations.minus(corporation)
+            otherShipsOnTile.forEach { other ->
+                getInfoFromShip(other, coordinatingShip)
             }
+            lastCoordinatingCorporation = otherCorporations.maxByOrNull { it.id }
+
+            /**
+             * otherCorporations.forEach {
+             *                     corporation ->
+             *                 val toCooperateWith = corporation.ownedShips.filter { otherShipsOnTile.contains(it) }
+             *                     .sortedBy { it.id }.first()
+             *                 getInfoFromShip(toCooperateWith, coordinatingShip)
+             *                 lastCoordinatingCorporation = otherCorporations.maxByOrNull { it.id }
+             *                 otherCorporations.minus(corporation)
+             *             }
+             */
         }
     }
 
     private fun getInfoFromShip(otherShip: Ship, coordinatingShip: Ship) {
-        val telescopes: List<ScoutingShip> = otherShip.capabilities
-            .filterIsInstance<ScoutingShip>()
-        telescopes.forEach { telescope ->
-            val tilesWithGarbage: List<Tile> =
-                telescope.getTilesWithGarbageInFoV(sea, otherShip.position)
-            // partnerGarbage is a map of garbage id to tile
-            tilesWithGarbage.forEach { tile ->
-                tile.garbage
-                    .asSequence()
-                    .filter { acceptedGarbageType.contains(it.type) }
-                    .forEach { garbage -> partnerGarbage[garbage.id] = tile }
+        val corp = otherShip.owner
+        /**
+         * corp.trackedGarbage.forEach {
+         *             coordinatingShip.owner.partnerGarbage[it.id] =
+         *         }
+         */
+
+        corp.partnerGarbage.forEach {
+            if (it.key !in knownGarbage.keys) {
+                coordinatingShip.owner.partnerGarbage[it.key] = it.value
             }
         }
+        corp.knownGarbage.forEach {
+            if (it.key !in knownGarbage.keys) {
+                coordinatingShip.owner.partnerGarbage[it.key] = it.value
+            }
+        }
+        /**
+         *  val telescopes: List<ScoutingShip> = otherShip.capabilities
+         *             .filterIsInstance<ScoutingShip>()
+         *         telescopes.forEach { telescope ->
+         *             val tilesWithGarbage: List<Tile> =
+         *                 telescope.getTilesWithGarbageInFoV(sea, otherShip.position)
+         *             // partnerGarbage is a map of garbage id to tile
+         *             tilesWithGarbage.forEach { tile ->
+         *                 tile.garbage
+         *                     .asSequence()
+         *                     .filter { acceptedGarbageType.contains(it.type) }
+         *                     .forEach { garbage -> partnerGarbage[garbage.id] = tile }
+         *             }
+         *         }
+         */
+
         LoggerCorporationAction.logCooperationBetweenCorporations(
             id,
             otherShip.owner.id,
@@ -522,7 +548,7 @@ class Corporation(
         result = if (onPos != null) {
             true
         } else {
-            helperMoveCoordinating(ship, otherShips)
+            helperMoveCoordinating(ship, shipFov)
         }
         return result
     }
@@ -560,8 +586,8 @@ class Corporation(
      */
     private fun collectGarbage() {
         val collectingShips: List<Ship> = Helper().filterCollectingCapabilities(this).sortedBy { it.id }
-        val allGarbage = collectingShips.map { it.position.garbage }.flatten().sortedBy { it.id }
-        for (garbage in allGarbage) {
+        val allGarbage = collectingShips.map { it.position.garbage }.flatten().sortedBy { it.id }.toSet()
+        for (garbage in allGarbage.sortedBy { it.id }) {
             if (garbage.type == GarbageType.PLASTIC) {
                 collectPlasticFromCurrentTile(collectingShips.filter { it.position.garbage.contains(garbage) }, garbage)
             } else if (garbage.type == GarbageType.OIL) {

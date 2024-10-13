@@ -20,6 +20,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class RewardsTest {
+    lateinit var ship1: Ship
+    lateinit var ship2: Ship
     var sea = Sea()
     var container: Container = Container(
         GarbageType.CHEMICALS,
@@ -34,6 +36,9 @@ class RewardsTest {
     lateinit var initialTile: Tile
     lateinit var task: Task
     lateinit var collectingReward: Reward
+    lateinit var container: Container
+    lateinit var collectingCapability: CollectingShip
+
 
     val corporation = Corporation(
         5,
@@ -48,6 +53,14 @@ class RewardsTest {
     @BeforeEach
     fun setUp() {
         factory.createTestingMap()
+        val initialTile = Sea.getTileByPos(Vec2D(5, 7)) ?: error("Tile not found at position (5,7)")
+        targetTile = Sea.getTileByPos(Vec2D(6, 6)) ?: error("Tile not found at position (6,6)")
+        container = Container(GarbageType.CHEMICALS, 5000)
+        collectingCapability = CollectingShip(mutableListOf(container))
+        collectingReward = ContainerReward(1, collectingCapability, container)
+        ship1 = Ship(1, 50, 15, 5000, 7, mutableListOf())
+        ship2 = Ship(2, 50, 15, 5000, 7, mutableListOf(collectingCapability))
+        ship1.position = initialTile
         sea = factory.sea
         val initialTile = sea.getTileByPos(Vec2D(5, 7)) ?: error("Tile not found at position (5,7)")
         targetTile = sea.getTileByPos(Vec2D(6, 6)) ?: error("Tile not found at position (6,6)")
@@ -73,6 +86,15 @@ class RewardsTest {
     }
 
     @Test
+    fun checkApplyRewardForShipWithEmptyCapabilitiesTrue() {
+        collectingReward.applyReward(ship1)
+        assertTrue(ship1.capabilities.contains(collectingCapability))
+    }
+
+    @Test
+    fun checkApplyRewardForShipWithCapabilitiesTrue() {
+        collectingReward.applyReward(ship2)
+        assertTrue(ship1.capabilities.contains(collectingCapability))
     fun checkApplyRewardForShipWithNoCapabilitiesTrue() {
         collectingReward.applyReward(ship2)
         assertTrue(ship2.capabilities.contains(collectingCapability))

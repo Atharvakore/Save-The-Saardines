@@ -1,0 +1,366 @@
+@startuml
+actor User
+participant Main as Main
+
+User -> Main: main(map.json, corporations.json, scenario.json, 0)
+activate Main
+create "accu: Accumulator" as accu
+Main -> accu :  Accumulator()
+activate accu
+accu --> Main : accu
+deactivate accu
+
+create parser as "m: MapJSONParser"
+Main -> parser : MapJSONParser(accu)
+activate parser
+parser --> Main: m
+deactivate parser
+Main -> parser: parseMap(map.json)
+activate parser
+parser -> parser: createTileObjects(map.json)
+activate parser
+parser --> parser : objects: List<JSONObject>
+deactivate parser
+parser -> parser : validateTiles(objects)
+activate parser
+
+
+
+loop for tileObject in objects
+
+parser->parser:validateTile(tileObject)
+activate parser
+
+parser --> parser: True
+deactivate parser
+
+create "t:Tiles" as Tiles
+parser -> Tiles: Tiles(id, coord, shipTraversable)
+activate Tiles
+
+Tiles --> parser: t
+deactivate Tiles
+parser -> accu: addTile(id, t)
+activate accu
+accu --> parser
+deactivate accu
+
+parser -> accu: addTileByCoordinat(coord, t)
+activate accu
+accu --> parser
+deactivate accu
+end
+parser --> parser: True
+deactivate parser
+parser -> parser: createMap()
+activate parser
+
+
+create "s: Sea" as map
+parser -> map : Map(accu.tiles.getValues(), accu.tilesbyCoord)
+activate map
+map --> parser: s
+deactivate map
+parser --> parser: s
+deactivate parser
+parser -> accu: setMap(s)
+activate accu
+accu --> parser:
+deactivate accu
+participant Logger as log
+parser -> log: logInitializationInfoSuccess(maps.json)
+activate log
+log --> parser:
+deactivate log
+parser-->Main: True
+deactivate parser
+
+
+
+create corparser as "c: CorporartionJSONParser"
+Main -> corparser: CorporationJSONParser(accu)
+activate corparser
+corparser --> Main : c
+deactivate corparser
+Main -> corparser: parseShips(corporations.json)
+
+activate corparser
+corparser -> corparser: createShipObjects(corporations.json)
+activate corparser
+corparser --> corparser : objects: List<JSONObject>
+deactivate corparser
+corparser -> corparser : validateShips(objects)
+activate corparser
+
+
+loop for shipObject in objects
+
+corparser -> corparser:ValidateShip(shipObject)
+activate corparser
+corparser --> corparser : True
+deactivate corparser
+corparser -> corparser : createShip(shipObject)
+activate corparser
+
+create "s:Ship" as ship
+corparser -> ship: Ship(id, name, tile, maxVelocity, acceleration, fuelCapacity, fuelConsumption, visibilityRange, garbageType, capacity)
+activate ship
+ship -->corparser: s
+deactivate ship
+corparser --> corparser: s
+deactivate corparser
+corparser -> accu: addShip(id, s)
+
+activate accu
+accu --> corparser
+deactivate accu
+corparser -> accu: addShipToCorp(corporationId, id)
+activate accu
+accu        --> corparser
+
+deactivate accu
+corparser --> corparser: True
+deactivate corparser
+end
+corparser --> corparser: True
+deactivate corparser
+
+corparser --> Main: True
+deactivate corparser
+Main -> corparser: parseCorporations(corporations.json)
+activate corparser
+activate corparser
+corparser -> corparser: createCorporationObjectst(corporations.json)
+activate corparser
+corparser --> corparser : objects: List<JSONObject>
+deactivate corparser
+corparser -> corparser: validateCorporations(objects)
+activate corparser
+
+loop for corporationObject in objects
+corparser -> corparser: ValidateCorporation(corporationObject)
+activate corparser
+
+loop for id in homeHarbors
+corparser -> accu: getTilebyId(id)
+activate accu
+accu --> corparser : t
+deactivate accu
+end
+
+
+loop for id in ships
+corparser -> accu: getShipById(id)
+activate accu
+accu --> corparser : s
+deactivate accu
+end
+corparser -> accu : getShipsOfCorp(id)
+activate accu
+accu --> corparser : shouldBeShips: List<Int>
+deactivate accu
+
+create "corporation: Corporation" as corp
+corparser -> corp : Corporation(id, name, ships, homeHarbors, garbage)
+activate corp
+corp --> corparser: corp
+deactivate corp
+corparser -> accu: addCorporation(id, corp)
+activate accu
+accu --> corparser
+deactivate accu
+deactivate corp
+corparser --> corparser: True
+deactivate corparser
+end
+corparser --> corparser : True
+deactivate corparser
+
+
+
+corparser -> log : logInitializationInfoSuccess(corporations.json)
+activate log
+log --> corparser
+deactivate log
+corparser --> Main : True
+deactivate corparser
+create "Sc: ScenarioJSONParser" as scparser
+Main -> scparser: ScenarioJSONParser(accu)
+activate scparser
+scparser -> Main: Sc
+deactivate scparser
+Main -> scparser : parseGarbage(Scenario.json)
+activate scparser
+scparser -> scparser: createGarbageObjects(Scenario.json)
+activate scparser
+scparser --> scparser : objects: List<JSONObject>
+deactivate scparser
+scparser -> scparser:  validateGarbages(objects)
+activate scparser
+
+loop for garbageObject in objects
+scparser -> scparser : validateGarbage(garbageObject)
+activate scparser
+
+scparser -> map : getTilebyId(locationId)
+activate map
+map --> scparser: t
+deactivate map
+scparser --> scparser: True
+
+scparser ->scparser : createGarbage(garbageObject)
+activate scparser
+create "g: Garbage " as garbage
+scparser -> garbage: Garbage(id, amount, type, t)
+activate garbage
+garbage --> scparser: g
+deactivate garbage
+
+scparser -->scparser : g
+deactivate scparser
+scparser -> accu: addGarbage(id, g)
+activate accu
+accu --> scparser
+deactivate accu
+scparser --> scparser: True
+
+deactivate scparser
+end
+scparser --> scparser: True
+deactivate scparser
+scparser --> Main: True
+deactivate scparser
+Main -> scparser: parseEvents(Scenario.json)
+activate scparser
+scparser -> scparser: createEventObjects(Scenario.json)
+activate scparser
+scparser --> scparser : objects: List<JSONObject>
+deactivate scparser
+scparser -> scparser:  validateEvents(objects)
+activate scparser
+
+loop eventObject in objects
+scparser -> scparser: validateEvent(eventObject)
+activate scparser
+scparser -> scparser : createEvent(eventObject)
+activate scparser
+create "event: Event" as event
+scparser -> event: Event(id, type, tick, duration, location, radius, speed, amount, direction, shipID)
+activate event
+event --> scparser: event
+deactivate event
+scparser --> scparser: event
+deactivate scparser
+scparser -> accu: addEvent(id, event)
+activate accu
+accu --> scparser
+deactivate accu
+scparser --> scparser: True
+deactivate scparser
+end
+scparser --> scparser: True
+
+deactivate scparser
+
+scparser --> Main: True
+deactivate scparser
+
+
+Main -> scparser: parseRewards(Scenario.json)
+activate scparser
+
+scparser -> scparser:  validateRewards(rewards)
+activate scparser
+
+loop rewardObject in rewards
+scparser -> scparser: validateReward(rewardObject)
+activate scparser
+
+scparser -> scparser : createReward(rewardObject)
+activate scparser
+create "reward: Reward" as reward
+scparser -> reward: Reward(id)
+activate reward
+reward --> scparser: reward
+deactivate reward
+scparser --> scparser: reward
+deactivate scparser
+scparser -> accu: addReward(id, reward)
+activate accu
+accu --> scparser
+deactivate accu
+scparser --> scparser: True
+deactivate scparser
+end
+scparser --> scparser: True
+deactivate scparser
+scparser --> Main: True
+deactivate scparser
+
+
+Main -> scparser: parseTasks(Scenario.json)
+activate scparser
+
+scparser -> scparser:  validateTasks(tasks)
+activate scparser
+
+loop taskObject in tasks
+scparser -> scparser: validateTask(taskObject)
+activate scparser
+scparser -> accu: getRewardById(rewardId)
+activate accu
+accu --> scparser: reward
+deactivate accu
+scparser -> accu: getShipById(taskShipId)
+activate accu
+accu --> scparser: taskShip
+deactivate accu
+scparser -> accu: getShipById(rewardShipId)
+activate accu
+accu --> scparser: rewardShip
+deactivate accu
+scparser -> scparser: ship1.getOwner().equals(ship2.getOwner())
+activate scparser
+scparser --> scparser
+deactivate scparser
+
+scparser -> scparser : createTask(taskObject)
+activate scparser
+create "task: Task" as task
+scparser -> task: Task(id, tick, taskShip, reward, rewardShip, ship1.getOwner())
+activate task
+task --> scparser: task
+deactivate task
+scparser --> scparser: task
+deactivate scparser
+scparser -> accu: addTask(id, task)
+activate accu
+accu --> scparser
+deactivate accu
+scparser --> scparser: True
+deactivate scparser
+end
+scparser --> scparser: True
+deactivate scparser
+scparser --> Main: True
+deactivate scparser
+
+
+
+
+
+loop for g in garbage
+Main -> Main: m.getTilebyId(g.getLocationId()).addGarbage(g)
+activate Main
+Main --> Main
+deactivate Main
+end
+create "s: Simulation" as sim
+
+Main -> sim: Simulation(corporations, events, 0, 0, m, tasks)
+activate sim
+sim --> Main : s
+deactivate sim
+
+
+@enduml

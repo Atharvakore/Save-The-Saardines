@@ -1,0 +1,231 @@
+{
+  "corporations": [
+    {
+      "id": 1,
+      "name": "Ocean Scouters Inc.",
+      "ships": [
+        1, 2, 3, 10, 13
+      ],
+      "homeHarbors": [
+        354, 107, 143, 49, 563, 469, 314, 535
+      ],
+      "garbageTypes": [
+        "OIL"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Ocean Cleaners Inc.",
+      "ships": [
+        4, 5, 6, 11, 14
+      ],
+      "homeHarbors": [
+        354, 107, 143, 49, 563, 469, 314, 535
+      ],
+      "garbageTypes": [
+        "OIL"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Chemical Cleaner Inc.",
+      "ships": [
+        7, 8, 9, 12, 15
+      ],
+      "homeHarbors": [
+        354, 107, 143, 49, 563, 469, 314, 535
+      ],
+      "garbageTypes": [
+        "OIL"
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "id": 1,
+      "name": "Explorer",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 107,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 10000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    },
+    {
+      "id": 2,
+      "name": "Collecter2",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 107,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 5,
+      "capacity": 50000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 3,
+      "name": "Coordinator2",
+      "type": "COORDINATING",
+      "corporation": 1,
+      "location": 384,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 5,
+      "visibilityRange": 1
+    },
+    {
+      "id": 4,
+      "name": "Explorer1",
+      "type": "SCOUTING",
+      "corporation": 2,
+      "location": 314,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 10000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    },
+    {
+      "id": 5,
+      "name": "Collecter",
+      "type": "COLLECTING",
+      "corporation": 2,
+      "location": 314,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 5,
+      "capacity": 50000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 6,
+      "name": "Coordinator1",
+      "type": "COORDINATING",
+      "corporation": 2,
+      "location": 384,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 5,
+      "visibilityRange": 1
+    },
+    {
+      "id": 7,
+      "name": "Explorer2",
+      "type": "SCOUTING",
+      "corporation": 3,
+      "location": 535,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 10000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    },
+    {
+      "id": 8,
+      "name": "Collecter3",
+      "type": "COLLECTING",
+      "corporation": 3,
+      "location": 535,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 5,
+      "capacity": 50000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 9,
+      "name": "Coordinator",
+      "type": "COORDINATING",
+      "corporation": 3,
+      "location": 384,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 5,
+      "visibilityRange": 1
+    },
+    {
+      "id": 10,
+      "name": "ExplorerUNO",
+      "type": "SCOUTING",
+      "corporation": 1,
+      "location": 68,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 10000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    },
+    {
+      "id": 11,
+      "name": "ExplorerDUO",
+      "type": "SCOUTING",
+      "corporation": 2,
+      "location": 335,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 10000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    },
+    {
+      "id": 12,
+      "name": "ExplorerTRES",
+      "type": "SCOUTING",
+      "corporation": 3,
+      "location": 51,
+      "maxVelocity": 100,
+      "acceleration": 25,
+      "fuelCapacity": 10000,
+      "fuelConsumption": 10,
+      "visibilityRange": 5
+    },
+    {
+      "id": 13,
+      "name": "Collecter22",
+      "type": "COLLECTING",
+      "corporation": 1,
+      "location": 63,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 5,
+      "capacity": 50000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 14,
+      "name": "Collecter33",
+      "type": "COLLECTING",
+      "corporation": 2,
+      "location": 152,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 5,
+      "capacity": 50000,
+      "garbageType": "OIL"
+    },
+    {
+      "id": 15,
+      "name": "Collecter44",
+      "type": "COLLECTING",
+      "corporation": 3,
+      "location": 452,
+      "maxVelocity": 50,
+      "acceleration": 10,
+      "fuelCapacity": 5000,
+      "fuelConsumption": 5,
+      "capacity": 50000,
+      "garbageType": "OIL"
+    }
+  ]
+}
